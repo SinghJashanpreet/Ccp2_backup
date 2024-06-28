@@ -1,0 +1,584 @@
+.icon-red {
+  --sds-c-icon-color-foreground-default: #e10202;
+}
+input{
+    padding:14px 20px 14px 20px;
+    border: 1px solid #d9d9d9;
+    border-radius: 10px;
+}
+
+.main {
+  position: relative;
+  width: 100%;
+  height: max-content;
+
+}
+.half {
+  width: 100%;
+  position: absolute;
+  left: 0;
+}
+.top {
+  height: 60vh;
+  background-color: lightblue;
+}
+
+.bottom {
+  /* height: 60%; */
+  position: relative;
+  height: max-content;
+  background-color: rgb(253, 253, 253);
+  display: flex;
+  justify-content: center;
+}
+.center-content {
+  position: relative;
+  height: 100%;
+  margin-top: -32vh;
+  width: 90%;
+  background-color: white;
+  z-index: 1;
+  border-radius: 10px;
+}
+
+.overlay {
+  position: absolute;
+  top:15vh;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.centered-text {
+  color: white;
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+}
+
+.heading {
+  font-weight: 600;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.main-content {
+  padding: 64px calc(256px - 10%) 64px calc(256px - 10%);
+}
+
+.list-container {
+  min-height: 250px;
+}
+
+.list-element {
+  box-shadow: 0px 0px 10px 0px #00000026;
+border-radius:10px;
+  border: 1px solid #d9d9d9;
+  display: flex;
+  justify-content: space-between;
+  /* gap: 15%; */
+  align-items: center;
+  padding: 25px 25px;
+  margin: 20px 0 25px 0;
+  position: relative;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.list-data {
+  display: flex;
+}
+
+.footer-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 15px;
+}
+
+.button {
+  color: black;
+  background-color: #F4F4F4;
+  box-shadow: 0px 0px 10px 0px #00000026;
+  border: 1px solid #D9D9D9;
+  padding: 12px 0;
+  width: 264px;
+  border-radius:10px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  padding-top: 25px;
+  position: relative;
+}
+.form_container {
+  width: 84%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #D9D9D9;
+  padding: 25px 25px 25px 20px;
+  position: relative;
+}
+.form_footer {
+  display: flex;
+  flex-direction: row;
+  height: 10%;
+  width: 84%;
+  padding: 5px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.datarec {
+  position: relative;
+  width: 100%;
+}
+.records {
+  margin-bottom: 25px;
+  display: flex;
+  gap: 15px;
+}
+.records_number{
+    margin-bottom: 25px;
+    display: flex;
+    gap: 18px;
+    align-items:center;
+}
+.records_number div input{
+    /* width: 264px; */
+}
+.records1 {
+  margin-bottom: 25px;
+  margin-left: 180px;
+  display: flex;
+  flex-direction: column;
+}
+.head {
+  font-size: 14px;
+  font-weight: bold;
+  color: #0a0a0a;
+  width: 190px;
+  font-family: Helvetica, Arial, sans-serif;
+  margin-left: 30px;
+}
+.head1 {
+  font-size: 14px;
+  font-weight: bold;
+  color: #0a0a0a;
+  width: 150px;
+  font-family: Helvetica, Arial, sans-serif;
+  margin-left: 80px;
+  margin-bottom: 8px;
+}
+.data {
+  /* margin-left: 80px; */
+  margin-top: 1px;
+  font-size: 14px;
+  margin-bottom: 2px;
+  font-family: Helvetica, Arial, sans-serif;
+  width: 100%;
+}
+.data input{
+    width: 100%;
+}
+.data .dataCellName input{
+    /* width: 264px; */
+}
+
+.dataCellName {
+  display: flex;
+  gap: 12px;
+}
+.data-cell-item{
+    width: 100%;
+    /* padding:16px, 24px, 16px, 24px */
+}
+
+.dataBranch{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.toedit {
+  color: black;
+  transition: color 0.3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+  border: #8f98aa;
+  border-radius: 10px;
+}
+.btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 40px;
+  background-color: white;
+  border: 1px solid #8f98aa;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    border 0.3s ease,
+    color 0.3s ease;
+}
+.buttonEdit {
+  /* width: 100%; */
+  display: flex;
+  /* flex-direction: column; */
+  align-items: flex-end;
+  justify-content: center;
+  /* height: 70px; */
+  /* margin-top: 30px; */
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  border-radius: 10px;
+}
+/* .btn:hover {
+  background-color: white;
+  border: 1px solid #e10202;
+  cursor: pointer;
+  color: #0a0a0a;
+}
+.btn:hover .toedit {
+  color: red;
+} */
+.btn1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  justify-content: center;
+  width: 180px;
+  height: 40px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  transition:
+    background-color 0.3s ease,
+    border 0.3s ease,
+    color 0.3s ease;
+}
+.btn1:hover {
+  background-color: white;
+  border: 1px solid #8f98aa;
+  cursor: pointer;
+}
+.btn1:hover .toedit {
+  color: #8f98aa;
+}
+.input-checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: #EB5A5A;
+    -webkit-appearance: checkbox;
+    -moz-appearance: checkbox;
+    appearance: checkbox;
+    cursor: pointer;
+}
+.deleteUser {
+  color: red;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  width: fit-content;
+  padding: 10px 0 0 5px;
+  cursor: pointer;
+  caret-color: red;
+  align-items: center;
+}
+
+
+ .reqtxt{
+    color: white;
+    font-size: 10px;
+    background-color: #E10202;
+    padding: 5px 6px;
+    width: 45px;
+    height: 22px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* margin-left: 4px; */
+ }
+
+ .checkboxContainer{
+    display: flex;
+    gap: 14px;
+    margin-bottom: 10px;
+    align-items:center;
+ }
+
+ /* .btn-no{
+    width: 176px;
+    height: 48px;
+    border-radius: 10px;
+}
+.btn-yes{
+    width:176px;
+    height: 48px;
+    border-radius: 10px;
+} */
+ 
+.content-modal{
+    height: 7rem;
+    margin: 40px 30px;
+}
+.content-modal h1{
+    margin-top: 10%;
+    text-align: center;
+}
+.content-modal .btn-modal{
+    display: flex;
+    flex-direction: row;
+    margin-top: 5%;
+    margin-left: 20%;
+    margin-right: 20%;
+    /* align-items: center; */
+    justify-content: space-between;
+    gap: 56px;
+}
+.invalid-input{
+    outline: 2px solid red;
+    width: 100%;
+}
+ 
+.content-modal .btn-modal button{
+    border: none;
+    border-radius: none;
+    /* color: black;
+    background-color:#D9D9D9; */
+}
+ 
+ /* .checkboxContainer input{
+    width: 24px;
+    height: 24px;
+ }
+ .checkboxContainer input:active{
+  background-color:#EB5A5A;
+ } */
+/* 
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.centered-text {
+    color: white; 
+    font-size: 2.5em; 
+    font-weight: bolder;
+    margin-bottom: 30px;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.record-item lightning-icon {
+    cursor: pointer;
+}
+.filtericn{
+    --sds-c-icon-color-foreground-default: #E10202; 
+    --sds-c-icon-color-foreground: #E10202; 
+    --sds-c-icon-color-background: #ffffff; 
+    margin-right: 7px;
+ }
+
+ lightning-spinner {
+    display: block;
+    margin: auto;
+}
+
+.slds-spinner__dot-a, .slds-spinner__dot-b {
+    background-color: #E10202; 
+}
+
+.combo{
+    --slds-c-input-radius-border : 3px;
+    --slds-c-input-color-border : #d4d4d4;
+    --slds-c-input-color-background : #ffffff;
+    width: 350px;
+ }
+
+@media (max-width: 768px) {
+    .center-content {
+        width: 90%; 
+        top: 50%; 
+    }
+
+    .form_container {
+        width: 90%; 
+        height: 60vh; 
+    }
+
+    .btn, .btn1 {
+        width: 100px; 
+        height: 40px; 
+    }
+
+} */
+
+
+
+@media (min-width: 768px) and (max-width: 1440px) {
+    .input-checkbox {
+        width: 1.6666666667vw;
+        height: 1.6666666667vw;
+    }
+}
+
+/*Adding Heading in detail page also*/
+.centered-text-inside {
+  color: black;
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+/*Edited Top and Add Member button*/
+button.return-button:hover {
+  background-color: white;
+  border-color: #F4F4F4;
+}
+
+button.submit-button:hover {
+  color: #E10202;
+  background-color: white;
+  border-color: #E10202;
+}
+
+button.submit-button {
+  background-color: #E10202; color:white;
+}
+
+/* Delete User */
+button.btn-yes {
+  background-color:#E10202; 
+  color: white;
+  border-radius: 10px;
+  width: 176px;
+  height: 48px;
+}
+
+button.btn-yes:hover {
+  background-color: white;
+  color: #E10202;
+  border: 1px solid #E10202 !important;
+  border-radius: 10px;
+  width: 176px;
+  height: 48px;
+}
+
+button.btn-no {
+  background-color: #f4f4f4;
+  color: black;
+  border-radius: 10px;
+    width: 176px;
+    height: 48px;
+}
+
+button.btn-no:hover {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid #F4F4F4 !important;
+  border-radius: 10px;
+  width: 176px;
+  height: 48px;
+}
+
+.btn-yes.btn-yes-save {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-save {
+  background-color: #e10202 !important;
+  border: 1px solid #e10202 !important;
+  margin-top: 20px !important;
+}
+
+.txt-save {
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: white !important;
+  border: 1px solid #E10202 !important;
+}
+
+.btn-save:hover .txt-save {
+  color: #E10202; /* This will affect text inside child elements with class txt-save */
+}
+
+.form_container.form_container_save {
+  border: none !important;
+}
+
+.head-save {
+  width: 360px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+.head-save-cnt {
+  align-items: center !important;
+}
+
+.data-align {
+  margin-top: 0 !important;
+}
+
+.head-save-align {
+  padding-top: 1 !important;
+}
+
+/* Media Queries
+@media (width: 820px) and (height: 1120px) {
+  .main-content {
+      padding: 64px 10% !important;
+  }
+}
+
+/* Media query for smaller screens (example for tablets) 
+@media (max-width: 768px) {
+  .main-content {
+      padding: 50px 8% !important; /* Adjust padding for smaller screens 
+  }
+}
+
+/* Media query for even smaller screens (example for mobile devices) 
+@media (max-width: 480px) {
+  .main-content {
+      padding: 30px 5% !important; /* Adjust padding for smaller screens 
+  }
+}
+
+ Media query for very small screens (example for small mobile devices) 
+@media (max-width: 320px) {
+  .main-content {
+      padding: 20px 3% !important; /* Adjust padding for smaller screens 
+  }
+} */
