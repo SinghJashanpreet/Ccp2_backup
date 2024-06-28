@@ -11,6 +11,7 @@ import getUserAllServicesList from "@salesforce/apex/CCP2_ServicesList.permissio
 import deleteUser from "@salesforce/apex/CCP2_UserDeleteController.deleteUser";
 import USER_ID from "@salesforce/user/Id";
 import { refreshApex } from "@salesforce/apex";
+import getbranchdetails from "@salesforce/apex/CCP2_userData.UnAssociatedBranch";
 
 import CCP2_MembershipManagement from "@salesforce/label/c.CCP2_MembershipManagement";
 import CCP2_MemberList from "@salesforce/label/c.CCP2_MemberList";
@@ -126,6 +127,8 @@ export default class Ccp2UserManagement extends LightningElement {
   InputEmpCode = "";
   InputDepartment = "";
   InputPost = "";
+  // Custom vars
+   //Custom Vars End
 
   getAllUser() {
     getAllUser()
@@ -652,4 +655,163 @@ export default class Ccp2UserManagement extends LightningElement {
     });
     this.dispatchEvent(evt);
   }
+
+  /*Custom JS*/
+  @track branchoptions = [];
+  @track searchTerm = '';
+  @track branch = [];
+
+
+  @wire(getbranchdetails) wiredBranches({ data, error }) {
+    if (data) {
+      // console.log("")
+      // console.log("Bdata",data);
+      console.log("branches", data);
+      this.branchoptions = data.map((vehicle) => {
+        return { label: vehicle.Name, value: vehicle.Id };
+      });
+      console.log("branchdata", JSON.stringify(this.branchoptions));
+    } else if (error) {
+      console.error(error);
+    }
+  }
+
+  handleSearch(event) {
+    this.searchTerm = event.target.value.toLowerCase();
+  }
+
+  handlebranChange(event) {
+    //console.log('employee', this.contactInputData);
+    event.stopPropagation();
+    this.showlist = !this.showlist;
+  }
+  @track showlist = false;
+
+handleInsideClick(event) {
+    event.stopPropagation();
+}
+
+get filteredbranch() {
+    if (!this.searchTerm) {
+      return this.branchoptions;
+    }
+    return this.branchoptions.filter((veh) => {
+      return veh.label.toLowerCase().includes(this.searchTerm);
+    });
+  }
+
+handleBranchSelect(event) {
+    this.selectbranchId = event.currentTarget.dataset.id;
+    console.log("selected b id", JSON.stringify(this.selectbranchId));
+    this.handlebranchChange();
+  }
+  @track deletedBranchIds = [];
+handleDeleteBranch(event) {
+    // const vehicleId = event.currentTarget.dataset.id;
+    // this.deletedVehicleIds.push(vehicleId);
+    // console.log("delete",this.deletedVehicleIds);
+    // this.morevehicles = this.morevehicles.filter(veh => veh.Id !== vehicleId);
+ 
+    // this.vehicles = [...this.vehicles, { label: deletedVehicleFromMoreVehiclesArray.Name, value: deletedVehicleFromMoreVehiclesArray.Id }];
+    // const branchId = event.currentTarget.dataset.id;
+ 
+    // Find the deleted vehicle from morevehicles array
+    // const deletedVehicleFromMoreVehiclesArray = this.branch.find(veh => veh.Id === branchId);
+ 
+    // Push the deleted vehicle ID to deletedVehicleIds array
+    // this.deletedBranchIds.push(branchId);
+ 
+    // Remove the vehicle from morevehicles array
+    // this.branch = this.branch.filter(veh => veh.Id !== branchId);
+ 
+    // Add the deleted vehicle back to vehicles array
+    // if (deletedVehicleFromMoreVehiclesArray) {
+    //     this.branch = [...this.branch, { label: deletedVehicleFromMoreVehiclesArray.Name, value: deletedVehicleFromMoreVehiclesArray.Id }];
+ 
+    // }
+ 
+    // this.selectbranchId = '';
+ 
+    const branchId = event.currentTarget.dataset.id;
+ 
+    // Find the deleted branch from branch array
+    const deletedBranchFromBranchArray = this.branch.find(
+      (branch) => branch.Id === branchId
+    );
+    if (deletedBranchFromBranchArray) {
+      this.branchoptions = [
+        ...this.branchoptions,
+        {
+          label: deletedBranchFromBranchArray.Name,
+          value: deletedBranchFromBranchArray.Id
+        }
+      ];
+    }
+ 
+    // Push the deleted branch ID to deletedBranchIds array
+    this.deletedBranchIds.push(branchId);
+ 
+    // Remove the branch from branch array
+    this.branch = this.branch.filter((branch) => branch.Id !== branchId);
+ 
+    // Add the deleted branch back to another array if needed
+ 
+    // Clear the selected branch ID
+    this.selectbranchId = "";
+  }
+  handleOutsideClick = (event) => {
+    const dataDropElement = this.template.querySelector('.dataDrop');
+    const listsElement = this.template.querySelector('.lists');
+    
+    if (
+        dataDropElement &&
+        !dataDropElement.contains(event.target) &&
+        listsElement &&
+        !listsElement.contains(event.target)
+    ) {
+        this.showlist = false;
+        console.log("Clicked outside");
+    }
+};
+
+renderedCallback() {
+    if (!this.outsideClickHandlerAdded) {
+        document.addEventListener('click', this.handleOutsideClick.bind(this));
+        this.outsideClickHandlerAdded = true;
+    }
+}
+
+disconnectedCallback() {
+    document.removeEventListener('click', this.handleOutsideClick.bind(this));
+}
+
+handlebranchChange() {
+  // this.selectbranchId = event.detail.value;
+  let selectedBranch = "";
+  for (let i = 0; i < this.branchoptions.length; i++) {
+    if (this.branchoptions[i].value === this.selectbranchId) {
+      selectedBranch = this.branchoptions[i];
+      console.log("options", this.branchoptions);
+      this.branchoptions = this.branchoptions.filter(
+        (bran) => bran.value !== this.selectbranchId
+      );
+      console.log("options2", this.branchoptions);
+      break;
+    }
+  }
+  if (selectedBranch) {
+    console.log("selectedBranch", selectedBranch);
+    this.branch.push({
+      Id: selectedBranch.value,
+      Name: selectedBranch.label
+    });
+    this.branchDataForClass.push(selectedBranch.label);
+  }
+  this.selectbranchId = null;
+  // console.log("AddOpt",this.selectbranchId);
+  // console.log("optfind",selectedBranch);
+  // console.log('optfindstr11:', JSON.stringify(this.vehicle));
+  // console.log('optfindstr:', JSON.stringify(selectedVehicle));
+  // console.log("veh on updt",this.morevehicles);
+}
 }

@@ -877,11 +877,3 @@ handleVehicleSelect(event) {
 }
 
 }
-
-
-
-
-
-
-
-

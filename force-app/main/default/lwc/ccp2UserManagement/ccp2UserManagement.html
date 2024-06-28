@@ -89,6 +89,8 @@
                                                     <div key={elm.Id} class="data">{elm.Name}</div>
                                                 </template>
                                             </div>
+                                            <!--Changing for Combo-->
+                                        <!-- Changing End -->
                                         </div>
                                         <div class="records">
                                             <div class="head">{labels.CCP2_Deploy}</div>
@@ -243,9 +245,49 @@
                                 <div class="records">
                                     <div class="head head-save">{labels.CCP2_Affiliation}</div>
                                     <div class="dataBranch">
-                                        <template for:each={userDetailData.Branchs__r} for:item="branch">
+                                        <div class="dataDrop">
+                                            <input type="text" oninput={handleSearch} onclick={handlebranChange}
+                                                class="Inputs1 icon" placeholder="Please select">
+                                            <template if:true={showlist}>
+                                                <div class="lists" onclick={handleInsideClick}>
+                                                    <template for:each={filteredbranch} for:item="veh">
+                                                        <div key={veh.value} class="list-item"
+                                                            onclick={handleBranchSelect} data-id={veh.value}>
+                                                            <p>{veh.label}</p>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="branchrecords">
+                                            <template for:each={branch} for:item="veh">
+                                                <div key={veh.Id} class="record-item">
+                                                    <lightning-icon icon-name="utility:close" size="x-small"
+                                                        alternative-text="Delete" onclick={handleDeleteBranch}
+                                                        data-id={veh.Id} class="filtericn"></lightning-icon>
+                                                    <span>{veh.Name}</span>
+                                                    <br>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <!-- <div class="branchrecords">
+                                            <template for:each={branch} for:item="veh">
+                                                <div key={veh.Id} class="record-item">
+                                                    <lightning-icon icon-name="utility:close" size="x-small"
+                                                        alternative-text="Delete" onclick={handleDeleteBranch}
+                                                        data-id={veh.Id} class="filtericn"></lightning-icon>
+                                                    <span>{veh.Name}</span>
+                                                    <br>
+                                                </div>
+                                            </template>
+                                        </div> -->
+                                    </div>
+                                    <!-- </div> -->
+                                </div>
+
+                                        <!-- <template for:each={userDetailData.Branchs__r} for:item="branch">
                                             <div key={branch.Id} class="data">{branch.Name}</div>
-                                        </template>
+                                        </template> -->
                                     </div>
                                 </div>
 
@@ -357,4 +399,20 @@
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>
     </template>
+    <!-- <template if:true={}}>
+        <div class="main-content" style="padding: 64px calc(256px - 10%) 64px calc(256px - 10%);">
+            <h2 class="heading">会員管理</h2>
+        <div class="list-container list-container-new">
+            <p class="text-para">会員がありません、追加してみませんか？</p>
+            <div class="button-container" style="display: flex; justify-content: center;">
+                <button class="button add-user-button" onclick={handleAddUser}>会員追加</button>
+            </div>
+        </div>
+    
+            <div class="footer-buttons">
+                <a href={homeUrl} style="color: white;"><button
+                        class="button return-button">トップに戻る</button></a>
+            </div>
+        </div>
+    </template> -->
 </template>
