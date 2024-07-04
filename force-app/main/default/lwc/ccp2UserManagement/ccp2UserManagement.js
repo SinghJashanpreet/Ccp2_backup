@@ -143,7 +143,7 @@ export default class Ccp2UserManagement extends LightningElement {
   // Custom vars
   //Custom Vars End
 
-  @wire(branchdetails, { User: "$selectedUserId", refresh: "$refreshToken" })
+  @wire(branchdetails, { User: "$selectedUserId", refresh: "$refreshTokenInt" })
   wiredbranches2({ data, error }) {
     if (data) {
       this.branchfromjunction = data.map((branch) => ({
@@ -161,7 +161,7 @@ export default class Ccp2UserManagement extends LightningElement {
 
   @wire(getUserServices, {
     userId: "$selectedContactUserId",
-    refresh: "$refreshToken"
+    refresh: "$refreshTokenInt"
   })
   userServicesFun({ data, error }) {
     if (data) {
