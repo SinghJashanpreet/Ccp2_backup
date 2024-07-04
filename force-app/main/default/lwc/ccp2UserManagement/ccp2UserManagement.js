@@ -95,6 +95,7 @@ export default class Ccp2UserManagement extends LightningElement {
   refreshUserDetailWireData;
   refreshToken = false;
   refreshTokenInt = 0;
+  refreshTokenInt2 = 10;
   @track selectedUserId;
   @track selectedContactUserId;
   imgdrop = arrowicon;
@@ -143,21 +144,6 @@ export default class Ccp2UserManagement extends LightningElement {
   // Custom vars
   //Custom Vars End
 
-  @wire(branchdetails, { User: "$selectedUserId", refresh: "$refreshTokenInt" })
-  wiredbranches2({ data, error }) {
-    if (data) {
-      this.branchfromjunction = data.map((branch) => ({
-        Name: branch.Name,
-        Id: branch.Id
-      }));
-      // console.log(
-      //   "branch data from new branch func",
-      //   JSON.stringify(this.branchfromjunction)
-      // );
-    } else {
-      console.error("error in fetching branches from new", error);
-    }
-  }
 
   @wire(getUserServices, {
     userId: "$selectedContactUserId",
@@ -243,6 +229,24 @@ export default class Ccp2UserManagement extends LightningElement {
       );
     }
   }
+
+  @wire(branchdetails, { User: "$selectedUserId", refresh: "$refreshTokenInt2" })
+  wiredbranches2({ data, error }) {
+    if (data) {
+      console.log('branchdetails', data , this.refreshTokenInt2)
+      this.branchfromjunction = data.map((branch) => ({
+        Name: branch.Name,
+        Id: branch.Id
+      }));
+      // console.log(
+      //   "branch data from new branch func",
+      //   JSON.stringify(this.branchfromjunction)
+      // );
+    } else {
+      console.error("error in fetching branches from new", error);
+    }
+  }
+
 
   getUserServices(id) {
     getUserServices({ userId: id, refresh: this.refreshToken })
@@ -358,7 +362,7 @@ export default class Ccp2UserManagement extends LightningElement {
   }
 
   getUserAllServicesList(id) {
-    getUserAllServicesList({ userId: id })
+    getUserAllServicesList({ userId: id, refresh: this.refreshTokenInt })
       .then((result) => {
         // console.log("services result final", result);
         // console.log("services result id", id);
@@ -701,6 +705,8 @@ export default class Ccp2UserManagement extends LightningElement {
           // this.selectedUserId = temp;
           this.refreshTokenInt = ++this.refreshTokenInt;
           this.getUserDetail(this.selectedUserId)
+          this.refreshTokenInt2 = ++this.refreshTokenInt2;
+          this.branch = [];
           console.log(
             "refresh , selectedUserId in save form",
             this.refreshTokenInt,
@@ -712,6 +718,7 @@ export default class Ccp2UserManagement extends LightningElement {
             // Ensure changes are reflected in UI
             this.showUserList = false;
             this.userDetailsLoader = false;
+            this.getUserAllServicesList(this.selectedContactUserId);
           }, 2000);
 
           // this.userDetailsLoader = true;
