@@ -1,0 +1,213 @@
+<!--
+ * @Author: Huanghao Tu
+ * @Date: 2022-11-28 13:08:46
+ * @LastEditTime: 2023-01-03 13:10:10
+ * @Description: Header Component
+-->
+<template>
+    <div class="body body-vw">
+        <div class="header">
+            <div class="container">
+                <div class="header__inner">
+                    <div class="header__logo">
+                        <a href={homeUrl} class="header__logo-link">
+                            <img src={headerLogo} alt="" class="header__logo" />
+                        </a>
+                    </div>
+                    <nav class="header__navigation">
+                        <!-- header menu  -->
+                        <div class="header__navigation__title-wrapper is-wide">
+                            <h4 class="header__navigation__title"><a name='Reservation' class='hide'
+                                    href={directBookingUrl}>車検・入庫予約</a></h4>
+                            <!-- CCP2 Changes by JS Changed Class -->
+                            <h4 class="header__navigation__title"><a name='Vehicle_Info' class=''
+                                    href={vehicleListUrl}>保有車情報</a></h4>
+                            <!-- CCP2 Changes by JS Changed Class -->
+                            <!--<h4 class="header__navigation__title"><a name='Reservation_Status' class = 'hide'  href={bookingListUrl}>予約状況</a></h4>-->
+                            <h4 class="header__navigation__title"><a name='Shop' class='hide' target="_blank"
+                                    href={shopUrl}>三菱ふそう_ショップ</a></h4>
+                            <h4 class="header__navigation__title"><a name='Request_Book' class='hide'
+                                    href={requestBookUrl}>部整月次請求書(電子版)</a></h4>
+                        </div>
+                    </nav>
+                    <!-- modal1 start -->
+                    <template if:true={isShowModal1}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                            <div class="slds-modal__container">
+                                <div class="slds-modal__content slds-p-around_medium">
+                                    <H3 class="modal1">
+                                        お客様は部整月次請求書（電子版）の利用登録をしておりません。お手数ですが、登録をご希望の場合はご利用のサービスセンターにお問い合わせください。
+                                    </H3>
+                                </div>
+                                <!-- modal footer start-->
+                                <footer class="slds-modal__footer">
+                                    <button class="return_btn--m button_add" onclick={hideModalBox}>TOPページへ戻る</button>
+                                </footer>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+                    <!-- modal end-->
+                    <!-- modal2 start -->
+                    <template if:true={isShowModal2}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                            <div class="slds-modal__container">
+                                <div class="slds-modal__content slds-p-around_medium">
+                                    <H3 class="modal2">お客様は車検・入庫予約のサービスをご利用いただけません。ご利用を希望の場合は、管理者ユーザにお問い合わせください。
+                                    </H3>
+                                </div>
+                                <!-- modal footer start-->
+                                <footer class="slds-modal__footer">
+                                    <button class="return_btn--m button_add" onclick={hideModalBox}>TOPページへ戻る</button>
+                                </footer>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+                    <!-- modal end-->
+                    <!-- modal3 start -->
+                    <template if:true={isShowModal3}>
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                            <div class="slds-modal__container">
+                                <div class="slds-modal__content slds-p-around_medium">
+                                    <H3 class="modal3">お客様は三菱ふそうショップにアクセスいただけません。ご利用を希望の場合は、管理者ユーザにお問い合わせください。
+                                    </H3>
+                                </div>
+                                <!-- modal footer start-->
+                                <footer class="slds-modal__footer">
+                                    <button class="return_btn--m button_add" onclick={hideModalBox}>TOPページへ戻る</button>
+                                </footer>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+                    <!-- modal end-->
+                    <div class="header__menu-wrapper is-wide">
+                        <div class="header__menu header__menu--user">
+                            <img src={userIcon} alt="" />
+                            <ul class="header__menu__dropdown__list">
+                                <template if:false={amIGuestUser}>
+                                    <li class="header__menu__dropdown__list-item"><a href={profileUrl}>基本情報</a></li>
+                                    <template if:true={enableAddUserItem}>
+                                        <!-- <li class="header__menu__dropdown__list-item"><a href={addUserUrl}>会員追加</a></li> -->
+                                        <li class="header__menu__dropdown__list-item"><a href={UserManagementUrl}>{labels.CCP2_UserManagement}</a></li>
+                                    </template>
+                                    <template if:false={BranchManagement}>
+                                        <li class="header__menu__dropdown__list-item"><a href={addBranchUrl}>{labels.CCP2_BranchManagement}</a>
+                                        </li>
+                                    </template>
+                                    <!--<li class="header__menu__dropdown__list-item"><a href={logoutLink}>ログアウト</a></li>-->
+                                    <li class="header__menu__dropdown__list-item"><a onclick={handleLogout}>ログアウト</a>
+                                    </li>
+                                </template>
+                                <template if:true={amIGuestUser}>
+                                    <li class="header__menu__dropdown__list-item"><a href={loginLink}>ログイン</a></li>
+                                </template>
+                            </ul>
+                        </div>
+                        <template if:false={amIGuestUser}>
+                            <a class="header__menu _margin" href={notificationsUrl}>
+                                <span class="header__menu--notice">
+                                    <img src={noticeIcon} alt="" />
+                                    <template if:true={notificationNumber}>
+                                        <span class="header__menu--notice-active">{notificationNumber}</span>
+                                    </template>
+                                </span>
+                            </a>
+                        </template>
+                        <template if:true={amIGuestUser}>
+                            <a class="header__menu _margin">
+                                <span class="header__menu--notice"> </span>
+                            </a>
+                        </template>
+                        <div class="header__menu header__menu--question">
+                            <img src={questionIcon} alt="" />
+                            <ul class="header__menu__dropdown__list">
+                                <li class="header__menu__dropdown__list-item"><a target="_blank"
+                                        href={faqUrl}>よくあるご質問</a></li>
+                                <template if:false={amIGuestUser}>
+                                    <li class="header__menu__dropdown__list-item"><a target="_blank"
+                                            href={inquiryUrl}>お問い合わせ</a></li>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="header__menu-wrapper is-sp">
+                        <a class="header__menu _margin" href={notificationsUrl}>
+                            <span class="header__menu--notice">
+                                <template if:false={amIGuestUser}>
+                                    <img src={noticeIcon} alt="" />
+                                    <template if:true={notificationNumber}>
+                                        <span class="header__menu--notice-active">{notificationNumber}</span>
+                                    </template>
+                                </template>
+                            </span>
+                        </a>
+                        <div class="header__menu humburger">
+                            <button type="button" id="js-hamburgerBtn" class="hamburger" onclick={drawerOperation}>
+                                <span class="hamburger__icon"></span>
+                                <span class="hamburger__icon"></span>
+                                <span class="hamburger__icon"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="headerPlaceHolder"></div>
+        <!-- drawer-nav | for-sm -->
+        <div id="js-drawerNav" class="drawer-nav is-sp">
+            <div class="jscanScroll drawer-nav__content">
+                <!-- nav-main -->
+                <nav class="drawer-nav__nav-main nav-main">
+                    <ul class="nav-main__list">
+                        <li class="nav-main__item"><a href={directBookingUrl} name='Reservation1'
+                                onclick={closeDrawerMenu} class="nav-main__link hide">車検・入庫予約</a></li>
+                        <li class="nav-main__item"><a href={vehicleListUrl} name='Vehicle_Info1'
+                                onclick={closeDrawerMenu} class="nav-main__link hide">保有車情報</a></li>
+                        <!--<li class="nav-main__item"><a href={bookingListUrl} name='Reservation_Status1'  onclick={closeDrawerMenu} class="nav-main__link hide">予約状況</a></li>-->
+                        <li class="nav-main__item"><a onclick={closeDrawerMenu} name='Shop1' target="_blank"
+                                href={shopUrl} class="nav-main__link hide">三菱ふそう_ショップ</a></li>
+                        <li class="nav-main__item"><a href={requestBookUrl} name='Request_Book1'
+                                class='nav-main__link hide'>部整月次請求書(電子版)</a></li>
+                    </ul>
+                </nav>
+                <!-- nav-sub -->
+                <nav class="drawer-nav__nav-sum nav-sub">
+                    <ul class="nav-sub__list">
+                        <template if:false={amIGuestUser}>
+                            <li class="nav-sub__item"><a href={profileUrl} onclick={closeDrawerMenu}
+                                    class="nav-sub__link">基本情報</a></li>
+                            <template if:true={enableAddUserItem}>
+                                <li class="nav-sub__item"><a href={addUserUrl} onclick={closeDrawerMenu}
+                                        class="nav-sub__link">会員追加</a></li>
+                            </template>
+                        </template>
+                        <li class="nav-sub__item">
+                            <a href={faqUrl} target="_blank" onclick={closeDrawerMenu} class="nav-sub__link">よくあるご質問</a>
+                        </li>
+                        <template if:false={amIGuestUser}>
+                            <li class="nav-sub__item">
+                                <a href={inquiryUrl} target="_blank" onclick={closeDrawerMenu}
+                                    class="nav-sub__link">お問い合わせ</a>
+                            </li>
+                        </template>
+                    </ul>
+                </nav>
+                <!-- nav-logout -->
+                <nav class="drawer-nav__nav-logout nav-logout">
+                    <template if:false={amIGuestUser}>
+                        <!-- <a href={logoutLink} onclick={closeDrawerMenu} class="nav-logout__link">ログアウト</a> -->
+                        <a onclick={handleLogout} class="nav-logout__link">ログアウト</a>
+                    </template>
+                    <template if:true={amIGuestUser}>
+                        <a href={loginLink} onclick={closeDrawerMenu} class="nav-logout__link">ログイン</a>
+                    </template>
+                </nav>
+            </div>
+        </div>
+    </div>
+</template>

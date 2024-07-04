@@ -7,7 +7,7 @@
                     </lightning-spinner>
                 </template>
                 <div class="hero">
-                    <h1 class="hero__title">会員追加</h1>
+                    <!-- <h1 class="hero__title">会員追加</h1> -->
                     <div class="hero__wrapper">
                         <picture class="hero__image">
                             <source media="(max-width: 767px)" srcset={backgroundImageMobile}>
@@ -22,6 +22,8 @@
                                 </template> -->
                                 <!-- Input Section -->
                                 <template if:true={showInputSection}>
+
+                                    <div class="heading">会員追加</div>
                                     <!-- Flow Section -->
                                     <div class="step">
                                         <div class="step__wrapper">
@@ -32,7 +34,7 @@
                                                         <img class="item__icon-check" src={checkIcon} alt="">
                                                         <img class="item__icon-track" src={trackIcon} alt="">
                                                     </div>
-                                                    <div class="item__bottom">基本情報入力</div>
+                                                    <div class="item__bottom">内容入力</div>
                                                 </li>
                                                 <li class="step__item item">
                                                     <div class="item__top">
@@ -40,7 +42,7 @@
                                                         <img class="item__icon-check" src={checkIcon} alt="">
                                                         <img class="item__icon-track" src={trackIcon} alt="">
                                                     </div>
-                                                    <div class="item__bottom">確認</div>
+                                                    <div class="item__bottom">内容確認</div>
                                                 </li>
                                                 <li class="step__item item">
                                                     <div class="item__top">
@@ -77,7 +79,7 @@
                                                         <div class="slds-form-element__control">
                                                             <input type="text" class="form-input slds-input"
                                                                 name="lastName" value={contactInputData.lastName}
-                                                                placeholder="ふそう" maxlength="30">
+                                                                placeholder="ふそう" maxlength="30" onchange={handleAllInputChange}>
                                                         </div>
                                                     </div>
                                                     <div class="form-item__list">
@@ -85,7 +87,7 @@
                                                         <div class="slds-form-element__control">
                                                             <input type="text" class="form-input slds-input"
                                                                 name="firstName" value={contactInputData.firstName}
-                                                                placeholder="太郎" maxlength="30">
+                                                                placeholder="太郎" maxlength="30" onchange={handleAllInputChange}>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -113,7 +115,7 @@
                                                             <input type="text" class="form-input slds-input"
                                                                 name="lastNameKana"
                                                                 value={contactInputData.lastNameKana} placeholder="フソウ"
-                                                                maxlength="30">
+                                                                maxlength="30" onchange={handleAllInputChange}>
                                                         </div>
                                                     </div>
                                                     <div class="form-item__list">
@@ -122,7 +124,7 @@
                                                             <input type="text" class="form-input slds-input"
                                                                 name="firstNameKana"
                                                                 value={contactInputData.firstNameKana} placeholder="タロウ"
-                                                                maxlength="30">
+                                                                maxlength="30" onchange={handleAllInputChange}>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -144,20 +146,20 @@
                                             <label class="form-label aligntop">社員番号</label>
                                             <input type="text" name="employeeCode" value={contactInputData.employeeCode}
                                                 class="form-input slds-form-element__control slds-input" maxlength="100"
-                                                placeholder="入力してください">
+                                                placeholder="入力してください" onchange={handleAllInputChange}>
                                         </div>
 
                                         <div class="form-item">
                                             <label class="form-label aligntop">部署</label>
                                             <input type="text" name="department" value={contactInputData.department}
                                                 class="form-input slds-form-element__control slds-input" maxlength="100"
-                                                placeholder="入力してください">
+                                                placeholder="入力してください" onchange={handleAllInputChange}>
                                         </div>
                                         <div class="form-item">
                                             <label class="form-label aligntop">役職</label>
                                             <input type="text" name="title" value={contactInputData.title}
                                                 class="form-input slds-form-element__control slds-input" maxlength="100"
-                                                placeholder="入力してください">
+                                                placeholder="入力してください" onchange={handleAllInputChange}>
                                         </div>
 
                                         <!-- <div class="item__input-form">
@@ -193,36 +195,13 @@
 
                                         <div class="form-item">
                                             <!-- <div class="item__input-form-item" onclick={toggleDropdown}> -->
-                                            <label class="required form-label aligntop">支店</label>
+                                            <label class="required form-label aligntop">勤務地</label>
                                             <div class="form-item__wrapper">
 
-                                                <!-- <div class="dataDrop">
-                                                        <template for:each={branch} for:item="bran">
-                                                            <div key={bran.Id} class="record-item" style="top:40px;">
-                                                                <lightning-icon icon-name="utility:close" size="x-small"
-                                                                    alternative-text="Delete" onclick={handleDeleteBranch}
-                                                                    data-id={bran.Id} class="filtericn"></lightning-icon>
-                                                                <span>{bran.Name}</span>
-                                                                <br>
-                                                            </div>
-                                                        </template>
-                                                        <input type="text" oninput={handleSearch} onclick={handlebranChange}
-                                                            class="form-input icon" placeholder="Please Select Branch">
-                                                        <template if:true={showlist}>
-                                                            <div class="lists">
-                                                                <template for:each={branchoptions} for:item="bran">
-                                                                    <div key={bran.value} class="list-item"
-                                                                        onclick={handleBranchSelect} data-id={bran.value}>
-                                                                        <p>{bran.label}</p>
-                                                                    </div>
-                                                                </template>
-                                                            </div>
-                                                        </template>
-                                                    </div> -->
-
+                                                
                                                 <div class="dataDrop">
                                                     <input type="text" oninput={handleSearch} onclick={handlebranChange}
-                                                        class="Inputs1 icon" placeholder="Please select">
+                                                        class="Inputs1 icon" placeholder="選択してください">
                                                     <template if:true={showlist}>
                                                         <div class="lists" onclick={handleInsideClick}>
                                                             <template for:each={filteredbranch} for:item="veh">
@@ -242,6 +221,7 @@
                                                                 data-id={veh.Id} class="filtericn"></lightning-icon>
                                                             <span>{veh.Name}</span>
                                                             <br>
+
                                                         </div>
                                                     </template>
                                                 </div>
@@ -258,7 +238,7 @@
                                                 <input type="email"
                                                     class="form-input slds-form-element__control slds-input"
                                                     name="email" value={contactInputData.email}
-                                                    placeholder="sample@sample.com" maxlength="100">
+                                                    placeholder="sample@sample.com" maxlength="100" onchange={handleAllInputChange}>
                                                 <template if:true={emailError}>
                                                     <p class="_error">{emailErrorText}</p>
                                                 </template>
@@ -274,14 +254,14 @@
                                                     <input type="tel"
                                                         class="form-input slds-form-element__control slds-input"
                                                         name="phone" value={contactInputData.phone}
-                                                        placeholder="0312345678" maxlength="15">
+                                                        placeholder="0312345678" minlength="10" maxlength="10" pattern="\d*" onchange={handleAllInputChange} >
                                                 </div>
                                                 <div class="form-item__list">
                                                     <label class="label-text">携帯番号</label>
                                                     <input type="tel"
                                                         class="form-input slds-form-element__control slds-input"
                                                         name="mobilePhone" value={contactInputData.mobilePhone}
-                                                        placeholder="08012345678" maxlength="15">
+                                                        placeholder="08012345678" minlength="10" maxlength="10" pattern="\d*" onchange={handleAllInputChange}>
                                                 </div>
 
                                                 <template if:true={phoneError}>
@@ -295,9 +275,8 @@
                                                 <template if:true={isFDPShow}>
                                                     <div class="checkbox-wrapper">
                                                         <label class="label-box" for="1">
-                                                            <input class="input-checkbox" disabled type="checkbox"
-                                                                name="baseService" onchange={handleCheckboxChange1}
-                                                                checked={baseChecked}>
+                                                            <input class="input-checkbox" type="checkbox"
+                                                                name="baseService" onchange={handleCheckboxChange1} checked={baseChecked}>
                                                             <a href="javascript:void(0);" target="_blank">
                                                                 基本サービス（三菱ふそう_ショップ）
                                                             </a>
@@ -393,9 +372,10 @@
                                         </div>
 
                                         <div class="button__wrapper">
-                                            <a onclick={nextClick} name="nextButton"
-                                                class="primary_btn--m disabled">次へ</a>
+                                            <a onclick={nextClick} name="nextButton" class="primary_nextbtn--m disabled">次へ</a>
                                         </div>
+
+            
                                     </form>
                                 </template>
                                 <!-- modal start -->
@@ -431,7 +411,7 @@
                                                         <img class="item__icon-check" src={checkIcon} alt="">
                                                         <img class="item__icon-track" src={trackIcon} alt="">
                                                     </div>
-                                                    <div class="item__bottom">基本情報入力</div>
+                                                    <div class="item__bottom">内容入力</div>
                                                 </li>
                                                 <li class="step__item item _current">
                                                     <div class="item__top">
@@ -439,7 +419,7 @@
                                                         <img class="item__icon-check" src={checkIcon} alt="">
                                                         <img class="item__icon-track" src={trackIcon} alt="">
                                                     </div>
-                                                    <div class="item__bottom">確認</div>
+                                                    <div class="item__bottom">内容確認</div>
                                                 </li>
                                                 <li class="step__item item">
                                                     <div class="item__top">
@@ -479,9 +459,9 @@
                                             </div>
                                             <div class="section__definition-list">
                                                 <dt>支店</dt>
-                                                <dd>
+                                                <dd class="selectedbranchlist">
                                                     <template for:each={branch} for:item="bran">
-                                                        <div key={bran.Id}>
+                                                        <div key={bran.Id} class="selectedbranchname">
                                                             <span>{bran.Name}</span>
                                                         </div>
                                                     </template>
@@ -511,73 +491,44 @@
                                                 <dt class="aligntop">利用するサービス</dt>
                                                 <div class="form-item__wrapper _tell padtop">
                                                     <template if:true={isFDPShow}>
-                                                        <div class="checkbox-wrapper">
+                                                        <!-- <div class="checkbox-wrapper">
                                                             <label class="label-box" for="1"><input
                                                                     class="input-checkbox" type="checkbox"
-                                                                    name="baseService1" disabled checked={baseService}>
+                                                                    name="baseService1" disabled checked={baseService}> -->
                                                                 <a href="javascript:void(0);" target="_blank">
                                                                     基本サービス（三菱ふそう_ショップ）
-                                                                </a></label>
-                                                        </div>
+                                                                </a>
+                                                            <!-- </label> -->
+                                                        <!-- </div> -->
                                                     </template>
-                                                    <!-- <template if:true={vehicleShow}>
-                                                        <div class="checkbox-wrapper">
-                                                            <label class="label-box" for="1"><input class="input-checkbox" type="checkbox" name="vehiclereservation1"
-                                                            disabled checked={vehiclereservation}>
-                                                            <a href="javascript:void(0);" target="_blank">
-                                                                車検・入庫予約
-                                                            </a></label>
-                                                        </div>
-                                                    </template> -->
-                                                    <!-- <template if:true={requestShow}> -->
-                                                    <div class="checkbox-wrapper">
-                                                        <label class="label-box" for="1"><input class="input-checkbox"
-                                                                type="checkbox" name="requestbook1" disabled
-                                                                checked={requestbook}>
-                                                            <a href="javascript:void(0);" target="_blank">
-                                                                部整月次請求書（電子版）
-                                                            </a></label>
-                                                    </div>
-                                                    <!-- </template> -->
-                                                    <!-- <template if:true={financialshow}> -->
-                                                    <div class="checkbox-wrapper">
-                                                        <label class="label-box" for="1">
-                                                            <input class="input-checkbox" type="checkbox"
-                                                                name="financialservice1" disabled
-                                                                checked={financialservice}>
-                                                            <a href="javascript:void(0);" target="_blank">
-                                                                ファイナンシャルサービス
-                                                            </a>
-                                                        </label>
-                                                    </div>
-                                                    <!-- </template> -->
-                                                    <!-- <template if:true={maintenanceshow}> -->
-                                                    <div class="checkbox-wrapper">
-                                                        <label class="label-box" for="1">
-                                                            <input class="input-checkbox" type="checkbox"
-                                                                name="onlinemaintenancebooking1" disabled
-                                                                checked={onlinemaintenancebooking}>
-                                                            <a href="javascript:void(0);" target="_blank">
-                                                                車検入庫予約
-                                                            </a>
-                                                        </label>
-                                                    </div>
-                                                    <!-- </template> -->
-                                                    <!-- <template if:true={vehiclemanagementshow}> -->
-                                                    <div class="checkbox-wrapper">
-                                                        <label class="label-box" for="1">
-                                                            <input class="input-checkbox" type="checkbox"
-                                                                name="vehiclemanagement1" disabled
-                                                                checked={vehiclemanagement}>
-                                                            <a href="javascript:void(0);" target="_blank">
-                                                                車両管理
-                                                            </a>
-                                                        </label>
-                                                    </div>
-
-                                                    <!-- </template> -->
-                                                    <!-- <template if:true={costshow}> -->
-                                                    <div class="checkbox-wrapper">
+                                                        
+                                                    <template if:true={fsChecked}>
+                                                        <a href="javascript:void(0);" target="_blank">
+                                                            ファイナンシャルサービス
+                                                        </a>
+                                                    </template>
+                                                    <template if:true={ombChecked}>
+                                                        <a href="javascript:void(0);" target="_blank">
+                                                            車検入庫予約
+                                                        </a>
+                                                    </template>
+                                                    <template if:true={vmChecked}>
+                                                        <a href="javascript:void(0);" target="_blank">
+                                                            車両管理
+                                                        </a>
+                                                    </template>
+                                                    <template if:true={rbChecked}>
+                                                        <a href="javascript:void(0);" target="_blank">
+                                                            部整月次請求書（電子版）
+                                                        </a>
+                                                    </template>
+                                                    
+                                                    <template if:true={cmChecked}>
+                                                        <a href="javascript:void(0);" target="_blank">
+                                                            費用管理
+                                                        </a>
+                                                    </template>
+                                                    <!-- <div class="checkbox-wrapper">
                                                         <label class="label-box" for="1">
                                                             <input class="input-checkbox" type="checkbox"
                                                                 name="costmanagement1" disabled
@@ -586,7 +537,7 @@
                                                                 費用管理
                                                             </a>
                                                         </label>
-                                                    </div>
+                                                    </div> -->
                                                     <!-- </template> -->
 
                                                     <!-- <template if:true={isFDPShow}>
@@ -601,7 +552,7 @@
                                     </div>
                                     <div class="button__wrapper">
                                         <a onclick={back2InputClick} class="return_btn--m">修正</a>
-                                        <a onclick={confirmClick} class="primary_btn--m">次へ</a>
+                                        <a onclick={confirmClick} class="primary_nextbtn--m">次へ</a>
                                     </div>
                                 </template>
 
@@ -617,7 +568,7 @@
                                                         <img class="item__icon-check" src={checkIcon} alt="">
                                                         <img class="item__icon-track" src={trackIcon} alt="">
                                                     </div>
-                                                    <div class="item__bottom">基本情報入力</div>
+                                                    <div class="item__bottom">内容入力</div>
                                                 </li>
                                                 <li class="step__item item _checked">
                                                     <div class="item__top">
@@ -625,7 +576,7 @@
                                                         <img class="item__icon-check" src={checkIcon} alt="">
                                                         <img class="item__icon-track" src={trackIcon} alt="">
                                                     </div>
-                                                    <div class="item__bottom">確認</div>
+                                                    <div class="item__bottom">内容確認</div>
                                                 </li>
                                                 <li class="step__item item _current">
                                                     <div class="item__top">
@@ -641,10 +592,11 @@
                                     <div class="register-ok">
                                         <p class="text-main">
                                             ご登録内容を確認の上、運営よりご連絡いたします。<br>
-                                            追加いただいたメールアドレスに、認証のご案内メールを送信いたしました。認証作業を行ってください。
+                                            追加いただいたメールアドレスに、認証のご案内メールを送信いたしまし<br>
+                                            た。認証作業を行ってください。
                                         </p>
                                         <div class="button__wrapper">
-                                            <button onclick={navigateToHome} class="primary_btn--m">TOPページへ戻る</button>
+                                            <button onclick={navigateToHome} class="primary_nextbtn--m">会員管理へ</button>
                                         </div>
                                     </div>
                                 </template>

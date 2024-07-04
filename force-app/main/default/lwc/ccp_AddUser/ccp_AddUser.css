@@ -57,6 +57,7 @@
     padding: 0;
     color: var(--colorText1);
     background: white;
+    /* border: solid; */
     position: relative;
     -webkit-text-size-adjust: none;
     -moz-text-size-adjust: none;
@@ -268,9 +269,9 @@ h4 {
 .container__inner {
     width: 100%;
     position: relative;
-    background-color: #fff;
-    margin-top: -14.7222222222vw;
-    border-radius: 40px;
+    background-color: rgba(251, 251, 251, 0.8);
+    margin-top: -28.5vw;
+    border-radius: 10px;
     padding: 64px 60px 120px;
 }
 
@@ -372,9 +373,9 @@ h4 {
 .step__list::before {
     content: "";
     position: absolute;
-    height: 1px;
+    height: 2px;
     width: calc(100% - 100px);
-    background-color: #d9d9d9;
+    background-color: #BBBBBB;
     top: 12px;
     left: 50%;
     transform: translate(-50%, -100%);
@@ -427,6 +428,7 @@ h4 {
     color: white;
     border: none;
     font-weight: bold;
+    background-color: unset;
 }
 
 .step__item._current .item__icon-track {
@@ -451,7 +453,6 @@ h4 {
 .step__item .item__top {
     width: 38px;
     height: 32px;
-    background-color: white;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -475,7 +476,7 @@ h4 {
 
 .step__item .item__num {
     font-size: 10px;
-    color: #BBBBBB;
+    color: white;
     border-radius: 50%;
     border: 1px solid #BBBBBB;
     display: flex;
@@ -485,6 +486,7 @@ h4 {
     height: 24px;
     position: relative;
     z-index: 1;
+    background-color:#BBBBBB;
 }
 
 @media (min-width: 768px) and (max-width: 1440px) {
@@ -574,7 +576,15 @@ h4 {
     padding-bottom: 8px;
     font-size: 18px;
     text-align: center;
+    font-weight: 530;
 }
+
+.selectedbranchlist{
+    display: flex;
+    flex-direction: column;
+}
+
+
 
 @media (min-width: 768px) and (max-width: 1440px) {
     .text-main {
@@ -591,7 +601,7 @@ h4 {
 }
 
 .register-ok .text-main {
-    margin-bottom: 64px;
+    margin-bottom: 15%;
 }
 
 @media (min-width: 768px) and (max-width: 1440px) {
@@ -660,6 +670,9 @@ h4 {
 .form-item--checkbox,
 .form-item--textarea {
     align-items: flex-start;
+}
+
+.form-item--register{
 }
 
 @media (min-width: 768px) and (max-width: 1440px) {
@@ -754,6 +767,10 @@ h4 {
 .form-item__wrapper._tell .form__title,
 .form-item__wrapper._email .form__title {
     margin-bottom: 16px;
+}
+
+.form__title{
+    font-weight: 500;
 }
 
 @media (min-width: 768px) and (max-width: 1440px) {
@@ -866,6 +883,14 @@ h4 {
         margin-right: 2.1333333333vw;
         margin-bottom: 0;
     }
+}
+
+.label-text{
+    font-weight: 500;
+}
+
+.input-checkbox .a{
+    font-weight: bold;
 }
 
 .select-date__wrapper._tell .form-item__list .form-input,
@@ -1052,6 +1077,40 @@ h4 {
     }
 }
 
+.button__wrapper .primary_nextbtn--m{
+    display: block;
+    text-align: center;
+    max-width: 264px;
+    font-size: 16px;
+    width: 20%;
+    background-color: #E10202;
+    color: white;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    line-height: 1.5;
+    padding: 12px 40px;
+    box-shadow: 0px 0px 10px 0px #00000026;
+    transition: background-color 0.3s linear, border 0.3s linear, color 0.3s ease-out;
+}
+
+.button__wrapper .primary_nextbtn--m:hover{
+    background-color: white;
+    border-color: #E10202;
+    color: #E10202;
+    box-shadow: 0px 0px 10px 0px #00000026;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+}
+
+.button__wrapper .primary_nextbtn--m.disabled{
+    pointer-events: none;
+    background-color: #E10202;
+    color: white;
+    box-shadow: 0px 0px 10px 0px #00000026;
+    border-radius: 10px;
+}
+
+
+
 .primary_btn--m:hover {
     background-color: var(--colorBase);
     color: var(--colorbuttonAlert);
@@ -1158,7 +1217,7 @@ label.form-label--tel {
 .select-date {
     width: 100%;
     height: 56px;
-    cursor: pointer;
+    cursor: auto;
     border: 1px solid var(--colorLine);
     border-radius: 3px;
     max-width: 552px;
@@ -1274,6 +1333,14 @@ label.label-box {
     line-height: 1.5;
     position: relative;
     cursor: pointer;
+}
+.heading{
+    font-size:xx-large;
+    display: flex;
+    justify-content: center;
+    margin-top: 3%;
+    margin-bottom: 5%;
+    font-weight: bold;
 }
 
 @media (min-width: 768px) and (max-width: 1440px) {
@@ -1488,7 +1555,7 @@ input.input-checkbox {
 
 /* section__outline */
 .section__outline {
-    border: 1px solid var(--colorLine);
+    /* border: 1px solid var(--colorLine); */
     width: 100%;
     max-width: 936px;
     margin: 0 auto;
@@ -1562,12 +1629,14 @@ input.input-checkbox {
 .return_btn--m {
     max-width: 264px;
     font-size: 16px;
-    width: 100%;
-    background-color: var(--colorTextLink);
-    color: var(--colorBase);
-    border: 1px solid var(--colorTextLink);
+    width: 20%;
+    border-radius: 10px;
+    background-color: #E9E9E9;
+    color: black;
+    border: 1px solid #E9E9E9;
     padding: 12px 32px;
     display: block;
+    box-shadow: 0px 0px 10px 0px #00000026;
     text-align: center;
     transition: background-color 0.3s linear, border 0.3s linear, color 0.3s ease-out;
 }
@@ -1595,9 +1664,11 @@ input.input-checkbox {
 }
 
 .return_btn--m:hover {
-    background-color: var(--colorBase);
-    color: var(--colorTextLink);
-    border: 1px solid var(--colorTextLink);
+    background-color: white;
+    color: #8F98AA;
+    border: 1px solid #8F98AA;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+    box-shadow: 0px 0px 10px 0px #00000026;
 }
 
 /* flex
@@ -1669,15 +1740,12 @@ input.input-checkbox {
     background-color: #f0f0f0; /* Hover effect */
 }
 .dataDrop{
-    /* margin-left: 190px; */
     margin-top: 1px;
     font-size: 14px;
     margin-bottom: 2px;
     font-family: Helvetica, Arial, sans-serif;
-    width: 100%;
-    /* margin-left: 80%; */
-    /* display: flex;
-    justify-content: end; */
+    width: 60%;
+    
 }
 .new12{
     margin-left: 20px;
@@ -1688,17 +1756,17 @@ input.input-checkbox {
     display: flex;
     
 }
-.Inputs1{
+/* .Inputs1{
     border: 1px solid #D9D9D9;
-    /* border-radius: 2px; */
+    border-radius: 2px;
     height: 50px;
     padding-left: 22px;
     width: 100%;
     border-radius:10px;
- }
- .Inputs1:hover{
+ } */
+ /* .Inputs1:hover{
     cursor: pointer;
- }
+ } */
 
 .item__input-form{
     display: flex;
@@ -1719,10 +1787,56 @@ input.input-checkbox {
     --dropdown-icon: url(''); /* Fallback or default value */
 }
 
+.combo .slds-input {
+    padding-left: 40px; 
+    background: var(--dropdown-icon) no-repeat;
+    background-position: 10px 50%; 
+    background-size: 20px; 
+}
+
+.branchrecords{
+    width: 50%;
+    min-height: 50px;
+    max-height: 232px;
+    border-radius: 10px;
+    border: 1px solid lightgrey;
+    --slds-c-icon-color-foreground-default: #E10202;
+    padding: 2%;
+    overflow-y: auto;
+}
+
+/* width */
+.branchrecords::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+.branchrecords::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+.branchrecords::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius:50px;
+  }
+  
+  /* Handle on hover */
+.branchrecords::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
+
+
+.record-item{
+    font-size: medium;
+    padding: 4%;
+}
+
 .icon{
     padding-left: 40px; /* Adjust padding to make space for the icon */
     background: var(--dropdown-icon) no-repeat;
-    background-position: 450px 50%; /* Adjust position as needed */
+    background-position: 215px 50%; /* Adjust position as needed */
     background-size: 20px; /* Adjust size as needed */
 }
 
@@ -1732,10 +1846,14 @@ input.input-checkbox {
 .Inputs1{
     border: 1px solid #D9D9D9;
     border-radius: 8px;
-    width: 190px;
-    height: 40px;
+    width: 250px;
+    height: 50px;
     padding-left: 22px;
     background-color: #ffffff;
+ }
+
+ .Inputs1::placeholder{
+    color: #BBBBBB;
  }
 .Inputs1:hover{
     cursor: pointer;
@@ -1745,7 +1863,7 @@ position: absolute;
 background: white;
 border: 1px solid #D9D9D9;
 border-radius: 8px;
-width: 189px; /* Matches the input width */
+width: 250px; /* Matches the input width */
 max-height: 200px; /* Maximum height for the dropdown */
 overflow-y: auto;
 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);

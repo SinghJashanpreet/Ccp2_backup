@@ -7,7 +7,7 @@
 import { LightningElement, track, wire } from "lwc";
 import AddUser_StaticResource from "@salesforce/resourceUrl/CCP_StaticResource_AddUser";
 import Vehicle_StaticResource from "@salesforce/resourceUrl/CCP_StaticResource_Vehicle";
-import Branch_StaticResource from "@salesforce/resourceUrl/CCP_StaticResource_Vehicle";
+// import Branch_StaticResource from "@salesforce/resourceUrl/CCP_StaticResource_Vehicle";
 import getContactData from "@salesforce/apex/CCP_AddUserCtrl.getContactData";
 import checkUserEmail from "@salesforce/apex/CCP_AddUserCtrl.checkUserEmail";
 import checkManageUser from "@salesforce/apex/CCP_AddUserCtrl.checkManageUser";
@@ -24,11 +24,8 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import Id from "@salesforce/user/Id";
 
-const arrowicon =
-  Branch_StaticResource + "/CCP_StaticResource_Vehicle/images/arrow_under.png";
-const BACKGROUND_IMAGE_PC =
-  Vehicle_StaticResource +
-  "/CCP_StaticResource_Vehicle/images/Main_Background.png";
+const  arrowicon = Vehicle_StaticResource + '/CCP_StaticResource_Vehicle/images/arrow_under.png';
+const BACKGROUND_IMAGE_PC = Vehicle_StaticResource + "/CCP_StaticResource_Vehicle/images/Main_Background.png";
 //const BACKGROUND_IMAGE_MOBILE = AddUser_StaticResource + '/CCP_StaticResource_AddUser/images/register_img_hero.png';
 const BACKGROUND_IMAGE_MOBILE =
   Vehicle_StaticResource +
@@ -45,7 +42,7 @@ export default class Ccp_AddUser extends LightningElement {
   imgdrop = arrowicon;
   trackIcon = TRACK_ICON;
   checkIcon = CHECK_ICON;
-  showInputSection = true;
+  @track showInputSection = true;
   showConfirmationSection = false;
   showCompletionSection = false;
   isManageUser = false;
@@ -61,13 +58,13 @@ export default class Ccp_AddUser extends LightningElement {
   vmChecked = false;
   cmChecked = false;
 
-  @track deletedBranchIds = [];
-  @track selectedLabels = [];
+   deletedBranchIds = [];
+   selectedLabels = [];
 
-  @track branchoptions = [];
-  @track branch = [];
-  @track branchDataForClass = [];
-  @track selectbranchId = "";
+  branchoptions = [];
+  branch = [];
+  branchranchDataForClass = [];
+  selectbranchId = "";
   @track showlist = false;
   searchTerm = "";
 
@@ -97,8 +94,8 @@ export default class Ccp_AddUser extends LightningElement {
   emailErrorText;
   phoneErrorText;
   isShowModal = false;
-  baseChecked = true;
-  baseService = true;
+  baseChecked = false;
+  // baseService = true;
   eInvioceService = false;
   directBookService = false;
   contactInputData = {
@@ -114,13 +111,24 @@ export default class Ccp_AddUser extends LightningElement {
     employeeCode: null
   };
 
+  handleAllInputChange(event){
+    this.contactInputData[event.target.name] = event.target.value;
+  }
+
   connectedCallback() {
-    this.template.host.style.setProperty(
-      "--dropdown-icon",
-      `url(
-            ${this.imgdrop}
-            )`
-    );
+
+    this.template.host.style.setProperty('--dropdown-icon', `url(${this.imgdrop})`);
+        requestAnimationFrame(() => {
+            this.addCustomStyles();
+        });
+
+
+    // this.template.host.style.setProperty(
+    //   "--dropdown-icon",
+    //   `url(
+    //         ${this.imgdrop}
+    //         )`
+    // );
     //res = false
     this.userTypeJudgment();
     this.checkManageUser();
@@ -220,9 +228,12 @@ export default class Ccp_AddUser extends LightningElement {
   //     console.log("sample",this.contactData );
   // }
   handlebranChange(event) {
-    //console.log('employee', this.contactInputData);
+    console.log('employee', JSON.stringify(this.contactInputData));
     event.stopPropagation();
     this.showlist = !this.showlist;
+    if(this.branchoptions.length === 0){
+      this.showlist = false;
+    }
   }
 
   @wire(getbranchdetails) wiredBranches({ data, error }) {
@@ -263,17 +274,25 @@ export default class Ccp_AddUser extends LightningElement {
     let mobilePhone = this.template.querySelector('[name="mobilePhone"]');
     let department = this.template.querySelector('[name="department"]');
     let title = this.template.querySelector('[name="title"]');
+    
     let employeeCode = this.template.querySelector('[name="employeeCode"]');
-    if (!this.isFDP) {
+    // if (!this.isFDP) {
+    //   // this.baseService = this.template.querySelector(
+    //   //   '[name="baseService"]'
+    //   // ).checked;
+    // }
+
+
+    if (this.template.querySelector('[name="baseService"]') != null){
       this.baseService = this.template.querySelector(
         '[name="baseService"]'
       ).checked;
     }
-    if (this.template.querySelector('[name="vehiclereservation"]') != null) {
-      this.vehiclereservation = this.template.querySelector(
-        '[name="vehiclereservation"]'
-      ).checked;
-    }
+    // if (this.template.querySelector('[name="vehiclereservation"]') != null) {
+    //   this.vehiclereservation = this.template.querySelector(
+    //     '[name="vehiclereservation"]'
+    //   ).checked;
+    // }
     if (this.template.querySelector('[name="requestbook"]') != null) {
       this.requestbook = this.template.querySelector(
         '[name="requestbook"]'
@@ -312,6 +331,9 @@ export default class Ccp_AddUser extends LightningElement {
       );
       return;
     }
+
+    
+    
     // the lastName verify not null and up to 80 characters
     if (!lastName.value) {
       lastName.className = "form-input _error slds-input";
@@ -363,7 +385,7 @@ export default class Ccp_AddUser extends LightningElement {
     phone.className = "form-input  slds-form-element__control slds-input";
     mobilePhone.className = "form-input  slds-form-element__control slds-input";
     // verify the phone and mobile cannot be empty at the same time
-    if (!phone.value && !mobilePhone.value) {
+    if (!phone.value || !mobilePhone.value) {
       phone.className =
         "form-input _error slds-form-element__control slds-input";
       mobilePhone.className =
@@ -372,14 +394,14 @@ export default class Ccp_AddUser extends LightningElement {
       //this.phoneErrorText = '電話番号と携帯番号のいずれかを必ず入力してください';
       this.phoneErrorText = "電話番号か携帯番号かいずれ入力してください。";
     } else if (
-      (phone.value.length > 0 && !onlyNumber.test(phone.value)) ||
-      (mobilePhone.value.length > 0 && !onlyNumber.test(mobilePhone.value))
+      (phone.value.length < 10 || !onlyNumber.test(phone.value)) ||
+      (mobilePhone.value.length < 10 || !onlyNumber.test(mobilePhone.value))
     ) {
-      if (phone.value.length > 0 && !onlyNumber.test(phone.value)) {
+      if (phone.value.length < 10 || !onlyNumber.test(phone.value)) {
         phone.className =
           "form-input _error slds-form-element__control slds-input";
       }
-      if (mobilePhone.value.length > 0 && !onlyNumber.test(mobilePhone.value)) {
+      if (mobilePhone.value.length < 10 || !onlyNumber.test(mobilePhone.value)) {
         mobilePhone.className =
           "form-input _error slds-form-element__control slds-input";
       }
@@ -465,7 +487,19 @@ export default class Ccp_AddUser extends LightningElement {
       mobilePhone: mobilePhone.value,
       employeeCode: employeeCode.value
     };
+
+    if(title.value == ''){
+      this.contactInputData.title = 'Null';
+    }
+    if(department.value == ''){
+      this.contactInputData.department = 'Null';
+    }
+    if(employeeCode.value == ''){
+      this.contactInputData.employeeCode = 'Null';
+    }
   }
+
+  
 
   // get the checked information
   handleCheckboxChange(event) {
@@ -484,17 +518,12 @@ export default class Ccp_AddUser extends LightningElement {
   handleCheckboxChange1(event) {
     let checkName = event.target.name;
     let isChecked = event.target.checked;
-    if (checkName == "vehiclereservation") {
-      this.vrChecked = isChecked;
+    
+    if (checkName == "baseService") {
+      this.baseChecked = isChecked;
     } else if (checkName == "requestbook") {
       this.rbChecked = isChecked;
     }
-    // else if(checkName == 'basicservice'){
-    //     this.bsChecked = isChecked;
-    // }
-    // else if(checkName == 'einvoice'){
-    //     this.eiChecked = isChecked;
-    // }
     else if (checkName == "financialservice") {
       this.fsChecked = isChecked;
     } else if (checkName == "onlinemaintenancebooking") {
@@ -562,30 +591,6 @@ export default class Ccp_AddUser extends LightningElement {
   }
 
   handleDeleteBranch(event) {
-    // const vehicleId = event.currentTarget.dataset.id;
-    // this.deletedVehicleIds.push(vehicleId);
-    // console.log("delete",this.deletedVehicleIds);
-    // this.morevehicles = this.morevehicles.filter(veh => veh.Id !== vehicleId);
-
-    // this.vehicles = [...this.vehicles, { label: deletedVehicleFromMoreVehiclesArray.Name, value: deletedVehicleFromMoreVehiclesArray.Id }];
-    // const branchId = event.currentTarget.dataset.id;
-
-    // Find the deleted vehicle from morevehicles array
-    // const deletedVehicleFromMoreVehiclesArray = this.branch.find(veh => veh.Id === branchId);
-
-    // Push the deleted vehicle ID to deletedVehicleIds array
-    // this.deletedBranchIds.push(branchId);
-
-    // Remove the vehicle from morevehicles array
-    // this.branch = this.branch.filter(veh => veh.Id !== branchId);
-
-    // Add the deleted vehicle back to vehicles array
-    // if (deletedVehicleFromMoreVehiclesArray) {
-    //     this.branch = [...this.branch, { label: deletedVehicleFromMoreVehiclesArray.Name, value: deletedVehicleFromMoreVehiclesArray.Id }];
-
-    // }
-
-    // this.selectbranchId = '';
 
     const branchId = event.currentTarget.dataset.id;
 
@@ -605,14 +610,17 @@ export default class Ccp_AddUser extends LightningElement {
 
     // Push the deleted branch ID to deletedBranchIds array
     this.deletedBranchIds.push(branchId);
+    console.log("newe2",JSON.stringify(this.deletedBranchIds));
 
     // Remove the branch from branch array
     this.branch = this.branch.filter((branch) => branch.Id !== branchId);
 
+    console.log("newe2",JSON.stringify(this.branch));
+
     // Add the deleted branch back to another array if needed
 
     // Clear the selected branch ID
-    this.selectbranchId = "";
+    branchId = "";
   }
 
   getInputData() {
@@ -644,9 +652,9 @@ export default class Ccp_AddUser extends LightningElement {
     // if the two terms not check, the next button is disable
     if (nextButton != null) {
       if (this.termServiceChecked && this.termDataChecked) {
-        nextButton.className = "primary_btn--m";
+        nextButton.className = "primary_nextbtn--m";
       } else {
-        nextButton.className = "primary_btn--m disabled";
+        nextButton.className = "primary_nextbtn--m disabled";
       }
     }
   }
@@ -670,7 +678,7 @@ export default class Ccp_AddUser extends LightningElement {
             contactId: data,
             accountCode: this.contactData.accountCode,
             contactInputDataStr: JSON.stringify(this.contactInputData),
-            vrChecked: this.vrChecked,
+            vrChecked: this.baseChecked,
             rbChecked: this.rbChecked,
             //bsChecked:this.bsChecked,eiChecked:this.eiChecked,
             fsChecked: this.fsChecked,
@@ -692,11 +700,11 @@ export default class Ccp_AddUser extends LightningElement {
               // console.log("inside user",data)
               console.log("createUser Errors:" + JSON.stringify(error));
             });
-
+            const BranchIdsToAdd = this.branch.map(vehicle => vehicle.Id);
           createBranch({
             accountId: this.contactData.accountId,
             contactId: contactID,
-            branches: this.branchDataForClass
+            branches: BranchIdsToAdd
           })
             .then((data) => {
               // if(data != null){
@@ -764,81 +772,12 @@ export default class Ccp_AddUser extends LightningElement {
   
 
 
-
-
-
-
-
-
-
-
-
-
   
-  // shivam code
-  
-
 handleInsideClick(event) {
     event.stopPropagation();
 }
-handleDeleteVehicle(event) {
-    const vehicleId = event.currentTarget.dataset.id;
-// console.log("Deleting vehicle with ID:", vehicleId);
 
-const deletedVehicleFromVehicleArray = this.vehicle.find(veh => veh.Id === vehicleId);
-if (deletedVehicleFromVehicleArray) {
-    this.vehicles = [...this.vehicles, { label: deletedVehicleFromVehicleArray.Name, value: deletedVehicleFromVehicleArray.Id }];
-   // console.log("Vehicle re-added to selection list from `vehicle` array:", JSON.stringify(this.vehicles));
-}
-
-const deletedVehicleFromMoreVehiclesArray = this.morevehicles.find(veh => veh.Id === vehicleId);
-if (deletedVehicleFromMoreVehiclesArray && !deletedVehicleFromVehicleArray) {
-    this.vehicles = [...this.vehicles, { label: deletedVehicleFromMoreVehiclesArray.Name, value: deletedVehicleFromMoreVehiclesArray.Id }];
-    //console.log("Vehicle re-added to selection list from `morevehicles` array:", JSON.stringify(this.vehicles));
-}
-
-this.deletedVehicleIds.push(vehicleId);
-
-this.vehicle = this.vehicle.filter(veh => veh.Id !== vehicleId);
-this.morevehicles = this.morevehicles.filter(veh => veh.Id !== vehicleId);
-this.selectedVehicleId = '';
-
-
-}
-//  handleVehicleSelect(event) {
-//     this.selectedVehicleId = event.currentTarget.dataset.id;
-//     this.handleVehicleChange();
-// }
-closeList(){
-    this.showlist = false;
-}
-
-
- handleVehicleChange() {
-    let selectedVehicle = '';
-    for (let i = 0; i < this.vehicles.length; i++) {
-        if (this.vehicles[i].value === this.selectedVehicleId) {
-            selectedVehicle = this.vehicles[i];
-            console.log("options",JSON.stringify(this.vehicles));
-            this.vehicles = this.vehicles.filter(veh => veh.value !== this.selectedVehicleId);
-            console.log("options",JSON.stringify(this.vehicles));
-            break;
-        }
-    }
-    if (selectedVehicle) {
-        this.morevehicles.push({ Id: selectedVehicle.value, Name: selectedVehicle.label });
-         }
-        this.selectedVehicleId = null; 
-        if (this.vehicles.length === 0) {
-            this.showlist = false;
-        }
-    // console.log("AddOpt",this.selectedVehicleId);
-    // console.log("optfind",selectedVehicle);
-    // console.log('optfindstr11:', JSON.stringify(this.vehicle));
-    // console.log('optfindstr:', JSON.stringify(selectedVehicle));
-     // console.log("veh on updt",this.morevehicles);
-}
- handleOutsideClick = (event) => {
+handleOutsideClick = (event) => {
     const dataDropElement = this.template.querySelector('.dataDrop');
     const listsElement = this.template.querySelector('.lists');
     if (
@@ -853,27 +792,8 @@ closeList(){
 };
 
 
-disconnectedCallback() {
+disconnectedCallback(){
     document.removeEventListener('click', this.handleOutsideClick.bind(this));
 }
   
-
-handleSearch(event) {
-    this.searchTerm = event.target.value.toLowerCase();
-}
-get filteredVehicles() {
-    if (!this.searchTerm) {
-        return this.vehicles;
-    }
-    return this.vehicles.filter(veh => {
-        return veh.label.toLowerCase().includes(this.searchTerm);
-    });
-}
-
-handleVehicleSelect(event) {
-    this.selectedVehicleId = event.currentTarget.dataset.id;
-    this.handleVehicleChange();
-
-}
-
 }
