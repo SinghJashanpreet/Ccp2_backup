@@ -91,7 +91,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
       })
       .catch((error) => {
         this.errors = JSON.stringify(error);
-        console.log("checkManagerUser errors:" + JSON.stringify(error));
+        //console.log("checkManagerUser errors:" + JSON.stringify(error));
       });
   }
 
@@ -101,7 +101,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
       // console.log("amIGuestUser", result);
       if (result == true) {
         getLoginURL().then((result) => {
-          console.log("getLoginURL", result);
+         // console.log("getLoginURL", result);
           this.loginLink = result;
         });
       } else {
@@ -121,10 +121,10 @@ export default class Ccp2_FusoHeader extends LightningElement {
     document.head.appendChild(link);
     this.getAllUrl();
 
-     console.log("info of user api id:- ", Id);
+    // console.log("info of user api id:- ", Id);
     getAllServices({ userId: this.uid })
       .then((res) => {
-         console.log("info of user api:- ", res);
+         //console.log("info of user api:- ", res);
 
         res.forEach((elm) => {
           if (elm.apiName == "E_invoice_Flag__c") {
@@ -142,7 +142,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
       })
       .catch((error) => {
         this.errors = JSON.stringify(error);
-        console.log("checkManagerUser errors:" + JSON.stringify(error));
+       // console.log("checkManagerUser errors:" + JSON.stringify(error));
       });
   }
 
@@ -172,7 +172,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
   handleLogout() {
     getLogoutURL()
       .then(async (result) => {
-        console.log("getLogoutURL", result);
+       // console.log("getLogoutURL", result);
         const sitePrefix = basePath.replace(/\/s$/i, "");
         const defLogoutURL = sitePrefix + "/secur/logout.jsp";
         if (result) {
@@ -184,7 +184,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
       })
       .catch((error) => {
         this.errors = JSON.stringify(error);
-        console.log("getLogoutURL errors:" + JSON.stringify(error));
+       // console.log("getLogoutURL errors:" + JSON.stringify(error));
       });
   }
 
@@ -199,7 +199,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
       !listsElement.contains(event.target)
     ) {
       this.showUserList = false;
-      console.log("Clicked outside");
+     // console.log("Clicked outside");
     }
   };
 

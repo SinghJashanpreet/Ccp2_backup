@@ -584,7 +584,10 @@ h4 {
     flex-direction: column;
 }
 
-
+.error-align{
+    display: flex;
+    flex-direction: column;
+}
 
 @media (min-width: 768px) and (max-width: 1440px) {
     .text-main {
@@ -672,8 +675,12 @@ h4 {
     align-items: flex-start;
 }
 
-.form-item--register{
+.form-main{
+    width:85%;
+    display: block;
+    margin: auto;
 }
+
 
 @media (min-width: 768px) and (max-width: 1440px) {
     .form-item {
@@ -760,6 +767,7 @@ h4 {
 .form-item__wrapper._email {
     flex-direction: column;
     align-items: flex-start;
+    font-weight: 549;
 }
 
 .select-date__wrapper._tell .form__title,
@@ -1103,7 +1111,7 @@ h4 {
 
 .button__wrapper .primary_nextbtn--m.disabled{
     pointer-events: none;
-    background-color: #E10202;
+    background-color: #7B7B7B;
     color: white;
     box-shadow: 0px 0px 10px 0px #00000026;
     border-radius: 10px;
@@ -1328,6 +1336,7 @@ label.form-label--tel {
 }
 
 label.label-box {
+    display: flex;
     font-size: 16px;
     padding-left: 40px;
     line-height: 1.5;
@@ -1406,6 +1415,17 @@ input.input-checkbox {
         text-align: left;
     }
 }
+
+.hello-class{
+    border: 1px solid #E10202;
+    border-radius: 8px;
+    width: 250px;
+    height: 50px;
+    padding-left: 22px;
+    background-color: #fe9494;
+    cursor: pointer;
+}
+
 
 .form-input._error,
 .form-textarea._error,
@@ -1798,35 +1818,86 @@ input.input-checkbox {
     width: 50%;
     min-height: 50px;
     max-height: 232px;
-    border-radius: 10px;
-    border: 1px solid lightgrey;
+    /* border-radius: 10px; */
+    border: 1px solid #d9d9d9;
     --slds-c-icon-color-foreground-default: #E10202;
     padding: 2%;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    /* padding-left: 6px;
+    padding-top: 10px; */
+    padding: 5px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    justify-content: center;
+}
+ 
+.scrollbar{
+    max-height: 100%;
+    overflow-y: auto;
+    width: 97%;
 }
 
-/* width */
-.branchrecords::-webkit-scrollbar {
+.scrollbar::-webkit-scrollbar {
+    width: 12px;
+   
+}
+ 
+.scrollbar::-webkit-scrollbar-track {
+    background: #F4F4F4;
+    border-radius: 3px;
+}
+ 
+.scrollbar::-webkit-scrollbar-thumb {
+    background: #BBBBBB;
+    border-radius: 3px;
+}
+.scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #d1d0d0;
+}
+
+
+/* .branchrecords::-webkit-scrollbar {
     width: 10px;
   }
   
-  /* Track */
 .branchrecords::-webkit-scrollbar-track {
     background: #f1f1f1; 
+    border-radius: 5px;
   }
    
-  /* Handle */
 .branchrecords::-webkit-scrollbar-thumb {
-    background: #888; 
-    border-radius:50px;
+    background: #a3a3a3;
+    border-radius:5px;
   }
-  
-  /* Handle on hover */
+
 .branchrecords::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-  }
+    background: #d1d0d0;  
+  } */
 
+  /* .dataScroll{
+    padding: 5px;
+    padding-top: 10px;
+    margin-left: 5px;
+    margin-top: 24px;
+    font-size: 12px;
+    margin-bottom: 2px;
+    font-family: 'Noto Sans JP', sans-serif;
+    max-height: 150px; 
+    border: 1px solid #d9d9d9;
+    background-color: #ffffff;
+    border-radius: 8px;
+    align-items: center;
+    width: 180px;
+}
+.scrollbar{
+    max-height: 100%;
+    overflow-y: auto;
+    width: 95%;
+}
 
+   */
 
 .record-item{
     font-size: medium;
@@ -1835,6 +1906,12 @@ input.input-checkbox {
 
 .icon{
     padding-left: 40px; /* Adjust padding to make space for the icon */
+    background: var(--dropdown-icon) no-repeat;
+    background-position: 215px 50%; /* Adjust position as needed */
+    background-size: 20px; /* Adjust size as needed */
+}
+
+.icon2{
     background: var(--dropdown-icon) no-repeat;
     background-position: 215px 50%; /* Adjust position as needed */
     background-size: 20px; /* Adjust size as needed */
@@ -1850,6 +1927,7 @@ input.input-checkbox {
     height: 50px;
     padding-left: 22px;
     background-color: #ffffff;
+    cursor: pointer;
  }
 
  .Inputs1::placeholder{
@@ -1870,4 +1948,13 @@ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 z-index: 1000;
 margin-top: 5px; /* Space between input and dropdown */
 padding: 10px;
+}
+.custom-placeholder{
+    color: #BBBBBB;
+    margin-left: 3.5%;
+    /* margin-top: 2%; */
+}
+
+.with-error{
+    margin-right: 2%;
 }

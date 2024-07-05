@@ -144,7 +144,6 @@ export default class Ccp2UserManagement extends LightningElement {
   // Custom vars
   //Custom Vars End
 
-
   @wire(getUserServices, {
     userId: "$selectedContactUserId",
     refresh: "$refreshTokenInt"
@@ -170,53 +169,52 @@ export default class Ccp2UserManagement extends LightningElement {
     }
   }
 
-  @wire(getUserDetail, { User: "$selectedUserId", refresh: "$refreshTokenInt" }) wiredUser({
-    data,
-    error
-  }) {
+  @wire(getUserDetail, { User: "$selectedUserId", refresh: "$refreshTokenInt" })
+  wiredUser({ data, error }) {
     this.refreshUserDetailWireData = data;
     if (data) {
       // console.log("refresh token",this.refreshToken)
       console.log("wire user Detail data:-", data, this.refreshTokenInt);
       this.userDetailData = {
-        Name: data[0].Name == null ? "null" : data[0].Name,
-        id: data[0].Id == null ? "null" : data[0].Id,
-        email: data[0].Email == null ? "null" : data[0].Email,
+        Name: data[0].Name == null ? "-" : data[0].Name,
+        id: data[0].Id == null ? "-" : data[0].Id,
+        email: data[0].Email == null ? "-" : data[0].Email,
         account: {
           // id: data[0].Account.Id ? 'null' : data[0].Account.Id,
-          name: data[0].Account.Name == null ? "null" : data[0].Account.Name,
+          name: data[0].Account.Name == null ? "-" : data[0].Account.Name,
           siebelAccountCode__c:
             data[0].Account.siebelAccountCode__c == null
-              ? "null"
+              ? "-"
               : data[0].Account.siebelAccountCode__c
         },
-        Department: data[0].Department == null ? "null" : data[0].Department,
+        Department: data[0].Department == null ? "-" : data[0].Department,
         // Branchs__r: data[0].Branchs__r == null ? [{ Name: "Null" }] : data[0].Branchs__r,
-        MobilePhone: data[0].MobilePhone == null ? "null" : data[0].MobilePhone,
-        Phone: data[0].Phone == null ? "null" : data[0].Phone,
+        MobilePhone: data[0].MobilePhone == null ? "-" : data[0].MobilePhone,
+        Phone: data[0].Phone == null ? "-" : data[0].Phone,
         Title:
-          !data[0].Title || data[0].Title == undefined ? "null" : data[0].Title,
+          !data[0].Title || data[0].Title == undefined ? "-" : data[0].Title,
         firstNameKana__c:
-          data[0].firstNameKana__c == null ? "null" : data[0].firstNameKana__c,
+          data[0].firstNameKana__c == null ? "-" : data[0].firstNameKana__c,
         lastNameKana__c:
-          data[0].lastNameKana__c == null ? "null" : data[0].lastNameKana__c,
+          data[0].lastNameKana__c == null ? "-" : data[0].lastNameKana__c,
         Employee_Code__c:
-          data[0].Employee_Code__c == null ? "null" : data[0].Employee_Code__c
+          data[0].Employee_Code__c == null ? "-" : data[0].Employee_Code__c
       };
       this.firstName = data[0].Name.split(" ")[1];
       this.lastName = data[0].Name.split(" ")[0];
 
-      this.InputFirstName = this.firstName;
-      this.InputLastName = this.lastName;
-      this.InputFKanaName = data[0].firstNameKana__c;
-      this.InputLKanaName = data[0].lastNameKana__c;
-      this.InputEmail = data[0].Email;
-      this.InputTelephone = data[0].Phone;
-      this.InputCellPhone = data[0].MobilePhone;
+      this.InputFirstName = this.firstName == undefined ? '' : this.firstName;
+        this.InputLastName = this.lastName == undefined ? '' : this.lastName;
+        this.InputFKanaName = data[0].firstNameKana__c == undefined ? '' : data[0].firstNameKana__c;
+        this.InputLKanaName = data[0].lastNameKana__c == undefined ? '' : data[0].lastNameKana__c;
+        this.InputEmail = data[0].Email == undefined ? '' : data[0].Email;
+        this.InputTelephone = data[0].Phone == undefined ? '' : data[0].Phone;
+        this.InputCellPhone = data[0].MobilePhone == undefined ? '' : data[0].MobilePhone;
 
-      this.InputDepartment = data[0].Department;
-      this.InputPost = data[0].Title;
-      this.InputEmpCode = data[0].Employee_Code__c;
+        this.InputDepartment = data[0].Department == undefined ? '' : data[0].Department;
+        this.InputPost = data[0].Title == undefined ? '' : data[0].Title;
+        this.InputEmpCode = data[0].Employee_Code__c == undefined ? '' : data[0].Employee_Code__c;
+
 
       // console.log("split", data[0].Name.split(" "));
       this.userDetailsLoader = false;
@@ -230,10 +228,13 @@ export default class Ccp2UserManagement extends LightningElement {
     }
   }
 
-  @wire(branchdetails, { User: "$selectedUserId", refresh: "$refreshTokenInt2" })
+  @wire(branchdetails, {
+    User: "$selectedUserId",
+    refresh: "$refreshTokenInt2"
+  })
   wiredbranches2({ data, error }) {
     if (data) {
-      console.log('branchdetails', data , this.refreshTokenInt2)
+      console.log("branchdetails", data, this.refreshTokenInt2);
       this.branchfromjunction = data.map((branch) => ({
         Name: branch.Name,
         Id: branch.Id
@@ -246,7 +247,6 @@ export default class Ccp2UserManagement extends LightningElement {
       console.error("error in fetching branches from new", error);
     }
   }
-
 
   getUserServices(id) {
     getUserServices({ userId: id, refresh: this.refreshToken })
@@ -417,61 +417,66 @@ export default class Ccp2UserManagement extends LightningElement {
     getUserDetail({ User: id, refresh: this.refreshTokenInt })
       .then((result) => {
         // this.getUserAllServicesList(id);
-        if (result) console.log("user detail from function : ", result , this.refreshTokenInt);
+        if (result)
+          console.log(
+            "user detail from function : ",
+            result,
+            this.refreshTokenInt
+          );
 
         this.userDetailData = {
-          Name: result[0].Name == null ? "null" : result[0].Name,
-          id: result[0].Id == null ? "null" : result[0].Id,
-          email: result[0].Email == null ? "null" : result[0].Email,
+          Name: result[0].Name == null ? "-" : result[0].Name,
+          id: result[0].Id == null ? "-" : result[0].Id,
+          email: result[0].Email == null ? "-" : result[0].Email,
           account: {
             // id: result[0].Account.Id ? 'null' : result[0].Account.Id,
             name:
-              result[0].Account.Name == null ? "null" : result[0].Account.Name,
+              result[0].Account.Name == null ? "-" : result[0].Account.Name,
             siebelAccountCode__c:
               result[0].Account.siebelAccountCode__c == null
-                ? "null"
+                ? "-"
                 : result[0].Account.siebelAccountCode__c
           },
           Department:
-            result[0].Department == null ? "null" : result[0].Department,
+            result[0].Department == null ? "-" : result[0].Department,
           // Branchs__r:
           //   result[0].Branchs__r == null
           //     ? [{ Name: "Null" }]
           //     : result[0].Branchs__r,
           MobilePhone:
-            result[0].MobilePhone == null ? "null" : result[0].MobilePhone,
-          Phone: result[0].Phone == null ? "null" : result[0].Phone,
+            result[0].MobilePhone == null ? "-" : result[0].MobilePhone,
+          Phone: result[0].Phone == null ? "-" : result[0].Phone,
           Title:
             !result[0].Title || result[0].Title == undefined
-              ? "null"
+              ? "-"
               : result[0].Title,
           firstNameKana__c:
             result[0].firstNameKana__c == null
-              ? "null"
+              ? "-"
               : result[0].firstNameKana__c,
           lastNameKana__c:
             result[0].lastNameKana__c == null
-              ? "null"
+              ? "-"
               : result[0].lastNameKana__c,
           Employee_Code__c:
             result[0].Employee_Code__c == null
-              ? "null"
+              ? "-"
               : result[0].Employee_Code__c
         };
         this.firstName = result[0].Name.split(" ")[1];
         this.lastName = result[0].Name.split(" ")[0];
 
-        this.InputFirstName = this.firstName;
-        this.InputLastName = this.lastName;
-        this.InputFKanaName = result[0].firstNameKana__c;
-        this.InputLKanaName = result[0].lastNameKana__c;
-        this.InputEmail = result[0].Email;
-        this.InputTelephone = result[0].Phone;
-        this.InputCellPhone = result[0].MobilePhone;
+        this.InputFirstName = this.firstName == undefined ? '' : this.firstName;
+        this.InputLastName = this.lastName == undefined ? '' : this.lastName;
+        this.InputFKanaName = data[0].firstNameKana__c == undefined ? '' : data[0].firstNameKana__c;
+        this.InputLKanaName = data[0].lastNameKana__c == undefined ? '' : data[0].lastNameKana__c;
+        this.InputEmail = data[0].Email == undefined ? '' : data[0].Email;
+        this.InputTelephone = data[0].Phone == undefined ? '' : data[0].Phone;
+        this.InputCellPhone = data[0].MobilePhone == undefined ? '' : data[0].MobilePhone;
 
-        this.InputDepartment = result[0].Department;
-        this.InputPost = result[0].Title;
-        this.InputEmpCode = result[0].Employee_Code__c;
+        this.InputDepartment = data[0].Department == undefined ? '' : data[0].Department;
+        this.InputPost = data[0].Title == undefined ? '' : data[0].Title;
+        this.InputEmpCode = data[0].Employee_Code__c == undefined ? '' : data[0].Employee_Code__c;
 
         // console.log("split", result[0].Name.split(" "));
         this.userDetailsLoader = false;
@@ -575,24 +580,34 @@ export default class Ccp2UserManagement extends LightningElement {
           this.InputEmail = event.target.value;
           this.contactClassEmail = this.InputEmail ? "" : "invalid-input";
         } else if (field == "電話番号") {
+          const onlyNumber = /^[0-9]*$/;
           const input = event.target;
-          input.value = input.value.replace(/\D/g, "").slice(0, 10); // Allow only numbers and limit to 10 characters
-          this.InputTelephone = event.target.value
-            .replace(/\D/g, "")
-            .slice(0, 10);
-          // console.log("field in tele : ", this.InputTelephone);
 
-          this.contactClassTelephone = this.InputTelephone
-            ? ""
-            : "invalid-input";
+          // phone.value.length > 0 && !onlyNumber.test(phone.value)
+          let isOk =
+            input.value.length > 0 && onlyNumber.test(input.value)
+              ? true
+              : false;
+          // input.value = input.value.replace(/\D/g, "");
+          this.InputTelephone = input.value;
+
+          this.contactClassTelephone = isOk == true ? "" : "invalid-input";
+          // console.log(this.contactClassTelephone);
         } else if (field == "携帯番号") {
+          const onlyNumber = /^[0-9]*$/;
           const input = event.target;
-          input.value = input.value.replace(/\D/g, "").slice(0, 10);
-          this.InputCellPhone = event.target.value;
 
-          this.contactClassCellPhone = this.InputCellPhone
-            ? ""
-            : "invalid-input";
+          // phone.value.length > 0 && !onlyNumber.test(phone.value)
+          let isOk =
+            input.value.length > 0 && onlyNumber.test(input.value)
+              ? true
+              : false;
+          // input.value = input.value.replace(/\D/g, "");
+          // console.log("isok", isOk, input.value);
+          // input.value = input.value.replace(/\D/g, "").slice(0, 10); // Allow only numbers and limit to 10 characters
+          this.InputCellPhone = input.value;
+
+          this.contactClassCellPhone = isOk == true ? "" : "invalid-input";
         }
 
         this.formData[field] = event.target.value;
@@ -656,33 +671,56 @@ export default class Ccp2UserManagement extends LightningElement {
     }
   }
 
-//   handleRefreshClick() {
-//     console.log('refresh1')
-//     this.refreshToken = !this.refreshToken; // Toggle refreshData to force refresh
-//     if (this.refreshUserDetailWireData) {
-//       console.log('refresh2')
-//         refreshApex(this.refreshUserDetailWireData); // Explicitly refresh cached data
-//     }
-// }
+  //   handleRefreshClick() {
+  //     console.log('refresh1')
+  //     this.refreshToken = !this.refreshToken; // Toggle refreshData to force refresh
+  //     if (this.refreshUserDetailWireData) {
+  //       console.log('refresh2')
+  //         refreshApex(this.refreshUserDetailWireData); // Explicitly refresh cached data
+  //     }
+  // }
 
   saveFormData() {
+    let onlyNumber = /^[0-9]*$/;
     if (
       this.InputFirstName == "" ||
       this.InputLastName == "" ||
       this.InputFKanaName == "" ||
       this.InputLKanaName == "" ||
       this.InputEmail == "" ||
-      this.InputTelephone == "" ||
-      this.InputCellPhone == ""
+      (this.InputTelephone == "" && this.InputCellPhone == "")
     ) {
       this.handleError();
-    } else if (this.InputTelephone.length < 10) {
-      this.contactClassTelephone = "invalid-input";
-      this.handleValidationError();
-    } else if (this.InputCellPhone.length < 10) {
+    } else if (
+      this.InputTelephone == "" &&
+      !onlyNumber.test(this.InputCellPhone)
+    ) {
+      // this.contactClassTelephone = "invalid-input";
       this.contactClassCellPhone = "invalid-input";
       this.handleValidationError();
-    } else {
+    } else if (
+      !onlyNumber.test(this.InputTelephone) &&
+      this.InputCellPhone == ""
+    ) {
+      this.contactClassTelephone = "invalid-input";
+      // this.contactClassCellPhone = "invalid-input";
+      this.handleValidationError();
+    } else if (
+      this.InputTelephone != "" &&
+      this.InputCellPhone != "" &&
+      (!onlyNumber.test(this.InputTelephone) ||
+        !onlyNumber.test(this.InputCellPhone))
+    ) {
+      this.contactClassTelephone = "invalid-input";
+      this.contactClassCellPhone = "invalid-input";
+      this.handleValidationError();
+    }
+
+    // else if (this.InputCellPhone == '') {
+    //   this.contactClassCellPhone = "invalid-input";
+    //   this.handleValidationError();
+    // }
+    else {
       this.formDataArray = [];
       this.formData["ContactId"] = this.selectedUserId;
       this.formDataArray.push(this.formData);
@@ -699,12 +737,12 @@ export default class Ccp2UserManagement extends LightningElement {
           await this.updateUserServices(filteredCheck);
           await this.branchdeleteAdd();
 
-        //  this.handleRefreshClick();
-          
+          //  this.handleRefreshClick();
+
           // let temp = this.selectedUserId;
           // this.selectedUserId = temp;
           this.refreshTokenInt = ++this.refreshTokenInt;
-          this.getUserDetail(this.selectedUserId)
+          this.getUserDetail(this.selectedUserId);
           this.refreshTokenInt2 = ++this.refreshTokenInt2;
           this.branch = [];
           console.log(
@@ -734,36 +772,36 @@ export default class Ccp2UserManagement extends LightningElement {
 
   handleSuccess() {
     const evt = new ShowToastEvent({
-      title: "Success",
-      message: "Record edited successfully",
-      variant: "success"
+      title: "完了",
+      message: "情報が正常に更新されました。",
+      variant: "Success"
     });
     this.dispatchEvent(evt);
   }
 
   handleDeleteSuccess() {
     const evt = new ShowToastEvent({
-      title: "Success",
-      message: "User deleted successfully",
-      variant: "success"
+      title: "完了",
+      message: "会員が正常に削除されました。",
+      variant: "Success"
     });
     this.dispatchEvent(evt);
   }
 
   handleError() {
     const evt = new ShowToastEvent({
-      title: "Error",
-      message: "Please fill in all required fields",
-      variant: "error"
+      title: "エラー",
+      message: "必須項目を入力してください。",
+      variant: "Error"
     });
     this.dispatchEvent(evt);
   }
 
   handleValidationError() {
     const evt = new ShowToastEvent({
-      title: "Error",
-      message: "Please fill a valid value",
-      variant: "error"
+      title: "エラー",
+      message: " 正しい値を入力してください。",
+      variant: "Error"
     });
     this.dispatchEvent(evt);
   }
@@ -793,16 +831,16 @@ export default class Ccp2UserManagement extends LightningElement {
   handleSearch(event) {
     this.searchTerm = event.target.value.toLowerCase();
   }
-
+  
+  @track showlist = false;
   handlebranChange(event) {
     //console.log('employee', this.contactInputData);
     event.stopPropagation();
     this.showlist = !this.showlist;
-    if (this.branchoptions.length === 0) {
+    if (this.branchoptions.length == 0) {
       this.showlist = false;
     }
   }
-  @track showlist = false;
 
   handleInsideClick(event) {
     event.stopPropagation();
@@ -818,7 +856,12 @@ export default class Ccp2UserManagement extends LightningElement {
   }
 
   handleBranchSelect(event) {
+    console.log('this.branchoptions.length' , this.branchoptions.length)
+    if (this.branchoptions.length == 1) {
+      this.showlist = false;
+    }
     this.selectbranchId = event.currentTarget.dataset.id;
+
     // console.log("selected b id", JSON.stringify(this.selectbranchId));
     this.handlebranchChange();
   }
@@ -927,6 +970,9 @@ export default class Ccp2UserManagement extends LightningElement {
       this.branchDataForClass.push(selectedBranch.label);
     }
     this.selectbranchId = null;
+      if (this.branchoptions.length == 0) {
+        this.showlist = false;
+      }
     // console.log("AddOpt",this.selectbranchId);
     // console.log("optfind",selectedBranch);
     // console.log('optfindstr11:', JSON.stringify(this.vehicle));

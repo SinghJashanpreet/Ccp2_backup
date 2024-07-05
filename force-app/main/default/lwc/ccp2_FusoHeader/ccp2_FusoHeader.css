@@ -72,6 +72,14 @@
     color: #0A0A0A;
     z-index: 10;
 }
+.logout{
+    font-size: 10px;
+    font-family: 'Noto Sans JP', sans-serif;
+    text-decoration: underline;
+    font-weight: bold;
+    z-index: 105;
+    color: #e10202;
+}
 .small{
     height: 14px;
     width: 14px;
