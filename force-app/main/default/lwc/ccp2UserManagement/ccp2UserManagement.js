@@ -200,21 +200,25 @@ export default class Ccp2UserManagement extends LightningElement {
         Employee_Code__c:
           data[0].Employee_Code__c == null ? "-" : data[0].Employee_Code__c
       };
-      this.firstName = data[0].Name.split(" ")[1];
-      this.lastName = data[0].Name.split(" ")[0];
+      this.firstName = data[0].Name.split(" ")[0];
+      this.lastName = data[0].Name.split(" ")[1];
 
-      this.InputFirstName = this.firstName == undefined ? '' : this.firstName;
-        this.InputLastName = this.lastName == undefined ? '' : this.lastName;
-        this.InputFKanaName = data[0].firstNameKana__c == undefined ? '' : data[0].firstNameKana__c;
-        this.InputLKanaName = data[0].lastNameKana__c == undefined ? '' : data[0].lastNameKana__c;
-        this.InputEmail = data[0].Email == undefined ? '' : data[0].Email;
-        this.InputTelephone = data[0].Phone == undefined ? '' : data[0].Phone;
-        this.InputCellPhone = data[0].MobilePhone == undefined ? '' : data[0].MobilePhone;
+      this.InputFirstName = this.firstName == undefined ? "" : this.firstName;
+      this.InputLastName = this.lastName == undefined ? "" : this.lastName;
+      this.InputFKanaName =
+        data[0].firstNameKana__c == undefined ? "" : data[0].firstNameKana__c;
+      this.InputLKanaName =
+        data[0].lastNameKana__c == undefined ? "" : data[0].lastNameKana__c;
+      this.InputEmail = data[0].Email == undefined ? "" : data[0].Email;
+      this.InputTelephone = data[0].Phone == undefined ? "" : data[0].Phone;
+      this.InputCellPhone =
+        data[0].MobilePhone == undefined ? "" : data[0].MobilePhone;
 
-        this.InputDepartment = data[0].Department == undefined ? '' : data[0].Department;
-        this.InputPost = data[0].Title == undefined ? '' : data[0].Title;
-        this.InputEmpCode = data[0].Employee_Code__c == undefined ? '' : data[0].Employee_Code__c;
-
+      this.InputDepartment =
+        data[0].Department == undefined ? "" : data[0].Department;
+      this.InputPost = data[0].Title == undefined ? "" : data[0].Title;
+      this.InputEmpCode =
+        data[0].Employee_Code__c == undefined ? "" : data[0].Employee_Code__c;
 
       // console.log("split", data[0].Name.split(" "));
       this.userDetailsLoader = false;
@@ -430,15 +434,13 @@ export default class Ccp2UserManagement extends LightningElement {
           email: result[0].Email == null ? "-" : result[0].Email,
           account: {
             // id: result[0].Account.Id ? 'null' : result[0].Account.Id,
-            name:
-              result[0].Account.Name == null ? "-" : result[0].Account.Name,
+            name: result[0].Account.Name == null ? "-" : result[0].Account.Name,
             siebelAccountCode__c:
               result[0].Account.siebelAccountCode__c == null
                 ? "-"
                 : result[0].Account.siebelAccountCode__c
           },
-          Department:
-            result[0].Department == null ? "-" : result[0].Department,
+          Department: result[0].Department == null ? "-" : result[0].Department,
           // Branchs__r:
           //   result[0].Branchs__r == null
           //     ? [{ Name: "Null" }]
@@ -455,9 +457,7 @@ export default class Ccp2UserManagement extends LightningElement {
               ? "-"
               : result[0].firstNameKana__c,
           lastNameKana__c:
-            result[0].lastNameKana__c == null
-              ? "-"
-              : result[0].lastNameKana__c,
+            result[0].lastNameKana__c == null ? "-" : result[0].lastNameKana__c,
           Employee_Code__c:
             result[0].Employee_Code__c == null
               ? "-"
@@ -466,17 +466,22 @@ export default class Ccp2UserManagement extends LightningElement {
         this.firstName = result[0].Name.split(" ")[1];
         this.lastName = result[0].Name.split(" ")[0];
 
-        this.InputFirstName = this.firstName == undefined ? '' : this.firstName;
-        this.InputLastName = this.lastName == undefined ? '' : this.lastName;
-        this.InputFKanaName = data[0].firstNameKana__c == undefined ? '' : data[0].firstNameKana__c;
-        this.InputLKanaName = data[0].lastNameKana__c == undefined ? '' : data[0].lastNameKana__c;
-        this.InputEmail = data[0].Email == undefined ? '' : data[0].Email;
-        this.InputTelephone = data[0].Phone == undefined ? '' : data[0].Phone;
-        this.InputCellPhone = data[0].MobilePhone == undefined ? '' : data[0].MobilePhone;
+        this.InputFirstName = this.firstName == undefined ? "" : this.firstName;
+        this.InputLastName = this.lastName == undefined ? "" : this.lastName;
+        this.InputFKanaName =
+          data[0].firstNameKana__c == undefined ? "" : data[0].firstNameKana__c;
+        this.InputLKanaName =
+          data[0].lastNameKana__c == undefined ? "" : data[0].lastNameKana__c;
+        this.InputEmail = data[0].Email == undefined ? "" : data[0].Email;
+        this.InputTelephone = data[0].Phone == undefined ? "" : data[0].Phone;
+        this.InputCellPhone =
+          data[0].MobilePhone == undefined ? "" : data[0].MobilePhone;
 
-        this.InputDepartment = data[0].Department == undefined ? '' : data[0].Department;
-        this.InputPost = data[0].Title == undefined ? '' : data[0].Title;
-        this.InputEmpCode = data[0].Employee_Code__c == undefined ? '' : data[0].Employee_Code__c;
+        this.InputDepartment =
+          data[0].Department == undefined ? "" : data[0].Department;
+        this.InputPost = data[0].Title == undefined ? "" : data[0].Title;
+        this.InputEmpCode =
+          data[0].Employee_Code__c == undefined ? "" : data[0].Employee_Code__c;
 
         // console.log("split", result[0].Name.split(" "));
         this.userDetailsLoader = false;
@@ -725,6 +730,10 @@ export default class Ccp2UserManagement extends LightningElement {
       this.formData["ContactId"] = this.selectedUserId;
       this.formDataArray.push(this.formData);
       let filteredData = JSON.stringify(this.formDataArray);
+      console.log(
+        "Data send for updation:-",
+        JSON.stringify(this.formDataArray)
+      );
       this.checkboxFormData["Name"] = this.selectedContactUserId;
       let filteredCheck = this.checkboxFormData;
 
@@ -831,7 +840,7 @@ export default class Ccp2UserManagement extends LightningElement {
   handleSearch(event) {
     this.searchTerm = event.target.value.toLowerCase();
   }
-  
+
   @track showlist = false;
   handlebranChange(event) {
     //console.log('employee', this.contactInputData);
@@ -856,7 +865,7 @@ export default class Ccp2UserManagement extends LightningElement {
   }
 
   handleBranchSelect(event) {
-    console.log('this.branchoptions.length' , this.branchoptions.length)
+    console.log("this.branchoptions.length", this.branchoptions.length);
     if (this.branchoptions.length == 1) {
       this.showlist = false;
     }
@@ -970,9 +979,9 @@ export default class Ccp2UserManagement extends LightningElement {
       this.branchDataForClass.push(selectedBranch.label);
     }
     this.selectbranchId = null;
-      if (this.branchoptions.length == 0) {
-        this.showlist = false;
-      }
+    if (this.branchoptions.length == 0) {
+      this.showlist = false;
+    }
     // console.log("AddOpt",this.selectbranchId);
     // console.log("optfind",selectedBranch);
     // console.log('optfindstr11:', JSON.stringify(this.vehicle));

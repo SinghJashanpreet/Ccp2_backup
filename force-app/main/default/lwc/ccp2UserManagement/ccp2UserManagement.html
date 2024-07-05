@@ -42,7 +42,7 @@
                             <a href={homeUrl} style="color: white;"><button
                                     class="button return-button">トップに戻る</button></a>
                             <a href={addUserUrl} style="color: white; "><button
-                                    class="button submit-button" >会員追加</button></a>
+                                    class="button submit-button">会員追加</button></a>
                         </div>
 
                     </div>
@@ -92,7 +92,7 @@
                                                 </template>
                                             </div>
                                             <!--Changing for Combo-->
-                                        <!-- Changing End -->
+                                            <!-- Changing End -->
                                         </div>
                                         <div class="records">
                                             <div class="head">{labels.CCP2_Deploy}</div>
@@ -158,7 +158,7 @@
                                             title="Delete User"></lightning-icon>
                                         <p>{labels.CCP2_DeleteThisMember}</p>
                                     </div> -->
-                                    
+
                                 </div>
                                 <div class="form_footer">
                                     <div class="btn1" onclick={handleReturnClick}>
@@ -171,7 +171,7 @@
                                         <p>この会員を削除する</p>
                                     </div>
                                 </div>
-                                
+
                             </div>
 
                         </div>
@@ -218,12 +218,13 @@
 
                                 <!-- Name (furigana) -->
                                 <div class="records">
-                                    <div class="head head-save head-save-cnt">{labels.CCP2_NameFurigana} <span class="reqtxt">{labels.CCP2_Required}</span>
+                                    <div class="head head-save head-save-cnt">{labels.CCP2_NameFurigana} <span
+                                            class="reqtxt">{labels.CCP2_Required}</span>
                                     </div>
                                     <div class="data">
                                         <div class="dataCellName">
                                             <span class="data-cell-item">姓（フリガナ）</span>
-                                            <span class="data-cell-item">姓（フリガナ）</span>
+                                            <span class="data-cell-item">名（フリガナ）</span>
                                         </div>
                                         <div class="dataCellName">
                                             <input type="text" class={contactClassFKanaName}
@@ -296,7 +297,7 @@
                                     <!-- </div> -->
                                 </div>
 
-                                        <!-- <template for:each={userDetailData.Branchs__r} for:item="branch">
+                                <!-- <template for:each={userDetailData.Branchs__r} for:item="branch">
                                             <div key={branch.Id} class="data">{branch.Name}</div>
                                         </template> -->
 
@@ -318,7 +319,8 @@
 
                                 <!-- Email Address -->
                                 <div class="records">
-                                    <div class="head head-save head-save-cnt">{labels.CCP2_EmailAddress} <span class="reqtxt">{labels.CCP2_Required}</span>
+                                    <div class="head head-save head-save-cnt">{labels.CCP2_EmailAddress} <span
+                                            class="reqtxt">{labels.CCP2_Required}</span>
                                     </div>
                                     <div class="data"><input type="text" onchange={handleInputChange}
                                             data-field="メールアドレス" value={InputEmail} class={contactClassEmail}
@@ -327,7 +329,8 @@
 
                                 <!-- Telephone Number -->
                                 <div class="records">
-                                    <div class="head head-save head-save-align">{labels.CCP2_TelephoneNumber} <span class="reqtxt">{labels.CCP2_Required}</span>
+                                    <div class="head head-save head-save-align">{labels.CCP2_TelephoneNumber} <span
+                                            class="reqtxt">{labels.CCP2_Required}</span>
                                     </div>
                                     <div class="data data-align">
                                         <div class="">電話番号か携帯番号かいずれかご入力してください。</div>
@@ -336,15 +339,15 @@
                                             <div class="">{labels.CCP2_TelephoneNumber}</div>
                                             <div class=""><input type="text" class={contactClassTelephone}
                                                     onchange={handleInputChange} data-field="電話番号"
-                                                    value={InputTelephone} maxlength="30" pattern="\d*"
-                                                    required placeholder="03621268002"></div>
+                                                    value={InputTelephone} maxlength="30" pattern="\d*" required
+                                                    placeholder="03621268002"></div>
                                         </div>
                                         <div class="records_number">
                                             <div class="">{labels.CCP2_CellphoneNumber}</div>
                                             <div class=""><input type="text" class={contactClassCellPhone}
                                                     onchange={handleInputChange} data-field="携帯番号"
-                                                    value={InputCellPhone} maxlength="30" pattern="\d*"
-                                                    required placeholder="03621268002"></div>
+                                                    value={InputCellPhone} maxlength="30" pattern="\d*" required
+                                                    placeholder="03621268002"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -356,7 +359,7 @@
                                         <!-- <div class="checked-service">
                                             <input type="checkbox" checked disabled style="width:20px; height:20px; margin-right:14px; margin-bottom: 10px;">基本サービス（ふそうショップ）
                                         </div> -->
-                                        
+
                                         <template for:each={allServicesListData} for:item="elm">
                                             <div class="checkboxContainer" key={elm.apiName}><input type="checkbox"
                                                     class="input-checkbox" style="width:20px; height:20px;"
@@ -387,8 +390,8 @@
                             この会員の削除申請が提出しました。運営よりご連絡いたします。
                         </p>
                         <div class="btn-top" onclick={handleReturnClick2}>
-                                <!-- {labels.CCP2_Return} -->
-                                会員管理へ
+                            <!-- {labels.CCP2_Return} -->
+                            会員管理へ
                         </div>
                     </div>
                 </template>
@@ -396,15 +399,15 @@
                 <template if:true={IsUsercountZero}>
                     <div class="main-content" style="padding: 64px calc(256px - 10%) 64px calc(256px - 10%);">
                         <h2 class="heading">会員管理</h2>
-                    <div class="list-container list-container-new">
-                        <p class="text-para">会員がありません、追加してみませんか？</p>
-                        <div class="button-container" style="display: flex; justify-content: center;">
-                            <a href={addUserUrl} style="color: white; ">
-                                <button class="button add-user-button">会員追加</button>
-                            </a>
+                        <div class="list-container list-container-new">
+                            <p class="text-para">会員がありません、追加してみませんか？</p>
+                            <div class="button-container" style="display: flex; justify-content: center;">
+                                <a href={addUserUrl} style="color: white; ">
+                                    <button class="button add-user-button">会員追加</button>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                
+
                         <div class="footer-buttons">
                             <a href={homeUrl} style="color: white;"><button
                                     class="button return-button">トップに戻る</button></a>
@@ -419,12 +422,13 @@
     <template if:true={showconfModal}>
         <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container custom-width-modal">
-                <div class="slds-modal__content slds-text-heading_small" style="border-radius:8px; background-color: rgba(251, 251, 251, 0.8);">
+                <div class="slds-modal__content slds-text-heading_small"
+                    style="border-radius:8px; background-color: rgba(251, 251, 251, 0.8);">
                     <div class="content-modal">
                         <h1>このアカウントを削除します。<br>
                             また、そのアカウントが作成されたデータ所<br>
                             有権を管理者に移管します。
-                            </h1>
+                        </h1>
                         <div class="btn-modal">
                             <button class="btn-no" style="background-color:#F4F4F4;" onclick={handleNo}>いいえ</button>
                             <button class="btn-yes" onclick={handleYes}>はい</button>
