@@ -146,24 +146,15 @@ export default class Ccp2UserManagement extends LightningElement {
 
   @wire(getUserServices, {
     userId: "$selectedContactUserId",
-    refresh: "$refreshTokenInt"
-  })
+    refresh: "$refreshTokenInt2"})
   userServicesFun({ data, error }) {
     if (data) {
+      console.log('getUserServices wire:-', data,this.refreshTokenInt)
       if (data.length == 0) {
         this.userServicesData = ["Null"];
       } else {
         this.userServicesData = data;
       }
-      // console.log(
-      //   "sercvices on detail page(ccp2_UIpermissionList) wire: ",
-      //   data
-      // );
-      // console.log(
-      //   "sercvices on detail page(ccp2_UIpermissionList) wire2: ",
-      //   this.selectedUserId,
-      //   this.refreshToken
-      // );
     } else {
       console.error("User Services Fetching error: wire", error);
     }
@@ -174,7 +165,7 @@ export default class Ccp2UserManagement extends LightningElement {
     this.refreshUserDetailWireData = data;
     if (data) {
       // console.log("refresh token",this.refreshToken)
-      console.log("wire user Detail data:-", data, this.refreshTokenInt);
+      // console.log("wire user Detail data:-", data, this.refreshTokenInt);
       this.userDetailData = {
         Name: data[0].Name == null ? "-" : data[0].Name,
         id: data[0].Id == null ? "-" : data[0].Id,
@@ -224,7 +215,7 @@ export default class Ccp2UserManagement extends LightningElement {
       this.userDetailsLoader = false;
 
       // console.log("user detail api data response wire : ", data);
-    } else {
+    } else if(error) {
       // console.log("user id in wire: ", this.uid);
       console.error(
         "User Detail Fetching error: in wire" + JSON.stringify(error)
@@ -238,7 +229,7 @@ export default class Ccp2UserManagement extends LightningElement {
   })
   wiredbranches2({ data, error }) {
     if (data) {
-      console.log("branchdetails", data, this.refreshTokenInt2);
+      console.log("branchdetails wire:-", data, this.refreshTokenInt2);
       this.branchfromjunction = data.map((branch) => ({
         Name: branch.Name,
         Id: branch.Id
@@ -252,23 +243,23 @@ export default class Ccp2UserManagement extends LightningElement {
     }
   }
 
-  getUserServices(id) {
-    getUserServices({ userId: id, refresh: this.refreshToken })
-      .then((result) => {
-        if (result.length == 0) {
-          this.userServicesData = ["Null"];
-        } else {
-          this.userServicesData = result;
-        }
-        // console.log(
-        //   "sercvices on detail page(ccp2_UIpermissionList): ",
-        //   result
-        // );
-      })
-      .catch((error) => {
-        console.error("User Services Fetching error:" + error);
-      });
-  }
+  // getUserServices(id) {
+  //   getUserServices({ userId: id, refresh: this.refreshToken })
+  //     .then((result) => {
+  //       if (result.length == 0) {
+  //         this.userServicesData = ["Null"];
+  //       } else {
+  //         this.userServicesData = result;
+  //       }
+  //       console.log(
+  //         "getUserServices funtion:- ",
+  //         result
+  //       );
+  //     })
+  //     .catch((error) => {
+  //       console.error("User Services Fetching error:" + error);
+  //     });
+  // }
 
   getAllUser() {
     getAllUser()
@@ -417,79 +408,79 @@ export default class Ccp2UserManagement extends LightningElement {
     });
   }
 
-  getUserDetail(id) {
-    getUserDetail({ User: id, refresh: this.refreshTokenInt })
-      .then((result) => {
-        // this.getUserAllServicesList(id);
-        if (result)
-          console.log(
-            "user detail from function : ",
-            result,
-            this.refreshTokenInt
-          );
+  // getUserDetail(id) {
+  //   getUserDetail({ User: id, refresh: this.refreshTokenInt })
+  //     .then((result) => {
+  //       // this.getUserAllServicesList(id);
+  //       if (result)
+  //         console.log(
+  //           "user detail from function : ",
+  //           result,
+  //           this.refreshTokenInt
+  //         );
 
-        this.userDetailData = {
-          Name: result[0].Name == null ? "-" : result[0].Name,
-          id: result[0].Id == null ? "-" : result[0].Id,
-          email: result[0].Email == null ? "-" : result[0].Email,
-          account: {
-            // id: result[0].Account.Id ? 'null' : result[0].Account.Id,
-            name: result[0].Account.Name == null ? "-" : result[0].Account.Name,
-            siebelAccountCode__c:
-              result[0].Account.siebelAccountCode__c == null
-                ? "-"
-                : result[0].Account.siebelAccountCode__c
-          },
-          Department: result[0].Department == null ? "-" : result[0].Department,
-          // Branchs__r:
-          //   result[0].Branchs__r == null
-          //     ? [{ Name: "Null" }]
-          //     : result[0].Branchs__r,
-          MobilePhone:
-            result[0].MobilePhone == null ? "-" : result[0].MobilePhone,
-          Phone: result[0].Phone == null ? "-" : result[0].Phone,
-          Title:
-            !result[0].Title || result[0].Title == undefined
-              ? "-"
-              : result[0].Title,
-          firstNameKana__c:
-            result[0].firstNameKana__c == null
-              ? "-"
-              : result[0].firstNameKana__c,
-          lastNameKana__c:
-            result[0].lastNameKana__c == null ? "-" : result[0].lastNameKana__c,
-          Employee_Code__c:
-            result[0].Employee_Code__c == null
-              ? "-"
-              : result[0].Employee_Code__c
-        };
-        this.firstName = result[0].Name.split(" ")[1];
-        this.lastName = result[0].Name.split(" ")[0];
+  //       this.userDetailData = {
+  //         Name: result[0].Name == null ? "-" : result[0].Name,
+  //         id: result[0].Id == null ? "-" : result[0].Id,
+  //         email: result[0].Email == null ? "-" : result[0].Email,
+  //         account: {
+  //           // id: result[0].Account.Id ? 'null' : result[0].Account.Id,
+  //           name: result[0].Account.Name == null ? "-" : result[0].Account.Name,
+  //           siebelAccountCode__c:
+  //             result[0].Account.siebelAccountCode__c == null
+  //               ? "-"
+  //               : result[0].Account.siebelAccountCode__c
+  //         },
+  //         Department: result[0].Department == null ? "-" : result[0].Department,
+  //         // Branchs__r:
+  //         //   result[0].Branchs__r == null
+  //         //     ? [{ Name: "Null" }]
+  //         //     : result[0].Branchs__r,
+  //         MobilePhone:
+  //           result[0].MobilePhone == null ? "-" : result[0].MobilePhone,
+  //         Phone: result[0].Phone == null ? "-" : result[0].Phone,
+  //         Title:
+  //           !result[0].Title || result[0].Title == undefined
+  //             ? "-"
+  //             : result[0].Title,
+  //         firstNameKana__c:
+  //           result[0].firstNameKana__c == null
+  //             ? "-"
+  //             : result[0].firstNameKana__c,
+  //         lastNameKana__c:
+  //           result[0].lastNameKana__c == null ? "-" : result[0].lastNameKana__c,
+  //         Employee_Code__c:
+  //           result[0].Employee_Code__c == null
+  //             ? "-"
+  //             : result[0].Employee_Code__c
+  //       };
+  //       this.firstName = result[0].Name.split(" ")[1];
+  //       this.lastName = result[0].Name.split(" ")[0];
 
-        this.InputFirstName = this.firstName == undefined ? "" : this.firstName;
-        this.InputLastName = this.lastName == undefined ? "" : this.lastName;
-        this.InputFKanaName =
-          data[0].firstNameKana__c == undefined ? "" : data[0].firstNameKana__c;
-        this.InputLKanaName =
-          data[0].lastNameKana__c == undefined ? "" : data[0].lastNameKana__c;
-        this.InputEmail = data[0].Email == undefined ? "" : data[0].Email;
-        this.InputTelephone = data[0].Phone == undefined ? "" : data[0].Phone;
-        this.InputCellPhone =
-          data[0].MobilePhone == undefined ? "" : data[0].MobilePhone;
+  //       this.InputFirstName = this.firstName == undefined ? "" : this.firstName;
+  //       this.InputLastName = this.lastName == undefined ? "" : this.lastName;
+  //       this.InputFKanaName =
+  //         data[0].firstNameKana__c == undefined ? "" : data[0].firstNameKana__c;
+  //       this.InputLKanaName =
+  //         data[0].lastNameKana__c == undefined ? "" : data[0].lastNameKana__c;
+  //       this.InputEmail = data[0].Email == undefined ? "" : data[0].Email;
+  //       this.InputTelephone = data[0].Phone == undefined ? "" : data[0].Phone;
+  //       this.InputCellPhone =
+  //         data[0].MobilePhone == undefined ? "" : data[0].MobilePhone;
 
-        this.InputDepartment =
-          data[0].Department == undefined ? "" : data[0].Department;
-        this.InputPost = data[0].Title == undefined ? "" : data[0].Title;
-        this.InputEmpCode =
-          data[0].Employee_Code__c == undefined ? "" : data[0].Employee_Code__c;
+  //       this.InputDepartment =
+  //         data[0].Department == undefined ? "" : data[0].Department;
+  //       this.InputPost = data[0].Title == undefined ? "" : data[0].Title;
+  //       this.InputEmpCode =
+  //         data[0].Employee_Code__c == undefined ? "" : data[0].Employee_Code__c;
 
-        // console.log("split", result[0].Name.split(" "));
-        this.userDetailsLoader = false;
-      })
-      .catch((error) => {
-        console.error("User Detail Fetching error:" + JSON.stringify(error));
-      });
-  }
+  //       // console.log("split", result[0].Name.split(" "));
+  //       this.userDetailsLoader = false;
+  //     })
+  //     .catch((error) => {
+  //       console.error("User Detail Fetching error:" + JSON.stringify(error));
+  //     });
+  // }
 
   connectedCallback() {
     let baseUrl = window.location.href;
@@ -508,21 +499,12 @@ export default class Ccp2UserManagement extends LightningElement {
   handleUserClick(event) {
     // this.refreshToken = !this.refreshToken;
     this.selectedContactUserId = event.target.dataset.user;
-    // this.getUserServices(this.selectedContactUserId);
-    // console.log("services contact user id", this.selectedContactUserId);
+  
     this.getUserAllServicesList(this.selectedContactUserId);
     this.selectedUserId = event.target.dataset.idd;
-    // this.uid = null;
-    // this.uid = this.selectedUserId;
-    // const tempStore = this.selectedContactUserId;
-    // // this.selectedContactUserId = null;
-    // this.selectedContactUserId = tempStore;
-    // console.log("services contact id", this.selectedUserId);
-    this.getUserDetail(this.selectedUserId);
-    // console.log(
-    //   "services contact id event",
-    //   JSON.stringify(event.target.dataset)
-    // );
+
+    this.refreshTokenInt = ++this.refreshTokenInt;
+
     this.customerId = event.target.dataset.idd;
     this.showUserList = false;
     this.showUserDetails = true;
@@ -730,10 +712,10 @@ export default class Ccp2UserManagement extends LightningElement {
       this.formData["ContactId"] = this.selectedUserId;
       this.formDataArray.push(this.formData);
       let filteredData = JSON.stringify(this.formDataArray);
-      console.log(
-        "Data send for updation:-",
-        JSON.stringify(this.formDataArray)
-      );
+      // console.log(
+      //   "Data send for updation:-",
+      //   JSON.stringify(this.formDataArray)
+      // );
       this.checkboxFormData["Name"] = this.selectedContactUserId;
       let filteredCheck = this.checkboxFormData;
 
@@ -746,23 +728,20 @@ export default class Ccp2UserManagement extends LightningElement {
           await this.updateUserServices(filteredCheck);
           await this.branchdeleteAdd();
 
-          //  this.handleRefreshClick();
-
-          // let temp = this.selectedUserId;
-          // this.selectedUserId = temp;
           this.refreshTokenInt = ++this.refreshTokenInt;
-          this.getUserDetail(this.selectedUserId);
           this.refreshTokenInt2 = ++this.refreshTokenInt2;
+
           this.branch = [];
           console.log(
-            "refresh , selectedUserId in save form",
+            "refresh1 ,refresh2, selectedUserId in save form",
             this.refreshTokenInt,
+            this.refreshTokenInt2,
             this.selectedUserId
           );
           setTimeout(async () => {
-            // await this.getUserDetail(this.selectedUserId);
             this.handleSuccess();
-            // Ensure changes are reflected in UI
+            this.refreshTokenInt = ++this.refreshTokenInt;
+            this.refreshTokenInt2 = ++this.refreshTokenInt2;
             this.showUserList = false;
             this.userDetailsLoader = false;
             this.getUserAllServicesList(this.selectedContactUserId);
@@ -865,7 +844,7 @@ export default class Ccp2UserManagement extends LightningElement {
   }
 
   handleBranchSelect(event) {
-    console.log("this.branchoptions.length", this.branchoptions.length);
+    // console.log("this.branchoptions.length", this.branchoptions.length);
     if (this.branchoptions.length == 1) {
       this.showlist = false;
     }
