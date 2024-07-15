@@ -2,8 +2,8 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
    
     <types>
-        <members>ccp2_userupdate</members>
-        <name>ApexClass</name>
+        <members>ccp2VehicleDetails</members>
+        <name>LightningComponentBundle</name>
     </types>
    
     <version>59.0</version>

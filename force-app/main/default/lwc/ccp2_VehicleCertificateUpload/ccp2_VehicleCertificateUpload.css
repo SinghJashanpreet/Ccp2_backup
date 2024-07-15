@@ -1,0 +1,155 @@
+ul li {
+  list-style-type: disc;
+}
+
+.upload-main {
+  display: flex;
+  justify-content: center;
+}
+
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+}
+
+.full-width-one-element{
+    width: 660px;
+}
+.full-width-two-element{
+    width: 900px;
+}
+
+.upload-image-container {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 1%;
+  flex-wrap: wrap-reverse;
+}
+
+.upload-image-sample {
+  width: 330px;
+  height: 210px;
+  border-radius: 10px;
+}
+
+.upload-image-icon-box {
+  max-width: 330px;
+  width: 31.5%;
+  height: 210px;
+  border-radius: 10px;
+}
+
+.upload-image {
+  width: 31.5%;
+  max-width: 330px;
+  height: 210px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.one-element{
+    width: calc(50% - 16px);
+}
+
+.sample-image {
+  width: 100%;
+  height: 100%;
+}
+
+.upload-image-top {
+  width: 100%;
+  height: 148px;
+  border-radius: 10px;
+}
+
+.upload-image-top img {
+  width: 100%;
+  height: 100%;
+}
+
+.upload-image-bottom {
+  width: 100%;
+  max-height: 56px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #d9d9d9;
+  padding: 16px;
+}
+
+.filtericn {
+  --sds-c-icon-color-foreground-default: #e10202;
+  --sds-c-icon-color-foreground: #e10202;
+}
+
+.upload-image-icon-container {
+  border: 1px dotted #e10202;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-instruction-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.left {
+  align-items: start;
+  margin-left: 15px;
+  padding-left: 10px;
+}
+
+.upload-instruction-heading {
+  display: flex;
+  gap: 4px;
+  margin-left: -20px;
+}
+
+.upload-instruction-content ul {
+  color: #7b7b7b;
+}
+
+.upload-button-container {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.upload-button {
+  width: 176px;
+  height: 48px;
+  padding: 12px 16px 12px 16px;
+  border-radius: 10px;
+  border: none;
+}
+.cancel {
+  color: black;
+  background-color: #f4f4f4;
+  box-shadow: 0px 0px 10px 0px #00000026;
+  border: 1px solid #d9d9d9;
+}
+.save {
+  color: white;
+  background-color: #E10202;
+}
+
+.disable{
+    background-color: #bbbbbb;
+    cursor: not-allowed;
+}

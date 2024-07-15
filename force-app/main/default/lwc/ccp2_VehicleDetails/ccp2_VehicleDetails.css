@@ -1,0 +1,448 @@
+.no-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scroll {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .main_container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 0 28px 0 28px;
+  }
+  
+  .content1_container {
+    display: flex;
+    background-color: white;
+    box-shadow: 0px 0px 10px 0px #00000026;
+  }
+  .content1_left_container {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    min-height: 220px;
+    margin: 15px 10px 10px 10px;
+  }
+  
+  .content1_right_container {
+    width: 30%;
+  }
+  
+  .content1_left_row1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 32.5%;
+    align-items: center;
+    /* padding-left: 20px; */
+  }
+  .content1_left_row2 {
+    display: flex;
+    flex-direction: row;
+    height: 42.5%;
+    align-items: center;
+    gap: 2.3%;
+    padding-left: 20px;
+  }
+  .content1_left_row3 {
+    display: flex;
+    flex-direction: row;
+    height: 25%;
+    align-items: center;
+  }
+  
+  .content1_left_row2_element {
+    /* width: 20%;
+      height: 100%; */
+  }
+  
+  .btnico {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+    margin-top: 15px;
+    margin-right: 10px;
+    border: 1px solid #d8d8d8;
+    padding: 5px 5px;
+  
+    background-color: white;
+    box-shadow: 0px 0px 10px 0px #00000026;
+  
+    cursor: pointer;
+    height: 50%;
+  }
+  .btnico1 {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 38px;
+    margin-top: 15px;
+    border: 1px solid #d8d8d8;
+    padding: 5px 5px;
+    box-shadow: 0px 0px 10px 0px #00000026;
+  
+    background-color: white;
+    cursor: pointer;
+    height: 50%;
+  }
+  
+  .content1_right_img {
+    min-width: 100%;
+    height: 100%;
+  }
+  
+  .content2_container {
+    background-color: white;
+    /* height: 600px; */
+    /* width: 90%; */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .content1_left_row1_left {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    width: 60%;
+  }
+  
+  .vehicle_container {
+    /* overflow: scroll; */
+    /* margin: 6px; */
+    background-color: #f4f4f4;
+    width: calc(100% - 20px);
+    height: 100%;
+    padding: 12px 20px 15px 20px;
+  }
+  .vehicle_header {
+    display: flex;
+    background-color: #f4f4f4;
+    gap: 20px;
+    padding: 0 0 10px 0;
+  }
+  .vehicle_header h3 {
+    /* background-color: white; */
+    padding: 7px;
+  }
+  .vehicle_header h3:first-child {
+    background-color: white;
+  }
+  .vehicle_child1 {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 25px;
+  }
+  .vehicle_child1_container {
+    display: flex;
+    gap: 20px;
+  }
+  .vehicle_child1_list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  }
+  .vehicle_child2 {
+    padding: 13px 0 13px 5px;
+  }
+  .vehicle_child3 {
+    background-color: white;
+    display: flex;
+    gap: 20px;
+    padding: 25px;
+  }
+  
+  .recMain {
+    display: flex;
+    width: calc(100% - 20px);
+    height: 100%;
+    max-height: 436px;
+    margin: 0 0 0 20px;
+    overflow-y: scroll;
+  }
+  
+  .btnrec {
+      display: flex;
+      width: 100%;
+      padding-top: 36px;
+    }
+
+    .truckonnect{
+      display: flex;
+      gap: 5px;
+
+      background-color: transparent; /* Set background color to transparent */
+      border: none;
+      color: black; /* Set text color to black */
+      padding: 18px 15px 15px 15px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      position: relative;
+    }
+  
+  /* prvious */
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    background-color: #fbfbfb;
+    align-items: center;
+    width: 1000px;
+  }
+  
+  .recbase {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    height: 200px;
+    width: 90%;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .recdetail {
+  }
+  .Rec {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    height: 100%;
+    margin-left: 10px;
+    margin-top: 5px;
+  }
+  .imgs {
+    height: 100%;
+    width: 25%;
+  }
+  .header {
+  }
+  .detail {
+  }
+  .RegNo {
+  }
+  .RegNoData {
+    margin: 18px 1px 16px 20px;
+    font-size: 36px;
+    font-weight: bolder;
+  }
+  hr {
+    height: 1px; /* Set to 10% of the container's height */
+    background-color: rgb(152, 152, 152); /* Adjust color as needed */
+    margin: 0 auto;
+    width: 98%;
+  }
+
+  .Head {
+    margin: 3px;
+    color: rgb(165, 162, 162);
+  }
+  .recdata {
+    margin: 4px 3px 3px 3px;
+  }
+  .recimg {
+    width: fit-content;
+    height: 100%;
+  }
+  .square-button {
+    width: 50px; /* Adjust width as needed */
+    height: 50px; /* Adjust height as needed */
+    overflow: hidden;
+  }
+  
+  .button-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+  }
+  
+  .icon {
+    width: 100%; /* Ensure icon fills the button */
+    height: 100%; /* Ensure icon fills the button */
+  }
+  .recbar {
+    display: flex;
+    flex-direction: row;
+    gap: 1px;
+    height: 10%;
+    width: 100%;
+    margin-left: 14px;
+    /* border: 1px solid red ; */
+  }
+  .underline-button {
+    background-color: transparent; /* Set background color to transparent */
+    border: none;
+    color: black; /* Set text color to black */
+    padding: 18px 15px 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .underline {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: transparent;
+    transition: background-color 0.3s;
+  }
+  
+  /* .underline-button:hover .underline {
+    background-color: black;
+  } */
+  
+  
+  .rsearch {
+    margin-left: auto;
+    margin-right: 27px;
+    margin-bottom: 20px;
+    color: rgb(232, 232, 232);
+    border-radius: 0px;
+  }
+  .b {
+    margin-top: 7px;
+    color: rgb(165, 162, 162);
+  }
+  
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    width: 40%;
+    height: 100%;
+  }
+  .i {
+    width: 20px;
+    height: 20px;
+    background-size: cover;
+    margin-right: 5px;
+  }
+  .notetext {
+    margin-left: 1px;
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    color: black;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  /* not in use */
+
+  .modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-window {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 82%;
+    max-width: 90%;
+    height: max-content;
+    max-height: 90%;
+    overflow: auto;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.closeIcon {
+    --sds-c-icon-color-foreground-default: #0A0A0A;
+    --sds-c-icon-color-foreground: #0A0A0A;
+}
+
+.main {
+    /* height: 56.8%; */
+    flex: 1;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.btn {
+    height: 2rem;
+    width: 8rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cancelbutton {
+    background-color: #f4f4f4;
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.searchbutton {
+    background-color: #ea0202;
+}
+
+.searchbutton:hover {
+    cursor: pointer;
+}
+
+.cancelbutton:hover {
+    cursor: pointer;
+}
+
+.buttontxt {
+    color: #0A0A0A;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.buttontxt2 {
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.template-a[show] .template-a,
+.template-b[show] .template-b,
+.template-c[show] .template-c {
+    display: block;
+}
+
+.div-elements {
+    margin-top: 2%;
+}
+
+.head-elements {
+    font-weight: bolder;
+}
