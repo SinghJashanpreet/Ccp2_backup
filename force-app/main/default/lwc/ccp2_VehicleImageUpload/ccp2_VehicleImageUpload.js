@@ -1,4 +1,4 @@
-import { LightningElement, track,api } from "lwc";
+import { LightningElement, track, api } from "lwc";
 import Vehicle_StaticResource from "@salesforce/resourceUrl/CCP2_Resources";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import CCP2_vehcileImageUploader from "@salesforce/apex/CCP2_vehcileImageUploader.uploadImage";
@@ -6,6 +6,8 @@ const sample = Vehicle_StaticResource + "/CCP2_Resources/Vehicle/sample.png";
 const upload = Vehicle_StaticResource + "/CCP2_Resources/Vehicle/upload.png";
 const error_outline =
   Vehicle_StaticResource + "/CCP2_Resources/Vehicle/error_outline.png";
+import { createRecord } from "lightning/uiRecordApi";
+import deleteBranchApi from "@salesforce/apex/CCP2_vehcileImageUploader.deleteContentDocumentByVersionId";
 
 export default class Ccp2_VehicleImageUpload extends LightningElement {
   @api imageData;
@@ -13,6 +15,7 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
   @track fileURL = "";
   @track fileType = "";
   @track uploadImagesArray = [];
+  @track uploadImagesOnlyIds = [];
   @track instructionContainerCss = "upload-instruction-container";
   @track uploadImageCss = "upload-image";
   @track uploadImageIconCss = "upload-image-icon-box";
@@ -82,9 +85,28 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
 
   handleFilesChange(event) {
     const files = event.target.files;
-    if (files.length > 0) {
+    const maxSizeInBytes = 10 * 1024 * 1024; // 10 MB
+
+    if (files[0] && files[0].size > maxSizeInBytes) {
+      this.showToast("Error", "File size should not exceed 10 MB", "Error");
+    } else if (files.length > 0) {
       this.uploadFile(files[0]);
     }
+  }
+
+  deleteBranchApi(id) {
+    deleteBranchApi({ contentVersionId: id })
+      .then((result) => {
+        console.log("result", result);
+        this.uploadImagesOnlyIds = this.uploadImagesOnlyIds.filter((elm) => {
+          return elm.id !== id;
+        });
+
+        this.saveLoader = false;
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   }
 
   uploadImage(fileArray) {
@@ -105,6 +127,7 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
   }
 
   uploadFile(file) {
+    this.saveLoader = true;
     this.fileName = file.name;
     this.fileType = file.type;
 
@@ -116,6 +139,7 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
     // If the file name exists, do not proceed with the upload
     if (isFileNameExists) {
       this.showToast("Error", `${file.name} already exists.`, "error");
+      this.saveLoader = false;
       return;
     }
 
@@ -166,59 +190,115 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
         this.compressedImageData = compressedImageData;
         // console.log('compressedImageData',this.compressedImageData);
 
-        this.uploadImagesArray.push({
-          fileName: file.name,
-          fileURL: this.compressedImageData,
-          base64: this.compressedImageData.split(",")[1],
-          filetype: "vehicleImage"
-        });
+        const fields = {
+          Title: this.fileName,
 
-        this.instructionContainerCss =
-          this.uploadImagesArray.length > 0
-            ? "upload-instruction-container left"
-            : "upload-instruction-container";
-        this.imageScrollerContainer =
-          this.uploadImagesArray.length >= 3
-            ? "image-scroll-container padding-right"
-            : "image-scroll-container";
-        this.uploadImageCss =
-          this.uploadImagesArray.length == 1 ||
-          this.uploadImagesArray.length == 2
-            ? "upload-image one-element"
-            : "upload-image one-element";
-        this.uploadImageIconCss =
-          this.uploadImagesArray.length == 1 ||
-          this.uploadImagesArray.length == 2
-            ? "upload-image-icon-box"
-            : "upload-image-icon-box";
-        this.saveButtonCss =
-          this.uploadImagesArray.length <= 0
-            ? "upload-button save disable"
-            : "upload-button save";
-        this.UploadImageButtonCss =
-          this.uploadImagesArray.length <= 9
-            ? "upload-image-icon-container"
-            : "upload-image-icon-container disable-div";
-        this.isButtonDisabled =
-          this.uploadImagesArray.length <= 0 ? true : false;
-        this.isUplaodButtonDisabled =
-          this.uploadImagesArray.length >= 10 ? true : false;
+          PathOnClient: this.fileName,
 
-        if (this.uploadImagesArray.length == 1) {
-          this.uploadContainerCss = "upload-container full-width-two-element";
-        } else if (
-          this.uploadImagesArray.length == 2 ||
-          this.uploadImagesArray.length == 3
-        ) {
-          this.uploadContainerCss = "upload-container full-width-two-element";
-        } else {
-          this.uploadContainerCss = "upload-container full-width-two-element";
-        }
-        this.isImageEmpty = this.uploadImagesArray.length > 0 ? false : true;
-        // console.log("aary", JSON.stringify(this.uploadImagesArray));
+          VersionData: this.compressedImageData.split(",")[1],
 
-        this.isImageLimitReached =
-          this.uploadImagesArray.length >= 10 ? true : false;
+          FirstPublishLocationId: this.recordId,
+
+          ContentLocation: "S",
+
+          Description: 'Certificates'
+
+          // Add any other fields you need
+        };
+
+        createRecord({
+          apiName: "ContentVersion",
+          fields: fields
+        })
+          .then((result) => {
+            console.log("result", result.id);
+            this.showToast(
+              "Success",
+              "File has been uploaded successfully.",
+              "Success"
+            );
+
+            this.newfile = true;
+
+            this.uploadImagesArray.push({
+              id: result.id,
+              fileName: file.name,
+              fileURL: this.compressedImageData,
+              base64: this.compressedImageData.split(",")[1],
+              filetype: "vehicleImage"
+            });
+
+            this.uploadImagesOnlyIds.push(result.id);
+
+            console.log(
+              "this.uploadImagesOnlyIds",
+              JSON.stringify(this.uploadImagesOnlyIds)
+            );
+
+            console.log(
+              "this.uploadImagesArray after push:_",
+              JSON.stringify(this.uploadImagesArray)
+            );
+
+            this.instructionContainerCss =
+              this.uploadImagesArray.length > 0
+                ? "upload-instruction-container left"
+                : "upload-instruction-container";
+            this.imageScrollerContainer =
+              this.uploadImagesArray.length >= 3
+                ? "image-scroll-container padding-right"
+                : "image-scroll-container";
+            this.uploadImageCss =
+              this.uploadImagesArray.length == 1 ||
+              this.uploadImagesArray.length == 2
+                ? "upload-image one-element"
+                : "upload-image one-element";
+            this.uploadImageIconCss =
+              this.uploadImagesArray.length == 1 ||
+              this.uploadImagesArray.length == 2
+                ? "upload-image-icon-box"
+                : "upload-image-icon-box";
+            this.saveButtonCss =
+              this.uploadImagesArray.length <= 0
+                ? "upload-button save disable"
+                : "upload-button save";
+            this.UploadImageButtonCss =
+              this.uploadImagesArray.length <= 9
+                ? "upload-image-icon-container"
+                : "upload-image-icon-container disable-div";
+            this.isButtonDisabled =
+              this.uploadImagesArray.length <= 0 ? true : false;
+            this.isUplaodButtonDisabled =
+              this.uploadImagesArray.length >= 10 ? true : false;
+
+            if (this.uploadImagesArray.length == 1) {
+              this.uploadContainerCss =
+                "upload-container full-width-two-element";
+            } else if (
+              this.uploadImagesArray.length == 2 ||
+              this.uploadImagesArray.length == 3
+            ) {
+              this.uploadContainerCss =
+                "upload-container full-width-two-element";
+            } else {
+              this.uploadContainerCss =
+                "upload-container full-width-two-element";
+            }
+            this.isImageEmpty =
+              this.uploadImagesArray.length > 0 ? false : true;
+            // console.log("aary", JSON.stringify(this.uploadImagesArray));
+
+            this.isImageLimitReached =
+              this.uploadImagesArray.length >= 10 ? true : false;
+
+            this.saveLoader = false;
+          })
+
+          .catch((error) => {
+            console.error("Error in callback:", error);
+
+            this.showToast("error", error.body.message, "error");
+          });
       };
     };
     reader.readAsDataURL(file);
@@ -229,6 +309,9 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
   }
 
   handleDeleteImage(event) {
+    this.saveLoader = true;
+    console.log("id for delete", event.target.dataset.id);
+    this.deleteBranchApi(event.target.dataset.id);
     // console.log("delete name:-", event.target.dataset.name);
     this.uploadImagesArray = this.uploadImagesArray.filter((item) => {
       return item.fileName !== event.target.dataset.name;
@@ -278,6 +361,16 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
 
     this.isImageLimitReached =
       this.uploadImagesArray.length >= 10 ? true : false;
+
+    const events = new CustomEvent("updateitems", {
+      detail: this.uploadImagesArray
+    });
+    this.dispatchEvent(events);
+
+    const eventss = new CustomEvent("updateids", {
+      detail: this.uploadImagesOnlyIds
+    });
+    this.dispatchEvent(eventss);
   }
 
   showToast(title, message, variant) {
@@ -296,6 +389,11 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
       detail: this.uploadImagesArray
     });
     this.dispatchEvent(events);
+
+    const eventss = new CustomEvent("updateids", {
+      detail: this.uploadImagesOnlyIds
+    });
+    this.dispatchEvent(eventss);
 
     const event2 = new CustomEvent("closemodal");
     this.dispatchEvent(event2);

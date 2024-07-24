@@ -33,28 +33,6 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
   upload = upload;
   error_outline = error_outline;
 
-  handleFilesChange(event) {
-    const files = event.target.files;
-    if (files.length > 0) {
-      this.uploadFile(files[0]);
-    }
-  }
-
-  deleteBranchApi(id) {
-    deleteBranchApi({ contentVersionId: id })
-      .then((result) => {
-        console.log("result", result);
-        this.uploadImagesOnlyIds = this.uploadImagesOnlyIds.filter((elm) => {
-          return elm.id !== id;
-        });
-
-        this.saveLoader = false;
-      })
-      .catch((e) => {
-        console.log("error", e);
-      });
-  }
-
   connectedCallback() {
     console.log("this.imageData", JSON.parse(JSON.stringify(this.imageData)));
     if (this.imageData != null) {
@@ -103,6 +81,32 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
     }
   }
 
+  handleFilesChange(event) {
+    const files = event.target.files;
+    const maxSizeInBytes = 10 * 1024 * 1024; // 10 MB
+
+    if (files[0] && files[0].size > maxSizeInBytes) {
+      this.showToast("Error", "File size should not exceed 10 MB", "Error");
+    } else if (files.length > 0) {
+      this.uploadFile(files[0]);
+    }
+  }
+
+  deleteBranchApi(id) {
+    deleteBranchApi({ contentVersionId: id })
+      .then((result) => {
+        console.log("result", result);
+        this.uploadImagesOnlyIds = this.uploadImagesOnlyIds.filter((elm) => {
+          return elm.id !== id;
+        });
+
+        this.saveLoader = false;
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  }
+
   uploadImage(fileArray) {
     CCP2_vehcileImageUploader({
       jsonStrings: fileArray
@@ -133,6 +137,7 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
     // If the file name exists, do not proceed with the upload
     if (isFileNameExists) {
       this.showToast("Error", `${file.name} already exists.`, "error");
+      this.saveLoader = false;
       return;
     }
 
@@ -194,7 +199,7 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
 
           ContentLocation: "S",
 
-          Description: this.description
+          Description: 'Images'
 
           // Add any other fields you need
         };
@@ -221,10 +226,7 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
               filetype: "certificate"
             });
 
-            this.uploadImagesOnlyIds.push({
-              fileName: file.name,
-              id: result.id
-            });
+            this.uploadImagesOnlyIds.push(result.id);
 
             console.log(
               "this.uploadImagesOnlyIds",
@@ -354,6 +356,16 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
     this.isImageEmpty = this.uploadImagesArray.length > 0 ? false : true;
     this.isImageLimitReached =
       this.uploadImagesArray.length >= 2 ? true : false;
+
+    const events = new CustomEvent("updateitems", {
+      detail: this.uploadImagesArray
+    });
+    this.dispatchEvent(events);
+
+    const eventss = new CustomEvent("updateids", {
+      detail: this.uploadImagesOnlyIds
+    });
+    this.dispatchEvent(eventss);
   }
 
   showToast(title, message, variant) {

@@ -101,6 +101,10 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   fuelTypeOptions = [];
   @track formLoader = false;
 
+  @track imageIdsForClass = [];
+  @track certificateIdsForClass = [];
+  @track showexitModal = false;
+
   tempImageDataToSend;
   tempCertificateDataToSend;
   tempFirstImageName;
@@ -228,6 +232,20 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     this.selectedVehicleId = event.currentTarget.dataset.id;
     this.handleBranchChange();
   }
+  showexit(){
+    this.commonChassisNumbers = this.vehicleInfo.slice(
+      0,
+      this.lastPageNumberTillSavedToBackend - 1
+    );
+    this.missingChassisNumbers = this.vehicleInfo.slice(
+      this.lastPageNumberTillSavedToBackend - 1,
+      this.totalPages
+    );
+    this.showexitModal = true;
+  }
+  Closeexit(){
+    this.showexitModal = false;
+  }
 
   handleBranchChange() {
     let selectedVehicle = "";
@@ -256,22 +274,34 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       this.showlist = false;
     }
   }
-  handleCarNameChange() {
+  handleCarNameChange(event) {
+    //  this.closeAllLists();
+    event.stopPropagation();
     this.showlistCarName = !this.showlistCarName;
   }
-  handlefuelTypeChange() {
+  handlefuelTypeChange(event) {
+    //  this.closeAllLists();
+    event.stopPropagation();
     this.showlistfuelType = !this.showlistfuelType;
   }
-  handletypeOfVehicleChange() {
+  handletypeOfVehicleChange(event) {
+    //  this.closeAllLists();
+    event.stopPropagation();
     this.showlisttypeOfVehicle = !this.showlisttypeOfVehicle;
   }
-  handleuseChange() {
+  handleuseChange(event) {
+    //  this.closeAllLists();
+    event.stopPropagation();
     this.showlistuse = !this.showlistuse;
   }
-  handleprivateOrBusinessUseChange() {
+  handleprivateOrBusinessUseChange(event) {
+    //  this.closeAllLists();
+    event.stopPropagation();
     this.showlistprivateOrBusinessUse = !this.showlistprivateOrBusinessUse;
   }
-  handlebodyShapeChange() {
+  handlebodyShapeChange(event) {
+    //  this.closeAllLists();
+    event.stopPropagation();
     this.showlistbodyShape = !this.showlistbodyShape;
   }
 
@@ -291,8 +321,8 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       this.branches = [
         ...this.branches,
         {
-          label: deletedBranchFromBranchArray.Name,
-          value: deletedBranchFromBranchArray.Id
+          label: deletedBranchFromBranchArray.label,
+          value: deletedBranchFromBranchArray.value
         }
       ];
       console.log("ok3");
@@ -417,6 +447,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       // chassisNumber: "HY674-658H8934"
     })
       .then((result) => {
+        console.log("getImagesFromApiViaChessisNumber1 ch no", this.currentChessisNumber);
         console.log("getImagesFromApiViaChessisNumber1", result);
         result = JSON.parse(result);
         console.log("getImagesFromApiViaChessisNumber2", result);
@@ -727,26 +758,32 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     if (name === "carName") {
       this.formdata[name] = value;
       this.selectedPicklistCarName = value;
+      this.showlistCarName = false;
       this.handleCarNameChange();
     } else if (name === "typeOfVehicle") {
       this.formdata[name] = value;
       this.selectedPicklisttypeOfVehicle = value;
+      this.showlisttypeOfVehicle = false;
       this.handletypeOfVehicleChange();
     } else if (name === "fuelType") {
       this.formdata[name] = value;
       this.selectedPicklistfuelType = value;
+      this.showlistfuelType = false;
       this.handlefuelTypeChange();
     } else if (name === "use") {
       this.formdata[name] = value;
       this.selectedPicklistuse = value;
+      this.showlistuse = false;
       this.handleuseChange();
     } else if (name === "privateOrBusinessUse") {
       this.formdata[name] = value;
+      this.showlistprivateOrBusinessUse = false;
       this.selectedPicklistprivateOrBusinessUse = value;
       this.handleprivateOrBusinessUseChange();
     } else if (name === "bodyShape") {
       this.formdata[name] = value;
       this.selectedPicklistbodyShape = value;
+      this.showlistbodyShape = false;
       this.handlebodyShapeChange();
     }
   }
@@ -1162,6 +1199,18 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     // this.saveFormData();
   }
 
+  getImageIdsForClass(event) {
+    this.imageIdsForClass = event.detail;
+    console.log("this.imageIdsForClass", JSON.stringify(this.imageIdsForClass));
+  }
+  getCertificateIdsForClass(event) {
+    this.certificateIdsForClass = event.detail;
+    console.log(
+      "this.certificateIdsForClass",
+      JSON.stringify(this.certificateIdsForClass)
+    );
+  }
+
   // getimagecertdata(event){
   //     this.uploadcertificatedata = event.detail;
 
@@ -1254,6 +1303,11 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     // console.log("name", ev.target.name);
     if (ev.target.name === "completion-button") {
       this.formLoader = false;
+      
+      if(this.totalPages === 1){
+        this.showRegisteredVehicles = true;
+        this.Step1 = false;
+      }else{
       this.showfinalModal = true;
 
       this.commonChassisNumbers = this.vehicleInfo.slice(
@@ -1264,6 +1318,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
         this.lastPageNumberTillSavedToBackend,
         this.totalPages
       );
+     }
     }
 
     let mergeImageArray = this.certificateDataToSendBack;
@@ -1273,12 +1328,21 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       );
     }
     console.log("mergeImageArray", JSON.stringify(mergeImageArray));
+
+    let certData = this.certificateIdsForClass;
+    if (this.imageIdsForClass != null) {
+      certData = this.certificateIdsForClass.concat(this.imageIdsForClass);
+    }
+    console.log("certData", JSON.stringify(certData));
+    // let certData = this.certificateIdsForClass
+    // let imageData = this.imageIdsForClass
+
     let finalListOfFormDataToSend = [];
     finalListOfFormDataToSend.push(this.formdata);
 
     this.handleSaveToServer(
       JSON.stringify(finalListOfFormDataToSend),
-      JSON.stringify(mergeImageArray)
+      JSON.stringify(certData)
     );
 
     // Add final save logic here, like saving to the server
@@ -1444,17 +1508,12 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       !listsElement.contains(event.target)
     ) {
       this.showlist = false;
-      this.showlistCarName = false;
-      this.showlistfuelType = false;
-      this.showlisttypeOfVehicle = false;
-      this.showlistbodyShape = false;
-      this.showlistprivateOrBusinessUse = false;
-      this.showlistuse = false;
     }
   };
   handleOutsideClick3 = (event) => {
-    const dataDropElement = this.template.querySelector(".Inputs1");
-    const listsElement = this.template.querySelector(".lists");
+    const dataDropElement = this.template.querySelector(".InputsCarName");
+    console.log("3eew",dataDropElement);
+    const listsElement = this.template.querySelector(".listCarName");
 
     if (
       dataDropElement &&
@@ -1463,37 +1522,234 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       !listsElement.contains(event.target)
     ) {
       this.showlistCarName = false;
+    }
+  };
+  handleOutsideClick4 = (event) => {
+    const dataDropElement = this.template.querySelector(".dropdownfuel");
+    console.log("3eew1",dataDropElement);
+    const listsElement = this.template.querySelector(".listfueltype");
+
+    if (
+      dataDropElement &&
+      !dataDropElement.contains(event.target) &&
+      listsElement &&
+      !listsElement.contains(event.target)
+    ) {
       this.showlistfuelType = false;
+    }
+  };
+  handleOutsideClick5 = (event) => {
+    const dataDropElement = this.template.querySelector(".Inputstypeofvehicle");
+    console.log("3eewsjw",dataDropElement);
+    // const listsElement = this.template.querySelector(".listtypeofvehicle");
+    // console.log("sw lists",listsElement);
+
+    if (
+      dataDropElement &&
+      !dataDropElement.contains(event.target) ||
+      listsElement &&
+      !listsElement.contains(event.target)
+    ) {
       this.showlisttypeOfVehicle = false;
+    }
+  };
+  handleOutsideClick6 = (event) => {
+    const dataDropElement = this.template.querySelector(".Inputsbodyshape");
+    console.log("3eewslksl2",dataDropElement);
+    const listsElement = this.template.querySelector(".listbodyshape");
+
+    if (
+      dataDropElement &&
+      !dataDropElement.contains(event.target) &&
+      listsElement &&
+      !listsElement.contains(event.target)
+    ) {
       this.showlistbodyShape = false;
+    }
+  };
+  handleOutsideClick7 = (event) => {
+    const dataDropElement = this.template.querySelector(".Inputsprivateorbussiness");
+    console.log("3eewkjsjkd2",dataDropElement);
+    const listsElement = this.template.querySelector(".listprivateOrBusinessUse");
+
+    if (
+      dataDropElement &&
+      !dataDropElement.contains(event.target) &&
+      listsElement &&
+      !listsElement.contains(event.target)
+    ) {
       this.showlistprivateOrBusinessUse = false;
+      console.log("working on console");
+    }
+  };
+  handleOutsideClick8 = (event) => {
+    const dataDropElement = this.template.querySelector(".Inputsuse");
+    console.log("dsjdk3ew",dataDropElement);
+    const listsElement = this.template.querySelector(".listuse");
+
+    if (
+      dataDropElement &&
+      !dataDropElement.contains(event.target) &&
+      listsElement &&
+      !listsElement.contains(event.target)
+    ) {
       this.showlistuse = false;
     }
   };
 
+  // handleOutsideClick3 = (event) => {
+    // console.log("inclise outside event");
+    // const dataDropElements = this.template.querySelectorAll(".Inputs1");
+    // const listsElements = this.template.querySelectorAll(".lists2");
+
+    // if (
+    //   dataDropElements[0] &&
+    //   !dataDropElements[0].contains(event.target) &&
+    //   listsElements[0] &&
+    //   !listsElements[0].contains(event.target)
+    // ) {
+    //   this.showlist = false;
+    //   // this.showlistCarName = false;
+    //   this.showlistfuelType = false;
+    //   this.showlisttypeOfVehicle = false;
+    //   this.showlistbodyShape = false;
+    //   this.showlistprivateOrBusinessUse = false;
+    //   this.showlistuse = false;
+    // } else if (
+    //   dataDropElements[1] &&
+    //   !dataDropElements[1].contains(event.target) &&
+    //   listsElements[1] &&
+    //   !listsElements[1].contains(event.target)
+    // ) {
+    //   this.showlist = false;
+    //   this.showlistCarName = false;
+    //   this.showlistfuelType = false;
+    //   // this.showlisttypeOfVehicle = false;
+    //   this.showlistbodyShape = false;
+    //   this.showlistprivateOrBusinessUse = false;
+    //   this.showlistuse = false;
+    
+    // } else if (
+    //   dataDropElements[2] &&
+    //   !dataDropElements[2].contains(event.target) &&
+    //   listsElements[2] &&
+    //   !listsElements[2].contains(event.target)
+    // ) {
+    //   this.showlist = false;
+    //   this.showlistCarName = false;
+    //   // this.showlistfuelType = false;
+    //   this.showlisttypeOfVehicle = false;
+    //   this.showlistbodyShape = false;
+    //   this.showlistprivateOrBusinessUse = false;
+    //   this.showlistuse = false;
+    
+    // } else if (
+    //   dataDropElements[3] &&
+    //   !dataDropElements[3].contains(event.target) &&
+    //   listsElements[3] &&
+    //   !listsElements[3].contains(event.target)
+    // ) {
+    //   this.showlist = false;
+    //   this.showlistCarName = false;
+    //   this.showlistfuelType = false;
+    //   this.showlisttypeOfVehicle = false;
+    //   this.showlistbodyShape = false;
+    //   // this.showlistprivateOrBusinessUse = false;
+    //   this.showlistuse = false;
+    
+    // } else if (
+    //   dataDropElements[4] &&
+    //   !dataDropElements[4].contains(event.target) &&
+    //   listsElements[4] &&
+    //   !listsElements[4].contains(event.target)
+    // ) {
+    //   this.showlist = false;
+    //   this.showlistCarName = false;
+    //   this.showlistfuelType = false;
+    //   this.showlisttypeOfVehicle = false;
+    //   // this.showlistbodyShape = false;
+    //   this.showlistprivateOrBusinessUse = false;
+    //   this.showlistuse = false;
+    
+    // } else if (
+    //   dataDropElements[5] &&
+    //   !dataDropElements[5].contains(event.target) &&
+    //   listsElements[5] &&
+    //   !listsElements[5].contains(event.target)
+    // ) {
+    //   this.showlist = false;
+    //   this.showlistCarName = false;
+    //   this.showlistfuelType = false;
+    //   this.showlisttypeOfVehicle = false;
+    //   this.showlistbodyShape = false;
+    //   this.showlistprivateOrBusinessUse = false;
+    //   // this.showlistuse = false;
+    // }
+    // console.log("include outside event");
+    // const dataDropElements = this.template.querySelectorAll(".Inputs1");
+    // const listsElements = this.template.querySelectorAll(".lists2");
+  
+    // let clickedOutside = true;
+    
+    // dataDropElements.forEach((element, index) => {
+    //   if (element.contains(event.target)) {
+    //     clickedOutside = false;
+    //   }
+    // });
+  
+    // listsElements.forEach((element, index) => {
+    //   if (element.contains(event.target)) {
+    //     clickedOutside = false;
+    //   }
+    // });
+  
+    // if (clickedOutside) {
+    //   this.closeAllLists();
+    // }
+  // };
+
+  closeAllLists = () => {
+    this.showlist = false;
+    this.showlistCarName = false;
+    this.showlistfuelType = false;
+    this.showlisttypeOfVehicle = false;
+    this.showlistbodyShape = false;
+    this.showlistprivateOrBusinessUse = false;
+    this.showlistuse = false;
+  };
   renderedCallback() {
     if (!this.outsideClickHandlerAdded) {
       document.addEventListener("click", this.handleOutsideClick2.bind(this));
       document.addEventListener("click", this.handleOutsideClick3.bind(this));
+      document.addEventListener("click", this.handleOutsideClick4.bind(this));
+      document.addEventListener("click", this.handleOutsideClick5.bind(this));
+      document.addEventListener("click", this.handleOutsideClick6.bind(this));
+      document.addEventListener("click", this.handleOutsideClick7.bind(this));
+      document.addEventListener("click", this.handleOutsideClick8.bind(this));
       this.outsideClickHandlerAdded = true;
     }
   }
 
   disconnectedCallback() {
-    document.removeEventListener("click", this.handleOutsideClick.bind(this));
+    document.removeEventListener("click", this.handleOutsideClick2.bind(this));
+    document.removeEventListener("click", this.handleOutsideClick3.bind(this));
+    document.removeEventListener("click", this.handleOutsideClick4.bind(this));
+    document.removeEventListener("click", this.handleOutsideClick5.bind(this));
+    document.removeEventListener("click", this.handleOutsideClick6.bind(this));
+    document.removeEventListener("click", this.handleOutsideClick7.bind(this));
+    document.removeEventListener("click", this.handleOutsideClick8.bind(this));
   }
   handleInsideClick(event) {
     event.stopPropagation();
   }
 
   handleSaveToServer(jsonInput, jsonStrings) {
-    console.log(
-      "register vehicle class data send",
-      jsonInput,
-      jsonStrings
-    );
+    console.log("register vehicle class data send", jsonInput, jsonStrings);
     // Make sure bigdata is not empty before calling the server
-    registervehicle({ jsonInput: jsonInput, jsonStrings: jsonStrings })
+    registervehicle({
+      jsonInput: jsonInput,
+      contentVersionIdsJson: jsonStrings
+    })
       .then((result) => {
         this.showToasts(
           "Success",
@@ -1577,5 +1833,9 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     this.showRegisteredVehicles = true;
     this.Step1 = false;
     this.showfinalModal = false;
+  }
+
+  handleClick(){
+    window.location.reload();
   }
 }

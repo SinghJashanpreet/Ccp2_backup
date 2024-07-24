@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-        <div class="half top">
+        <div class="half top img-head">
             <img src={backgroundImagePC}>
         </div>
     </div>
@@ -29,7 +29,8 @@
                                         <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous"
                                             size="small"></lightning-icon>
                                     </button>
-                                    <span><span class="page-button-color">{currentPage}</span> of {totalPages}</span>
+                                    <span class="travellingicon"><span class="page-button-color">{currentPage}</span> of
+                                        {totalPages}</span>
                                     <button class="nav-button" onclick={handleNext} title="Next"
                                         disabled={isPageDataSavedToBackend}>
                                         <lightning-icon icon-name="utility:chevronright" alternative-text="Next"
@@ -40,8 +41,8 @@
                             <div class="form-section">
                                 <template if:true={formLoader}>
                                     <div
-                                        style="height: 100vh; width:100vw; position:relative; background-color: rgba(251, 251, 251, 0.9);">
-                                        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                                        style="height: 100vh; width:100vw; position:relative;">
+                                        <lightning-spinner style="background-color: var(--slds-g-color-neutral-100-opacity-75, rgb(255 255 255 / 17%));" alternative-text="Loading" size="medium"></lightning-spinner>
                                     </div>
                                 </template>
                                 <template if:false={formLoader}>
@@ -158,11 +159,11 @@
                                                    
                                                 </select> -->
                                                 <div class="dropdown">
-                                                    <input type="text" onclick={handleCarNameChange}
-                                                        class="Inputs1 icon" placeholder="選択してください"
-                                                        value={selectedPicklistCarName} name="carName">
+                                                    <input type="text" onclick={handleCarNameChange} autocomplete="off"
+                                                        class="InputsCarName Inputs1 icon2 " placeholder="選択してください"
+                                                        value={selectedPicklistCarName} name="carName" readonly>
                                                     <template if:true={showlistCarName}>
-                                                        <div class="lists2 no-scroll" onclick={handleInsideClick}>
+                                                        <div class="listCarName lists2 no-scroll" name="carName" onclick={handleInsideClick}>
                                                             <template for:each={carNameOptions} for:item="veh">
                                                                 <div key={veh.label} class="list-item"
                                                                     onclick={handlePickListChange} data-namee="carName"
@@ -194,10 +195,10 @@
                                                 </select> -->
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handletypeOfVehicleChange}
-                                                        class="Inputs1 icon2" placeholder="選択してください"
-                                                        value={selectedPicklisttypeOfVehicle} name="typeOfVehicle">
+                                                        autocomplete="off" class="Inputstypeofvehicle Inputs1 icon2" placeholder="選択してください"
+                                                        value={selectedPicklisttypeOfVehicle} name="typeOfVehicle"  readonly>
                                                     <template if:true={showlisttypeOfVehicle}>
-                                                        <div class="lists2 no-scroll" onclick={handleInsideClick}>
+                                                        <div class="listtypeofvehicle lists2 no-scroll" name="typeOfVehicle" onclick={handleInsideClick}>
                                                             <template for:each={vehicleTypeOptions} for:item="veh">
                                                                 <div key={veh.label} class="list-item"
                                                                     onclick={handlePickListChange}
@@ -243,12 +244,12 @@
                                                         </option>
                                                     </template>
                                                 </select> -->
-                                                <div class="dropdown">
-                                                    <input type="text" onclick={handlefuelTypeChange}
-                                                        class="Inputs1 icon" placeholder="選択してください"
-                                                        value={selectedPicklistfuelType} name="fuelType">
+                                                <div class="dropdownfuel">
+                                                    <input type="text" onclick={handlefuelTypeChange} autocomplete="off"
+                                                        class="InputsfuelType Inputs1 icon2" placeholder="選択してください"
+                                                        value={selectedPicklistfuelType} name="fuelType" readonly>
                                                     <template if:true={showlistfuelType}>
-                                                        <div class="lists2 no-scroll" onclick={handleInsideClick}>
+                                                        <div class="listfueltype lists2 no-scroll" name="fuelType" onclick={handleInsideClick}>
                                                             <template for:each={fuelTypeOptions} for:item="veh">
                                                                 <div key={veh.label} class="list-item"
                                                                     onclick={handlePickListChange} data-namee="fuelType"
@@ -338,11 +339,11 @@
                                                 </select> -->
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handleprivateOrBusinessUseChange}
-                                                        class="Inputs1 icon2" placeholder="選択してください"
+                                                        autocomplete="off" class="Inputsprivateorbussiness Inputs1 icon2" placeholder="選択してください"
                                                         value={selectedPicklistprivateOrBusinessUse}
-                                                        name="privateOrBusinessUse">
+                                                        name="privateOrBusinessUse" readonly>
                                                     <template if:true={showlistprivateOrBusinessUse}>
-                                                        <div class="lists2 no-scroll" onclick={handleInsideClick}>
+                                                        <div class="listprivateOrBusinessUse lists2 no-scroll" name="privateOrBusinessUse" onclick={handleInsideClick}>
                                                             <template for:each={privateOrBusinessOptions}
                                                                 for:item="veh">
                                                                 <div key={veh.label} class="list-item"
@@ -378,10 +379,10 @@
                                                 </select> -->
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handlebodyShapeChange}
-                                                        class="Inputs1 icon" placeholder="選択してください"
-                                                        value={selectedPicklistbodyShape} name="bodyShape">
+                                                        autocomplete="off" class="Inputsbodyshape Inputs1 icon2" placeholder="選択してください"
+                                                        value={selectedPicklistbodyShape} name="bodyShape" readonly>
                                                     <template if:true={showlistbodyShape}>
-                                                        <div class="lists2 no-scroll" onclick={handleInsideClick}>
+                                                        <div class="listbodyshape lists2 no-scroll" name="bodyShape" onclick={handleInsideClick}>
                                                             <template for:each={bodyShapeOptions} for:item="veh">
                                                                 <div key={veh.label} class="list-item"
                                                                     onclick={handlePickListChange}
@@ -416,10 +417,11 @@
                                                     
                                                 </select> -->
                                                 <div class="dropdown">
-                                                    <input type="text" onclick={handleuseChange} class="Inputs1 icon"
-                                                        placeholder="選択してください" value={selectedPicklistuse} name="use">
+                                                    <input type="text" onclick={handleuseChange} class="Inputsuse Inputs1 icon2 "
+                                                        autocomplete="off" placeholder="選択してください"
+                                                        value={selectedPicklistuse} name="use" readonly>
                                                     <template if:true={showlistuse}>
-                                                        <div class="lists2 no-scroll" onclick={handleInsideClick}>
+                                                        <div class="listuse lists2 no-scroll" name="use" onclick={handleInsideClick}>
                                                             <template for:each={useOptions} for:item="veh">
                                                                 <div key={veh.label} class="list-item"
                                                                     onclick={handlePickListChange} data-namee="use"
@@ -447,7 +449,7 @@
                                             <span class="unit">Km</span>
                                         </div>
 
-                                        <div class="form-group-wr form-margin">
+                                        <div class="form-group-wr second-last-second-section">
                                             <label for="Weight">
                                                 <div class="addMain">
                                                     車両重量
@@ -459,7 +461,7 @@
                                             <span class="unit">Kg</span>
                                         </div>
 
-                                        <div class="form-group-branch form-margin">
+                                        <div class="form-group-branch">
                                             <label for="branches">
                                                 <div class="addMain branch">
                                                     所属
@@ -467,8 +469,8 @@
                                                 </div>
                                             </label>
                                             <div class="dataDrop">
-                                                <input type="text" onclick={handlevehChange} class="Inputs12 icon"
-                                                    placeholder="please select">
+                                                <input type="text" onclick={handlevehChange} readonly class="Inputs12 icon" style="cursor: default; background-position:6.4rem 50%;"
+                                                    placeholder="選択する">
                                                 <template if:true={showlist}>
                                                     <div class="lists no-scroll" onclick={handleInsideClick}>
                                                         <template for:each={branches} for:item="veh">
@@ -495,7 +497,7 @@
                                                         </template>
                                                     </template>
                                                     <template if:false={hasVehicles2}>
-                                                        <p class="empty1">select branch</p>
+                                                        <p class="empty1">選択された</p>
                                                     </template>
                                                 </div>
                                             </div>
@@ -504,9 +506,10 @@
                                 </template>
                             </div>
                             <div class="form-footer">
-                                <div class="button">
-                                    <div class="btn" onclick={handlePrevious}>
-                                        <P class="toedit">Cancel</P>
+                                <div class="button cancel-btn">
+                                    <div class="btn" onclick={showexit}>
+                                        <P class="toedit">キャンセル</P>
+                                        <!-- cancel -->
                                     </div>
                                 </div>
                                 <!-- <template if:true={isLastPage}>
@@ -524,14 +527,16 @@
                                 <div style="display: flex; justify-content:right; align-items:center; gap:25px">
                                     <button style="background-color: white; color:black; border:1px solid #bfbfbf;"
                                         class={finalCompletionButtonCss} name="completion-button"
-                                        onclick={handleSaveData} disabled={disableSaveButton}>Completion</button>
+                                        onclick={handleSaveData} disabled={disableSaveButton}>完了</button> 
+                                        <!-- Completion -->
+                                        
 
                                     <template if:false={isLastPage}>
                                         <!-- <div class="searchbutton btn " onclick={handleSaveData}> -->
-                                        <button class="searchbutton btn buttontxt2" name="next-button"
+                                        <button class="searchbutton btn buttontxt2 searchbuttonnew" name="next-button"
                                             style="color: white;" disabled={disableSaveButton}
-                                            onclick={handleSaveData}>Register &
-                                            Next</button>
+                                            onclick={handleSaveData}>保存して次へ</button>
+                                            <!-- save and continue -->
                                         <!-- </div> -->
                                     </template>
                                 </div>
@@ -571,6 +576,7 @@
                         </template> -->
                     <template if:true={commonChassisNumbers.length}>
                         <h3 class="headmeow">Template C: Common Chassis Numbers</h3>
+
                         <ul>
                             <template for:each={commonChassisNumbers} for:item="chassis">
                                 <li class="superfun" key={chassis}>{chassis}</li>
@@ -600,16 +606,58 @@
     <template if:true={showUploadModal}>
         <div class="modal-background">
             <div class="modal-window">
-                <c-ccp2-_-Vehicle-Image-Upload onupdateitems={getimagedata} onclosemodal={closeupload}
-                    image-data={imageDataToSendBack}></c-ccp2-_-Vehicle-Image-Upload>
+                <c-ccp2-_-Vehicle-Image-Upload onupdateitems={getimagedata} onupdateids={getImageIdsForClass}
+                    onclosemodal={closeupload} image-data={imageDataToSendBack}></c-ccp2-_-Vehicle-Image-Upload>
             </div>
         </div>
     </template>
     <template if:true={showUploadCModal}>
         <div class="modal-background">
             <div class="modal-window2">
-                <c-ccp2-_-Vehicle-Certificate-Upload onupdateitems={getimagecertdata} onclosemodal={closecertficate}
+                <c-ccp2-_-Vehicle-Certificate-Upload onupdateitems={getimagecertdata}
+                    onupdateids={getCertificateIdsForClass} onclosemodal={closecertficate}
                     image-data={certificateDataToSendBack}></c-ccp2-_-Vehicle-Certificate-Upload>
+            </div>
+        </div>
+    </template>
+    <template if:true={showexitModal}>
+        <div class="modal-background">
+            <div class="modal-background-exit">
+                <div class="heads">
+                    <!-- <template if:true={presentChassisNumbers.length}>
+                            <h3>Template A: Present Chassis Numbers</h3>
+                            <ul>
+                                <template for:each={presentChassisNumbers} for:item="chassis">
+                                    <li key={chassis}>{chassis}</li>
+                                </template>
+                            </ul>
+                        </template> -->
+                        <center><h1 class="exittest">終了しますか？</h1></center>
+                    <template if:true={commonChassisNumbers.length}>
+                        <h3 class="headmeow">Registered Ones</h3>
+                        <ul>
+                            <template for:each={commonChassisNumbers} for:item="chassis">
+                                <li class="superfun" key={chassis}>{chassis}</li>
+                            </template>
+                        </ul>
+                    </template>
+                    <template if:true={missingChassisNumbers.length}>
+                        <h3 class="headmeow gaps">Unregistered</h3>
+                        <ul>
+                            <template for:each={missingChassisNumbers} for:item="chassis">
+                                <li class="superfun" key={chassis}>{chassis}</li>
+                            </template>
+                        </ul>
+                    </template>
+                </div>
+                <div class="buttons-small">
+                    <div class="cancelbutton btn" onclick={Closeexit}>
+                        <p class="buttontxt">いいえ</p>
+                    </div>
+                    <div class="searchbutton btn" onclick={handleClick}>
+                        <p class="buttontxt2">はい</p>
+                    </div>
+                </div>
             </div>
         </div>
     </template>
