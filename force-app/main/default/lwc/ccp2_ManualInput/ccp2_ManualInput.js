@@ -53,8 +53,8 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   @track finalCompletionButtonCss = "searchbutton btn buttontxt2";
   @track uploadText1 = "アップロード";
   @track uploadText2 = "アップロード";
-  @track uploadDivCss1 = "input-field-img";
-  @track uploadDivCss2 = "input-field-img";
+  @track uploadDivCss1 = "input-field-img no-scrollbar";
+  @track uploadDivCss2 = "input-field-img no-scrollbar";
   @track formBodyCss = "form-body";
   @track uploadIconToggle1 = true;
   @track uploadIconToggle2 = true;
@@ -117,7 +117,14 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   tempUploadDivCss2;
   tempUploadText2;
   tempUploadUploadIconToggle2;
-
+  // inputType = "text";
+  // handleFocus(event) {
+  //   this.inputType = "date";
+  //   setTimeout(() => {this.template.querySelector('input[data-id="dateOfIssuance"]').click();}, 0);
+  // }
+  // handleBlur() {
+  //   this.inputType = "text";
+  // }
   @wire(getPicklistValues, {
     recordTypeId: "012000000000000AAA",
     fieldApiName: BODY_SHAPE_FIELD
@@ -232,7 +239,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     this.selectedVehicleId = event.currentTarget.dataset.id;
     this.handleBranchChange();
   }
-  showexit(){
+  showexit() {
     this.commonChassisNumbers = this.vehicleInfo.slice(
       0,
       this.lastPageNumberTillSavedToBackend - 1
@@ -243,7 +250,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     );
     this.showexitModal = true;
   }
-  Closeexit(){
+  Closeexit() {
     this.showexitModal = false;
   }
 
@@ -277,31 +284,65 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   handleCarNameChange(event) {
     //  this.closeAllLists();
     event.stopPropagation();
+    this.showlist = false;
+    this.showlistfuelType = false;
+    this.showlisttypeOfVehicle = false;
+    this.showlistbodyShape = false;
+    this.showlistprivateOrBusinessUse = false;
+    this.showlistuse = false;
     this.showlistCarName = !this.showlistCarName;
   }
   handlefuelTypeChange(event) {
     //  this.closeAllLists();
     event.stopPropagation();
+    this.showlist = false;
+    this.showlistCarName = false;
+    this.showlisttypeOfVehicle = false;
+    this.showlistbodyShape = false;
+    this.showlistprivateOrBusinessUse = false;
+    this.showlistuse = false;
     this.showlistfuelType = !this.showlistfuelType;
   }
   handletypeOfVehicleChange(event) {
     //  this.closeAllLists();
     event.stopPropagation();
+    this.showlist = false;
+    this.showlistCarName = false;
+    this.showlistfuelType = false;
+    this.showlistbodyShape = false;
+    this.showlistprivateOrBusinessUse = false;
+    this.showlistuse = false;
     this.showlisttypeOfVehicle = !this.showlisttypeOfVehicle;
   }
   handleuseChange(event) {
     //  this.closeAllLists();
     event.stopPropagation();
+    this.showlist = false;
+    this.showlistCarName = false;
+    this.showlistfuelType = false;
+    this.showlisttypeOfVehicle = false;
+    this.showlistbodyShape = false;
+    this.showlistprivateOrBusinessUse = false;
     this.showlistuse = !this.showlistuse;
   }
   handleprivateOrBusinessUseChange(event) {
-    //  this.closeAllLists();
     event.stopPropagation();
+    this.showlist = false;
+    this.showlistCarName = false;
+    this.showlistfuelType = false;
+    this.showlisttypeOfVehicle = false;
+    this.showlistbodyShape = false;
+    this.showlistuse = false;
     this.showlistprivateOrBusinessUse = !this.showlistprivateOrBusinessUse;
   }
   handlebodyShapeChange(event) {
-    //  this.closeAllLists();
     event.stopPropagation();
+    this.showlist = false;
+    this.showlistCarName = false;
+    this.showlistfuelType = false;
+    this.showlisttypeOfVehicle = false;
+    this.showlistprivateOrBusinessUse = false;
+    this.showlistuse = false;
     this.showlistbodyShape = !this.showlistbodyShape;
   }
 
@@ -447,7 +488,10 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       // chassisNumber: "HY674-658H8934"
     })
       .then((result) => {
-        console.log("getImagesFromApiViaChessisNumber1 ch no", this.currentChessisNumber);
+        console.log(
+          "getImagesFromApiViaChessisNumber1 ch no",
+          this.currentChessisNumber
+        );
         console.log("getImagesFromApiViaChessisNumber1", result);
         result = JSON.parse(result);
         console.log("getImagesFromApiViaChessisNumber2", result);
@@ -467,11 +511,11 @@ export default class Ccp2backgroundTemplate extends LightningElement {
           console.log(this.countOfUplaodedCertificate);
 
           if (this.countOfUplaodedCertificate == 1) {
-            this.uploadDivCss1 = "input-field-img left-align";
+            this.uploadDivCss1 = "input-field-img left-align no-scrollbar";
             this.uploadText1 = this.firstUplaodedCertificateName;
             this.uploadIconToggle1 = false;
           } else if (this.countOfUplaodedCertificate >= 2) {
-            this.uploadDivCss1 = "input-field-img left-align";
+            this.uploadDivCss1 = "input-field-img left-align no-scrollbar";
             this.uploadText1 =
               this.firstUplaodedCertificateName +
               "など" +
@@ -479,14 +523,14 @@ export default class Ccp2backgroundTemplate extends LightningElement {
               "枚";
             this.uploadIconToggle1 = false;
           } else {
-            this.uploadDivCss1 = "input-field-img";
+            this.uploadDivCss1 = "input-field-img no-scrollbar";
             this.uploadText1 = "アップロード";
             this.uploadIconToggle1 = true;
           }
         } else {
           this.firstUplaodedCertificateName = "";
           this.countOfUplaodedCertificate = 0;
-          this.uploadDivCss1 = "input-field-img";
+          this.uploadDivCss1 = "input-field-img no-scrollbar";
           this.uploadText1 = "アップロード";
           this.uploadIconToggle1 = true;
         }
@@ -497,11 +541,11 @@ export default class Ccp2backgroundTemplate extends LightningElement {
           console.log(this.countOfUploadedImage);
 
           if (this.countOfUploadedImage == 1) {
-            this.uploadDivCss2 = "input-field-img left-align";
+            this.uploadDivCss2 = "input-field-img left-align no-scrollbar";
             this.uploadText2 = this.firstUploadedImageName;
             this.uploadIconToggle2 = false;
           } else if (this.countOfUploadedImage >= 2) {
-            this.uploadDivCss2 = "input-field-img left-align";
+            this.uploadDivCss2 = "input-field-img left-align no-scrollbar";
             this.uploadText2 =
               this.firstUploadedImageName +
               "など" +
@@ -509,14 +553,14 @@ export default class Ccp2backgroundTemplate extends LightningElement {
               "枚";
             this.uploadIconToggle2 = false;
           } else {
-            this.uploadDivCss2 = "input-field-img";
+            this.uploadDivCss2 = "input-field-img no-scrollbar";
             this.uploadText2 = "アップロード";
             this.uploadIconToggle2 = true;
           }
         } else {
           this.firstUploadedImageName = "";
           this.countOfUploadedImage = 0;
-          this.uploadDivCss2 = "input-field-img";
+          this.uploadDivCss2 = "input-field-img no-scrollbar";
           this.uploadText2 = "アップロード";
           this.uploadIconToggle2 = true;
         }
@@ -525,7 +569,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       })
       .catch((err) => {
         console.error("getImagesFromApiViaChessisNumber4", err);
-        this.showToasts("Error", err.body.message, "error");
+        this.showToasts("エラー", err.body.message, "error");
         window.scrollTo(0, 0);
       });
   }
@@ -660,8 +704,37 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     return this.currentPage >= this.lastPageNumberTillSavedToBackend;
   }
   get disableSaveButton() {
-    return this.currentPage < this.lastPageNumberTillSavedToBackend;
+    let isTrue = this.areRequiredFieldsPresent();
+    console.log("Is True: ", isTrue);
+    return this.currentPage < this.lastPageNumberTillSavedToBackend || !isTrue;
   }
+
+  areRequiredFieldsPresent() {
+    if (
+      !this.formdata.loginNumberPart1 ||
+      !this.formdata.loginNumberPart2 ||
+      !this.formdata.loginNumberPart3 ||
+      !this.formdata.loginNumberPart4 ||
+      !this.formdata.dateOfIssuance ||
+      !this.formdata.initialRegistrationDate ||
+      !this.formdata.carName ||
+      !this.formdata.typeOfVehicle ||
+      !this.formdata.model1 ||
+      !this.formdata.model2 ||
+      !this.formdata.privateOrBusinessUse ||
+      !this.formdata.bodyShape ||
+      !this.formdata.fuelType ||
+      !this.formdata.use ||
+      !this.formdata.mileage ||
+      (this.selectedbranches && this.selectedbranches.length === 0) ||
+      this.certificateDataToSendBack == null ||
+      this.certificateDataToSendBack.length === 0
+    ) {
+      return false;
+    }
+    return true;
+  }
+
   showupload() {
     this.showUploadModal = true;
   }
@@ -709,18 +782,6 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     this.saveFormData();
   }
 
-  //   handleInputChangeModel(event) {
-  //     const type = event.target.dataset.types;
-  //     const value = event.target.value;
-
-  //     if (type == "part1") {
-  //       this.formdata.model1 = value;
-  //     } else if (type == "part2") {
-  //       this.formdata.model2 = value;
-  //     }
-  //     this.saveFormData();
-  //   }
-
   handleInputChange(event) {
     const { name, value } = event.target;
     if (name === "affiliation") {
@@ -736,6 +797,8 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       //   if (name === "dateOfIssuance") this.dateofIss = value;
       //   if (name === "RegistrationDate") this.dateofReg = value;
       //   if (name === "ExpirationDate") this.expData = value;
+
+      // this.isPlaceholderVisible = !this.dateValue;
     } else if (
       name === "privateOrBusinessUse" ||
       name === "use" ||
@@ -843,19 +906,34 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       );
     } else if (currentVehicle) {
       // Update form data from currentVehicle if vehicleList is empty or invalid
+      // this.currentChessisNumber = currentVehicle.carPlatformNo__c.trim();
+      // console.log(
+      //   "this.currentChessisNumber when made from class",
+      //   this.currentChessisNumber,
+      //   " ",
+      //   this.currentChessisNumber.length
+      // );
+      // const parts = currentVehicle.carPlatformNo__c
+      //   ? currentVehicle.carPlatformNo__c.split("-")
+      //   : ["", ""];
+      // const partBefore = parts[0]; // "part1"
+      // const partAfter = parts[1]; // "part2"
       this.currentChessisNumber = currentVehicle.carPlatformNo__c.trim();
-      console.log(
-        "this.currentChessisNumber when made from class",
-        this.currentChessisNumber,
-        " ",
-        this.currentChessisNumber.length
-      );
-      const parts = currentVehicle.carPlatformNo__c
-        ? currentVehicle.carPlatformNo__c.split("-")
-        : ["", ""];
-      const partBefore = parts[0]; // "part1"
-      const partAfter = parts[1]; // "part2"
+console.log(
+  "this.currentChessisNumber when made from class",
+  this.currentChessisNumber,
+  " ",
+  this.currentChessisNumber.length
+);
 
+// Remove hyphen
+const carPlatformNoWithoutHyphen = currentVehicle.carPlatformNo__c.replace("-", "");
+
+// Split into two parts: first 5 characters and the rest
+let partBefore = carPlatformNoWithoutHyphen.substring(0, 5); // first 5 characters
+let partAfter = carPlatformNoWithoutHyphen.substring(5) // rest of the characters
+partAfter = partAfter.padStart(7,'0');
+    
       const fullmodel = currentVehicle.fullModel__c
         ? currentVehicle.fullModel__c.split("-")
         : ["", ""];
@@ -889,7 +967,8 @@ export default class Ccp2backgroundTemplate extends LightningElement {
         curbWeight: currentVehicle.vehicleWeight__c || "", // Correctly update curbWeight
         typeOfVehicle: "",
         doorNumber: "",
-        bodyShape: ""
+        bodyShape: "",
+        privateOrBusinessUse: ""
       };
     } else {
       // No data available, set form data to default values
@@ -1063,6 +1142,29 @@ export default class Ccp2backgroundTemplate extends LightningElement {
 
         this.branches = this.tempBranches;
         this.selectedbranches = this.tempSelectedBranches;
+
+        console.log("here is image detail on next");
+        console.log("this.imageDataToSendBack", this.imageDataToSendBack);
+        console.log(
+          "this.certificateDataToSendBack",
+          this.certificateDataToSendBack
+        );
+        console.log("this.firstUploadedImageName", this.firstUploadedImageName);
+        console.log(
+          "this.firstUplaodedCertificateName",
+          this.firstUplaodedCertificateName
+        );
+        console.log(
+          "this.countOfUplaodedCertificate",
+          this.countOfUplaodedCertificate
+        );
+        console.log("this.countOfUploadedImage", this.countOfUploadedImage);
+        console.log("this.uploadDivCss1", this.uploadDivCss1);
+        console.log("this.uploadText1", this.uploadText1);
+        console.log("this.uploadIconToggle1", this.uploadIconToggle1);
+        console.log("this.uploadDivCss2", this.uploadDivCss2);
+        console.log("this.uploadText2", this.uploadText2);
+        console.log("this.uploadIconToggle2", this.uploadIconToggle2);
       }
     }
   }
@@ -1127,21 +1229,27 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     this.uploadimagedata = event.detail;
     this.imageDataToSendBack = event.detail;
 
-    this.firstUploadedImageName = event.detail[0].fileName;
-    this.countOfUploadedImage = event.detail.length;
-    console.log(this.countOfUploadedImage);
+    if (this.uploadimagedata.length === 0) {
+      this.firstUploadedImageName = "";
+      this.countOfUploadedImage = event.detail.length;
+      console.log(this.countOfUploadedImage);
+    } else {
+      this.firstUploadedImageName = event.detail[0].fileName;
+      this.countOfUploadedImage = event.detail.length;
+      console.log(this.countOfUploadedImage);
+    }
 
     if (this.countOfUploadedImage == 1) {
-      this.uploadDivCss2 = "input-field-img left-align";
+      this.uploadDivCss2 = "input-field-img left-align no-scrollbar";
       this.uploadText2 = this.firstUploadedImageName;
       this.uploadIconToggle2 = false;
     } else if (this.countOfUploadedImage >= 2) {
-      this.uploadDivCss2 = "input-field-img left-align";
+      this.uploadDivCss2 = "input-field-img left-align no-scrollbar";
       this.uploadText2 =
         this.firstUploadedImageName + "など" + this.countOfUploadedImage + "枚";
       this.uploadIconToggle2 = false;
     } else {
-      this.uploadDivCss2 = "input-field-img";
+      this.uploadDivCss2 = "input-field-img no-scrollbar";
       this.uploadText2 = "アップロード";
       this.uploadIconToggle2 = true;
     }
@@ -1159,21 +1267,32 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     this.uploadimagedata = event.detail;
     this.certificateDataToSendBack = event.detail;
 
-    this.firstUplaodedCertificateName = event.detail[0].fileName;
-    console.log(
-      "this.firstUplaodedCertificateName",
-      this.firstUplaodedCertificateName
-    );
-    console.log("this.firstUplaodedCertificateName2", event.detail);
-    this.countOfUplaodedCertificate = event.detail.length;
-    console.log(this.countOfUplaodedCertificate);
+    if (this.uploadimagedata.length === 0) {
+      this.firstUplaodedCertificateName = "";
+      console.log(
+        "this.firstUplaodedCertificateName",
+        this.firstUplaodedCertificateName
+      );
+      console.log("this.firstUplaodedCertificateName2", event.detail);
+      this.countOfUplaodedCertificate = event.detail.length;
+      console.log(this.countOfUplaodedCertificate);
+    } else {
+      this.firstUplaodedCertificateName = event.detail[0].fileName;
+      console.log(
+        "this.firstUplaodedCertificateName",
+        this.firstUplaodedCertificateName
+      );
+      console.log("this.firstUplaodedCertificateName2", event.detail);
+      this.countOfUplaodedCertificate = event.detail.length;
+      console.log(this.countOfUplaodedCertificate);
+    }
 
     if (this.countOfUplaodedCertificate == 1) {
-      this.uploadDivCss1 = "input-field-img left-align";
+      this.uploadDivCss1 = "input-field-img left-align no-scrollbar";
       this.uploadText1 = this.firstUplaodedCertificateName;
       this.uploadIconToggle1 = false;
     } else if (this.countOfUplaodedCertificate >= 2) {
-      this.uploadDivCss1 = "input-field-img left-align";
+      this.uploadDivCss1 = "input-field-img left-align no-scrollbar";
       this.uploadText1 =
         this.firstUplaodedCertificateName +
         "など" +
@@ -1181,22 +1300,10 @@ export default class Ccp2backgroundTemplate extends LightningElement {
         "枚";
       this.uploadIconToggle1 = false;
     } else {
-      this.uploadDivCss1 = "input-field-img";
+      this.uploadDivCss1 = "input-field-img no-scrollbar";
       this.uploadText1 = "アップロード";
       this.uploadIconToggle1 = true;
     }
-    // // Assuming you want to store the image data in formdata
-    // if (!this.formdata.certimages) {
-    //   this.formdata.certimages = [];
-    // }
-    // this.formdata.certimages = [...event.detail];
-    // console.log(
-    //   "this.formdata after certificate",
-    //   JSON.stringify(this.formdata)
-    // );
-    // this.saveFormData();
-
-    // this.saveFormData();
   }
 
   getImageIdsForClass(event) {
@@ -1210,9 +1317,6 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       JSON.stringify(this.certificateIdsForClass)
     );
   }
-
-  // getimagecertdata(event){
-  //     this.uploadcertificatedata = event.detail;
 
   closeupload() {
     this.showUploadModal = false;
@@ -1303,22 +1407,22 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     // console.log("name", ev.target.name);
     if (ev.target.name === "completion-button") {
       this.formLoader = false;
-      
-      if(this.totalPages === 1){
+
+      if (this.totalPages === 1 || this.currentPage === this.totalPages) {
         this.showRegisteredVehicles = true;
         this.Step1 = false;
-      }else{
-      this.showfinalModal = true;
+      } else {
+        this.showfinalModal = true;
 
-      this.commonChassisNumbers = this.vehicleInfo.slice(
-        0,
-        this.lastPageNumberTillSavedToBackend
-      );
-      this.missingChassisNumbers = this.vehicleInfo.slice(
-        this.lastPageNumberTillSavedToBackend,
-        this.totalPages
-      );
-     }
+        this.commonChassisNumbers = this.vehicleInfo.slice(
+          0,
+          this.lastPageNumberTillSavedToBackend
+        );
+        this.missingChassisNumbers = this.vehicleInfo.slice(
+          this.lastPageNumberTillSavedToBackend,
+          this.totalPages
+        );
+      }
     }
 
     let mergeImageArray = this.certificateDataToSendBack;
@@ -1382,24 +1486,12 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       .appendChild(style);
   }
 
-  // nextButtonCSS() {
-  //     let nextButton = this.template.querySelector('[name="nextButton"]');
-  //     // if the two terms not check, the next button is disable
-  //     if (nextButton != null) {
-  //       if (this.termServiceChecked && this.termDataChecked) {
-  //         nextButton.className = "primary_nextbtn--m";
-  //       } else {
-  //         nextButton.className = "primary_nextbtn--m disabled";
-  //       }
-  //     }
-  //   }
-
   toastIt(value) {
-    this.showToasts("Error", `${value} is required`, "error");
+    this.showToasts("エラー", `${value} は必須です`, "error");
     return false;
   }
   toastCustom(message) {
-    this.showToasts("Error", `${message}`, "error");
+    this.showToasts("エラー", `${message}`, "error");
     return false;
   }
 
@@ -1411,7 +1503,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       !this.formdata.loginNumberPart3 ||
       !this.formdata.loginNumberPart4
     ) {
-      return this.toastIt("login number");
+      return this.toastIt("ログイン番号");
     } else {
       this.formdata.loginNumberPart1 = this.formdata.loginNumberPart1
         .replace(/\s+/g, "")
@@ -1430,46 +1522,62 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     }
 
     if (!this.formdata.dateOfIssuance) {
-      return this.toastIt("dateOfIssuance");
+      console.log("Date Of Issuance: ", this.formdata.dateOfIssuance);
+      return this.toastIt("交付年月日");
     }
     if (!this.formdata.initialRegistrationDate) {
-      return this.toastIt("initialRegistrationDate");
+      return this.toastIt("初回登録日");
+    }
+    if (!this.formdata.expirationDate) {
+      console.log("Expiration Date Here", this.formdata.expirationDate);
+      return this.toastIt("有効期限");
     }
     if (this.selectedbranches && this.selectedbranches.length === 0) {
-      return this.toastIt("affiliation");
+      return this.toastIt("所属");
     }
     if (!this.formdata.carName) {
-      return this.toastIt("Car Name");
+      return this.toastIt("車名");
     }
     if (!this.formdata.typeOfVehicle) {
-      return this.toastIt("Vehicle Type");
+      return this.toastIt("車両タイプ");
     }
-    if (this.certificateDataToSendBack == null) {
-      return this.toastIt("Certificate Image");
+    if (
+      this.certificateDataToSendBack == null ||
+      this.certificateDataToSendBack.length === 0
+    ) {
+      return this.toastIt("証明書の画像");
     }
     if (!this.formdata.model1 || !this.formdata.model2) {
-      return this.toastIt("Model");
+      return this.toastIt("モデル");
     } else {
       this.formdata.model2 = this.formdata.model2
         .replace(/\s+/g, "")
-        .toUpperCase()
-        .replace(/[^0-9A-Z]/g, "")
-        .padStart(7, "0");
+        .toUpperCase();
+
+      if (
+        /[^0-9A-Z]/.test(this.formdata.model2) ||
+        /[^0-9A-Za-z]/.test(this.formdata.model1)
+      ) {
+        this.toastCustom("モデルには英数字のみを含める必要があります。");
+        return false;
+      }
+
+      this.formdata.model2 = this.formdata.model2.padStart(7, "0");
     }
     if (!this.formdata.privateOrBusinessUse) {
-      return this.toastIt("Private or Business Use");
+      return this.toastIt("私用または業務用");
     }
     if (!this.formdata.bodyShape) {
-      return this.toastIt("Body Shape");
+      return this.toastIt("車体の形状");
     }
     if (!this.formdata.fuelType) {
-      return this.toastIt("Fuel Type");
+      return this.toastIt("燃料タイプ");
     }
     if (!this.formdata.use) {
-      return this.toastIt("Use");
+      return this.toastIt("使用目的");
     }
     if (!this.formdata.mileage) {
-      return this.toastIt("Mileage");
+      return this.toastIt("走行距離");
     } else {
       if (!/^\d+$/.test(this.formdata.mileage)) {
         return this.toastCustom("Mileage must contain numbers only.");
@@ -1479,22 +1587,31 @@ export default class Ccp2backgroundTemplate extends LightningElement {
         return this.toastCustom("Mileage cannot start with 0.");
       }
     }
-    if (this.formdata.curbWeight !== null) {
-      // if (!/^\d{1,4}$/.test(this.formdata.curbWeight)) {
-      // return this.toastCustom("Curb weight must be up to 4 digits.");
-      // }
+    if (
+      this.formdata.curbWeight === null ||
+      this.formdata.curbWeight === "" ||
+      this.formdata.curbWeight.length === 0
+    ) {
+      return this.toastIt("車両重量");
+    }
+    else {
+      if (!/^\d+$/.test(this.formdata.curbWeight)) {
+        return this.toastCustom("車両重量には数字のみを入力してください。");
+      }
+
       if (/^0/.test(this.formdata.curbWeight)) {
-        return this.toastCustom("Curb weight cannot start with 0.");
+        return this.toastCustom("車両重量は 0 から始めることはできません。");
       }
     }
-
-    // Validate doorNumber
-    // if (this.formdata.doorNumber !== null) {
-    //   if (!/^\d{10}$/.test(this.formdata.doorNumber)) {
-    // 	return this.toastCustom("Door number must be exactly 10 digits.");
-    //   }
-    // }
-
+    if (
+      this.formdata.doorNumber !== null &&
+      this.formdata.doorNumber !== "" &&
+      this.formdata.doorNumber.length !== 0
+    ) {
+      if (!/^\d+$/.test(this.formdata.doorNumber)) {
+        return this.toastCustom("ドア番号には数字のみを入力してください");
+      }
+    }
     return true;
   }
   handleOutsideClick2 = (event) => {
@@ -1512,7 +1629,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   };
   handleOutsideClick3 = (event) => {
     const dataDropElement = this.template.querySelector(".InputsCarName");
-    console.log("3eew",dataDropElement);
+    console.log("3eew", dataDropElement);
     const listsElement = this.template.querySelector(".listCarName");
 
     if (
@@ -1526,7 +1643,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   };
   handleOutsideClick4 = (event) => {
     const dataDropElement = this.template.querySelector(".dropdownfuel");
-    console.log("3eew1",dataDropElement);
+    console.log("3eew1", dataDropElement);
     const listsElement = this.template.querySelector(".listfueltype");
 
     if (
@@ -1540,22 +1657,17 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   };
   handleOutsideClick5 = (event) => {
     const dataDropElement = this.template.querySelector(".Inputstypeofvehicle");
-    console.log("3eewsjw",dataDropElement);
-    // const listsElement = this.template.querySelector(".listtypeofvehicle");
-    // console.log("sw lists",listsElement);
-
+    console.log("3eewsjw", dataDropElement);
     if (
-      dataDropElement &&
-      !dataDropElement.contains(event.target) ||
-      listsElement &&
-      !listsElement.contains(event.target)
+      (dataDropElement && !dataDropElement.contains(event.target)) ||
+      (listsElement && !listsElement.contains(event.target))
     ) {
       this.showlisttypeOfVehicle = false;
     }
   };
   handleOutsideClick6 = (event) => {
     const dataDropElement = this.template.querySelector(".Inputsbodyshape");
-    console.log("3eewslksl2",dataDropElement);
+    console.log("3eewslksl2", dataDropElement);
     const listsElement = this.template.querySelector(".listbodyshape");
 
     if (
@@ -1568,9 +1680,13 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     }
   };
   handleOutsideClick7 = (event) => {
-    const dataDropElement = this.template.querySelector(".Inputsprivateorbussiness");
-    console.log("3eewkjsjkd2",dataDropElement);
-    const listsElement = this.template.querySelector(".listprivateOrBusinessUse");
+    const dataDropElement = this.template.querySelector(
+      ".Inputsprivateorbussiness"
+    );
+    console.log("3eewkjsjkd2", dataDropElement);
+    const listsElement = this.template.querySelector(
+      ".listprivateOrBusinessUse"
+    );
 
     if (
       dataDropElement &&
@@ -1584,7 +1700,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   };
   handleOutsideClick8 = (event) => {
     const dataDropElement = this.template.querySelector(".Inputsuse");
-    console.log("dsjdk3ew",dataDropElement);
+    console.log("dsjdk3ew", dataDropElement);
     const listsElement = this.template.querySelector(".listuse");
 
     if (
@@ -1596,117 +1712,6 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       this.showlistuse = false;
     }
   };
-
-  // handleOutsideClick3 = (event) => {
-    // console.log("inclise outside event");
-    // const dataDropElements = this.template.querySelectorAll(".Inputs1");
-    // const listsElements = this.template.querySelectorAll(".lists2");
-
-    // if (
-    //   dataDropElements[0] &&
-    //   !dataDropElements[0].contains(event.target) &&
-    //   listsElements[0] &&
-    //   !listsElements[0].contains(event.target)
-    // ) {
-    //   this.showlist = false;
-    //   // this.showlistCarName = false;
-    //   this.showlistfuelType = false;
-    //   this.showlisttypeOfVehicle = false;
-    //   this.showlistbodyShape = false;
-    //   this.showlistprivateOrBusinessUse = false;
-    //   this.showlistuse = false;
-    // } else if (
-    //   dataDropElements[1] &&
-    //   !dataDropElements[1].contains(event.target) &&
-    //   listsElements[1] &&
-    //   !listsElements[1].contains(event.target)
-    // ) {
-    //   this.showlist = false;
-    //   this.showlistCarName = false;
-    //   this.showlistfuelType = false;
-    //   // this.showlisttypeOfVehicle = false;
-    //   this.showlistbodyShape = false;
-    //   this.showlistprivateOrBusinessUse = false;
-    //   this.showlistuse = false;
-    
-    // } else if (
-    //   dataDropElements[2] &&
-    //   !dataDropElements[2].contains(event.target) &&
-    //   listsElements[2] &&
-    //   !listsElements[2].contains(event.target)
-    // ) {
-    //   this.showlist = false;
-    //   this.showlistCarName = false;
-    //   // this.showlistfuelType = false;
-    //   this.showlisttypeOfVehicle = false;
-    //   this.showlistbodyShape = false;
-    //   this.showlistprivateOrBusinessUse = false;
-    //   this.showlistuse = false;
-    
-    // } else if (
-    //   dataDropElements[3] &&
-    //   !dataDropElements[3].contains(event.target) &&
-    //   listsElements[3] &&
-    //   !listsElements[3].contains(event.target)
-    // ) {
-    //   this.showlist = false;
-    //   this.showlistCarName = false;
-    //   this.showlistfuelType = false;
-    //   this.showlisttypeOfVehicle = false;
-    //   this.showlistbodyShape = false;
-    //   // this.showlistprivateOrBusinessUse = false;
-    //   this.showlistuse = false;
-    
-    // } else if (
-    //   dataDropElements[4] &&
-    //   !dataDropElements[4].contains(event.target) &&
-    //   listsElements[4] &&
-    //   !listsElements[4].contains(event.target)
-    // ) {
-    //   this.showlist = false;
-    //   this.showlistCarName = false;
-    //   this.showlistfuelType = false;
-    //   this.showlisttypeOfVehicle = false;
-    //   // this.showlistbodyShape = false;
-    //   this.showlistprivateOrBusinessUse = false;
-    //   this.showlistuse = false;
-    
-    // } else if (
-    //   dataDropElements[5] &&
-    //   !dataDropElements[5].contains(event.target) &&
-    //   listsElements[5] &&
-    //   !listsElements[5].contains(event.target)
-    // ) {
-    //   this.showlist = false;
-    //   this.showlistCarName = false;
-    //   this.showlistfuelType = false;
-    //   this.showlisttypeOfVehicle = false;
-    //   this.showlistbodyShape = false;
-    //   this.showlistprivateOrBusinessUse = false;
-    //   // this.showlistuse = false;
-    // }
-    // console.log("include outside event");
-    // const dataDropElements = this.template.querySelectorAll(".Inputs1");
-    // const listsElements = this.template.querySelectorAll(".lists2");
-  
-    // let clickedOutside = true;
-    
-    // dataDropElements.forEach((element, index) => {
-    //   if (element.contains(event.target)) {
-    //     clickedOutside = false;
-    //   }
-    // });
-  
-    // listsElements.forEach((element, index) => {
-    //   if (element.contains(event.target)) {
-    //     clickedOutside = false;
-    //   }
-    // });
-  
-    // if (clickedOutside) {
-    //   this.closeAllLists();
-    // }
-  // };
 
   closeAllLists = () => {
     this.showlist = false;
@@ -1751,23 +1756,18 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       contentVersionIdsJson: jsonStrings
     })
       .then((result) => {
-        this.showToasts(
-          "Success",
-          "Data has been successfully saved.",
-          "success"
-        );
+        this.showToasts("成功", "データは正常に保存されました.", "success");
 
         //just go to next page
         if (this.currentPage < this.totalPages) {
           this.currentPage += 1; // Increment the current page
           this.updateFormData(); // Update the form for the next page
+          this.lastPageNumberTillSavedToBackend += 1;
+          console.log(
+            "lastPageNumberTillSavedToBackend",
+            this.lastPageNumberTillSavedToBackend
+          );
         }
-
-        this.lastPageNumberTillSavedToBackend += 1;
-        console.log(
-          "lastPageNumberTillSavedToBackend",
-          this.lastPageNumberTillSavedToBackend
-        );
 
         this.formBodyCss =
           this.currentPage >= this.lastPageNumberTillSavedToBackend
@@ -1777,6 +1777,8 @@ export default class Ccp2backgroundTemplate extends LightningElement {
         //just space management u know
         this.imageDataToSendBack = null;
         this.certificateDataToSendBack = null;
+        this.certificateIdsForClass = [];
+        this.imageIdsForClass = [];
         this.countOfUplaodedCertificate = 0;
         this.countOfUploadedImage = 0;
         this.firstUplaodedCertificateName = "";
@@ -1784,8 +1786,8 @@ export default class Ccp2backgroundTemplate extends LightningElement {
 
         this.uploadText1 = "アップロード";
         this.uploadText2 = "アップロード";
-        this.uploadDivCss1 = "input-field-img";
-        this.uploadDivCss2 = "input-field-img";
+        this.uploadDivCss1 = "input-field-img no-scrollbar";
+        this.uploadDivCss2 = "input-field-img no-scrollbar";
         this.uploadIconToggle1 = true;
         this.uploadIconToggle2 = true;
 
@@ -1815,7 +1817,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
           jsonStrings
         );
         console.error("error by register vehicle class", error);
-        this.showToasts("Error", error.body.message, "error");
+        this.showToasts("エラー", error.body.message, "error");
         window.scrollTo(0, 0);
       });
   }
@@ -1835,7 +1837,19 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     this.showfinalModal = false;
   }
 
-  handleClick(){
+  handleClick() {
     window.location.reload();
   }
+
+  @track dateValue = '';
+    @track isPlaceholderVisible = true;
+    placeholder = 'Select a date'; // Customize your placeholder text here
+
+    get dateClass() {
+        return this.dateValue ? 'input-filled' : '';
+    }
+
+  //   focusInput() {
+  //     this.template.querySelector('[data-id="date-input"]').focus();
+  // }
 }

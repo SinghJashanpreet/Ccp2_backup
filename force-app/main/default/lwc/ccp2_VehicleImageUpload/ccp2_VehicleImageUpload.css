@@ -176,6 +176,15 @@
     cursor: not-allowed;
 } */
 
+.no-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scroller {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 
 ul li {
   list-style-type: disc;
@@ -308,6 +317,10 @@ ul li {
   background-color:#26262666;
   color:white;
   margin-bottom: 8px;
+  overflow-x: auto;
+}
+.upload-image-bottom p{
+  white-space: nowrap;
 }
 
 .filtericn {
@@ -367,8 +380,8 @@ ul li {
 
 .upload-button {
   width: 176px;
-  height: 48px;
-  padding: 12px 16px 12px 16px;
+  height: 40px;
+  /* padding: 12px 16px 12px 16px; */
   border-radius: 10px;
   border: none;
 }

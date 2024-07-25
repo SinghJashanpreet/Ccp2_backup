@@ -9,7 +9,7 @@
                 <div class="upload-image-top">
                   <img src={elm.fileURL} alt="Uploaded Image" />
                 </div>
-                <div class="upload-image-bottom">
+                <div class="upload-image-bottom no-scroller">
                   <p>File name: {elm.fileName}</p>
                   <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete"
                     onclick={handleDeleteImage} data-id={elm.id} data-name={elm.fileName} class="filtericn"></lightning-icon>

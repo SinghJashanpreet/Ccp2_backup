@@ -402,7 +402,19 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
   }
 
   handleCancelClick(event) {
-    const events = new CustomEvent("closemodal");
+    console.log('cancel button on this.uploadImagesArray',JSON.stringify(this.uploadImagesArray))
+    const events = new CustomEvent("updateitems", {
+      detail: this.uploadImagesArray
+    });
     this.dispatchEvent(events);
+
+    const eventss = new CustomEvent("updateids", {
+      detail: this.uploadImagesOnlyIds
+    });
+    this.dispatchEvent(eventss);
+
+
+    const eventsss = new CustomEvent("closemodal");
+    this.dispatchEvent(eventsss);
   }
 }
