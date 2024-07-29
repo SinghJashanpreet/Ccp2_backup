@@ -117,6 +117,25 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   tempUploadDivCss2;
   tempUploadText2;
   tempUploadUploadIconToggle2;
+
+  errorMileage = "";
+  errorMileageCss = "hide-error";
+  errorModel = "";
+  errorModelCss = "hide-error";
+  errorCurb = "";
+  errorCurbCss = "hide-error";
+  errorDoor = "";
+  errorDoorCss = "hide-error";
+  errorModelDiv = "input-field-modal";
+  errorMileageDiv = "input-field-mil";
+  errorCurbDiv = "input-field-mil";
+  errorDoorDiv = "input-field";
+  // errorModel2 = "";
+  // errorModel2Css = "hide-error";
+  // errorModel2Div = "input-field-modal";
+  // errorVehicleNumber = "";
+  // errorVehicleNumberCss = "hide-error";
+  // errorVehicleNumberDiv = 'input-field';
   // inputType = "text";
   // handleFocus(event) {
   //   this.inputType = "date";
@@ -569,7 +588,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       })
       .catch((err) => {
         console.error("getImagesFromApiViaChessisNumber4", err);
-        this.showToasts("エラー", err.body.message, "error");
+        this.showToasts("エラー", 'もう一度試してください', "error");
         window.scrollTo(0, 0);
       });
   }
@@ -616,6 +635,10 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   @track certificateDataToSendBack = null;
 
   connectedCallback() {
+    // this.expdateChange();
+    // this.issdateChange();
+    // this.regdateChange();
+
     this.updatePagination();
     this.template.host.style.setProperty(
       "--upload-icon",
@@ -717,6 +740,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       !this.formdata.loginNumberPart4 ||
       !this.formdata.dateOfIssuance ||
       !this.formdata.initialRegistrationDate ||
+      !this.formdata.expirationDate ||
       !this.formdata.carName ||
       !this.formdata.typeOfVehicle ||
       !this.formdata.model1 ||
@@ -726,6 +750,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       !this.formdata.fuelType ||
       !this.formdata.use ||
       !this.formdata.mileage ||
+      !this.formdata.curbWeight ||
       (this.selectedbranches && this.selectedbranches.length === 0) ||
       this.certificateDataToSendBack == null ||
       this.certificateDataToSendBack.length === 0
@@ -919,21 +944,22 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       // const partBefore = parts[0]; // "part1"
       // const partAfter = parts[1]; // "part2"
       this.currentChessisNumber = currentVehicle.carPlatformNo__c.trim();
-console.log(
-  "this.currentChessisNumber when made from class",
-  this.currentChessisNumber,
-  " ",
-  this.currentChessisNumber.length
-);
+      console.log(
+        "this.currentChessisNumber when made from class",
+        this.currentChessisNumber,
+        " ",
+        this.currentChessisNumber.length
+      );
 
-// Remove hyphen
-const carPlatformNoWithoutHyphen = currentVehicle.carPlatformNo__c.replace("-", "");
+      // Remove hyphen
+      const carPlatformNoWithoutHyphen =
+        currentVehicle.carPlatformNo__c.replace("-", "");
 
-// Split into two parts: first 5 characters and the rest
-let partBefore = carPlatformNoWithoutHyphen.substring(0, 5); // first 5 characters
-let partAfter = carPlatformNoWithoutHyphen.substring(5) // rest of the characters
-partAfter = partAfter.padStart(7,'0');
-    
+      // Split into two parts: first 5 characters and the rest
+      let partBefore = carPlatformNoWithoutHyphen.substring(0, 5); // first 5 characters
+      let partAfter = carPlatformNoWithoutHyphen.substring(5); // rest of the characters
+      partAfter = partAfter.padStart(7, "0");
+
       const fullmodel = currentVehicle.fullModel__c
         ? currentVehicle.fullModel__c.split("-")
         : ["", ""];
@@ -1327,6 +1353,7 @@ partAfter = partAfter.padStart(7,'0');
 
   handleSaveData(event) {
     // Save the current form data
+    this.resetErrorCss();
     let isValid = this.validateFormData();
     if (!isValid) {
       return;
@@ -1491,19 +1518,185 @@ partAfter = partAfter.padStart(7,'0');
     return false;
   }
   toastCustom(message) {
-    this.showToasts("エラー", `${message}`, "error");
     return false;
   }
 
+  // validateFormData() {
+  //   console.log("For Validation: ", JSON.stringify(this.formdata));
+  //   if (
+  //     !this.formdata.loginNumberPart1 ||
+  //     !this.formdata.loginNumberPart2 ||
+  //     !this.formdata.loginNumberPart3 ||
+  //     !this.formdata.loginNumberPart4
+  //   ) {
+  //     return this.toastIt("ログイン番号");
+  //   } else {
+  //     this.formdata.loginNumberPart1 = this.formdata.loginNumberPart1
+  //       .replace(/\s+/g, "")
+  //       .toUpperCase();
+  //     this.formdata.loginNumberPart2 = this.formdata.loginNumberPart2
+  //       .replace(/\s+/g, "")
+  //       .toUpperCase()
+  //       .padStart(3, "0");
+  //     this.formdata.loginNumberPart3 = this.formdata.loginNumberPart3
+  //       .replace(/\s+/g, "")
+  //       .toUpperCase();
+  //     this.formdata.loginNumberPart4 = this.formdata.loginNumberPart4
+  //       .replace(/\s+/g, "")
+  //       .toUpperCase()
+  //       .padEnd(4, "・");
+  //   }
+
+  //   if (!this.formdata.dateOfIssuance) {
+  //     console.log("Date Of Issuance: ", this.formdata.dateOfIssuance);
+  //     return this.toastIt("交付年月日");
+  //   }
+  //   if (!this.formdata.initialRegistrationDate) {
+  //     return this.toastIt("初回登録日");
+  //   }
+  //   if (!this.formdata.expirationDate) {
+  //     console.log("Expiration Date Here", this.formdata.expirationDate);
+  //     return this.toastIt("有効期限");
+  //   }
+  //   if (this.selectedbranches && this.selectedbranches.length === 0) {
+  //     return this.toastIt("所属");
+  //   }
+  //   if (!this.formdata.carName) {
+  //     return this.toastIt("車名");
+  //   }
+  //   if (!this.formdata.typeOfVehicle) {
+  //     return this.toastIt("車両タイプ");
+  //   }
+  //   if (
+  //     this.certificateDataToSendBack == null ||
+  //     this.certificateDataToSendBack.length === 0
+  //   ) {
+  //     return this.toastIt("証明書の画像");
+  //   }
+  //   if (!this.formdata.model1 || !this.formdata.model2) {
+  //     return this.toastIt("モデル");
+  //   } else {
+  //     this.formdata.model2 = this.formdata.model2
+  //       .replace(/\s+/g, "")
+  //       .toUpperCase();
+
+  //     if (
+  //       /[^0-9A-Z]/.test(this.formdata.model2) ||
+  //       /[^0-9A-Za-z]/.test(this.formdata.model1)
+  //     ) {
+  //       this.errorModel = 'モデルには英数字のみを含める必要があります。';
+  //       this.errorModelCss = 'show-error';
+  //       this.toastCustom("モデルには英数字のみを含める必要があります。");
+  //       return false;
+  //     }
+
+  //     this.formdata.model2 = this.formdata.model2.padStart(7, "0");
+  //   }
+  //   if (!this.formdata.privateOrBusinessUse) {
+  //     return this.toastIt("私用または業務用");
+  //   }
+  //   if (!this.formdata.bodyShape) {
+  //     return this.toastIt("車体の形状");
+  //   }
+  //   if (!this.formdata.fuelType) {
+  //     return this.toastIt("燃料タイプ");
+  //   }
+  //   if (!this.formdata.use) {
+  //     return this.toastIt("使用目的");
+  //   }
+  //   if (!this.formdata.mileage) {
+      
+  //     this.errorMileage = 'this is required mileage'
+  //     this.errorMileageCss = 'show-error';
+
+  //     return this.toastIt("走行距離");
+  //   } else {
+  //     if (!/^\d+$/.test(this.formdata.mileage)) {
+  //       this.errorMileage = '数字のみを入力してください。。'
+  //       this.errorMileageCss = 'show-error';
+  //       return this.toastCustom("走行距離には数字のみを入力してください。");
+  //     }
+
+  //     if (/^0/.test(this.formdata.mileage)) {
+  //       this.errorMileage = '走行距離は0から始まることはできません。'
+  //       this.errorMileageCss = 'show-error';
+  //       return this.toastCustom("走行距離は0から始まることはできません。");
+  //     }
+  //   }
+  //   if (
+  //     this.formdata.curbWeight === null ||
+  //     this.formdata.curbWeight === "" ||
+  //     this.formdata.curbWeight.length === 0
+  //   ) {
+  //     return this.toastIt("車両重量");
+  //   } else {
+  //     if (!/^\d+$/.test(this.formdata.curbWeight)) {
+  //       this.errorCurb = '車両重量には数字のみを入力してください。';
+  //       this.errorCurbCss = 'show-error';
+  //       return this.toastCustom("車両重量には数字のみを入力してください。");
+  //     }
+
+  //     if (/^0/.test(this.formdata.curbWeight)) {
+  //       this.errorCurb = '車両重量は 0 から始めることはできません。';
+  //       this.errorCurbCss = 'show-error';
+  //       return this.toastCustom("車両重量は 0 から始めることはできません。");
+  //     }
+  //   }
+  //   if (
+  //     this.formdata.doorNumber !== null &&
+  //     this.formdata.doorNumber !== "" &&
+  //     this.formdata.doorNumber.length !== 0
+  //   ) {
+  //     if (!/^\d+$/.test(this.formdata.doorNumber)) {
+  //       this.errorDoor = 'ドア番号には数字のみを入力してください';
+  //       this.errorDoorCss = 'show-error';
+  //       return this.toastCustom("ドア番号には数字のみを入力してください");
+  //     }
+  //   }
+  //   return true;
+  // }
+
+  resetErrorCss() {
+    // this.errorVehicleNumberCss = ""
+    this.errorMileageCss = "hide-error";
+    this.errorModelCss = "hide-error";
+    // this.errorModel2Css = "hide-error";
+    this.errorCurbCss = "hide-error";
+    this.errorDoorCss = "hide-error";
+    this.errorModelDiv = "input-field-modal";
+    // this.errorModel2Div = "input-field-modal";
+    this.errorMileageDiv = "input-field-mil";
+    this.errorCurbDiv = "input-field-mil";
+    this.errorDoorDiv = "input-field";
+}
+
   validateFormData() {
     console.log("For Validation: ", JSON.stringify(this.formdata));
+    
+    let isValid = true;
+
+    // if (
+    //   this.formdata.vehicleNumber !== null &&
+    //   this.formdata.vehicleNumber !== "" &&
+    //   this.formdata.vehicleNumber.length !== 0
+    // ) {
+    //   if (!/^\d+$/.test(this.formdata.vehicleNumber)) {
+    //     this.errorVehicleNumberDiv = 'input-field invalid-input';
+    //     this.errorVehicleNumber = '車両番号には数字のみを入力してください';
+    //     this.errorVehicleNumberCss = 'show-error';
+    //     this.toastCustom("車両番号には数字のみを入力してください");
+    //     isValid = false;
+    //   }
+    // }
+
     if (
       !this.formdata.loginNumberPart1 ||
       !this.formdata.loginNumberPart2 ||
       !this.formdata.loginNumberPart3 ||
       !this.formdata.loginNumberPart4
     ) {
-      return this.toastIt("ログイン番号");
+      this.toastIt("ログイン番号");
+      isValid = false;
     } else {
       this.formdata.loginNumberPart1 = this.formdata.loginNumberPart1
         .replace(/\s+/g, "")
@@ -1523,68 +1716,95 @@ partAfter = partAfter.padStart(7,'0');
 
     if (!this.formdata.dateOfIssuance) {
       console.log("Date Of Issuance: ", this.formdata.dateOfIssuance);
-      return this.toastIt("交付年月日");
+      this.toastIt("交付年月日");
+      isValid = false;
     }
     if (!this.formdata.initialRegistrationDate) {
-      return this.toastIt("初回登録日");
+      this.toastIt("初回登録日");
+      isValid = false;
     }
     if (!this.formdata.expirationDate) {
       console.log("Expiration Date Here", this.formdata.expirationDate);
-      return this.toastIt("有効期限");
+      this.toastIt("有効期限");
+      isValid = false;
     }
     if (this.selectedbranches && this.selectedbranches.length === 0) {
-      return this.toastIt("所属");
+      this.toastIt("所属");
+      isValid = false;
     }
     if (!this.formdata.carName) {
-      return this.toastIt("車名");
+      this.toastIt("車名");
+      isValid = false;
     }
     if (!this.formdata.typeOfVehicle) {
-      return this.toastIt("車両タイプ");
+      this.toastIt("車両タイプ");
+      isValid = false;
     }
     if (
       this.certificateDataToSendBack == null ||
       this.certificateDataToSendBack.length === 0
     ) {
-      return this.toastIt("証明書の画像");
+      this.toastIt("証明書の画像");
+      isValid = false;
     }
     if (!this.formdata.model1 || !this.formdata.model2) {
-      return this.toastIt("モデル");
+      this.toastIt("モデル");
+      isValid = false;
     } else {
       this.formdata.model2 = this.formdata.model2
         .replace(/\s+/g, "")
         .toUpperCase();
 
-      if (
-        /[^0-9A-Z]/.test(this.formdata.model2) ||
-        /[^0-9A-Za-z]/.test(this.formdata.model1)
-      ) {
-        this.toastCustom("モデルには英数字のみを含める必要があります。");
-        return false;
-      }
+        if (
+          /[^0-9A-Z]/.test(this.formdata.model2) ||
+          /[^0-9A-Za-z]/.test(this.formdata.model1)
+        ) {
+          this.errorModelDiv = 'input-field-modal invalid-input';
+          this.errorModel = '英数字のみを入力してください。';
+          this.errorModelCss = 'show-error';
+          this.toastCustom("英数字のみを入力してください。");
+          isValid = false;
+        }
 
       this.formdata.model2 = this.formdata.model2.padStart(7, "0");
     }
     if (!this.formdata.privateOrBusinessUse) {
-      return this.toastIt("私用または業務用");
+      this.toastIt("私用または業務用");
+      isValid = false;
     }
     if (!this.formdata.bodyShape) {
-      return this.toastIt("車体の形状");
+      this.toastIt("車体の形状");
+      isValid = false;
     }
     if (!this.formdata.fuelType) {
-      return this.toastIt("燃料タイプ");
+      this.toastIt("燃料タイプ");
+      isValid = false;
     }
     if (!this.formdata.use) {
-      return this.toastIt("使用目的");
+      this.toastIt("使用目的");
+      isValid = false;
     }
     if (!this.formdata.mileage) {
-      return this.toastIt("走行距離");
+      this.errorMileageDiv = 'input-field-mil invalid-input';
+      this.errorMileage = 'this is required mileage';
+      this.errorMileageCss = 'show-error';
+      this.toastIt("走行距離");
+      isValid = false;
     } else {
       if (!/^\d+$/.test(this.formdata.mileage)) {
-        return this.toastCustom("Mileage must contain numbers only.");
+        this.errorMileageDiv = 'input-field-mil invalid-input';
+        this.errorMileage = '数字のみを入力してください。。';
+        this.errorMileageCss = 'show-error';
+        this.toastCustom("数字のみを入力してください。。");
+        isValid = false;
       }
-
+      
       if (/^0/.test(this.formdata.mileage)) {
-        return this.toastCustom("Mileage cannot start with 0.");
+        this.errorMileageDiv = 'invalid-input';
+        this.errorMileage = '走行距離は0から始まることはできません。';
+        this.errorMileageCss = 'show-error';
+        this.toastCustom("走行距離は0から始まることはできません。");
+        isValid = false;
       }
     }
     if (
@@ -1592,15 +1812,23 @@ partAfter = partAfter.padStart(7,'0');
       this.formdata.curbWeight === "" ||
       this.formdata.curbWeight.length === 0
     ) {
-      return this.toastIt("車両重量");
-    }
-    else {
+      this.toastIt("車両重量");
+      isValid = false;
+    } else {
       if (!/^\d+$/.test(this.formdata.curbWeight)) {
-        return this.toastCustom("車両重量には数字のみを入力してください。");
+        this.errorCurbDiv = 'input-field-mil invalid-input';
+        this.errorCurb = '数字のみを入力してください。。';
+        this.errorCurbCss = 'show-error';
+        this.toastCustom("数字のみを入力してください。。");
+        isValid = false;
       }
 
       if (/^0/.test(this.formdata.curbWeight)) {
-        return this.toastCustom("車両重量は 0 から始めることはできません。");
+        this.errorCurbDiv = 'input-field-mil invalid-input';
+        this.errorCurb = '車両重量は 0 から始めることはできません。';
+        this.errorCurbCss = 'show-error';
+        this.toastCustom("車両重量は 0 から始めることはできません。");
+        isValid = false;
       }
     }
     if (
@@ -1609,11 +1837,17 @@ partAfter = partAfter.padStart(7,'0');
       this.formdata.doorNumber.length !== 0
     ) {
       if (!/^\d+$/.test(this.formdata.doorNumber)) {
-        return this.toastCustom("ドア番号には数字のみを入力してください");
+        this.errorDoorDiv = 'input-field invalid-input';
+        this.errorDoor = '数字のみを入力してください。';
+        this.errorDoorCss = 'show-error';
+        this.toastCustom("数字のみを入力してください。");
+        isValid = false;
       }
     }
-    return true;
+    if (!isValid) this.showToasts('エラー','有効な値を入力してください','error');
+    return isValid;
   }
+
   handleOutsideClick2 = (event) => {
     const dataDropElement = this.template.querySelector(".Inputs12");
     const listsElement = this.template.querySelector(".lists");
@@ -1723,6 +1957,9 @@ partAfter = partAfter.padStart(7,'0');
     this.showlistuse = false;
   };
   renderedCallback() {
+    //   this.regdateChange();
+    //   this.issdateChange();
+    //   this.expdateChange();
     if (!this.outsideClickHandlerAdded) {
       document.addEventListener("click", this.handleOutsideClick2.bind(this));
       document.addEventListener("click", this.handleOutsideClick3.bind(this));
@@ -1756,7 +1993,7 @@ partAfter = partAfter.padStart(7,'0');
       contentVersionIdsJson: jsonStrings
     })
       .then((result) => {
-        this.showToasts("成功", "データは正常に保存されました.", "success");
+        // this.showToasts("成功", "データは正常に保存されました.", "success");
 
         //just go to next page
         if (this.currentPage < this.totalPages) {
@@ -1817,7 +2054,7 @@ partAfter = partAfter.padStart(7,'0');
           jsonStrings
         );
         console.error("error by register vehicle class", error);
-        this.showToasts("エラー", error.body.message, "error");
+        this.showToasts("エラー", 'もう一度試してください', "error");
         window.scrollTo(0, 0);
       });
   }
@@ -1841,13 +2078,13 @@ partAfter = partAfter.padStart(7,'0');
     window.location.reload();
   }
 
-  @track dateValue = '';
-    @track isPlaceholderVisible = true;
-    placeholder = 'Select a date'; // Customize your placeholder text here
+  @track dateValue = "";
+  @track isPlaceholderVisible = true;
+  placeholder = "Select a date"; // Customize your placeholder text here
 
-    get dateClass() {
-        return this.dateValue ? 'input-filled' : '';
-    }
+  get dateClass() {
+    return this.dateValue ? "input-filled" : "";
+  }
 
   //   focusInput() {
   //     this.template.querySelector('[data-id="date-input"]').focus();

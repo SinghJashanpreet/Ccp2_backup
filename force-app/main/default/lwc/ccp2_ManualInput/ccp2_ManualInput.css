@@ -11,41 +11,44 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .half {
   width: 100%;
   left: 0;
 }
+
 .top {
   height: 96vh;
   background-color: #f4f4f4;
   background: linear-gradient(to bottom, #bfbfbf, #f4f4f4);
 }
-.Inputsprivateorbussiness {
-}
-.InputsfuelType {
-}
-.Inputstypeofvehicle {
-}
-.InputsCarName {
-}
-.Inputsuse {
-}
-.Inputsbodyshape {
-}
-.listtypeofvehicle {
-}
-.listCarName {
-}
-.listprivateOrBusinessUse {
-}
-.listbodyshape {
-}
-.listuse {
-}
+
+.Inputsprivateorbussiness {}
+
+.InputsfuelType {}
+
+.Inputstypeofvehicle {}
+
+.InputsCarName {}
+
+.Inputsuse {}
+
+.Inputsbodyshape {}
+
+.listtypeofvehicle {}
+
+.listCarName {}
+
+.listprivateOrBusinessUse {}
+
+.listbodyshape {}
+
+.listuse {}
 
 .bottom {
   position: relative;
@@ -56,6 +59,7 @@
   justify-content: center;
   width: calc(100vw - 16px);
 }
+
 .center-content {
   position: relative;
   height: 100%;
@@ -66,10 +70,12 @@
   border-radius: 10px;
   margin-bottom: 50px;
 }
+
 .dev {
   width: 100%;
   height: 400px;
 }
+
 .form-footer {
   display: flex;
   width: 100%;
@@ -80,6 +86,7 @@
   margin-bottom: 50px;
   padding: 0rem 7.5rem 0rem 6rem;
 }
+
 .button {
   border: 1px solid #bfbfbf;
   border-radius: 10px;
@@ -88,6 +95,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .btn2 {
   font-family: "Noto Sans JP";
   border-radius: 5px;
@@ -101,6 +109,7 @@
   display: flex;
   justify-content: center;
 }
+
 .btn2on {
   border-radius: 5px;
   background-color: #e70101;
@@ -156,6 +165,7 @@
   color: #0a0a0a;
   font-family: "Noto Sans JP", sans-serif;
 }
+
 .buttontxt2 {
   color: white;
   font-family: "Noto Sans JP", sans-serif;
@@ -163,10 +173,12 @@
   background-color: #ea0202;
   border-radius: 10px;
 }
+
 .buttontxt2:disabled {
   cursor: not-allowed;
   /* opacity: 0.5; */
 }
+
 .searchbutton:disabled {
   cursor: not-allowed;
   /* opacity: 0.5; */
@@ -175,10 +187,12 @@
   border: 1px solid #bfbfbf;
   border-radius: 5px;
 }
+
 .searchbutton {
   background-color: #ea0202;
   color: white;
 }
+
 .searchbutton2 {
   background-color: #bfbfbf;
 }
@@ -192,6 +206,7 @@
 .cancelbutton:hover {
   cursor: pointer;
 }
+
 .btn {
   height: 2rem;
   width: 8rem;
@@ -229,8 +244,8 @@
   text-align: center;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 5rem 0px 5.5rem;
-  width: 98%;
+  padding: 0px 7.5% 0px 7.5%;
+  width: 100%;
   /* margin-bottom: 3%; */
 }
 
@@ -244,8 +259,6 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 20px;
-  padding: 8px;
 }
 
 .nav-button {
@@ -283,21 +296,26 @@
 .disable-editing input {
   pointer-events: none;
 }
+
 .disable-editing section {
   pointer-events: none;
 }
+
 /* .disable-editing lightning-icon {
   pointer-events: none;
 } */
 .disable-editing input {
   pointer-events: none;
 }
+
 .disable-editing select {
   pointer-events: none;
 }
+
 .disable-editing input:hover {
   cursor: not-allowed;
 }
+
 .disable-editing select:hover {
   cursor: not-allowed;
 }
@@ -305,6 +323,7 @@
 .First-Section {
   margin: 3% 0 5% 7.5%;
 }
+
 .form-group-ChassisNumber {
   display: flex;
   align-items: center;
@@ -347,6 +366,7 @@
   border: 1px solid lightgrey;
   padding: 3%;
 }
+
 /* .combo{
   --slds-c-input-radius-border : 0.1rem;
   --slds-c-input-color-border : #bbbbbb;
@@ -355,17 +375,35 @@
   --lwc-shadowButtonFocus: 0 0 3px #E10202;
   width: 10.2vw;
 } */
+
+.hide-error {
+  display: none;
+}
+
+.show-error {
+  display: block;
+}
+
 .inputlight {
   position: absolute;
   width: 21.3vw;
   top: 0;
   left: 0;
-  margin-top: -10px;
+  margin-top: -12px;
 
   height: 50px;
   --slds-c-input-color-background: #ffffff;
 
   --slds-c-input-color-border: #ffffff;
+
+  /* --slds-c-input-spacing-horizontal-end: 1vw; */
+
+  /* --slds-c-input-focus-border-color: #ff0000;
+  --slds-c-input-spacing-horizontal-start: 3%;
+  --lwc-heightInput: 45px;
+  --slds-c-input-color-border: #d9d9d9;
+  --slds-c-input-radius-border: 8px
+  width: 101%; */
 }
 
 .inputlight:hover {
@@ -434,6 +472,7 @@
   border: 1px solid lightgrey;
   padding: 3%;
 }
+
 .lists2 {
   position: absolute;
   background: white;
@@ -447,6 +486,7 @@
   padding: 10px 0px;
   overflow-y: scroll;
 }
+
 .Inputs12 {
   width: 10.25vw;
   margin-left: 4%;
@@ -455,6 +495,7 @@
   height: 50px;
   padding-left: 17px;
 }
+
 .Inputs1 {
   margin-left: 1%;
   border: 1px solid #d9d9d9;
@@ -464,6 +505,7 @@
   padding-left: 3%;
   background-color: white;
 }
+
 .icon {
   padding-left: auto;
   background: var(--dropdown-icon) no-repeat;
@@ -471,12 +513,14 @@
   background-position: 8.2rem 50%;
   /* color: white; */
 }
+
 .icon2 {
   padding-left: auto;
   background: var(--dropdown-icon) no-repeat;
   background-size: 20px;
   background-position: 18.8vw 50%;
 }
+
 .exittest {
   margin-bottom: 0.5rem;
   font-size: 1rem;
@@ -488,7 +532,9 @@
   background: white;
   border: 1px solid #d9d9d9;
   border-radius: 8px;
-  width: 10rem;
+  width: 10.25vw;
+  white-space: nowrap;
+  margin-left: 5px;
   min-height: 40px;
   max-height: 200px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -497,6 +543,7 @@
   padding: 10px 0px;
   overflow-y: scroll;
 }
+
 .dataScroll {
   overflow-y: auto;
   padding-top: 10px;
@@ -511,6 +558,7 @@
   width: 10.25vw;
   /* height: 50px; */
 }
+
 .scrollbar {
   max-height: 100%;
   overflow-y: auto;
@@ -530,26 +578,31 @@
   background: #a3a3a3;
   border-radius: 5px;
 }
+
 .scrollbar::-webkit-scrollbar-thumb:hover {
   background: #d1d0d0;
 }
+
 .record-item {
   margin-bottom: 10px;
   font-family: "Noto Sans JP", sans-serif;
   white-space: nowrap;
 }
+
 .empty1 {
   margin-left: 16px;
   font-family: "Noto Sans JP", sans-serif;
   margin-top: 2px;
   color: #cdcdcd;
 }
+
 .filtericn {
   --sds-c-icon-color-foreground-default: #e10202;
   --sds-c-icon-color-foreground: #e10202;
   margin-right: 7px;
   margin-left: 17px;
 }
+
 /* .vehicleInBox{
   margin-bottom: 20px;
 } */
@@ -558,19 +611,27 @@
   align-items: center;
   margin-bottom: 5%;
 }
+
 .form-group-branch {
   /* align-items: center; */
   display: flex;
   margin-bottom: 5%;
   /* align-items: center; */
 }
+
 .no-scroll::-webkit-scrollbar {
   display: none;
 }
+
 .list-item {
   padding: 10px;
   cursor: pointer;
   font-family: "Noto Sans JP", sans-serif;
+}
+
+.list-item:hover {
+  color: #e10202;
+  background-color: #f4f4f4;
 }
 
 .no-scroll {
@@ -590,7 +651,7 @@
 }
 
 .Second-Section {
-  margin: 3% 5% 5% 0;
+  margin: 3% 7.5% 5% 0;
 }
 
 .input-field-disc {
@@ -691,7 +752,7 @@
 }
 
 .unit {
-  margin-left: 1%;
+  margin-left: 2%;
 }
 
 .input-field-mil {
@@ -736,6 +797,7 @@
 .form-margin {
   margin-bottom: 5.5% !important;
 }
+
 .modal-window {
   display: flex;
   flex-direction: column;
@@ -743,57 +805,77 @@
   border-radius: 8px;
   padding: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: var(--modal-width, 70%);
-  min-height: var(--modal-height, 72%); /* Default height: 50% */
+
   max-width: 90%;
   height: max-content;
+  width: max-content;
   max-height: 90%;
-  overflow: auto;
+  overflow-y: auto;
 }
+
 .modal-window2 {
+  max-height: 90%;
   background-color: rgba(251, 251, 251, 1);
   border-radius: 8px;
   padding: 15px;
-  width: var(--modal-width, 70%); /* Default width: 50% */
-  min-height: var(--modal-height, 72%); /* Default height: 50% */
-  max-width: 90%; /* Max width to ensure it fits on screen */
-  height: max-content; /* Max height to ensure it fits on screen */
-  overflow: auto; /* Add scroll if content overflows */
+  width: max-content;
+  overflow-y: auto;
+  /* width: var(--modal-width, 70%); Default width: 50% */
+  /* min-height: var(--modal-height, 72%); Default height: 50% */
+  max-width: 90%;
+  /* Max width to ensure it fits on screen */
+  height: max-content;
+  /* Max height to ensure it fits on screen */
+  /* overflow: auto; Add scroll if content overflows */
 }
+
 .modal-background-confirm {
   background-color: rgba(251, 251, 251, 0.9);
   border-radius: 8px;
   padding: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: var(--modal-width, 60%); /* Default width: 50% */
-  height: var(--modal-height, 65%); /* Default height: 50% */
-  max-width: 90%; /* Max width to ensure it fits on screen */
-  max-height: 90%; /* Max height to ensure it fits on screen */
+  width: var(--modal-width, 60%);
+  /* Default width: 50% */
+  height: var(--modal-height, 65%);
+  /* Default height: 50% */
+  max-width: 90%;
+  /* Max width to ensure it fits on screen */
+  max-height: 90%;
+  /* Max height to ensure it fits on screen */
   overflow: auto;
 }
+
 .modal-background-exit {
   background-color: rgba(251, 251, 251, 0.9);
   border-radius: 8px;
   padding: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: var(--modal-width, 40%); /* Default width: 50% */
-  height: var(--modal-height, 65%); /* Default height: 50% */
-  max-width: 90%; /* Max width to ensure it fits on screen */
-  max-height: 90%; /* Max height to ensure it fits on screen */
+  width: var(--modal-width, 40%);
+  /* Default width: 50% */
+  height: var(--modal-height, 65%);
+  /* Default height: 50% */
+  max-width: 90%;
+  /* Max width to ensure it fits on screen */
+  max-height: 90%;
+  /* Max height to ensure it fits on screen */
   overflow: auto;
 }
+
 .modal-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Semi-transparent black */
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 99; /* Ensure it is on top */
+  z-index: 99;
+  /* Ensure it is on top */
 }
+
 .buttons-small {
   height: 20%;
   display: flex;
@@ -801,12 +883,14 @@
   justify-content: center;
   gap: 10px;
 }
+
 .heads {
   height: 80%;
   display: flex;
   flex-direction: column;
   padding: 1rem;
 }
+
 .gaps {
   margin-top: 25px;
 }
@@ -814,10 +898,12 @@
 .input-field-combo option[selected] {
   color: gray;
 }
+
 .superfun {
   margin: 10px 0px;
   font-family: "Noto Sans JP", sans-serif;
 }
+
 .headmeow {
   font-family: "Noto Sans JP", sans-serif;
   margin-top: 10px;
@@ -829,7 +915,7 @@
 .container2 {
   display: flex;
   flex-direction: column;
-  height: 60vh;
+  height: 475px;
   justify-content: space-between;
   align-items: center;
   text-align: center;
@@ -853,15 +939,19 @@
 .input-field::placeholder {
   opacity: 0.5;
 }
+
 .input-field1::placeholder {
   opacity: 0.5;
 }
+
 .input-field2::placeholder {
   opacity: 0.5;
 }
+
 .input-field3::placeholder {
   opacity: 0.5;
 }
+
 .input-field4::placeholder {
   opacity: 0.5;
 }
@@ -869,11 +959,25 @@
 .input-field-modal::placeholder {
   opacity: 0.5;
 }
+
 /* .input-field-combo .input-place-combo{
     color: #E10202;
 } */
+
+input::placeholder {
+  opacity: 0.5 !important;
+}
+
+.slds-input::placeholder {
+  opacity: 0.5 !important;
+}
+
+.Inputs12::placeholder {
+  opacity: 1 !important;
+}
+
 .page-button-color {
-  background-color: red;
+  background-color: #e10202;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -881,6 +985,14 @@
   height: 32px;
   color: white;
   border-radius: 5px;
+}
+
+.page-button-color-no-color {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
 }
 
 .travellingicon {
@@ -895,6 +1007,7 @@
   border: 1px solid #d9d9d9;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+
 ul {
   list-style-type: circle;
 }
@@ -941,6 +1054,14 @@ ul {
   width: 100%;
 }
 
+.disable-editing lightning-input {
+  pointer-events: none;
+}
+
+.disable-editing .filtericn {
+  pointer-events: none !important;
+}
+
 /**/
 /* .date-input-container {
   position: relative;
@@ -961,3 +1082,19 @@ input:focus ~ .placeholder-text,
 input.input-filled ~ .placeholder-text {
   display: none;
 } */
+.light-placeholder {
+  opacity: 0.5;
+}
+
+.normal-placeholder {
+  opacity: 1;
+}
+
+.chassis-color {
+  background-color: #f4f4f4;
+}
+
+.invalid-input {
+  outline: solid 2px #e10202;
+  background-color: #Feeeed !important;
+}

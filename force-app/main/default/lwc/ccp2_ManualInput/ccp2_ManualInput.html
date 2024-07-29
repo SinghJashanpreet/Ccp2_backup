@@ -20,7 +20,7 @@
                                 <img src={truckpic} alt="Image1">
                             </div>
                             <div class="section-header">
-                                <div>
+                                <div class="mainheading2">
                                     <p>車両の情報を入力してください。</p>
                                 </div>
                                 <div class="header">
@@ -29,8 +29,11 @@
                                         <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous"
                                             size="small"></lightning-icon>
                                     </button>
-                                    <span class="travellingicon"><span class="page-button-color">{currentPage}</span> of
-                                        {totalPages}</span>
+                                    <span class="travellingicon">
+                                        <span class="page-button-color">{currentPage}</span>
+                                        <span class="page-button-color-no-color">of</span>
+                                        <span class="page-button-color-no-color">{totalPages}</span>
+                                    </span>
                                     <button class="nav-button" onclick={handleNext} title="Next"
                                         disabled={isPageDataSavedToBackend}>
                                         <lightning-icon icon-name="utility:chevronright" alternative-text="Next"
@@ -67,14 +70,14 @@
                                                     <span class="reqtxt">必須</span>
                                                 </div>
                                             </label>
-                                            <input type="text" class="input-field-modal" placeholder="5桁の英数字"
+                                            <input type="text" class="input-field-modal chassis-color" placeholder="5桁の英数字"
                                                 name="chassisNum1" data-type="part1" value={formdata.carPlatformNoPart1}
                                                 oninput={handleInputChange} readonly>
                                             <span class="input-separator">
                                                 <!-- <img src={dashpic}> -->
                                                 -
                                             </span>
-                                            <input type="text" class="input-field-modal" placeholder="7桁の英数字"
+                                            <input type="text" class="input-field-modal chassis-color" placeholder="7桁の英数字"
                                                 name="chassisNum2" data-type="part2" value={formdata.carPlatformNoPart2}
                                                 oninput={handleInputChange} readonly>
                                         </div>
@@ -113,7 +116,7 @@
                                                 </div>
                                             </label>
                                             <div class="input-field" style="position: relative;">
-                                                <lightning-input type="date" class="inputlight"
+                                                <lightning-input type="date" class="inputlight inputissue"
                                                     placeholder="日付を選択してください" name="dateOfIssuance"
                                                     value={formdata.dateOfIssuance}
                                                     onchange={handleInputChange}></lightning-input>
@@ -140,8 +143,9 @@
                                                 </div>
                                             </label>
                                             <div class="input-field" style="position: relative;">
-                                                <lightning-input type="date" class="inputlight" placeholder="日付を選択してください"
-                                                    name="initialRegistrationDate" value={formdata.initialRegistrationDate}
+                                                <lightning-input type="date" class="inputlight inputreg"
+                                                    placeholder="日付を選択してください" name="initialRegistrationDate"
+                                                    value={formdata.initialRegistrationDate}
                                                     onchange={handleInputChange}></lightning-input>
                                             </div>
                                         </div>
@@ -154,8 +158,9 @@
                                             </label>
 
                                             <div class="input-field" style="position: relative;">
-                                                <lightning-input type="date" class="inputlight" placeholder="日付を選択してください"
-                                                    name="expirationDate" value={formdata.expirationDate}
+                                                <lightning-input type="date" class="inputlight inputexp"
+                                                    placeholder="日付を選択してください" name="expirationDate"
+                                                    value={formdata.expirationDate}
                                                     onchange={handleInputChange}></lightning-input>
                                             </div>
 
@@ -248,9 +253,12 @@
 
 
                                             <div class="Combox-input-wr">
-                                                <input type="text" id="DoorNum" class="input-field"
+                                                <div>
+                                                <input type="text" id="DoorNum" class={errorDoorDiv}
                                                     placeholder="選択してください" value={formdata.doorNumber} name="doorNumber"
                                                     onchange={handleInputChange} maxlength="10">
+                                                <p style="color: red;" class={errorDoorCss}>{errorDoor}</p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group-wr">
@@ -337,15 +345,21 @@
                                                     <span class="reqtxt">必須</span>
                                                 </div>
                                             </label>
-                                            <input type="text" class="input-field-modal" placeholder="US9"
+                                            <div>
+                                            <input type="text" class={errorModelDiv} placeholder="US9"
                                                 value={formdata.model1} name="model1" onchange={handleInputChange}
                                                 maxlength="3">
+                                                <p style="color: red;" class={errorModelCss}>{errorModel}</p>
+                                            </div>
                                             <span class="input-separator">
                                                 <!-- <img src={dashpic}> -->
                                                 - </span>
-                                            <input type="text" class="input-field-modal" placeholder="48I5"
+                                            <div>
+                                            <input type="text" class={errorModelDiv} placeholder="48I5"
                                                 value={formdata.model2} name="model2" onchange={handleInputChange}
                                                 maxlength="7">
+                                                <p style="color: red;" class={errorModelCss}>{errorModel}</p>
+                                            </div>
                                         </div>
 
                                         <div class="form-group form-margin">
@@ -476,10 +490,14 @@
                                                     <span class="reqtxt">必須</span>
                                                 </div>
                                             </label>
-                                            <input type="text" id="Mileage" class="input-field-mil"
-                                                placeholder="選択してください" value={formdata.mileage} name="mileage"
-                                                onchange={handleInputChange} maxlength="6">
+                                            <div>
+                                                <input type="text" id="Mileage" class={errorMileageDiv}
+                                                    placeholder="選択してください" value={formdata.mileage} name="mileage"
+                                                    onchange={handleInputChange} maxlength="6">
+                                                <p style="color: red;" class={errorMileageCss}>{errorMileage}</p>
+                                            </div>
                                             <span class="unit">Km</span>
+
                                         </div>
 
                                         <div class="form-group-wr second-last-second-section">
@@ -489,9 +507,13 @@
                                                     <span class="reqtxt">必須</span>
                                                 </div>
                                             </label>
-                                            <input type="text" id="Weight" class="input-field-mil"
+                                            <div>
+                                            <input type="text" id="Weight" class={errorCurbDiv}
                                                 placeholder="選択してください" value={formdata.curbWeight} name="curbWeight"
                                                 onchange={handleInputChange} maxlength="4">
+                                                
+                                                <p style="color: red;" class={errorCurbCss}>{errorCurb}</p>
+                                            </div>
                                             <span class="unit">Kg</span>
                                         </div>
 
@@ -580,21 +602,21 @@
                         </div>
                     </div>
                 </template>
-
-                <template if:true={showRegisteredVehicles}>
-                    <div class="container2">
-                        <div class="mainHeading">
-                            <h1>車両手動登録</h1>
-                        </div>
-                        <div class="content2">
-                            <p>車両が登録されました。</p>
-                        </div>
-                        <div class="footer2">
-                            <button class="searchbutton btn" onclick={handleClick}>車両一覧へ</button>
-                        </div>
-                    </div>
-                </template>
             </div>
+
+            <template if:true={showRegisteredVehicles}>
+                <div class="container2">
+                    <div class="mainHeading">
+                        <h1>車両手動登録</h1>
+                    </div>
+                    <div class="content2">
+                        <p>車両が登録されました。</p>
+                    </div>
+                    <div class="footer2">
+                        <button class="searchbutton btn" onclick={handleClick}>車両一覧へ</button>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 

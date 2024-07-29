@@ -85,8 +85,23 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
     const files = event.target.files;
     const maxSizeInBytes = 10 * 1024 * 1024; // 10 MB
 
+    const fileTypeWeGet = files[0].type;
+
+    if (!["image/jpeg", "image/png"].includes(fileTypeWeGet)) {
+      this.showToast(
+        "エラー",
+        "無効なファイルタイプです。 JPG、JPEG、または PNG ファイルをアップロードしてください。",
+        "Error"
+      );
+      return;
+    }
+
     if (files[0] && files[0].size > maxSizeInBytes) {
-      this.showToast("Error", "File size should not exceed 10 MB", "Error");
+      this.showToast(
+        "エラー",
+        "ファイルサイズは10MBを超えてはなりません",
+        "Error"
+      );
     } else if (files.length > 0) {
       this.uploadFile(files[0]);
     }
@@ -103,6 +118,8 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
         this.saveLoader = false;
       })
       .catch((e) => {
+        this.showToast("エラー", "何か問題が発生しました", "error");
+        this.saveLoader = false;
         console.log("error", e);
       });
   }
@@ -113,13 +130,13 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
     })
       .then(() => {
         console.log("success");
-        this.showToast("Success", `Photos Uploaded.`, "success");
+        this.showToast("成功", `写真がアップロードされました。`, "success");
         this.saveLoader = false;
       })
       .catch((err) => {
         console.log("fileArray", fileArray);
         console.log("error in uploading:-", err);
-        this.showToast("error", err.body.message, "error");
+        this.showToast("エラー", "もう一度試してください", "error");
         this.saveLoader = false;
       });
   }
@@ -133,10 +150,14 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
     const isFileNameExists = this.uploadImagesArray.some(
       (uploadedFile) => uploadedFile.fileName === file.name
     );
-
+ 
     // If the file name exists, do not proceed with the upload
     if (isFileNameExists) {
-      this.showToast("Error", `${file.name} already exists.`, "error");
+      this.showToast(
+        "エラー",
+        `${file.name}はすでにアップロードされています。`,
+        "error"
+      );
       this.saveLoader = false;
       return;
     }
@@ -199,7 +220,7 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
 
           ContentLocation: "S",
 
-          Description: 'Images'
+          Description: "Images"
 
           // Add any other fields you need
         };
@@ -211,8 +232,8 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
           .then((result) => {
             console.log("result", result.id);
             this.showToast(
-              "Success",
-              "File has been uploaded successfully.",
+              "成功",
+              "ファイルは正常にアップロードされました。",
               "Success"
             );
 
@@ -291,7 +312,8 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
           .catch((error) => {
             console.error("Error in callback:", error);
 
-            this.showToast("error", error.body.message, "error");
+            this.showToast("エラー", "もう一度試してください", "error");
+            this.saveLoader = false;
           });
       };
     };
@@ -398,7 +420,10 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
   }
 
   handleCancelClick(event) {
-    console.log('cancel button on this.uploadImagesArray',JSON.stringify(this.uploadImagesArray))
+    console.log(
+      "cancel button on this.uploadImagesArray",
+      JSON.stringify(this.uploadImagesArray)
+    );
     const events = new CustomEvent("updateitems", {
       detail: this.uploadImagesArray
     });

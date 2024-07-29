@@ -218,6 +218,7 @@ ul li {
   flex-direction: column;
   justify-content: center;
   gap: 32px;
+  margin: 0 0 64px 0;
 }
 
 .full-width-one-element {

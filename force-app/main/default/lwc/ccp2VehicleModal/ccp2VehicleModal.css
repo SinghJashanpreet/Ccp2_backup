@@ -1,0 +1,460 @@
+/* Styles for the modal background */
+.modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99; /* Ensure it is on top */
+}
+.modal-background-last{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 109; /* Ensure it is on top */
+}
+
+/* Styles for the modal window */
+.modal-window {
+    background-color: rgba(251, 251, 251, 0.9);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: max-content; /* Default width: 50% */
+    height: max-content; /* Default height: 50% */
+    max-width: 90%; /* Max width to ensure it fits on screen */
+    max-height: 90%; /* Max height to ensure it fits on screen */
+    overflow: auto; /* Add scroll if content overflows */
+}
+.modal-window-small {
+    background-color: rgba(251, 251, 251, 1);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: var(--modal-width, 30%); /* Default width: 50% */
+    height: var(--modal-height, 45%); /* Default height: 50% */
+    max-width: 90%; /* Max width to ensure it fits on screen */
+    max-height: 90%; /* Max height to ensure it fits on screen */
+    overflow: auto; /* Add scroll if content overflows */
+}
+.modal-windowChassis {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: var(--modal-width, 50%); /* Default width: 50% */
+    height: var(--modal-height, 80%); /* Default height: 50% */
+    max-width: 90%; /* Max width to ensure it fits on screen */
+    max-height: 90%; /* Max height to ensure it fits on screen */
+    overflow: auto; /* Add scroll if content overflows */
+}
+.modal-finalWindow{
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: var(--modal-width, 40%); /* Default width: 50% */
+    height: var(--modal-height, 80%); /* Default height: 50% */
+    max-width: 90%; /* Max width to ensure it fits on screen */
+    max-height: 90%; /* Max height to ensure it fits on screen */
+    overflow: auto; 
+}
+.main{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.close{
+    margin-left: auto;
+}
+.closeIcon{
+    --sds-c-icon-color-foreground-default: #0A0A0A; 
+    --sds-c-icon-color-foreground: #0A0A0A;
+}
+.header{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 5%;
+    align-items: center;
+}
+.warning{
+    width: 100%;
+    height: 64%;
+    display: flex;
+    padding: 3rem;
+    justify-content: center;
+    text-align: center;
+}
+.warntxt{
+    font-size: 14px;
+    color: #0A0A0A;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.buttons{
+    height: 20%;
+}
+.buttons-small{
+    height: 36%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.cards{
+    display: flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content: center;
+    width: 100%;
+    height: 95%;
+    margin-left: 0.6rem;
+    padding: 20px 15px 20px 15px;
+}
+.cardsChassis{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    height: 95%;
+    padding: 0px 5px 0px 5px;
+}
+.cardsChassis2{
+    display: flex;
+    flex-direction:column;
+    width: 100%;
+    height: 95%;
+    padding: 0px 5px 0px 5px;
+    padding-left: 2rem;
+    padding-top: 0.5rem;
+}
+
+.headingNew{
+    height: 5%;
+}
+.cardInput{
+    background-color: white;
+    height: 17rem;
+    padding: 8px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    gap: 3px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+.headings{
+    display: flex;
+    width: 100%;
+    height: 18%;
+    align-items: center;
+    justify-content: center;
+}
+.Picture{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 60%;
+}
+.info{
+    text-align: center;
+    width: 100%;
+    height: 10%;
+}
+.txt{
+    font-size: 12px;
+    color: #0A0A0A;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.bold{
+    font-weight: bold;
+    font-size: 15px;
+}
+.txt1{
+    font-size: 15px;
+    font-weight: bold;
+    color: #0A0A0A;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.margin{
+    margin-bottom: 1rem;
+}
+.margintop{
+    margin-top: 0.5rem;
+}
+.information{
+    margin-top: 7px;
+    font-size: 10px;
+    color: #0A0A0A;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.information2{
+    margin-bottom: 5px;
+    font-size: 10px;
+    color: #0A0A0A;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+img{
+    width: 100%;
+    height: 100%;
+}
+.cardInput:hover{
+    cursor: pointer;
+    border: 0.1rem solid #e70303;
+}
+.inputMultiple{
+    display: flex;
+    flex-direction: column;
+}
+.vertical{
+    display: flex;
+    gap: 3px;
+}
+.horizontal{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+}
+.input-field-modal {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 185px;
+        text-align: center;
+    margin-left: 10px;
+}
+.input-field-modal-invalid{
+    padding: 10px;
+    border: 1px solid #e70303;
+    background-color: #FEEEED;
+    border-radius: 8px;
+    width: 185px;
+        text-align: center;
+    margin-left: 10px;
+}
+ 
+.input-separator {
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.inputsScroll::-webkit-scrollbar {
+    width: 14px; 
+}
+ 
+.inputsScroll::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 10px;
+}
+ 
+.inputsScroll::-webkit-scrollbar-thumb {
+    background: #BBBBBB; 
+    border-radius: 10px;
+}
+ 
+.inputsScroll::-webkit-scrollbar-thumb:hover {
+    background: #BBBBBB; 
+}
+ 
+input::placeholder {
+    color: #cdcdcd;
+    opacity: 1;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.inputsScroll{
+    display:flex;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 16px;
+}
+.footer{
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+}
+.addlabel{
+    display: flex;
+
+}
+.label{
+    font-size: 12px;
+    font-weight: bold;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin-top: 0.5rem;
+}
+.add-button{
+    height: 20px;
+    width: 20px;
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+}
+.addbutton{
+    margin-right:1rem ;
+}
+.input-field-container{
+    margin-bottom: 1rem;
+}
+.input1invalid{
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 4px;
+}
+.input-field-container-invalid{
+    display: flex;
+    margin-bottom: 0.1rem;
+}
+.mainforInputs{
+    display: flex;
+}
+.textinvalid{
+    color: #ea0202;
+    margin-bottom: 1rem;
+    font-size: 10px;
+}
+.lists2 {
+    background: white;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+    width: 25.4rem;
+    max-height: 200px; 
+    overflow-y: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    margin-top: 5px; 
+    padding: 10px 0px 10px 0px;
+    margin-left: 10px;
+}
+.btn{
+    height: 2rem;
+    width: 8rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cancelbutton{
+    background-color: #f4f4f4;
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.cancelbutton2{
+    background-color: #ea0202;
+}
+.cancelbutton2.buttontxt{
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.searchbutton{
+    background-color: #ea0202;
+}
+
+.searchbuttoninput{
+    background-color: #BBBBBB;
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
+.nextbutton{
+    background-color: #ea0202;
+    transition: background-color 0.5s ease, border 0.5s ease;
+}
+.searchbutton:hover{
+    cursor: pointer;
+}
+.nextbutton:hover{
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid red;
+}
+.cancelbutton:hover{
+    cursor: pointer;
+}
+.buttontxt{
+    color: #0A0A0A;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.buttontxt2{
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.buttontxt21{
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+    transition: color 0.5s ease;
+}
+.nextbutton:hover .buttontxt21{
+   color: #e70303;
+}
+.no-scroll::-webkit-scrollbar {
+    display: none;
+  }
+ 
+  .no-scroll {
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
+  }
+  .list-item {
+    padding: 10px;
+    cursor: pointer;
+    font-family: 'Noto Sans JP', sans-serif;
+    display: flex;
+    gap: 1rem;
+}
+.list-item:hover {
+    background-color: #f0f0f0;
+    color: #ea0202; 
+}
+
+@media (max-width: 768px) {
+    .modal-windowChassis{
+        width: var(--modal-width, 80%);
+    }
+    .modal-finalWindow{
+        width: var(--modal-width, 60%);
+    }
+    .txt1{
+     font-size: 14px;
+    }
+    .modal-window-small{
+        width: var(--modal-width, 50%);
+    }
+    .cardInput{
+        width: 100%;
+        height: 16rem;
+    }
+}
+@media (max-width: 1024px) and (min-width: 769px) {
+    .modal-windowChassis{
+        width: var(--modal-width, 60%);
+    }
+    .modal-finalWindow{
+        width: var(--modal-width, 50%);
+    }
+    .txt1{
+        font-size: 14px;
+       }
+       .modal-window-small{
+        width: var(--modal-width, 36%);
+    }
+    .cardInput{
+        width: 30%;
+    }
+}

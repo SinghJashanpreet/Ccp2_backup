@@ -1,0 +1,271 @@
+<template>
+    <template if:true={fullModal}>
+        <div class="modal-background">
+            <template if:true={showVehicleModal}>
+                    <div class="modal-window">
+                    <div class="main">
+                        <div class="header">
+                            <div class="close">
+                                <lightning-icon icon-name='utility:close' alternative-text='close' size='x-small' title='close' onclick={onClose} class="closeIcon"></lightning-icon>
+                            </div>
+                        </div>
+                        <div class="cards">
+                            <div class="cardInput">
+                                <div class="headings">
+                                     <!-- evi registration -->
+                                    <p class="txt bold">電子車検証登録</p>
+                                </div>
+                                <div class="Picture">
+                                    <img src={ElecRegImg} alt="Electronic registration Image">
+                                </div>
+                                <div class="info">
+                                    <p class="information">
+                                         <!-- evi registration txt -->
+                                         車両情報を電子車検証から取り
+                                    </p>
+                                    <p class="information2">込みます。</p>
+                                </div>
+                            </div>
+                            <div class="cardInput">
+                                <div class="headings">
+                                     <!-- csv registration -->
+                                    <p class="txt bold">一括登録</p>
+                                </div>
+                                <div class="Picture">
+                                    <img src={CSVRegImg} alt="Bulk registration Image">
+                                </div>
+                                <div class="info">
+                                    <p class="information">
+                                         <!-- csv registration txt -->
+                                         車両情報をCSVファイルで一括
+                                    </p>
+                                    <p class="information2">で登録を行います。</p>
+                                </div>
+                            </div>
+                            <div class="cardInput" onclick={openManualModal}>
+                                <div class="headings">
+                                    <!-- manual registration -->
+                                    <p class="txt bold">手動登録</p>
+                                </div>
+                                <div class="Picture">
+                                    <img src={ManualRegImg} alt="manual registration Image">
+                                </div>
+                                <div class="info">
+                                    <p class="information">
+                                         <!-- manual registration txt-->
+                                         車両情報を手動で登録します。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+            </template>
+            <template if:true={showManualRegistration}>
+                <div class="modal-windowChassis">
+                    <div class="main">
+                        <div class="header">
+                        </div>
+                        <div class="cardsChassis">
+                            <div class="headingNew">
+                                <!-- Heading i.e enter chasis number -->
+                                <p class="txt">車台番号を入力してください</p>
+                            </div>
+                                <div class="mainforInputs">
+                                        <div class="addlabel">
+                                            <!-- Input Label @chasis number -->
+                                            <p class="label">車台番号</p>
+                                        </div>
+                                        <div class="inputsScroll">
+                                            <div class="inputMultiple" onclick={handleInsideClick}>
+                                                <template for:each={inputs} for:item="input" for:index="index">
+                                                        <div key={input.id} class="input-field-container">
+                                                            <div class="vertical">
+                                                                <div class="horizontal">
+                                                                    <input type="text" class="input-field-modal" placeholder="5桁の英数字"
+                                                                    value={input.part1} oninput={handleInputChange} data-index={index}
+                                                                    data-type="part1" maxlength="5">
+                                                                    <template if:false={input.validInput}>
+                                                                        <div class="textinvalid">英数字だけを入力してください。</div>
+                                                                    </template>
+                                                                </div>
+                                                                <span class="input-separator">–</span>
+                                                                <div class="horizontal">
+                                                                    <template if:true={input.validInput}>
+                                                                        <input type="text" class="input-field-modal" placeholder="7桁の英数字"
+                                                                        value={input.part2} oninput={handleInputChange} data-index={index}
+                                                                        data-type="part2" maxlength="7">
+                                                                    </template>
+                                                                    <template if:false={input.validInput}>
+                                                                        <input type="text" class="input-field-modal-invalid" placeholder="7桁の英数字"
+                                                                        value={input.part2} oninput={handleInputChange} data-index={index}
+                                                                        data-type="part2">
+                                                                        <div class="textinvalid">英数字だけを入力してください。</div>
+                                                                    </template> 
+                                                                </div>
+                                                            </div>
+                                                            <template if:true={input.showlist}>
+                                                                <div class="lists2 no-scroll" onclick={handleInsideClick}>
+                                                                    <template for:each={input.searchResults} for:item="veh">
+                                                                        <div key={veh.value} class="list-item" onclick={handleSelection}
+                                                                            data-id={veh.value} data-index={index}>
+                                                                            <p>{veh.label}</p>
+                                                                            <p>{veh.registrationNumber}</p>
+                                                                        </div>
+                                                                    </template>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                </template>
+                                            </div>
+                                            <div class="addbutton">
+                                                <img src={addButton} alt="Add Button" class="add-button" onclick={addInputFields}>
+                                            </div>
+                                        </div>
+                                 </div>
+                        </div>
+                        <div class="footer">
+                            <div class="cancelbutton btn" onclick={onInputClick}>
+                                <p class="buttontxt">キャンセル</p>
+                            </div>
+                            <!-- <template if:true={input1there}>
+                                <div class="searchbuttoninput btn">
+                                    <p class="buttontxt2">検索</p>
+                                </div>
+                            </template>
+                            <template if:true={inputthere}>
+                                <div class="searchbutton btn" onclick={handleSearchButtonClick}>
+                                    <p class="buttontxt2">検索</p>
+                                </div>
+                            </template> -->
+                            <div class={searchButtonClass} onclick={handleSearchButtonClick}>
+                                <p class="buttontxt2">検索</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template if:true={Results}>
+                <div class="modal-finalWindow">
+                    <div class="main">
+                        <div class="header">
+                            <div class="headingNew">
+                               
+                            </div>
+                        </div>
+                        <div class="cardsChassis2">
+                            <template if:true={RegVehicle}>
+                                <p class="txt1 margin">下記の車両はすでにカスタマーポータルに登録されています。</p>
+                                <template for:each={registeredVehicles} for:item="veh">
+                                    <div key={veh.Id} class="item">
+                                        <span>{veh.Chassis_number__c}</span>
+                                        
+                                    </div>
+                                </template>
+                            </template>
+                            <template if:true={VehicleInfo}>
+                                <p class="txt1">下記の車両を登録します。</p>
+                                <!-- <p class="txt1 margin">登録を始めましょう。</p> -->
+                                <template for:each={vehicleInfo} for:item="veh">
+                                    <div key={veh.Id} class="item">
+                                        <span>{veh.carPlatformNo__c}</span>
+                                        
+                                    </div>
+                                </template>
+                            </template>
+                            <template if:true={nodata}>
+                                <p class="txt1 ">この車台番号の車両は社内に存在しません</p>
+                            </template>
+                            <template if:true={Bothcase}>
+                                <p class="txt1 margin">下記の車両はすでにカスタマーポータルに登録されています。</p>
+                                <template for:each={registeredVehicles} for:item="veh">
+                                    <div key={veh.Id} class="item">
+                                        <span>{veh.Chassis_number__c}</span>
+                                        
+                                    </div>
+                                </template>
+                                <br>
+                                <br>
+                                <p class="txt1 margintop">下記の車両のみ新規にカスタマーポータルに登録します。</p>
+                                <!-- <p class="txt1 margin">登録を始めましょう。</p> -->
+                                <template for:each={vehicleInfo} for:item="veh">
+                                    <div key={veh.Id} class="item">
+                                        <span>{veh.carPlatformNo__c}</span>
+                                        
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                        <div class="footer">
+                            <template if:true={nodata}>
+                                <div class="cancelbutton2 btn" onclick={onClose}>
+                                    <p class="buttontxt21">キャンセル</p>
+                                </div>
+                            </template>
+                            <template if:true={RegVehicle}>
+                                <div class="cancelbutton2 btn" onclick={onClose}>
+                                    <p class="buttontxt21">キャンセル</p>
+                                </div>
+                            </template>
+                            <template if:true={VehicleInfo}>
+                                <div class="cancelbutton btn" onclick={suremodal}>
+                                    <p class="buttontxt">キャンセル</p>
+                                </div>
+                                <div class="nextbutton btn" onclick={onNext}>
+                                    <p class="buttontxt21">次へ</p>
+                                </div>
+                            </template>
+                            <template if:true={Bothcase}>
+                                <div class="cancelbutton btn" onclick={suremodal}>
+                                    <p class="buttontxt">キャンセル</p>
+                                </div>
+                                <div class="nextbutton btn" onclick={onNext}>
+                                    <p class="buttontxt21">次へ</p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template>
+       </div>
+    </template>
+    <template if:true={showregvehicle}>
+        <c-ccp2_-manual-input vehicle-info={filteredregisteredChassis}></c-ccp2_-manual-input>
+    </template>
+    <template if:true={showsure}>
+        <div class="modal-background-last">
+            <div class="modal-window-small">
+                <div class="warning">
+                    <p class="warntxt">入力された内容が保存していませんが、
+                        車両登録を終了しますか？</p>
+                </div>
+                <div class="buttons-small">
+                    <div class="cancelbutton btn" onclick={closesure}>
+                        <p class="buttontxt">いいえ</p>
+                    </div>
+                    <div class="searchbutton btn" onclick={onClose}>
+                        <p class="buttontxt2">はい</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:true={suretoclose}>
+        <div class="modal-background-last">
+            <div class="modal-window-small">
+                <div class="warning">
+                    <p class="warntxt">入力された内容が保存していませんが、
+                        車両登録を終了しますか？</p>
+                </div>
+                <div class="buttons-small">
+                    <div class="cancelbutton btn" onclick={closeinputsure}>
+                        <p class="buttontxt">いいえ</p>
+                    </div>
+                    <div class="searchbutton btn" onclick={onClose}>
+                        <p class="buttontxt2">はい</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>
