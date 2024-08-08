@@ -220,7 +220,7 @@ export default class Ccp2_VehicleCertificateUpload extends LightningElement {
 
           ContentLocation: "S",
 
-          Description: "Images"
+          Description: "Certificates"
 
           // Add any other fields you need
         };

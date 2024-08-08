@@ -1,0 +1,757 @@
+<template>
+    <template if:true={isManageUser}>
+        <div class="body body-vw">
+            <div class="register">
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                    </lightning-spinner>
+                </template>
+                <div class="hero">
+                    <div class="half top">
+                        <img src={backgroundImagePC} alt="" style="width: 100vw;">
+                    </div>
+                    <!-- <h1 class="hero__title">会員追加</h1> -->
+                    <!-- <div class="hero__wrapper">
+                        <picture class="hero__image">
+                            <source media="(max-width: 767px)" srcset={backgroundImageMobile}>
+                            <img src={backgroundImagePC} alt="" style="width: 100vw;">
+                        </picture>
+                    </div> -->
+                    <div class="container container--sp-no-padding">
+                        <div class="container__inner">
+                            <div class="contents-box contents-box--inner">
+                                <!-- <template if:true={errors}>
+                                    <div style="color:red">an error occurs: {errors}</div>
+                                </template> -->
+                                <!-- Input Section -->
+                                <template if:true={showInputSection}>
+
+                                    <div class="heading">会員追加</div>
+                                    <!-- Flow Section -->
+                                    <div class="step">
+                                        <!-- <div class="step__wrapper">
+                                            <ol class="step__list">
+                                                <li class="step__item item _current">
+                                                    <div class="item__top">
+                                                        <div class="item__num">1</div>
+                                                        <img class="item__icon-check" src={checkIcon} alt="">
+                                                        <img class="item__icon-track" src={trackIcon} alt="">
+                                                    </div>
+                                                    <div class="item__bottom">内容入力</div>
+                                                </li>
+                                                <li class="step__item item">
+                                                    <div class="item__top">
+                                                        <div class="item__num">2</div>
+                                                        <img class="item__icon-check" src={checkIcon} alt="">
+                                                        <img class="item__icon-track" src={trackIcon} alt="">
+                                                    </div>
+                                                    <div class="item__bottom">内容確認</div>
+                                                </li>
+                                                <li class="step__item item">
+                                                    <div class="item__top">
+                                                        <div class="item__num">3</div>
+                                                        <img class="item__icon-check" src={checkIcon} alt="">
+                                                        <img class="item__icon-track" src={trackIcon} alt="">
+                                                    </div>
+                                                    <div class="item__bottom">完了</div>
+                                                </li>
+                                            </ol>
+                                        </div> -->
+                                        <img src={truckpic1} style="width: 48%; height:50px;">
+                                    </div>
+
+                                    <p class="text-main">追加する会員の基本情報をご入力ください。</p>
+                                    <p class="text-main">※追加は2名までとなります。</p>
+                                    <br>
+                                    <form action="" class="form-main">
+                                        <div class="form form--register">
+                                            <div class="form-item">
+                                                <label class="form-label">会社名</label>
+                                                <div class="form-text">{contactData.accountName}</div>
+                                            </div>
+                                            <div class="form-item">
+                                                <label class="form-label">お客様番号</label>
+                                                <div class="form-text">{contactData.accountCode}</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-item form-item--register">
+                                            <label class="required form-label aligntop-name">氏名</label>
+                                            <div class="form-item__wrapper flex-direction-column">
+                                                <div class="form-item__input flex" style="flex-direction:row">
+                                                    <div class="form-item__list">
+                                                        <label class="label-text">姓</label>
+                                                        <div class="slds-form-element__control">
+                                                            <input type="text" class="form-input slds-input"
+                                                                name="lastName" value={contactInputData.lastName}
+                                                                placeholder="ふそう" maxlength="10" onchange={handleAllInputChange} >
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-item__list">
+                                                        <label class="label-text">名</label>
+                                                        <div class="slds-form-element__control">
+                                                            <input type="text" class="form-input slds-input"
+                                                                name="firstName" value={contactInputData.firstName}
+                                                                placeholder="太郎" maxlength="10" onchange={handleAllInputChange} >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-item__error">
+                                                    <div class="form-item__list">
+                                                        <template if:true={lastNameError}>
+                                                            <p class="_error">{lastNameErrorText}</p>
+                                                        </template>
+                                                    </div>
+                                                    <div class="form-item__list">
+                                                        <template if:true={firstNameError}>
+                                                            <p class="_error">{firstNameErrorText}</p>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-item form-item--register">
+                                            <!-- <label class="form-label aligntop">氏名（フリガナ）
+                                                <span class="reqtxt">必須</span>
+                                            </label> -->
+                                            <label class="required form-label aligntop-name">氏名（フリガナ）</label>
+
+                                            <div class="form-item__wrapper flex-direction-column">
+                                                <div class="form-item__input flex" style="flex-direction:row">
+                                                    <div class="form-item__list">
+                                                        <label class="label-text">姓（フリガナ）</label>
+                                                        <div class="slds-form-element__control">
+                                                            <input type="text" class="form-input slds-input"
+                                                                name="lastNameKana"
+                                                                value={contactInputData.lastNameKana} placeholder="フソウ"
+                                                                maxlength="10" onchange={handleAllInputChange} >
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-item__list">
+                                                        <label class="label-text">名（フリガナ）</label>
+                                                        <div class="slds-form-element__control">
+                                                            <input type="text" class="form-input slds-input"
+                                                                name="firstNameKana"
+                                                                value={contactInputData.firstNameKana} placeholder="タロウ"
+                                                                maxlength="10" onchange={handleAllInputChange} >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-item__error flex sp-flex-direction-column">
+                                                    <div class="form-item__list">
+                                                        <template if:true={lastNameKanaError}>
+                                                            <p class="_error">{lastNameKanaErrorText}</p>
+                                                        </template>
+                                                    </div>
+                                                    <div class="form-item__list">
+                                                        <template if:true={firstNameKanaError}>
+                                                            <p class="_error">{firstNameKanaErrorText}</p>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="limit-error">
+                                        <div class="form-item">
+                                            <label class="form-label aligntop">社員番号</label>
+                                            <input type="text" name="employeeCode" value={contactInputData.employeeCode}
+                                                class="form-input slds-form-element__control slds-input" maxlength="100"
+                                                placeholder="入力してください" onchange={handleAllInputChange} >
+                                        </div>
+                                        
+                                            <div class="form-item__list">
+                                                <template if:true={employeeCodeError}>
+                                                    <p class="_error">{employeeCodeErrorText}</p>
+                                                </template>
+                                            </div>
+                                           
+                                        </div> -->
+                                        <!-- <div class="form-item">
+                                            <label class="form-label aligntop">メールアドレス
+                                                <span class="reqtxt">必須</span>
+                                            </label>
+                                            <div class="form-item__wrapper _email">
+                                                <input type="email"
+                                                    class="form-input slds-form-element__control slds-input"
+                                                    name="email" value={contactInputData.email}
+                                                    placeholder="sample@sample.com" maxlength="100" onchange={handleAllInputChange} >
+                                                <template if:true={emailError}>
+                                                    <p class="_error">{emailErrorText}</p>
+                                                </template>
+                                            </div>
+                                        </div> -->
+                                        <div class="form-item">
+                                            <label class="form-label aligntop">社員番号
+                                            </label>
+                                            <div class="form-item__wrapper _email">
+                                                <input type="text" name="employeeCode" value={contactInputData.employeeCode}
+                                                  class="form-input slds-form-element__control slds-input"
+                                                    placeholder="入力してください" maxlength="24" onchange={handleAllInputChange} >
+                                                <template if:true={employeeCodeError}>
+                                                    <p class="_error">{employeeCodeErrorText}</p>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="form-item">
+                                            <label class=" form-label aligntop">部署</label>
+                                            <div class="form-item__wrapper _email">
+
+                                            <input type="text" name="department" value={contactInputData.department}
+                                                class="form-input slds-form-element__control slds-input" maxlength="24"
+                                                placeholder="入力してください" onchange={handleAllInputChange} >
+                                                <template if:true={departmentError}>
+                                                    <p class="_error">{departmentErrorText}</p>
+                                                </template>
+                                        </div>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label aligntop ">役職</label>
+                                            <div class="form-item__wrapper _email">
+
+                                            <input type="text" name="title" value={contactInputData.title}
+                                                class="form-input slds-form-element__control slds-input" maxlength="24"
+                                                placeholder="入力してください" onchange={handleAllInputChange} >
+                                                <template if:true={titleError}>
+                                                    <p class="_error">{titleErrorText}</p>
+                                                </template>
+                                        </div>
+                                        </div>
+
+                                        <div class="form-item">
+                                            <!-- <div class="item__input-form-item" onclick={toggleDropdown}> -->
+                                            <label class="required form-label aligntopBranch">所属</label>
+                                            <div class="form-item__wrapper">
+
+                                                <div class="with-error">
+
+                                                    <div class="dataDrop">
+                                                        <input type="text" oninput={handleSearch} onclick={handlebranChange}
+                                                            class="Inputs1 icon slds-form-element__control slds-input" placeholder="選択してください" name="branchsss"  readonly>
+                                                            
+                                                        <template if:true={showlist}>
+                                                            <div class="lists" onclick={handleInsideClick}>
+                                                                <template for:each={filteredbranch} for:item="veh">
+                                                                    <div key={veh.value} class="list-item"
+                                                                        onclick={handleBranchSelect} data-id={veh.value}>
+                                                                        <p>{veh.label}</p>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </template>
+                                                        
+                                                    </div>
+                                                    <div class="form-item__error flex sp-flex-direction-column">
+                                                        <div class="form-item__list">
+                                                            <template if:true={branchError}>
+                                                                <p class="_error">{branchErrorText}</p>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <!-- </div> -->
+                                            
+                                            <div class="branchrecords">
+                                                <div class="scrollbar">
+                                                    <template if:true={branch.length}>
+                                                        <template for:each={branch} for:item="veh">
+                                                            <div key={veh.Id} class="record-item">
+                                                                <lightning-icon icon-name="utility:close" size="x-small"
+                                                                    alternative-text="Delete" onclick={handleDeleteBranch}
+                                                                    data-id={veh.Id} class="filtericn"></lightning-icon>
+                                                                <span>{veh.Name}</span>
+                                                                <br>
+    
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                </div>
+                                                <template if:false={branch.length}>
+                                                    <p class="custom-placeholder">選択された勤務地</p>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        </div>
+
+
+
+
+                                        <div class="form-item">
+                                            <label class="form-label aligntop">メールアドレス
+                                                <span class="reqtxt">必須</span>
+                                            </label>
+                                            <div class="form-item__wrapper _email">
+                                                <input type="email"
+                                                    class="form-input slds-form-element__control slds-input"
+                                                    name="email" value={contactInputData.email}
+                                                    placeholder="yamadataro@fuso.com" maxlength="100" onchange={handleAllInputChange} >
+                                                <template if:true={emailError}>
+                                                    <p class="_error">{emailErrorText}</p>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="required form-label aligntop">電話番号</label>
+                                            <div class="form-item__wrapper _tell">
+                                                <!-- <p class="form__title">電話番号か携帯番号かいずれかご入力してください</p>
+                                                <p class="form__title">ハイフンなしでご入力ください</p> -->
+                                                <p class="form__title">電話番号あるいは携帯番号のいずれかをハイフンなしでご入力してください</p>
+
+                                                <div class="form-item__list">
+                                                    <label class="label-text">電話番号</label>
+                                                    <input type="tel"
+                                                        class="form-input slds-form-element__control slds-input"
+                                                        name="phone" value={contactInputData.phone}
+                                                        placeholder="03122345678" onchange={handleAllInputChange} maxlength="11">
+                                                        
+                                                </div>
+                                                <div class="form-item__list">
+                                                    <label class="label-text">携帯番号</label>
+                                                    <input type="tel"
+                                                        class="form-input slds-form-element__control slds-input"
+                                                        name="mobilePhone" value={contactInputData.mobilePhone}
+                                                        placeholder="08012345678" onchange={handleAllInputChange} maxlength="11">
+                                                </div>
+
+                                                <template if:true={phoneError}>
+                                                    <p class="_error">{phoneErrorText}</p>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label aligntop">利用サービス</label>
+                                            <div class="form-item__wrapper _tell">
+                                                <template if:true={isFDPShow}>
+                                                    <div class="checkbox-wrapper">
+                                                        <label class="label-box" for="1">
+                                                            <input class="input-checkbox" type="checkbox"
+                                                                name="baseService" onchange={handleCheckboxChange1} checked disabled>
+                                                            <p data-checkbox="baseService" onclick={handleParagraphClick} >
+                                                                基本サービス（ふそうショップ）
+                                                            </p>
+                                                        </label>
+                                                    </div>
+                                                    <br>
+                                                </template>
+
+                                                <div class="checkbox-wrapper">
+                                                    <label class="label-box" for="1">
+                                                        <input class="input-checkbox" type="checkbox" name="requestbook"
+                                                            onchange={handleCheckboxChange1} checked={rbChecked}>
+                                                        <p data-checkbox="requestbook" onclick={handleParagraphClick}>
+                                                            部整月次請求書（電子版）
+                                                        </p>
+                                                    </label>
+                                                </div>
+                                                <br>
+
+                                                <div class="checkbox-wrapper">
+                                                    <label class="label-box" for="1">
+                                                        <input class="input-checkbox" type="checkbox"
+                                                            name="financialservice" onchange={handleCheckboxChange1}
+                                                            checked={fsChecked}>
+                                                        <p data-checkbox="financialservice" onclick={handleParagraphClick}>
+                                                            金融サービス
+                                                        </p>
+                                                    </label>
+                                                </div>
+                                                <br>
+                                                <!-- </template> -->
+                                                <!-- <template if:true={maintenanceshow}> -->
+                                                <div class="checkbox-wrapper">
+                                                    <label class="label-box" for="1">
+                                                        <input class="input-checkbox" type="checkbox"
+                                                            name="onlinemaintenancebooking"
+                                                            onchange={handleCheckboxChange1} checked={ombChecked}>
+                                                        <p data-checkbox="onlinemaintenancebooking" onclick={handleParagraphClick}>
+                                                            車検入庫予約
+                                                        </p>
+                                                    </label>
+                                                </div>
+                                                <br>
+                                                <!-- </template> -->
+                                                <!-- <template if:true={vehiclemanagementshow}> -->
+                                                <div class="checkbox-wrapper">
+                                                    <label class="label-box" for="1">
+                                                        <input class="input-checkbox" type="checkbox"
+                                                            name="vehiclemanagement" onchange={handleCheckboxChange1}
+                                                            checked={vmChecked}>
+                                                        <p data-checkbox="vehiclemanagement" onclick={handleParagraphClick}>
+                                                            車両管理
+                                                        </p>
+                                                    </label>
+                                                </div>
+                                                <br>
+                                                <!-- </template> -->
+                                                <!-- <template if:true={costshow}> -->
+                                                <div class="checkbox-wrapper">
+                                                    <label class="label-box" for="1">
+                                                        <input class="input-checkbox" type="checkbox"
+                                                            name="costmanagement" onchange={handleCheckboxChange1}
+                                                            checked={cmChecked}>
+                                                        <p data-checkbox="costmanagement" onclick={handleParagraphClick}>
+                                                            費用管理
+                                                        </p>
+                                                    </label>
+                                                </div>
+                                                <!-- </template> -->
+                                            </div>
+                                        </div>
+                                        <div class="checkbox-container">
+                                            <div class="checkbox-wrapper">
+                                                <label class="label-box" for="1">
+                                                    <input class="input-checkbox" type="checkbox" name="termService"
+                                                        onchange={handleCheckboxChange} checked={termServiceChecked}>
+                                                    <a href="https://www.mitsubishi-fuso.com/ja/site-policy/"
+                                                        target="_blank">
+                                                        サービス利用規約に同意します。
+                                                    </a>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox-wrapper">
+                                                <label class="label-box" for="1">
+                                                    <input class="input-checkbox" type="checkbox" name="termData"
+                                                        onchange={handleCheckboxChange} checked={termDataChecked}>
+                                                    <a href="https://assets.mitsubishi-fuso.com/fusoassets/2022/04/220318_MFTBC-Privacy-Statement_Japanese-1.pdf?_fsi=zhB5bU6X"
+                                                        target="_blank">
+                                                        データ保護規定に同意します。
+                                                    </a>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-footer">
+                                        <div class="button2">
+                                            <div class="btn2" onclick={handleCancel}>
+                                                <P class="toedit2">キャンセル</P>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="button">
+                                            <div class="btn">
+                                                <a onclick={nextClick} class="primary_nextbtn--m disabled" name="nextButton">次へ</a>
+                                            </div>
+                                        </div>  -->
+                                        <div class="button__wrapper">
+                                            <a onclick={nextClick} name="nextButton" class="primary_nextbtn--m ">次へ</a>
+                                        </div>
+                                    </div>
+                                    </form>
+                                </template>
+                                <!-- modal start -->
+                                <template if:true={isShowModal}>
+                                    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01"
+                                        aria-modal="true" aria-describedby="modal-content-id-1"
+                                        class="slds-modal slds-fade-in-open">
+                                        <div class="slds-modal__container">
+                                            <div class="slds-modal__content slds-p-around_medium ">
+                                                <H3 class="modal1" >
+                                                    会員追加は2名までとさせていただいております。</H3>
+                                            </div>
+                                            <!-- modal footer start-->
+                                            <footer class="slds-modal__footer" style="
+                                        text-align: -webkit-center;">
+                                                <button class="return_btn--m" onclick={returnTop}>TOPページへ戻る</button>
+                                            </footer>
+                                        </div>
+                                    </section>
+                                    <div class="slds-backdrop slds-backdrop_open"></div>
+                                </template>
+                                <!-- modal end-->
+
+                                <!-- Confirmation Section -->
+                                <template if:true={showConfirmationSection}>
+                                    <!-- Flow Section -->
+                                    <div class="heading">会員追加</div>
+
+                                    <div class="step">
+                                        
+                                        <!-- <div class="step__wrapper">
+                                            <ol class="step__list">
+                                                <li class="step__item item _checked">
+                                                    <div class="item__top">
+                                                        <div class="item__num">1</div>
+                                                        <img class="item__icon-check" src={checkIcon} alt="">
+                                                        <img class="item__icon-track" src={trackIcon} alt="">
+                                                    </div>
+                                                    <div class="item__bottom">内容入力</div>
+                                                </li>
+                                                <li class="step__item item _current">
+                                                    <div class="item__top">
+                                                        <div class="item__num">2</div>
+                                                        <img class="item__icon-check" src={checkIcon} alt="">
+                                                        <img class="item__icon-track" src={trackIcon} alt="">
+                                                    </div>
+                                                    <div class="item__bottom">内容確認</div>
+                                                </li>
+                                                <li class="step__item item">
+                                                    <div class="item__top">
+                                                        <div class="item__num">3</div>
+                                                        <img class="item__icon-check" src={checkIcon} alt="">
+                                                        <img class="item__icon-track" src={trackIcon} alt="">
+                                                    </div>
+                                                    <div class="item__bottom">完了</div>
+                                                </li>
+                                            </ol>
+                                        </div> -->
+                                        <img src={truckpic2} style="width: 48%; height:50px;">
+                                    </div>
+                                    <p class="text-main _register-check">基本情報をご確認ください。</p>
+                                    <!-- basic-info__section -->
+                                    <div class="basic-info__section">
+                                        <dl class="section__outline">
+                                            <div class="section__definition-list">
+                                                <dt>会社名</dt>
+                                                <dd>{contactData.accountName}</dd>
+                                            </div>
+                                            <div class="section__definition-list">
+                                                <dt>お客様番号</dt>
+                                                <dd>{contactData.accountCode}</dd>
+                                            </div>
+                                            <div class="section__definition-list">
+                                                <dt>氏名</dt>
+                                                <dd>{contactInputData.lastName}&nbsp;{contactInputData.firstName}</dd>
+                                            </div>
+                                            <div class="section__definition-list">
+                                                <dt>氏名（フリガナ）</dt>
+                                                <dd>{contactInputData.lastNameKana}&nbsp;{contactInputData.firstNameKana}
+                                                </dd>
+                                            </div>
+                                            <div class="section__definition-list">
+                                                <dt>社員番号</dt>
+                                                <dd>{contactInputData.employeeCode}</dd>
+                                            </div>
+                                            <div class="section__definition-list">
+                                                <dt>所属</dt>
+                                                <dd class="selectedbranchlist">
+                                                    <template for:each={branch} for:item="bran">
+                                                        <div key={bran.Id} class="selectedbranchname">
+                                                            <span>{bran.Name}</span>
+                                                        </div>
+                                                    </template>
+                                                </dd>
+                                            </div>
+                                            <div class="section__definition-list">
+                                                <dt>部署</dt>
+                                                <dd>{contactInputData.department}</dd>
+                                            </div>
+                                            <div class="section__definition-list">
+                                                <dt>役職</dt>
+                                                <dd>{contactInputData.title}</dd>
+                                            </div>
+
+                                           
+                                            <div class="section__definition-list">
+                                                <dt>メールアドレス</dt>
+                                                <dd>{contactInputData.email}</dd>
+                                            </div>
+                                            <div class="section__definition-list">
+                                                <dt>電話番号</dt>
+                                                <dd>{contactInputData.phone}</dd>
+                                            </div>
+                                            <div class="section__definition-list">
+                                                <dt>携帯番号</dt>
+                                                <dd>{contactInputData.mobilePhone}</dd>
+                                            </div>
+                                            <div class="section__definition-list">
+                                                <dt class="aligntop-service2">利用サービス</dt>
+                                                <div class="form-item__wrapper _tell padtop">
+                                                    <template if:true={baseChecked} >
+                                                        <p>基本サービス（ふそうショップ）</p>
+                                                    </template>
+
+                                                    <template if:true={rbChecked}>
+                                                        <p>部整月次請求書（電子版）</p>
+                                                    </template>
+                                                        
+                                                    <template if:true={fsChecked}>
+                                                        <p>金融サービス</p>
+                                                    </template>
+                                                    <template if:true={ombChecked}>
+                                                        <p>車検入庫予約</p>
+                                                    </template>
+                                                    <template if:true={vmChecked}>
+                                                        <p>車両管理</p>
+                                                    </template>
+                                                    <template if:true={cmChecked}>
+                                                        <p>費用管理</p>
+                                                    </template>
+                                                    <!-- <div class="checkbox-wrapper">
+                                                        <label class="label-box" for="1">
+                                                            <input class="input-checkbox" type="checkbox"
+                                                                name="costmanagement1" disabled
+                                                                checked={costmanagement}>
+                                                            <a href="javascript:void(0);" target="_blank">
+                                                                費用管理
+                                                            </a>
+                                                        </label>
+                                                    </div> -->
+                                                    <!-- </template> -->
+
+                                                    <!-- <template if:true={isFDPShow}>
+                                                        <div class="checkbox-wrapper">
+                                                            <label >※基本サービス（三菱ふそう_ショップ）は、すべての会員がご利用可能です。</label>
+                                                        </div>
+                                                    </template> -->
+                                                </div>
+
+                                            </div>
+                                        </dl>
+                                    </div>
+                                    <div class="button__wrapper">
+                                        <a onclick={back2InputClick} class="return_btn--m">修正</a>
+                                        <a onclick={confirmClick} class="primary_nextbtn--m">次へ</a>
+                                    </div>
+                                </template>
+
+                                <!-- Completion Section -->
+                                <template if:true={showCompletionSection}>
+                                    <!-- Flow Section -->
+                                    <div class="heading">会員追加</div>
+
+                                    <div class="step">
+                                        <!-- <div class="step__wrapper">
+                                            <ol class="step__list">
+                                                <li class="step__item item _checked">
+                                                    <div class="item__top">
+                                                        <div class="item__num">1</div>
+                                                        <img class="item__icon-check" src={checkIcon} alt="">
+                                                        <img class="item__icon-track" src={trackIcon} alt="">
+                                                    </div>
+                                                    <div class="item__bottom">内容入力</div>
+                                                </li>
+                                                <li class="step__item item _checked">
+                                                    <div class="item__top">
+                                                        <div class="item__num">2</div>
+                                                        <img class="item__icon-check" src={checkIcon} alt="">
+                                                        <img class="item__icon-track" src={trackIcon} alt="">
+                                                    </div>
+                                                    <div class="item__bottom">内容確認</div>
+                                                </li>
+                                                <li class="step__item item _current">
+                                                    <div class="item__top">
+                                                        <div class="item__num">3</div>
+                                                        <img class="item__icon-check" src={checkIcon} alt="">
+                                                        <img class="item__icon-track" src={trackIcon} alt="">
+                                                    </div>
+                                                    <div class="item__bottom">完了</div>
+                                                </li>
+                                            </ol>
+                                        </div> -->
+                                        <img src={truckpic3} style="width: 48%; height:50px;">
+                                    </div>
+                                    <div class="register-ok">
+                                        <p class="text-main">
+                                            ご登録ありがとうございました。<br>
+                                            登録いただいたメールアドレスに案内メールをお送りしています。<br>
+                                            メールに記載された案内にしたがって、ログインの手続きを進めてください。
+                                        </p>
+                                        <div class="button__wrapper">
+                                            <button onclick={navigateToHome} class="primary_nextbtn--m2">会員管理へ</button>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <!-- <template if:true={showCancelModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open custom-modal">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content slds-text-heading_medium custom-modal-content">
+                    <div class="content-modal">
+                        <h1 class="modal-title"><strong>The entered information has not been saved. Do you want to exit?</strong></h1>
+                        
+                        <div class="btn-modal">
+                            <div class="form-footer-modal">
+                                <div class="button2No">
+                                    <div class="btn2No" onclick={handleNo}>
+                                        <P class="toedit2">No</P>
+                                    </div>
+                                </div>
+                                <div class="button">
+                                    <a href={usermanagement}>
+                                        <div class="btn" onclick={handleYes}>
+                                            <P class="toedit">Yes</P>
+                                        </div>
+                                    </a>
+                                  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template> -->
+    <template if:true={showCancelModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open custom-modal">
+            <div class="slds-modal__container custom-modal-container2">
+                <div class="slds-modal__content slds-text-heading_medium custom-modal-content">
+                    <div class="content-modal">
+                        <div class="modal-title">
+                            <p>            <strong>    入力された内容が保存していませんが、</strong></p>
+                            <br>
+                            <p><strong>終了しますか？</strong></p>
+                                    </div>
+                        <!-- <h1 class="modal-title"><strong>入力された内容が保存していませんが、終了しますか？</strong></h1> -->
+                        
+                        <div class="btn-modal">
+                            <div class="form-footer-modal">
+                                <div class="button2No">
+                                    <div class="btn2No" onclick={handleNo}>
+                                        <P class="toedit2No">いいえ</P>
+                                    </div>
+                                </div>
+                                <div class="buttonYes">
+                                    <a href={usermanagement}>
+                                    <div class="btnYes" onclick={handleYes}>
+                                        <P class="toeditYes">はい</P>
+                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+
+    <template if:true={showCheckboxModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open custom-modal">
+            <div class="slds-modal__container custom-modal-container2">
+                <div class="slds-modal__content slds-text-heading_medium custom-modal-content2">
+                    <div class="content-modal2">
+                        <div class="modal-title2">
+                            <p>サービス利用規約とデータ保護規定を</p>
+                            <p>同意してください。</p>
+                            <!-- <strong>サービス利用規約とデータ保護規定を
+                                同意してください。</strong> -->
+                        </div>
+                        <!-- <h1 class="modal-title2"><strong>サービス利用規約とデータ保護規定を
+                            同意してください。</strong></h1> -->
+                        
+                        <div class="btn-modal2">
+                           
+                                <div class="button">
+                                    <a>
+                                        <div class="btn" onclick={handleOk}>
+                                            <P class="toedit">はい</P>
+                                        </div>
+                                    </a>
+                                  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    
+</template>

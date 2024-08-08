@@ -6,7 +6,6 @@
     </div>
     <div class="half bottom">
         <div class="center-content">
-            <!-- <ccp2-_-vehicle-list-new></ccp2-_-vehicle-list-new> -->
             <div class="form">
                 <template if:true={Step1}>
 
@@ -70,16 +69,17 @@
                                                     <span class="reqtxt">必須</span>
                                                 </div>
                                             </label>
-                                            <input type="text" class="input-field-modal chassis-color" placeholder="5桁の英数字"
-                                                name="chassisNum1" data-type="part1" value={formdata.carPlatformNoPart1}
-                                                oninput={handleInputChange} readonly>
+                                            <input type="text" class="input-field-modal chassis-color"
+                                                placeholder="5桁の英数字" name="chassisNum1" data-type="part1"
+                                                value={formdata.carPlatformNoPart1} oninput={handleInputChange}
+                                                readonly>
                                             <span class="input-separator">
-                                                <!-- <img src={dashpic}> -->
                                                 -
                                             </span>
-                                            <input type="text" class="input-field-modal chassis-color" placeholder="7桁の英数字"
-                                                name="chassisNum2" data-type="part2" value={formdata.carPlatformNoPart2}
-                                                oninput={handleInputChange} readonly>
+                                            <input type="text" class="input-field-modal chassis-color"
+                                                placeholder="7桁の英数字" name="chassisNum2" data-type="part2"
+                                                value={formdata.carPlatformNoPart2} oninput={handleInputChange}
+                                                readonly>
                                         </div>
 
 
@@ -121,19 +121,7 @@
                                                     value={formdata.dateOfIssuance}
                                                     onchange={handleInputChange}></lightning-input>
                                             </div>
-                                            <!-- <div class="date-input-container">
-                                                    <lightning-input
-                                                        data-id="date-input"
-                                                        name="dateOfIssuance"
-                                                        type="date"
-                                                        value={formdata.dateOfIssuance}
-                                                        onchange={handleInputChange}
-                                                        class={dateClass}
-                                                    ></lightning-input>
-                                                    <div if:true={isPlaceholderVisible} class="placeholder-text" onclick={focusInput}>
-                                                        {placeholder}
-                                                    </div>
-                                                </div> -->
+
                                         </div>
                                         <div class="form-group-wr">
                                             <label for="initialRegistrationDate">
@@ -175,16 +163,7 @@
                                             </label>
 
                                             <div class="Combox-input-wr">
-                                                <!-- <select class="input-field-combo" id="Car" name="carName"
-                                                    onchange={handleInputChange}>
-                                                    <option value="選択してください" hidden selected>選択してください</option>
-                                                    <template for:each={carNameOptions} for:item="branch">
-                                                        <option key={branch.value} value={branch.value}
-                                                            class="make-duller" >{branch.label}
-                                                        </option>
-                                                    </template>
-                                                   
-                                                </select> -->
+
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handleCarNameChange} autocomplete="off"
                                                         class="InputsCarName Inputs1 icon2 " placeholder="選択してください"
@@ -213,14 +192,7 @@
                                                 </div>
                                             </label>
                                             <div class="Combox-input-wr">
-                                                <!-- <select class="input-field-combo" id="typeOfCar" name="typeOfVehicle"
-                                                    onchange={handleInputChange}>
-                                                    <option value="選択してください" hidden selected>選択してください</option>
-                                                    <template for:each={vehicleTypeOptions} for:item="branch">
-                                                        <option key={branch.value} value={branch.value}>{branch.label}
-                                                        </option>
-                                                    </template>
-                                                </select> -->
+
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handletypeOfVehicleChange}
                                                         autocomplete="off" class="Inputstypeofvehicle Inputs1 icon2"
@@ -254,10 +226,10 @@
 
                                             <div class="Combox-input-wr">
                                                 <div>
-                                                <input type="text" id="DoorNum" class={errorDoorDiv}
-                                                    placeholder="選択してください" value={formdata.doorNumber} name="doorNumber"
-                                                    onchange={handleInputChange} maxlength="10">
-                                                <p style="color: red;" class={errorDoorCss}>{errorDoor}</p>
+                                                    <input type="text" id="DoorNum" class={errorDoorDiv}
+                                                        placeholder="選択してください" value={formdata.doorNumber}
+                                                        name="doorNumber" onchange={handleInputChange} maxlength="10">
+                                                    <p style="color: red; margin-top: 3px;" class={errorDoorCss}>{errorDoor}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -269,14 +241,7 @@
                                                 </div>
                                             </label>
                                             <div class="Combox-input-wr">
-                                                <!-- <select class="input-field-combo placeholder" id="fuelType"
-                                                    name="fuelType" onchange={handleInputChange}>
-                                                    <option value="選択してください" hidden selected>選択してください</option>
-                                                    <template for:each={fuelTypeOptions} for:item="branch">
-                                                        <option key={branch.value} value={branch.value}>{branch.label}
-                                                        </option>
-                                                    </template>
-                                                </select> -->
+
                                                 <div class="dropdownfuel">
                                                     <input type="text" onclick={handlefuelTypeChange} autocomplete="off"
                                                         class="InputsfuelType Inputs1 icon2" placeholder="選択してください"
@@ -314,11 +279,6 @@
                                                 </template>
                                                 <p>{uploadText1}</p>
                                             </section>
-                                            <!-- <input type="text" id="VehicleInspectionImage"
-                                                class="input-field-img upload-icon" placeholder="アップロード"
-                                                onclick={opencertmodal}> -->
-
-                                            <!-- <input type="file" id="fileInput" style="display:none;" accept="image/*"> -->
 
                                         </div>
                                         <div class="form-group-wr form-margin">
@@ -334,8 +294,7 @@
                                                 </template>
                                                 <p>{uploadText2}</p>
                                             </section>
-                                            <!-- <input type="text" id="VehicleImage" class="input-field-img upload-icon"
-                                                placeholder="アップロード" onclick={showupload}> -->
+
                                         </div>
 
                                         <div class="form-group-ChassisNumber form-margin">
@@ -345,20 +304,26 @@
                                                     <span class="reqtxt">必須</span>
                                                 </div>
                                             </label>
-                                            <div>
-                                            <input type="text" class={errorModelDiv} placeholder="US9"
-                                                value={formdata.model1} name="model1" onchange={handleInputChange}
-                                                maxlength="3">
-                                                <p style="color: red;" class={errorModelCss}>{errorModel}</p>
-                                            </div>
-                                            <span class="input-separator">
-                                                <!-- <img src={dashpic}> -->
-                                                - </span>
-                                            <div>
-                                            <input type="text" class={errorModelDiv} placeholder="48I5"
-                                                value={formdata.model2} name="model2" onchange={handleInputChange}
-                                                maxlength="7">
-                                                <p style="color: red;" class={errorModelCss}>{errorModel}</p>
+                                            <div class="model-div-container">
+                                                <div style="display: flex; align-items:center;">
+                                                    <div>
+                                                        <input type="text" class={errorModelDiv} placeholder="US9"
+                                                            value={formdata.model1} name="model1" onchange={handleInputChange}
+                                                            maxlength="3">
+                                                        <!-- <p style="color: red; width: 10.2vw;" class={errorModelCss}>{errorModel}
+                                                        </p> -->
+                                                    </div>
+                                                    <span class="input-separator"> - </span>
+                                                    <div>
+                                                        <input type="text" class={errorModelDiv} placeholder="48I5"
+                                                            value={formdata.model2} name="model2" onchange={handleInputChange}
+                                                            maxlength="7">
+                                                        <!-- <p style="color: red; width: 10.2vw;" class={errorModelCss}>{errorModel}
+                                                        </p> -->
+                                                    </div>
+                                                </div>
+                                                <p style="color: red; width: 21.5vw; white-space:nowrap; margin-top: 3px;" class={errorModelCss}>{errorModel}
+                                                </p>
                                             </div>
                                         </div>
 
@@ -371,12 +336,7 @@
                                             </label>
 
                                             <div class="Combox-input">
-                                                <!-- <select class="input-field-combo" id="PrivateBusiness"
-                                                    name="privateOrBusinessUse" onchange={handleInputChange}>
-                                                    <option value="選択してください" hidden selected>選択してください</option>
-                                                    <option value="private">Private Use</option>
-                                                    <option value="business">Business Use</option>
-                                                </select> -->
+
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handleprivateOrBusinessUseChange}
                                                         autocomplete="off"
@@ -412,14 +372,7 @@
                                                 </div>
                                             </label>
                                             <div class="Combox-input-wr">
-                                                <!-- <select class="input-field-combo" id="BodyShape" name="bodyShape"
-                                                    onchange={handleInputChange}>
-                                                    <option value="選択してください" disabled hidden selected>選択してください</option>
-                                                    <template for:each={bodyShapeOptions} for:item="option">
-                                                        <option key={option.value} value={option.value}>{option.label}
-                                                        </option>
-                                                    </template>
-                                                </select> -->
+
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handlebodyShapeChange}
                                                         autocomplete="off" class="Inputsbodyshape Inputs1 icon2"
@@ -452,15 +405,7 @@
                                             </label>
 
                                             <div class="Combox-input">
-                                                <!-- <select class="input-field-combo" id="Use" name="use"
-                                                    onchange={handleInputChange}>
-                                                    <option value="選択してください" disabled hidden selected>選択してください</option>
-                                                    <template for:each={useOptions} for:item="branch">
-                                                        <option key={branch.value} value={branch.value}>{branch.label}
-                                                        </option>
-                                                    </template>
-                                                    
-                                                </select> -->
+
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handleuseChange}
                                                         class="Inputsuse Inputs1 icon2 " autocomplete="off"
@@ -494,7 +439,7 @@
                                                 <input type="text" id="Mileage" class={errorMileageDiv}
                                                     placeholder="選択してください" value={formdata.mileage} name="mileage"
                                                     onchange={handleInputChange} maxlength="6">
-                                                <p style="color: red;" class={errorMileageCss}>{errorMileage}</p>
+                                                <p style="color: red;  margin-top: 3px;" class={errorMileageCss}>{errorMileage}</p>
                                             </div>
                                             <span class="unit">Km</span>
 
@@ -508,11 +453,11 @@
                                                 </div>
                                             </label>
                                             <div>
-                                            <input type="text" id="Weight" class={errorCurbDiv}
-                                                placeholder="選択してください" value={formdata.curbWeight} name="curbWeight"
-                                                onchange={handleInputChange} maxlength="4">
-                                                
-                                                <p style="color: red;" class={errorCurbCss}>{errorCurb}</p>
+                                                <input type="text" id="Weight" class={errorCurbDiv}
+                                                    placeholder="選択してください" value={formdata.curbWeight} name="curbWeight"
+                                                    onchange={handleInputChange} maxlength="4">
+
+                                                <p style="color: red;  margin-top: 3px;" class={errorCurbCss}>{errorCurb}</p>
                                             </div>
                                             <span class="unit">Kg</span>
                                         </div>
@@ -570,32 +515,19 @@
                                         <!-- cancel -->
                                     </div>
                                 </div>
-                                <!-- <template if:true={isLastPage}>
-                                    <template if:true={disbsave}>
-                                        <div class="searchbutton2 btn">
-                                            <p class="buttontxt2">検索</p>
-                                        </div>
-                                    </template>
-                                    <template if:false={disbsave}>
-                                        <div class="searchbutton btn" onclick={handleSaveData}>
-                                            <p class="buttontxt2">検索</p>
-                                        </div>
-                                    </template>
-                                </template> -->
+
                                 <div style="display: flex; justify-content:right; align-items:center; gap:25px">
                                     <button style="background-color: white; color:black; border:1px solid #bfbfbf;"
                                         class={finalCompletionButtonCss} name="completion-button"
                                         onclick={handleSaveData} disabled={disableSaveButton}>完了</button>
-                                    <!-- Completion -->
 
 
                                     <template if:false={isLastPage}>
-                                        <!-- <div class="searchbutton btn " onclick={handleSaveData}> -->
+
                                         <button class="searchbutton btn buttontxt2 searchbuttonnew" name="next-button"
                                             style="color: white;" disabled={disableSaveButton}
                                             onclick={handleSaveData}>保存して次へ</button>
-                                        <!-- save and continue -->
-                                        <!-- </div> -->
+
                                     </template>
                                 </div>
                             </div>
@@ -624,14 +556,7 @@
         <div class="modal-background">
             <div class="modal-background-confirm">
                 <div class="heads">
-                    <!-- <template if:true={presentChassisNumbers.length}>
-                            <h3>Template A: Present Chassis Numbers</h3>
-                            <ul>
-                                <template for:each={presentChassisNumbers} for:item="chassis">
-                                    <li key={chassis}>{chassis}</li>
-                                </template>
-                            </ul>
-                        </template> -->
+
                     <template if:true={missingChassisNumbers.length}>
                         <h3 class="headmeow gaps">下記の車両の情報がまだ入力されていません。</h3>
                         <ul>
@@ -682,15 +607,12 @@
     <template if:true={showexitModal}>
         <div class="modal-background">
             <div class="modal-background-exit">
-                <div class="heads">
-                    <!-- <template if:true={presentChassisNumbers.length}>
-                            <h3>Template A: Present Chassis Numbers</h3>
-                            <ul>
-                                <template for:each={presentChassisNumbers} for:item="chassis">
-                                    <li key={chassis}>{chassis}</li>
-                                </template>
-                            </ul>
-                        </template> -->
+                <div
+                    style=" color: #262626; height: 54px; width: 328px; font-weight: 400; line-height: 27px; font-size: 18px; display: flex; justify-content: center; align-items: center; margin: auto;">
+                    未アップロードの車両が残っています、
+                    車両登録を終了しますか？</div>
+                <div class="heads heads-exit">
+
                     <center>
                         <h1 class="exittest">終了しますか？</h1>
                     </center>

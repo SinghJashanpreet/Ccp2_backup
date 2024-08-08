@@ -2,7 +2,7 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
    
     <types>
-        <members>ccp2VehicleModal</members>
+        <members>ccp2_VehicleDetails</members>
         <name>LightningComponentBundle</name>
     </types>
    

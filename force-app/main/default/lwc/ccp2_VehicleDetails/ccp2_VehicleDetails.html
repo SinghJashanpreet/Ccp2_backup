@@ -1,0 +1,230 @@
+<template>
+    <div class="main_container">
+        <div class="main_container">
+            <template if:true={vehicleByIdLoader}>
+                <div
+                    style="position: relative; width:100%; height:550px; display:flex; justify-content:center; align-items:center;">
+                    <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                </div>
+            </template>
+
+            <template if:false={vehicleByIdLoader}>
+                <div class="content1_container">
+                    <div class="content1_left_container">
+                        <div class="content1_left_row1">
+                            <div class="content1_left_row1_left">
+                                <lightning-icon icon-name='utility:chevronleft' class="back-icon"
+                                    alternative-text='chevronleft' size='x-small' onclick={closeDetailPage}
+                                    title='chevronleft'></lightning-icon>
+                                <h1 class="RegNoData">{vehicleByIdData.vehicleNumber}</h1>
+                            </div>
+                            <!-- <div class="buttons">
+                                <div class="btnico">
+                                    <lightning-icon icon-name='utility:note' alternative-text='note' size='x-small'
+                                        title='note' class="i"></lightning-icon>
+                                    <span class="notetext">{label.CCP2_ScheduleRegistration}</span>
+                                </div>
+                                <div class="btnico1">
+                                    <lightning-icon icon-name='utility:date_input' alternative-text='date_input'
+                                        size='x-small' title='date_input' class="i"></lightning-icon>
+                                    <span class="notetext">{label.CCP2_ExpenseRegistration}</span>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="content1_left_row2">
+                            <div class="content1_left_row2_1">
+                                <div class="content1_left_row2_element">
+                                    <h4 class="Head">登録番号</h4>
+                                    <p class="recdata">{vehicleByIdData.registerationNumber}</p>
+                                </div>
+                                <div class="content1_left_row2_element">
+                                    <h4 class="Head">車名</h4>
+                                    <p class="recdata">{vehicleByIdData.name}</p>
+                                </div>
+                                <div class="content1_left_row2_element">
+                                    <h4 class="Head">自動車の種別</h4>
+                                    <p class="recdata">{vehicleByIdData.type}</p>
+                                </div>
+                                <div class="content1_left_row2_element">
+                                    <h4 class="Head">走行距離</h4>
+                                    <p class="recdata">{vehicleByIdData.mileage}</p>
+                                </div>
+                                <div class="content1_left_row2_element">
+                                    <h4 class="Head">車検証有効期限</h4>
+                                    <p class="recdata">NA</p>
+                                </div>
+
+
+                            </div>
+
+                            <div class="content1_left_row2_2">
+                                <div class="content1_left_left_row3">
+                                    <lightning-icon icon-name={starIcon} class="back-icon" alternative-text="Star"
+                                        size="x-small" onclick={toggleStar}></lightning-icon>
+                                    <p class="back-icon">お気に入り</p>
+                                </div>
+                                <div class="content1_left_row3">
+                                    <button>予定登録</button>
+                                    <button>費用登録</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="content1_right_container">
+                        <!-- <img src="https://cdn.britannica.com/17/126517-050-9CDCBDDF/semi-semitrailer-truck-tractor-highway.jpg"
+                            class="content1_right_img" /> -->
+                    </div>
+                </div>
+
+
+
+
+                <div class="content2_container">
+                    <div class="recbar">
+                        <button class="underline-button">
+                            {label.CCP2_VehicleDetails}
+                            <span class={classVehicleDetails}></span>
+                        </button>
+                        <button class="underline-button">
+                            {label.CCP2_MaintenanceList}
+                            <span class={classMaintainList}></span>
+                        </button>
+                        <button class="underline-button">
+                            {label.CCP2_ExpenseManagement}
+                            <span class={classCostManagement}></span>
+                        </button>
+                        <div class="truckonnect">
+                            <p>Truckonnect</p>
+                            <img src={truckLogoUrl} alt="Truckonnect"
+                                style="height:15px; width:15px; align-self:center;">
+                        </div>
+                    </div>
+
+                    <div class="recMain no-scroll">
+                        <template if:true={showVehicleDetails}>
+                            <div class="vehicle_container no-scroll">
+                                <!-- <div class="vehicle_header">
+                                    <h3>{label.CCP2_ChassisInformation}</h3>
+                                    <h3>{label.CCP2_LoadingPlatformInformation}</h3>
+                                    <h3>{label.CCP2_PartsInformation}</h3>
+                                    <h3>{label.CCP2_LeaseInformation}</h3>
+                                </div> -->
+                                <div style="">
+                                    <div class="vehicle_child1">
+                                        <div class="vehicle_child1_container"
+                                            style="border-right: 1px solid #00000014;">
+                                            <div class="vehicle_child1_list">
+                                                <h3>勤務地</h3>
+                                                <h3>車台番号</h3>
+                                                <h3>車検証交付年月日</h3>
+                                                <h3>初度登録年月</h3>
+                                                <h3>自家用・事業用</h3>
+                                                <h3>車体形状</h3>
+                                            </div>
+                                            <div class="vehicle_child1_list">
+                                                <h3>NA</h3>
+                                                <h3>{vehicleByIdData.chassisNumber}</h3>
+                                                <h3>NA</h3>
+                                                <h3>{vehicleByIdData.firstRegistrationDate}</h3>
+                                                <h3>{vehicleByIdData.privateBusinessUse}</h3>
+                                                <h3>{vehicleByIdData.carBodyShape}</h3>
+                                            </div>
+                                        </div>
+                                        <div class="vehicle_child1_container" style="padding-left: 36px;">
+                                            <div class="vehicle_child1_list">
+                                                <h3>車検証画像</h3>
+                                                <h3>用途</h3>
+                                                <h3>型式</h3>
+                                                <h3>燃料の種類</h3>
+                                                <h3>車両重量</h3>
+                                                <h3>ドアナンバー</h3>
+                                            </div>
+                                            <div class="vehicle_child1_list">
+                                                <h3
+                                                    style="color: #E10202; text-decoration:underline; white-space:nowrap;">
+                                                    {certificateTitleCount}</h3>
+                                                <h3>{vehicleByIdData.purpose}</h3>
+                                                <h3>{vehicleByIdData.model}</h3>
+                                                <h3>{vehicleByIdData.typeOfFuel}</h3>
+                                                <h3>{vehicleByIdData.vehicleWeigth}</h3>
+                                                <h3>{vehicleByIdData.doorNumber}</h3>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="vehicle_child1_container">
+                                            <div class="vehicle_child1_list">
+                                                <h3>{label.CCP2_DriversLicence}</h3>
+                                                <h3>{label.CCP2_FirstYearRegistrationDate}</h3>
+                                            </div>
+                                            <div class="vehicle_child1_list">
+                                                <h3>Not found</h3>
+                                                <h3>{vehicleByIdData.initialRegistrationDate}</h3>
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                    <!-- <div class="vehicle_child2">{label.CCP2_LoadingPlatformInformation}</div>
+                                    <div class="vehicle_child3">
+                                        <div class="vehicle_child1_list">
+                                            <h3>{label.CCP2_BodyMaker}</h3>
+                                            <h3>{label.CCP2_BodyInternalDimmension}</h3>
+                                            <h3>{label.CCP2_BodyShape}</h3>
+                                            <h3>{label.CCP2_MaximumLoadingCapacity}</h3>
+                                            <h3>{label.CCP2_BodyMounting}</h3>
+                                        </div>
+                                        <div class="vehicle_child1_list">
+                                            <h3>{vehicleByIdData.bodymaker}</h3>
+                                            <h3>Not found</h3>
+                                            <h3>{vehicleByIdData.bodyShape}</h3>
+                                            <h3>Not found</h3>
+                                            <h3>Not found</h3>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </template>
+
+
+                    </div>
+
+
+
+                    <div class="btnrec">
+                        <img src={vehicleIcon} alt="Delete Vehicle" onclick={dothis} class="bottom-icons" />
+                        <span class="b">車両削除</span>
+
+                        <img src={downloadIcon} alt="Download" onclick={dothis} class="bottom-icons" />
+                        <!-- <lightning-button-icon icon-name="utility:print" size="medium" variant="container"
+                        alternative-text={label.CCP2_Print} class="slds-m-left_small Abtn" onclick={dothis}
+                        title={label.CCP2_Print}></lightning-button-icon> -->
+                        <span class="b">ダウンロード</span>
+
+                        <img src={editIcon} alt="Edit" onclick={dothis} class="bottom-icons" />
+                        <!-- <lightning-button-icon icon-name="utility:download" size="medium" variant="container"
+                            alternative-text={label.CCP2_Download} class="slds-m-left_small Abtn" onclick={dothis}
+                            title={label.CCP2_Download}></lightning-button-icon> -->
+                        <span class="b">編集する</span>
+                    </div>
+                </div>
+            </template>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</template>
