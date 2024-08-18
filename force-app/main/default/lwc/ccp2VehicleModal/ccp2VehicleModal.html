@@ -64,8 +64,6 @@
             <template if:true={showManualRegistration}>
                 <div class="modal-windowChassis">
                     <div class="main">
-                        <div class="header">
-                        </div>
                         <div class="cardsChassis">
                             <div class="headingNew">
                                 <!-- Heading i.e enter chasis number -->
@@ -148,11 +146,6 @@
             <template if:true={Results}>
                 <div class="modal-finalWindow">
                     <div class="main">
-                        <div class="header">
-                            <div class="headingNew">
-                               
-                            </div>
-                        </div>
                         <div class="cardsChassis2">
                             <template if:true={RegVehicle}>
                                 <p class="txt1 margin">下記の車両はすでにカスタマーポータルに登録されています。</p>
@@ -236,8 +229,8 @@
         <div class="modal-background-last">
             <div class="modal-window-small">
                 <div class="warning">
-                    <p class="warntxt">入力された内容が保存していませんが、
-                        車両登録を終了しますか？</p>
+                    <p class="warntxt">入力された内容が保存していませんが、</p>
+                       <p class="warntxt more">車両登録を終了しますか？</p>
                 </div>
                 <div class="buttons-small">
                     <div class="cancelbutton btn" onclick={closesure}>
@@ -254,8 +247,8 @@
         <div class="modal-background-last">
             <div class="modal-window-small">
                 <div class="warning">
-                    <p class="warntxt">入力された内容が保存していませんが、
-                        車両登録を終了しますか？</p>
+                    <p class="warntxt">入力された内容が保存していませんが、</p>
+                     <p class="warntxt more">車両登録を終了しますか？</p>
                 </div>
                 <div class="buttons-small">
                     <div class="cancelbutton btn" onclick={closeinputsure}>

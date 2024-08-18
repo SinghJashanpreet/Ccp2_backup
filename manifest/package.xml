@@ -2,7 +2,25 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
    
     <types>
+
+        <members>ccp2cancelMembership</members>
+        <members>ccp2_BasicInfo</members>
+        <members>ccp2AddBranchForm</members>
+        <members>ccp2_branch</members>
+        <members>ccp2BranchRecordDetail</members>
+        <members>ccp_AddUser</members>
+        <members>ccp2UserManagement</members>
+        <members>ccp2_FusoFooter</members>
+        <members>ccp2_FusoHeader</members>
+        <members>ccp2_ManualInput</members>
         <members>ccp2_VehicleDetails</members>
+        <members>ccp2_VehicleImageUpload</members>
+        <members>ccp2_VehicleListNew</members>
+        <members>ccp_UserProfile</members>
+        <members>ccp2_VehicleCertificateUpload</members>
+        <members>ccp2VehicleModal</members>
+        <members>ccp2DeleteBranch</members>
+       
         <name>LightningComponentBundle</name>
     </types>
    

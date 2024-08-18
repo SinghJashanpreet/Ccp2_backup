@@ -160,6 +160,12 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   errorCurbCss = "hide-error";
   errorDoor = "";
   errorDoorCss = "hide-error";
+  errorLogin = "";
+  errorLoginCss = "hide-error";
+  errorlogin1div = "input-field1";
+  errorlogin2div = "input-field2";
+  errorlogin3div = "input-field3";
+  errorlogin4div = "input-field4";
   errorModelDiv = "input-field-modal";
   errorMileageDiv = "input-field-mil";
   errorCurbDiv = "input-field-mil";
@@ -1389,6 +1395,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     this.errorMileageCss = "hide-error";
     this.errorModelCss = "hide-error";
     // this.errorModel2Css = "hide-error";
+    this.errorLoginCss = "hide-error";
     this.errorCurbCss = "hide-error";
     this.errorDoorCss = "hide-error";
     this.errorModelDiv = "input-field-modal";
@@ -1396,10 +1403,19 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     this.errorMileageDiv = "input-field-mil";
     this.errorCurbDiv = "input-field-mil";
     this.errorDoorDiv = "input-field";
+    this.errorlogin1div = "input-field1";
+    this.errorlogin2div = "input-field2";
+    this.errorlogin3div = "input-field3";
+    this.errorlogin4div = "input-field4";
   }
 
   validateFormData() {
     let isValid = true;
+    const regexJapanese = /^[一-龠ぁ-ゔァ-ヴー々〆〤ヶ]+$/; // Any Japanese characters including Kanji, Hiragana, Katakana, and special characters
+    const regexNumbers = /^\d+$/; // Only digits  
+    const regexNumbers1 =/^\d+・*$/;
+ // Only digits  
+    // let cleanedString = this.formdata.loginNumberPart4.replace(/\・+$/, '');
 
     if (
       !this.formdata.loginNumberPart1 ||
@@ -1409,7 +1425,21 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     ) {
       this.toastIt("ログイン番号");
       isValid = false;
-    } else {
+    } else if(!regexJapanese.test(this.formdata.loginNumberPart1) ||
+              !regexJapanese.test(this.formdata.loginNumberPart3) ||
+              !regexNumbers.test(this.formdata.loginNumberPart2) ||
+              !regexNumbers1.test(this.formdata.loginNumberPart4)
+          ) {
+            this.errorlogin1div = "input-field1 invalid-input";
+            this.errorlogin2div = "input-field2 invalid-input";
+            this.errorlogin3div = "input-field3 invalid-input";
+            this.errorlogin4div = "input-field4 invalid-input";
+        this.errorLogin = "正しい登録番号を入力してください";
+        this.errorLoginCss = "show-error";
+        console.log("errorLoginCss: ",this.errorLoginCss);
+        this.toastCustom("Registration Number Wrong");
+        isValid = false;
+      } else {
       this.formdata.loginNumberPart1 = this.formdata.loginNumberPart1
         .replace(/\s+/g, "")
         .toUpperCase();
@@ -1543,12 +1573,13 @@ export default class Ccp2backgroundTemplate extends LightningElement {
         isValid = false;
       }
     }
+    const regexdoor = /^[\dA-Za-z一-龠ぁ-ゔァ-ヴー々〆〤ヶ]+$/;
     if (
       this.formdata.doorNumber !== null &&
       this.formdata.doorNumber !== "" &&
       this.formdata.doorNumber.length !== 0
     ) {
-      if (/[^0-9A-Za-z]/.test(this.formdata.doorNumber)) {
+      if (!regexdoor.test(this.formdata.doorNumber)) {
         this.errorDoorDiv = "input-field invalid-input";
         this.errorDoor = "ドア番号には英数字を入力してください。";
         this.errorDoorCss = "show-error";
@@ -1807,4 +1838,15 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   handleClick() {
     window.location.reload();
   }
+
+  handleInputCheck(event) {
+    const input = event.target;
+    input.value = input.value.replace(/[^\d０-９]/g, '').slice(0,6);
+  }
+  handleInputJapanese(event) {
+    const input = event.target;
+    // Allow Japanese Kanji, Hiragana, Katakana, and spaces (Furigana typically includes Hiragana and Katakana)
+    input.value = input.value.replace(/[^\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FBF\uFF66-\uFF9D]/g, '');
+}
+
 }

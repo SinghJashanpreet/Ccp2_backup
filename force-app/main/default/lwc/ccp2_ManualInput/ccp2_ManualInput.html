@@ -1,11 +1,4 @@
 <template>
-    <div class="main">
-        <div class="half top img-head">
-            <img src={backgroundImagePC} style="width: 100vw;">
-        </div>
-    </div>
-    <div class="half bottom">
-        <div class="center-content">
             <div class="form">
                 <template if:true={Step1}>
 
@@ -76,7 +69,7 @@
                                             <span class="input-separator">
                                                 -
                                             </span>
-                                            <input type="text" class="input-field-modal chassis-color"
+                                            <input type="text" class="input-field-modal2 chassis-color"
                                                 placeholder="7桁の英数字" name="chassisNum2" data-type="part2"
                                                 value={formdata.carPlatformNoPart2} oninput={handleInputChange}
                                                 readonly>
@@ -92,18 +85,22 @@
                                             </label>
 
                                             <div class="input-container">
-                                                <input type="text" class="input-field1" placeholder="大阪" name="regNum1"
+                                                
+                                                <div style="display: flex; align-items:center;">
+                                                <input type="text" class={errorlogin1div} placeholder="大阪" name="regNum1"
                                                     data-part="part1" value={formdata.loginNumberPart1}
-                                                    onchange={handleInputChangeLoginNumber} maxlength="24">
-                                                <input type="text" class="input-field2" placeholder="100" name="regNum2"
+                                                    onchange={handleInputChangeLoginNumber} oninput={handleInputJapanese} maxlength="24">
+                                                <input type="text" class={errorlogin2div} placeholder="100" name="regNum2"
                                                     data-part="part2" value={formdata.loginNumberPart2}
-                                                    onchange={handleInputChangeLoginNumber} maxlength="3">
-                                                <input type="text" class="input-field3" placeholder="あ" name="regNum3"
+                                                    onchange={handleInputChangeLoginNumber} oninput={handleInputCheck} maxlength="3">
+                                                <input type="text" class={errorlogin3div} placeholder="あ" name="regNum3"
                                                     data-part="part3" value={formdata.loginNumberPart3}
-                                                    onchange={handleInputChangeLoginNumber} maxlength="1">
-                                                <input type="text" class="input-field4" placeholder="7284"
+                                                    onchange={handleInputChangeLoginNumber} oninput={handleInputJapanese} maxlength="1">
+                                                <input type="text" class={errorlogin4div} placeholder="7284"
                                                     name="regNum4" data-part="part4" value={formdata.loginNumberPart4}
-                                                    onchange={handleInputChangeLoginNumber} maxlength="4">
+                                                    onchange={handleInputChangeLoginNumber} oninput={handleInputCheck} maxlength="4">
+                                                </div>
+                                                <p style="color: red; width: 21.5vw; white-space:nowrap; margin-top: 3px;" class={errorLoginCss}>{errorLogin}</p>
                                             </div>
                                         </div>
 
@@ -438,7 +435,7 @@
                                             <div>
                                                 <input type="text" id="Mileage" class={errorMileageDiv}
                                                     placeholder="選択してください" value={formdata.mileage} name="mileage"
-                                                    onchange={handleInputChange} maxlength="6">
+                                                    onchange={handleInputChange} oninput={handleInputCheck} maxlength="6">
                                                 <p style="color: red;  margin-top: 3px;" class={errorMileageCss}>{errorMileage}</p>
                                             </div>
                                             <span class="unit">Km</span>
@@ -455,7 +452,7 @@
                                             <div>
                                                 <input type="text" id="Weight" class={errorCurbDiv}
                                                     placeholder="選択してください" value={formdata.curbWeight} name="curbWeight"
-                                                    onchange={handleInputChange} maxlength="4">
+                                                    onchange={handleInputChange} oninput={handleInputCheck} maxlength="4">
 
                                                 <p style="color: red;  margin-top: 3px;" class={errorCurbCss}>{errorCurb}</p>
                                             </div>
@@ -472,7 +469,6 @@
                                             <div class="dataDrop">
                                                 <input type="text" onclick={handlevehChange} readonly
                                                     class="Inputs12 icon"
-                                                    style="cursor: default; background-position:8vw 50%;"
                                                     placeholder="選択する">
                                                 <template if:true={showlist}>
                                                     <div class="lists no-scroll" onclick={handleInsideClick}>
@@ -534,23 +530,22 @@
                         </div>
                     </div>
                 </template>
+                <template if:true={showRegisteredVehicles}>
+                    <div class="container2">
+                        <div class="mainHeading">
+                            <h1>車両手動登録</h1>
+                        </div>
+                        <div class="content2">
+                            <p>車両が登録されました。</p>
+                        </div>
+                        <div class="footer2">
+                            <button class="searchbutton btn" onclick={handleClick}>車両一覧へ</button>
+                        </div>
+                    </div>
+                </template>
             </div>
 
-            <template if:true={showRegisteredVehicles}>
-                <div class="container2">
-                    <div class="mainHeading">
-                        <h1>車両手動登録</h1>
-                    </div>
-                    <div class="content2">
-                        <p>車両が登録されました。</p>
-                    </div>
-                    <div class="footer2">
-                        <button class="searchbutton btn" onclick={handleClick}>車両一覧へ</button>
-                    </div>
-                </div>
-            </template>
-        </div>
-    </div>
+            
 
     <template if:true={showfinalModal}>
         <div class="modal-background">

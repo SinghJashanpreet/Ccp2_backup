@@ -25,10 +25,8 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 import Id from "@salesforce/user/Id";
 
-const arrowicon =
-  User_StaticResource + "/CCP2_Resources/Common/arrow_under.png";
-const BACKGROUND_IMAGE_PC =
-  User_StaticResource + "/CCP2_Resources/Common/Main_Background.png";
+const  arrowicon = User_StaticResource + '/CCP2_Resources/Common/arrow_under.png';
+const BACKGROUND_IMAGE_PC = User_StaticResource + "/CCP2_Resources/Common/Main_Background.png";
 //const BACKGROUND_IMAGE_MOBILE = AddUser_StaticResource + '/CCP_StaticResource_AddUser/images/register_img_hero.png';
 const BACKGROUND_IMAGE_MOBILE =
   Vehicle_StaticResource +
@@ -38,12 +36,11 @@ const TRACK_ICON =
 const CHECK_ICON =
   AddUser_StaticResource + "/CCP_StaticResource_AddUser/images/icon_check.svg";
 
-const truckcancel =
-  User_StaticResource + "/CCP2_Resources/User/truckcancel1.png";
-const truckcancel2 =
-  User_StaticResource + "/CCP2_Resources/User/truckcancel2.png";
-const truckcancel3 =
-  User_StaticResource + "/CCP2_Resources/User/truckcancel3.png";
+
+const truckcancel = User_StaticResource + '/CCP2_Resources/User/truckcancel1.png';
+const truckcancel2 = User_StaticResource + '/CCP2_Resources/User/truckcancel2.png';
+const truckcancel3 = User_StaticResource + '/CCP2_Resources/User/truckcancel3.png';
+  
 
 export default class Ccp_AddUser extends LightningElement {
   errors;
@@ -59,7 +56,7 @@ export default class Ccp_AddUser extends LightningElement {
   showConfirmationSection = false;
   showCompletionSection = false;
   isManageUser = false;
-
+  
   termServiceChecked = false;
   termDataChecked = false;
   vrChecked = false;
@@ -73,10 +70,10 @@ export default class Ccp_AddUser extends LightningElement {
   vmChecked = true;
   cmChecked = true;
 
-  deletedBranchIds = [];
-  selectedLabels = [];
-  @track showCancelModal = false;
-  @track showCheckboxModal = false;
+   deletedBranchIds = [];
+   selectedLabels = [];
+@track showCancelModal = false;
+@track showCheckboxModal = false;
   @track branchoptions = [];
   branch = [];
   branchranchDataForClass = [];
@@ -89,7 +86,7 @@ export default class Ccp_AddUser extends LightningElement {
   allContactEmail = [];
   allUserEmail = [];
   lastNameError = false;
-
+  
   firstNameError = false;
   lastNameKanaError = false;
   firstNameKanaError = false;
@@ -106,7 +103,7 @@ export default class Ccp_AddUser extends LightningElement {
 
   isFDPShow = true;
   lastNameErrorText;
-
+  
   firstNameErrorText;
   lastNameKanaErrorText;
   firstNameKanaErrorText;
@@ -131,47 +128,55 @@ export default class Ccp_AddUser extends LightningElement {
     employeeCode: null
   };
 
-  handleAllInputChange(event) {
+  handlephoneInput(event) {
+    // const input = event.target;
+    // input.value = input.value.replace(/\D/g, '');
+    // input.value = input.value.replace(/[^\d０-９]/g, '');
+    const input = event.target;
+    // This regex matches any digit (0-9) or full-width digit (０-９)
+    const filteredValue = input.value.replace(/[^\d０-９]/g, '');
+    
+    // Limit input to 11 characters
+    if (filteredValue.length > 11) {
+        input.value = filteredValue.slice(0, 11);
+    } else {
+        input.value = filteredValue;
+    }
+       
+  }
+
+  handleAllInputChange(event){
     this.contactInputData[event.target.name] = event.target.value;
-    console.log("contactinput input", this.contactInputData);
+    console.log("contactinput input",this.contactInputData)
     let nextButton = this.template.querySelector('[name="nextButton"]');
     // if the two terms not check, the next button is disable
     if (nextButton != null) {
       if (
-        this.contactInputData.firstName == null ||
-        this.contactInputData.firstName == "" ||
-        this.contactInputData.lastName == null ||
-        this.contactInputData.lastName == "" ||
-        this.contactInputData.firstNameKana == null ||
-        this.contactInputData.firstNameKana == "" ||
-        this.contactInputData.lastNameKana == null ||
-        this.contactInputData.lastNameKana == "" ||
+        (this.contactInputData.firstName == null || this.contactInputData.firstName == '') ||
+        (this.contactInputData.lastName == null || this.contactInputData.lastName == '') ||
+        (this.contactInputData.firstNameKana == null || this.contactInputData.firstNameKana == '') ||
+        (this.contactInputData.lastNameKana == null || this.contactInputData.lastNameKana == '') ||
         // this.branch.length === 0 ||
-        this.contactInputData.email == null ||
-        this.contactInputData == "" ||
-        ((this.contactInputData.mobilePhone == null ||
-          this.contactInputData.mobilePhone == "") &&
-          (this.contactInputData.phone == "" ||
-            this.contactInputData.phone == null))
+        (this.contactInputData.email == null || this.contactInputData == '') ||
+        ((this.contactInputData.mobilePhone == null || this.contactInputData.mobilePhone == '') && (this.contactInputData.phone == '' || this.contactInputData.phone == null))
       ) {
         nextButton.className = "primary_nextbtn--m ";
       } else {
         nextButton.className = "primary_nextbtn--m";
       }
     }
+
   }
 
   connectedCallback() {
-    this.template.host.style.setProperty(
-      "--dropdown-icon",
-      `url(${this.imgdrop})`
-    );
-    requestAnimationFrame(() => {
-      this.addCustomStyles();
-    });
 
-    let baseUrl = window.location.href;
-    this.usermanagement = baseUrl.split("/s/")[0] + "/s/usermanagement";
+    this.template.host.style.setProperty('--dropdown-icon', `url(${this.imgdrop})`);
+        requestAnimationFrame(() => {
+            this.addCustomStyles();
+        });
+
+        let baseUrl = window.location.href;
+        this.usermanagement = baseUrl.split("/s/")[0] + "/s/usermanagement";
 
     // this.template.host.style.setProperty(
     //   "--dropdown-icon",
@@ -183,7 +188,7 @@ export default class Ccp_AddUser extends LightningElement {
     this.userTypeJudgment();
     this.checkManageUser();
     checkUserNumber().then((res) => {
-      console.log("user count > 3", res);
+        console.log('user count > 3', res)
       if (!res) {
         this.isShowModal = true;
         console.log("usernumber", res);
@@ -205,8 +210,8 @@ export default class Ccp_AddUser extends LightningElement {
 
   renderedCallback() {
     if (!this.outsideClickHandlerAdded) {
-      document.addEventListener("click", this.handleOutsideClick.bind(this));
-      this.outsideClickHandlerAdded = true;
+        document.addEventListener('click', this.handleOutsideClick.bind(this));
+        this.outsideClickHandlerAdded = true;
     }
     this.nextButtonCSS();
   }
@@ -277,15 +282,25 @@ export default class Ccp_AddUser extends LightningElement {
   //     this.contactData = event.target.value;
   //     console.log("sample",this.contactData );
   // }
+
+  handleInput(event){
+    const input = event.target;
+    input.value = input.value.replace(/\D/g, '').slice(0, 16); 
+    this.validatePhone(input.value);
+}
+validatePhone() {
+  const phoneRegex = /^\d{11}$/;
+  return phoneRegex.test(this.phone);
+}
   handlebranChange(event) {
-    console.log("employee", JSON.stringify(this.contactInputData));
+    console.log('employee', JSON.stringify(this.contactInputData));
     event.stopPropagation();
     this.showlist = !this.showlist;
-    if (this.branchoptions.length == 0) {
+    if(this.branchoptions.length == 0){
       this.showlist = false;
-      console.log("inside false branch opts");
+      console.log("inside false branch opts")
     }
-    console.log("branchoption", this.branchoptions.length);
+    console.log("branchoption",this.branchoptions.length)
   }
 
   @wire(getbranchdetails) wiredBranches({ data, error }) {
@@ -301,11 +316,11 @@ export default class Ccp_AddUser extends LightningElement {
       console.error(error);
     }
   }
-  //   handleOutsideClick = (event) => {
-  //     if (!this.template.querySelector(".dataDrop").contains(event.target)) {
-  //       this.showList = false;
-  //     }
-  //   };
+//   handleOutsideClick = (event) => {
+//     if (!this.template.querySelector(".dataDrop").contains(event.target)) {
+//       this.showList = false;
+//     }
+//   };
 
   // Custom Validation, Input Section -> Confirmation Section
   nextClick() {
@@ -329,15 +344,39 @@ export default class Ccp_AddUser extends LightningElement {
     let department = this.template.querySelector('[name="department"]');
     let title = this.template.querySelector('[name="title"]');
     let branchList = this.template.querySelector('[name="branchsss"]');
-
+    
     let employeeCode = this.template.querySelector('[name="employeeCode"]');
 
-    if (this.template.querySelector('[name="baseService"]') != null) {
+    // let nextButton = this.template.querySelector('[name="nextButton"]');
+    // // if the two terms not check, the next button is disable
+    // if (nextButton != null) {
+    //   if (!email.value) {
+    //       console.log("inside next button disabled");
+    //     nextButton.className = "primary_nextbtn--m disabled";
+    //   } else {
+    //     nextButton.className = "primary_nextbtn--m";
+    //     console.log("inside next button enabled");
+    //   }
+    // }
+
+
+    // if (!this.isFDP) {
+    //   // this.baseService = this.template.querySelector(
+    //   //   '[name="baseService"]'
+    //   // ).checked;
+    // }
+   
+
+    if (this.template.querySelector('[name="baseService"]') != null){
       this.baseService = this.template.querySelector(
         '[name="baseService"]'
       ).checked;
     }
-
+    // if (this.template.querySelector('[name="vehiclereservation"]') != null) {
+    //   this.vehiclereservation = this.template.querySelector(
+    //     '[name="vehiclereservation"]'
+    //   ).checked;
+    // }
     if (this.template.querySelector('[name="requestbook"]') != null) {
       this.requestbook = this.template.querySelector(
         '[name="requestbook"]'
@@ -366,7 +405,39 @@ export default class Ccp_AddUser extends LightningElement {
       ).checked;
     }
 
-    // the department verify not null and up to 24 characters
+    // if (this.termServiceChecked && this.termDataChecked) {
+    //       this.showCheckboxModal = false;
+    //     } else {
+    //       this.showCheckboxModal = true;
+    //       return;
+    //     }
+
+    if (
+      !email.value ||
+      this.branch.length === 0 ||
+      !firstNameKana.value ||
+      !lastNameKana.value ||
+      !firstName.value ||
+      (!phone.value && !mobilePhone.value)
+    ) {
+
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: "エラー",
+          message:
+            "必須項目を入力してください。",
+          variant: "error"
+        })
+      )
+    }else if(this.termServiceChecked && this.termDataChecked) {
+      this.showCheckboxModal = false;
+    } else {
+      this.showCheckboxModal = true;
+      return;
+    }
+
+    
+     // the department verify not null and up to 24 characters
     if (department.value.length > MAX_CHARS_EMPLOYEECODE) {
       department.className = "form-input _error slds-input";
       this.departmentError = true;
@@ -376,8 +447,8 @@ export default class Ccp_AddUser extends LightningElement {
       this.departmentError = false;
       this.departmentErrorText = "";
     }
-    // the title/position verify not null and up to 24 characters
-    if (title.value.length > MAX_CHARS_EMPLOYEECODE) {
+     // the title/position verify not null and up to 24 characters
+     if (title.value.length > MAX_CHARS_EMPLOYEECODE) {
       title.className = "form-input _error slds-input";
       this.titleError = true;
       this.titleErrorText = "24桁以内に入力してください";
@@ -396,7 +467,7 @@ export default class Ccp_AddUser extends LightningElement {
     //   this.phoneError = false;
     //   this.phoneErrorText = "";
     // }
-    //employee code upto 24
+//employee code upto 24
     if (employeeCode.value.length > MAX_CHARS_EMPLOYEECODE) {
       employeeCode.className = "form-input _error slds-input";
       this.employeeCodeError = true;
@@ -437,7 +508,7 @@ export default class Ccp_AddUser extends LightningElement {
     if (!lastNameKana.value) {
       lastNameKana.className = "form-input _error slds-input";
       this.lastNameKanaError = true;
-      this.lastNameKanaErrorText = "名を入力してください";
+      this.lastNameKanaErrorText = "姓を入力してください";
     } else if (lastNameKana.value.length > MAX_CHARS) {
       lastNameKana.className = "form-input _error slds-input";
       this.lastNameKanaError = true;
@@ -481,40 +552,32 @@ export default class Ccp_AddUser extends LightningElement {
     //   this.firstNameKanaError = false;
     //   this.firstNameKanaErrorText = "";
     // }
-
-    phone.className = "form-input  slds-form-element__control slds-input";
-    mobilePhone.className = "form-input  slds-form-element__control slds-input";
-    // verify the phone and mobile cannot be empty at the same time
-    if (!phone.value && !mobilePhone.value) {
-      phone.className =
-        "form-input _error slds-form-element__control slds-input";
-      mobilePhone.className =
-        "form-input _error slds-form-element__control slds-input";
-      this.phoneError = true;
-      this.phoneErrorText = "電話番号か携帯番号かいずれかをご入力ください。";
-    } else if (
-      (phone.value.length > 0 && !onlyNumber.test(phone.value)) ||
-      (mobilePhone.value.length > 0 && !onlyNumber.test(mobilePhone.value))
-    ) {
-      if (phone.value.length > 0 && !onlyNumber.test(phone.value)) {
-        phone.className =
-          "form-input _error slds-form-element__control slds-input";
-      }
-      if (mobilePhone.value.length > 0 && !onlyNumber.test(mobilePhone.value)) {
-        mobilePhone.className =
-          "form-input _error slds-form-element__control slds-input";
-      }
-      this.phoneError = true;
-      this.phoneErrorText =
-        "電話番号・携帯番号は数字（ハイフンなし）でご入力ください";
-    } else {
-      phone.className = "form-input slds-form-element__control slds-input";
-      mobilePhone.className =
-        "form-input slds-form-element__control slds-input";
-      this.phoneError = false;
-      this.phoneErrorText = "";
-    }
-
+    
+    phone.className = 'form-input  slds-form-element__control slds-input';
+        mobilePhone.className = 'form-input  slds-form-element__control slds-input';
+        // verify the phone and mobile cannot be empty at the same time
+        if(!phone.value && !mobilePhone.value){
+            phone.className= 'form-input _error slds-form-element__control slds-input';
+            mobilePhone.className = 'form-input _error slds-form-element__control slds-input';
+            this.phoneError = true;
+            this.phoneErrorText = '電話番号か携帯番号かいずれかをご入力ください。';
+        } else if((phone.value.length > 0 && !onlyNumber.test(phone.value)) || 
+                (mobilePhone.value.length > 0 && !onlyNumber.test(mobilePhone.value))){
+            if((phone.value.length > 0 && !onlyNumber.test(phone.value))){
+                phone.className= 'form-input _error slds-form-element__control slds-input';
+            }
+            if((mobilePhone.value.length > 0 && !onlyNumber.test(mobilePhone.value))){
+                mobilePhone.className = 'form-input _error slds-form-element__control slds-input'; 
+            }
+            this.phoneError = true;
+            this.phoneErrorText = '電話番号・携帯番号は半角数字（ハイフンなし）でご入力ください';
+        } else{
+            phone.className = 'form-input slds-form-element__control slds-input';
+            mobilePhone.className = 'form-input slds-form-element__control slds-input';
+            this.phoneError = false;
+            this.phoneErrorText = '';
+        }
+    
     if (this.branch.length === 0) {
       // this.dispatchEvent(
       //   new ShowToastEvent({
@@ -524,15 +587,14 @@ export default class Ccp_AddUser extends LightningElement {
       //     variant: "error"
       //   })
       // )
-      branchList.className =
-        "Inputs1 hello-class icon form-input _error slds-form-element__control slds-input";
+      branchList.className = "Inputs1 invalid-input icon";
       this.branchError = true;
       this.branchErrorText = "所属を選択してください";
-    } else {
-      this.branchErrorText = "";
+    }
+    else{
+      this.branchErrorText = '';
       this.branchError = false;
-      branchList.className =
-        "Inputs1 icon slds-form-element__control slds-input";
+      branchList.className = "Inputs1 icon slds-form-element__control slds-input";
     }
     // the email verify not null, have correct email format and the same email does not exist for contacts under the same account
     if (!email.value) {
@@ -572,35 +634,8 @@ export default class Ccp_AddUser extends LightningElement {
                 "入力されたメールアドレスでは、会員登録ができません。担当営業にご連絡ください";
             }
           }
-
-          if (
-            !email.value ||
-            this.branch.length === 0 ||
-            !firstNameKana.value ||
-            !lastNameKana.value ||
-            !firstName.value ||
-            (!phone.value && !mobilePhone.value)
-          ) {
-            console.log(
-              "phone.value , mobilePhone.value",
-              phone.value,
-              mobilePhone.value
-            );
-
-            this.dispatchEvent(
-              new ShowToastEvent({
-                title: "エラー",
-                message: "必須項目を入力してください。",
-                variant: "error"
-              })
-            );
-          } else if (this.termServiceChecked && this.termDataChecked) {
-            this.showCheckboxModal = false;
-          } else {
-            this.showCheckboxModal = true;
-            return;
-          }
-
+      
+          
           // if the page not error can turn to next section
           if (
             !this.lastNameError &&
@@ -615,24 +650,24 @@ export default class Ccp_AddUser extends LightningElement {
             !this.departmentError &&
             !this.showCheckboxModal
           ) {
-            if (title.value == "") {
-              this.contactInputData.title = "-";
+            if(phone.value == ''){
+              this.contactInputData.phone = '-';
             }
-            if (department.value == "") {
-              this.contactInputData.department = "-";
+            if(mobilePhone.value == ''){
+              this.contactInputData.mobilePhone = '-';
             }
-            if (employeeCode.value == "") {
-              this.contactInputData.employeeCode = "-";
+            if(title.value == ''){
+              this.contactInputData.title = '-';
             }
-            if (phone.value == "") {
-              this.contactInputData.phone = "-";
+            if(department.value == ''){
+              this.contactInputData.department = '-';
             }
-            if (mobilePhone.value == "") {
-              this.contactInputData.mobilePhone = "-";
+            if(employeeCode.value == ''){
+              this.contactInputData.employeeCode = '-';
             }
-
             this.showInputSection = false;
             this.showConfirmationSection = true;
+            
             window.scrollTo(0, 0);
             this.showCompletionSection = false;
           } else {
@@ -642,6 +677,8 @@ export default class Ccp_AddUser extends LightningElement {
         .catch((error) => {
           console.log("checkUserEmail Errors:" + JSON.stringify(error));
         });
+
+        
     }
     // get input data
     this.contactInputData = {
@@ -656,7 +693,25 @@ export default class Ccp_AddUser extends LightningElement {
       mobilePhone: mobilePhone.value,
       employeeCode: employeeCode.value
     };
+
+    // if(title.value == ''){
+    //   this.contactInputData.title = '-';
+    // }
+    // if(department.value == ''){
+    //   this.contactInputData.department = '-';
+    // }
+    // if(employeeCode.value == ''){
+    //   this.contactInputData.employeeCode = '-';
+    // }
+    // if(phone.value == ''){
+    //   this.contactInputData.phone = '-';
+    // }
+    // if(mobilePhone.value == ''){
+    //   this.contactInputData.mobilePhone = '-';
+    // }
   }
+
+  
 
   // get the checked information
   handleCheckboxChange(event) {
@@ -675,12 +730,13 @@ export default class Ccp_AddUser extends LightningElement {
   handleCheckboxChange1(event) {
     let checkName = event.target.name;
     let isChecked = event.target.checked;
-
+    
     if (checkName == "baseService") {
       this.baseChecked = isChecked;
     } else if (checkName == "requestbook") {
       this.rbChecked = isChecked;
-    } else if (checkName == "financialservice") {
+    }
+    else if (checkName == "financialservice") {
       this.fsChecked = isChecked;
     } else if (checkName == "onlinemaintenancebooking") {
       this.ombChecked = isChecked;
@@ -693,58 +749,55 @@ export default class Ccp_AddUser extends LightningElement {
     this.getInputData();
   }
 
+
   handleParagraphClick(event) {
-    const checkName = event.currentTarget.getAttribute("data-checkbox");
-    let checkbox;
-    let newCheckedState;
+    
+const checkName = event.currentTarget.getAttribute('data-checkbox');
+        let checkbox;
+        let newCheckedState;
 
-    switch (checkName) {
-      // case 'baseService':
-      //     checkbox = this.template.querySelector('input[name="baseService"]');
-      //     newCheckedState = !this.baseChecked;
-      //     this.baseChecked = newCheckedState;
-      //     break;
-      case "requestbook":
-        checkbox = this.template.querySelector('input[name="requestbook"]');
-        newCheckedState = !this.rbChecked;
-        this.rbChecked = newCheckedState;
-        break;
-      case "financialservice":
-        checkbox = this.template.querySelector(
-          'input[name="financialservice"]'
-        );
-        newCheckedState = !this.fsChecked;
-        this.fsChecked = newCheckedState;
-        break;
-      case "onlinemaintenancebooking":
-        checkbox = this.template.querySelector(
-          'input[name="onlinemaintenancebooking"]'
-        );
-        newCheckedState = !this.ombChecked;
-        this.ombChecked = newCheckedState;
-        break;
-      case "vehiclemanagement":
-        checkbox = this.template.querySelector(
-          'input[name="vehiclemanagement"]'
-        );
-        newCheckedState = !this.vmChecked;
-        this.vmChecked = newCheckedState;
-        break;
-      case "costmanagement":
-        checkbox = this.template.querySelector('input[name="costmanagement"]');
-        newCheckedState = !this.cmChecked;
-        this.cmChecked = newCheckedState;
-        break;
-    }
+        switch (checkName) {
+            // case 'baseService':
+            //     checkbox = this.template.querySelector('input[name="baseService"]');
+            //     newCheckedState = !this.baseChecked;
+            //     this.baseChecked = newCheckedState;
+            //     break;
+            case 'requestbook':
+                checkbox = this.template.querySelector('input[name="requestbook"]');
+                newCheckedState = !this.rbChecked;
+                this.rbChecked = newCheckedState;
+                break;
+            case 'financialservice':
+                checkbox = this.template.querySelector('input[name="financialservice"]');
+                newCheckedState = !this.fsChecked;
+                this.fsChecked = newCheckedState;
+                break;
+            case 'onlinemaintenancebooking':
+                checkbox = this.template.querySelector('input[name="onlinemaintenancebooking"]');
+                newCheckedState = !this.ombChecked;
+                this.ombChecked = newCheckedState;
+                break;
+            case 'vehiclemanagement':
+                checkbox = this.template.querySelector('input[name="vehiclemanagement"]');
+                newCheckedState = !this.vmChecked;
+                this.vmChecked = newCheckedState;
+                break;
+            case 'costmanagement':
+                checkbox = this.template.querySelector('input[name="costmanagement"]');
+                newCheckedState = !this.cmChecked;
+                this.cmChecked = newCheckedState;
+                break;
+        }
 
-    if (checkbox) {
-      checkbox.checked = newCheckedState;
-      this.handleCheckboxChange({ target: checkbox });
-    }
-  }
-  //   handleSearch(event) {
-  //     this.searchTerm = event.target.value.toLowerCase();
-  //   }
+        if (checkbox) {
+            checkbox.checked = newCheckedState;
+            this.handleCheckboxChange({ target: checkbox });
+        }
+            
+}
+//   handleSearch(event) {
+//     this.searchTerm = event.target.value.toLowerCase();
+//   }
 
   get filteredbranch() {
     if (!this.searchTerm) {
@@ -756,18 +809,18 @@ export default class Ccp_AddUser extends LightningElement {
   }
 
   handleBranchSelect(event) {
-    if (this.branchoptions.length == 1) {
+    if(this.branchoptions.length == 1){
       this.showlist = false;
-      console.log("inside false branch opts");
+      console.log("inside false branch opts")
     }
     this.selectbranchId = event.currentTarget.dataset.id;
     console.log("selected b id", JSON.stringify(this.selectbranchId));
     this.handlebranchChange();
   }
 
-  //   closeList() {
-  //     this.showlist = false;
-  //   }
+//   closeList() {
+//     this.showlist = false;
+//   }
 
   handlebranchChange() {
     // this.selectbranchId = event.detail.value;
@@ -792,7 +845,7 @@ export default class Ccp_AddUser extends LightningElement {
       this.branchDataForClass.push(selectedBranch.label);
     }
     this.selectbranchId = null;
-    if (this.branchoptions.length == 0) {
+    if(this.branchoptions.length == 0){
       this.showlist = false;
     }
     // console.log("AddOpt",this.selectbranchId);
@@ -803,6 +856,7 @@ export default class Ccp_AddUser extends LightningElement {
   }
 
   handleDeleteBranch(event) {
+
     const branchId = event.currentTarget.dataset.id;
 
     // Find the deleted branch from branch array
@@ -821,12 +875,12 @@ export default class Ccp_AddUser extends LightningElement {
 
     // Push the deleted branch ID to deletedBranchIds array
     this.deletedBranchIds.push(branchId);
-    console.log("newe2", JSON.stringify(this.deletedBranchIds));
+    console.log("newe2",JSON.stringify(this.deletedBranchIds));
 
     // Remove the branch from branch array
     this.branch = this.branch.filter((branch) => branch.Id !== branchId);
 
-    console.log("newe2", JSON.stringify(this.branch));
+    console.log("newe2",JSON.stringify(this.branch));
 
     // Add the deleted branch back to another array if needed
 
@@ -852,20 +906,20 @@ export default class Ccp_AddUser extends LightningElement {
 
   // Confirmation Section -> Input Section
   back2InputClick() {
-    if (this.contactInputData.department == "-") {
-      this.contactInputData.department = "";
+    if(this.contactInputData.department == '-'){
+      this.contactInputData.department = '';
     }
-    if (this.contactInputData.title == "-") {
-      this.contactInputData.title = "";
+    if(this.contactInputData.title == '-'){
+      this.contactInputData.title = '';
     }
-    if (this.contactInputData.employeeCode == "-") {
-      this.contactInputData.employeeCode = "";
+    if(this.contactInputData.employeeCode == '-'){
+      this.contactInputData.employeeCode = '';
     }
-    if (this.contactInputData.phone == "-") {
-      this.contactInputData.phone = "";
+    if(this.contactInputData.phone == '-'){
+      this.contactInputData.phone = '';
     }
-    if (this.contactInputData.mobilePhone == "-") {
-      this.contactInputData.mobilePhone = "";
+    if(this.contactInputData.mobilePhone == '-'){
+      this.contactInputData.mobilePhone = '';
     }
     this.showInputSection = true;
     this.showConfirmationSection = false;
@@ -926,7 +980,7 @@ export default class Ccp_AddUser extends LightningElement {
               // console.log("inside user",data)
               console.log("createUser Errors:" + JSON.stringify(error));
             });
-          const BranchIdsToAdd = this.branch.map((vehicle) => vehicle.Id);
+            const BranchIdsToAdd = this.branch.map(vehicle => vehicle.Id);
           createBranch({
             accountId: this.contactData.accountId,
             contactId: contactID,
@@ -988,47 +1042,52 @@ export default class Ccp_AddUser extends LightningElement {
   returnTop() {
     let baseUrl = window.location.href;
     if (baseUrl.indexOf("/s/") != -1) {
-      window.location.href = baseUrl.split("/s/")[0] + "/s/";
+      window.location.href = baseUrl.split("/s/")[0] + "/s/usermanagement";
     }
   }
   saveSelections() {
     this.updateSelectedLabels();
     this.toggleDropdown();
   }
+  
 
-  handleInsideClick(event) {
+
+  
+handleInsideClick(event) {
     event.stopPropagation();
-  }
+}
 
-  handleOutsideClick = (event) => {
-    const dataDropElement = this.template.querySelector(".dataDrop");
-    const listsElement = this.template.querySelector(".lists");
+handleOutsideClick = (event) => {
+    const dataDropElement = this.template.querySelector('.dataDrop');
+    const listsElement = this.template.querySelector('.lists');
     if (
-      dataDropElement &&
-      !dataDropElement.contains(event.target) &&
-      listsElement &&
-      !listsElement.contains(event.target)
+        dataDropElement &&
+        !dataDropElement.contains(event.target) &&
+        listsElement &&
+        !listsElement.contains(event.target)
     ) {
-      this.showlist = false;
-      console.log("Clicked outside");
+        this.showlist = false;
+        console.log("Clicked outside");
     }
-  };
+};
 
-  disconnectedCallback() {
-    document.removeEventListener("click", this.handleOutsideClick.bind(this));
-  }
 
-  handleCancel() {
-    this.showCancelModal = true;
-  }
-  handleNo() {
-    this.showCancelModal = false;
-    this.isManageUser = true;
-  }
-  handleYes() {
-    this.showCancelModal = false;
-  }
-  handleOk() {
-    this.showCheckboxModal = false;
-  }
+disconnectedCallback(){
+    document.removeEventListener('click', this.handleOutsideClick.bind(this));
+}
+
+handleCancel(){
+  this.showCancelModal = true;
+}
+handleNo(){
+  this.showCancelModal = false;
+  this.isManageUser =  true;
+}
+handleYes(){
+  this.showCancelModal = false;
+}
+handleOk(){
+  this.showCheckboxModal = false;
+  
+}
 }

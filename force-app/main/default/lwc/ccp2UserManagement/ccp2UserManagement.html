@@ -1,0 +1,552 @@
+<template>
+    <div class="main">
+        <div class="top">
+            <img src={backgroundImagePC} class="img" alt="">
+            <div class="overlay">
+                <!-- <h1 class="centered-text">{labels.CCP2_MembershipManagement}</h1> -->
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="center-content">
+                <template if:true={showUserList}>
+                    <div class="main-content" style="padding: 64px calc(256px - 10%) 64px calc(256px - 10%);">
+                        <h2 class="heading">会員管理</h2>
+                        <div class="footer-buttons">
+                            <a href={homeUrl} style="color: white;"><button
+                                    class="button return-button">トップに戻る</button></a>
+                            <a href={addUserUrl} style="color: white; "><button
+                                    class="button submit-button">会員追加</button></a>
+                        </div>
+                        <template if:true={allUserLoader}>
+                            <div
+                                style="position: relative; width:100%; height:350px; display:flex; justify-content:center; align-items:center;">
+                                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                            </div>
+                        </template>
+                        <template if:false={allUserLoader}>
+                            <div class="list-container">
+                                <template for:each={contactlist} for:item="elm">
+                                    <div class="list-element" key={elm.contactssId} data-idd={elm.contactssId} data-user={elm.usercontactId}
+                                        onclick={handleUserClick}>
+                                        <div class="list-data" data-idd={elm.contactssId} data-user={elm.usercontactId}>
+                                            <!-- <p style="font-weight:600; width:150px; color: #E10202;" data-idd={elm.Id}
+                                                data-user={elm.UserId__c}>{elm.Account.siebelAccountCode__c}</p> -->
+                                            <p style="width:150px; display:flex; " data-idd={elm.contactssId} data-user={elm.usercontactId}>
+                                                {elm.contactName}</p>
+                                        </div>
+                                        <div class="list-data" data-idd={elm.contactssId} data-user={elm.usercontactId}>
+                                            <!-- <p style="font-weight:600; width:150px; color: #E10202;" data-idd={elm.Id}
+                                                data-user={elm.UserId__c}>{elm.Account.siebelAccountCode__c}</p> -->
+                                            <p style="min-width:150px " data-idd={elm.contactssId} data-user={elm.usercontactId}>
+                                                {elm.branchName}</p>
+                                        </div>
+                                        <!-- <div class="list-data" data-idd={elm.Id} data-user={elm.contactssId}> -->
+                                            <!-- <p style="width:150px" data-idd={elm.Id} data-user={elm.contactssId}> -->
+                                                <!-- <template for:each={elm.brnach} for:item="bran">
+                                                    <div class="list-element" key={bran.branchId} data-idd={bran.branchId}>
+                                                            <p style="width:150px " data-idd={bran.branchId}>
+                                                                {bran.branhesname}</p>
+                                                    </div>
+                                                </template> -->
+                                            <!-- </p> -->
+                                        <!-- </div> -->
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <!-- <div class="footer-buttons">
+                            <a href={homeUrl} style="color: white;"><button
+                                    class="button return-button">トップに戻る</button></a>
+                            <a href={addUserUrl} style="color: white; "><button
+                                    class="button submit-button">会員追加</button></a>
+                        </div> -->
+
+                    </div>
+                </template>
+
+                <template if:true={showUserDetails}>
+                    <template if:true={userDetailsLoader}>
+                        <div
+                            style="position: relative; width:100%; height:350px; display:flex; justify-content:center; align-items:center;">
+                            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                        </div>
+                    </template>
+                    <template if:false={userDetailsLoader}>
+                        <div class="main-content">
+                            <h1 class="centered-text-inside">会員情報</h1>
+                            <div class="form">
+                                <div class="form_container">
+                                    <div class="deleteUser" onclick={handleDeleteUser}>
+                                        <lightning-icon icon-name="utility:close" size="x-small" variant="container"
+                                            alternative-text="Delete User" class="slds-m-left_small Abtn icon-red"
+                                            title="Delete User"></lightning-icon>
+                                        <p>この会員を削除する</p>
+                                    </div>
+                                    <div class="datarec">
+                                        <div class="records">
+                                            <div class="head">{labels.CCP2_CompanyName}</div>
+                                            <div class="data">{userDetailData.account.name}</div>
+                                        </div>
+                                        <div class="records">
+                                            <div class="head">{labels.CCP2_CustomerNumber}</div>
+                                            <div class="data">{userDetailData.account.siebelAccountCode__c}</div>
+                                        </div>
+                                        <div class="records">
+                                            <div class="head">{labels.CCP2_FullName}</div>
+                                            <div class="data">{userDetailData.Name}</div>
+                                        </div>
+                                        <div class="records">
+                                            <div class="head">{labels.CCP2_NameFurigana}</div>
+                                            <div class="data">{userDetailData.lastNameKana__c} {userDetailData.firstNameKana__c}</div>
+                                        </div>
+                                        <div class="records">
+                                            <div class="head">{labels.CCP2_EmployeeNumber}</div>
+                                            <div class="data">{userDetailData.Employee_Code__c}</div>
+                                        </div>
+                                        
+                                        <div class="records">
+                                            <div class="head">{labels.CCP2_Deploy}</div>
+                                            <div class="data">{userDetailData.Department}</div>
+                                        </div>
+                                        <div class="records">
+                                            <div class="head">{labels.CCP2_Post}</div>
+                                            <div class="data">{userDetailData.Title}</div>
+                                        </div>
+                                        <div class="records">
+                                            <div class="head">
+                                                {labels.CCP2_Affiliation}
+                                            </div>
+                                            <div class="dataBranch2">
+                                                <template for:each={branchfromjunction} for:item="elm">
+                                                    <div key={elm.Name} class="data2">{elm.Name}</div>
+                                                </template>
+                                            </div>
+                                            <!--Changing for Combo-->
+                                            <!-- Changing End -->
+                                        </div>
+                                        <div class="records">
+                                            <div class="head">{labels.CCP2_EmailAddress}</div>
+                                            <div class="data">{userDetailData.email}</div>
+                                        </div>
+                                        <div class="records">
+                                            <div class="head">{labels.CCP2_TelephoneNumber}</div>
+                                            <div class="data">{userDetailData.Phone}</div>
+                                        </div>
+                                        <div class="records">
+                                            <div class="head">{labels.CCP2_CellphoneNumber}</div>
+                                            <div class="data">{userDetailData.MobilePhone}</div>
+                                        </div>
+                                        <div class="records">
+                                            <div class="head">{labels.CCP2_ServiceUsed}</div>
+                                            <div class="dataBranch">
+                                                <template for:each={userServicesData} for:item="elm">
+                                                    <div key={elm} class="data">{elm}</div>
+                                                </template>
+                                            </div>
+                                            <!-- <div class="data">Not Found</div> -->
+                                        </div>
+                                        <!-- <div class="records">
+                                        <div class="head">Affilated Vehicles</div>
+                                        <div class="data">
+                                             <template for:each={vehicle} for:item="veh">
+                                                <div key={veh.Id} class="record-item">
+                                                    <span>{veh.Name}</span>
+                                                    <br>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <div class="records">
+                                        <div class="head">Users</div>
+                                        <div class="data">
+                                           <template for:each={contacts} for:item="contact">
+                                                <div key={contact.Id} class="record-item">
+                                                    <span>{contact.Name}</span>
+                                                    <br>
+                                                </div>
+                                            </template> 
+                                        </div>
+                                    </div> -->
+                                    </div>
+                                   
+                                    <div class="buttonEdit">
+                                        <div class="btn" onclick={handleEditChange}>
+                                            <P class="toedit">{labels.CCP2_ToEdit}</P>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="deleteUser" onclick={handleDeleteUser}>
+                                        <lightning-icon icon-name="utility:close" size="x-small" variant="container"
+                                            alternative-text="Delete User" class="slds-m-left_small Abtn icon-red"
+                                            title="Delete User"></lightning-icon>
+                                        <p>{labels.CCP2_DeleteThisMember}</p>
+                                    </div> -->
+
+                                </div>
+                                <div class="form_footer">
+                                    <div class="btn1" onclick={handleReturnClick}>
+                                        <P class="toedit">会員管理へ</P>
+                                    </div>
+                                    <!-- <div class="deleteUser" onclick={handleDeleteUser}>
+                                        <lightning-icon icon-name="utility:close" size="x-small" variant="container"
+                                            alternative-text="Delete User" class="slds-m-left_small Abtn icon-red"
+                                            title="Delete User"></lightning-icon>
+                                        <p>この会員を削除する</p>
+                                    </div> -->
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </template>
+
+
+                </template>
+
+                <template if:true={showEditUserDetails}>
+                    <div class="main-content">
+                        <h2 class="heading">会員情報</h2>
+                        <div class="form">
+                            <div class="form_container form_container_save">
+                                <!-- Company Name -->
+                                <div class="records">
+                                    <div class="head head-save">{labels.CCP2_CompanyName}</div>
+                                    <div class="data">{userDetailData.account.name}</div>
+                                </div>
+
+                                <!-- Customer Number -->
+                                <div class="records">
+                                    <div class="head head-save">{labels.CCP2_CustomerNumber}</div>
+                                    <div class="data">{userDetailData.account.siebelAccountCode__c}</div>
+                                </div>
+
+                                <!-- Full Name -->
+                                <div class="records">
+                                    <div class="head head-save head-save-cnt">{labels.CCP2_FullName} <span
+                                            class="reqtxt">{labels.CCP2_Required}</span></div>
+                                    <div class="data">
+                                        <div class="dataCellName">
+                                            <span class="data-cell-item">姓</span>
+                                            <span class="data-cell-item">名</span>
+                                        </div>
+                                        <div class="dataCellName">
+                                            <div class="name-div">
+                                                <input type="text" class={contactClassLastName} onchange={handleInputChange}
+                                                    data-field="姓" value={InputLastName} placeholder="森下" maxlength="10" />
+                                                <div if:true={Lnameerror} class="error-text">{Lnameerror}</div>
+                                            </div>
+                                            <div class="name-div">
+                                                <input type="text" class={contactClassFirstName}
+                                                    onchange={handleInputChange} data-field="名" value={InputFirstName}
+                                                    placeholder="○○" maxlength="10" />
+                                                <div if:true={Fnameerror} class="error-text">{Fnameerror}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Name (furigana) -->
+                                <div class="records">
+                                    <div class="head head-save head-save-cnt">{labels.CCP2_NameFurigana} <span
+                                            class="reqtxt">{labels.CCP2_Required}</span>
+                                    </div>
+                                    <div class="data">
+                                        <div class="dataCellName">
+                                            <span class="data-cell-item">姓（フリガナ）</span>
+                                            <span class="data-cell-item">名（フリガナ）</span>
+                                        </div>
+                                        <div class="dataCellName">
+                                            <div class="name-div">
+                                                <input type="text" class={contactClassFKanaName}
+                                                    onchange={handleInputChange} data-field="姓（フリガナ）" value={InputLKanaName}
+                                                    placeholder="モリシタ" maxlength="10" />
+                                                    <div if:true={Lkanaerror} class="error-text">{Lkanaerror}</div>
+                                            </div>
+                                            <div class="name-div">
+                                                <input type="text" class={contactClassFKanaName}
+                                                    onchange={handleInputChange} data-field="名（フリガナ）" value={InputFKanaName}
+                                                    placeholder="○○" maxlength="10" />
+                                                    <div if:true={Fkanaerror} class="error-text">{Fkanaerror}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Employee Number -->
+                                <div class="records">
+                                    <div class="head head-save">{labels.CCP2_EmployeeNumber}</div>
+                                    <div class="data"><input type="text" onchange={handleInputChange} data-field="社員番号"
+                                            value={InputEmpCode} maxlength="24" placeholder="A0002"></div>
+                                </div>
+                                <div class="records">
+                                    <div class="head head-save">{labels.CCP2_Deploy}</div>
+                                    <div class="data"><input type="text" onchange={handleInputChange} data-field="部署"
+                                            value={InputDepartment} maxlength="24" placeholder="自動・製造・エネルギー"></div>
+                                </div>
+
+                                <!-- Post -->
+                                <div class="records">
+                                    <div class="head head-save">{labels.CCP2_Post}</div>
+                                    <div class="data">
+                                        <input type="text" onchange={handleInputChange} maxlength="24" data-field="役職"
+                                            value={InputPost} placeholder="課長">
+                                    </div>
+                                </div>
+                                <!-- Affiliation -->
+                                <div class="records">
+                                    <div class="head head-save">{labels.CCP2_Affiliation}
+                                    <span
+                                    class="reqtxt">{labels.CCP2_Required}</span>
+                                </div>
+                                    <div class="data" style="display:flex; gap:12px; ">
+                                        <div class="dataDrop">
+                                            <input type="text" oninput={handleSearch} onclick={handlebranChange}
+                                                class={contactClassBranch} placeholder="選択してください">
+                                                <div if:true={ErrorText} class="error-text">{ErrorText}</div>
+                                            <template if:true={showlist}>
+                                                <div class="lists" onclick={handleInsideClick}>
+                                                    <template for:each={filteredbranch} for:item="veh">
+                                                        <div key={veh.value} class="list-item"
+                                                            onclick={handleBranchSelect} data-id={veh.value}>
+                                                            <p>{veh.label}</p>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="branchrecords">
+                                            <template if:false={branchPlaceholder} >
+                                                <template for:each={branchfromjunction} for:item="veh">
+                                                    <div key={veh.Id} class="record-item">
+                                                        <lightning-icon icon-name="utility:close" size="x-small"
+                                                            alternative-text="Delete" onclick={handleDeleteBranch}
+                                                            data-id={veh.Id} class="filtericn"></lightning-icon>
+                                                        <span>{veh.Name}</span>
+                                                        <br>
+                                                    </div>
+                                                </template>
+                                                <template for:each={branch} for:item="veh">
+                                                    <div key={veh.Id} class="record-item">
+                                                        <lightning-icon icon-name="utility:close" size="x-small"
+                                                            alternative-text="Delete" onclick={handleDeleteBranch}
+                                                            data-id={veh.Id} class="filtericn"></lightning-icon>
+                                                        <span>{veh.Name}</span>
+                                                        <br>
+                                                    </div>
+                                                </template>
+                                            </template>
+                                            <template if:true={branchPlaceholder}>
+                                                <p class="custom-placeholder">選択された勤務地</p>
+                                            </template>
+                                        </div>
+                                        <!-- <div class="branchrecords">
+                                            <template for:each={branch} for:item="veh">
+                                                <div key={veh.Id} class="record-item">
+                                                    <lightning-icon icon-name="utility:close" size="x-small"
+                                                        alternative-text="Delete" onclick={handleDeleteBranch}
+                                                        data-id={veh.Id} class="filtericn"></lightning-icon>
+                                                    <span>{veh.Name}</span>
+                                                    <br>
+                                                </div>
+                                            </template>
+                                        </div> -->
+                                    </div>
+                                    <!-- </div> -->
+                                </div>
+
+                                <!-- <template for:each={userDetailData.Branchs__r} for:item="branch">
+                                            <div key={branch.Id} class="data">{branch.Name}</div>
+                                        </template> -->
+
+                                <!-- Deploy -->
+                                
+
+                                <!-- Email Address -->
+                                <div class="records">
+                                    <div class="head head-save head-save-cnt">{labels.CCP2_EmailAddress} <span
+                                            class="reqtxt">{labels.CCP2_Required}</span>
+                                    </div>
+                                    <div class="data"><input type="text" onchange={handleInputChange}
+                                            data-field="メールアドレス" value={InputEmail} maxlength="40" class={contactClassEmail}
+                                            placeholder="○○@cubastion.com">
+                                            <div if:true={emailerrorText} class="error-text">{emailerrorText}</div>
+                                        </div>
+                                </div>
+
+                                <!-- Telephone Number -->
+                                <div class="records">
+                                    <div class="head head-save head-save-align">{labels.CCP2_TelephoneNumber} <span
+                                            class="reqtxt">{labels.CCP2_Required}</span>
+                                    </div>
+                                    <div class="data data-align">
+                                        <div class="">電話番号あるいは携帯番号のいずれかをハイフンなしで入力してください</div>
+                                        <div class="records_number" style="margin-top: 15px;">
+                                            <div class="phn-label">{labels.CCP2_TelephoneNumber}</div>
+                                            <div class="phn-input"><input type="text" class={contactClassTelephone}
+                                                    onchange={handleInputChange} data-field="電話番号"
+                                                    value={InputTelephone} oninput={handleInputValidation} maxlength="11" pattern="\d*" required
+                                                    placeholder="03621268002">
+                                                    
+                                                </div>
+                                        </div>
+                                        <div class="records_number">
+                                            <div class="phn-label">{labels.CCP2_CellphoneNumber}</div>
+                                            <div class="phn-input"><input type="text" class={contactClassCellPhone}
+                                                    onchange={handleInputChange} data-field="携帯番号"
+                                                    value={InputCellPhone} oninput={handleInputValidation} maxlength="11" pattern="\d*" required
+                                                    placeholder="03621268002">
+                                                    </div>
+                                        </div>
+                                        <div if:true={telephoneErrorText} class="error-text">{telephoneErrorText}</div>
+                                        <div if:true={cellPhoneErrorText} class="error-text">{cellPhoneErrorText}</div>
+                                    </div>
+                                </div>
+
+                                <!-- Service Used -->
+                                <div class="records">
+                                    <div class="head head-save">{labels.CCP2_ServiceUsed}</div>
+                                    <div class="data">
+                                        <div class="checked-service">
+                                            <input type="checkbox" checked disabled style="width:20px; height:20px; margin-right:7px; margin-bottom: 10px;">基本サービス（ふそうショップ）
+                                        </div>
+
+                                        <template for:each={allServicesListData} for:item="elm">
+                                            <div class="checkboxContainer" key={elm.apiName}><input type="checkbox"
+                                                    class="input-checkbox" style="width:20px; height:20px;"
+                                                    data-field={elm.apiName} checked={elm.isActive}
+                                                    onchange={handleCheckInputChange}>
+                                                <span>{elm.name}</span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="form-footer">
+                                <div class="button2">
+                                    <div class="btn2" onclick={handleCancel}>
+                                        <P class="toedit2">キャンセル</P>
+                                    </div>
+                                </div> 
+                                <!-- Save Button -->
+                                <div class="btn-yes btn-yes-save">
+                                    <div class="btn btn-save" onclick={saveFormData}>
+                                        <p class="toedit txt-save">保存</p>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <template if:true={showDeleteScreen}>
+                    <div class="delete-page">
+                        <h2 class="delete-heading">会員削除完了</h2>
+                        <p class="delete-text">
+                            このアカウントを削除しました。
+                                                     </p>
+                        <div class="btn-top" onclick={handleReturnClick2}>
+                            <!-- {labels.CCP2_Return} -->
+                            会員管理へ
+                        </div>
+                    </div>
+                </template>
+
+                <template if:true={IsUsercountZero}>
+                    <div class="main-content" style="padding: 64px calc(256px - 10%) 64px calc(256px - 10%);">
+                        <h2 class="heading">会員管理</h2>
+                        <div class="list-container list-container-new">
+                            <p class="text-para">会員がありません、追加してみませんか？</p>
+                            <div class="button-container" style="display: flex; justify-content: center;">
+                                <a href={addUserUrl} style="color: white; ">
+                                    <button class="button add-user-button">会員追加</button>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="footer-buttons">
+                            <a href={homeUrl} style="color: white;"><button
+                                    class="button return-button">トップに戻る</button></a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+
+    <template if:true={showconfModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container custom-width-modal">
+                <div class="slds-modal__content slds-text-heading_small"
+                    style="border-radius:8px; background-color: #ffffff;">
+                    <div class="content-modal">
+                        <h1>このアカウントを削除します.</h1>
+                        <div class="btn-modal">
+                            <button class="btn-no" style="background-color:#F4F4F4;" onclick={handleNo}>いいえ</button>
+                            <button class="btn-yes" onclick={handleYes}>はい</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- <template if:true={showCancelModal}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open custom-modal">
+            <div class="slds-modal__container custom-modal-container2">
+                <div class="slds-modal__content slds-text-heading_medium custom-modal-content-cancel" style="overflow-y: hidden;">
+                    <div class="content-modal-Cancel">
+                        <div class="modal-title">
+                            <p>            <strong>    入力された内容が保存していませんが、</strong></p>
+                            <br>
+                            <p><strong>終了しますか？</strong></p>
+                                    </div>
+                        
+                        <div class="btn-modal">
+                            <div class="form-footer-modal">
+                                <div class="button2No">
+                                    <div class="btn2No" onclick={CancelhandleNo}>
+                                        <P class="toedit2No">いいえ</P>
+                                    </div>
+                                </div>
+                                <div class="buttonYes">
+                                    <div class="btnYes" onclick={CancelhandleYes}>
+                                        <P class="toeditYes">はい</P>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template> -->
+    
+    <template if:true={showCancelModal}>
+        <div class="modal-background-last">
+        <div class="modal-window-small">
+        <div class="warning">
+        <p class="warntxt">入力された内容が保存していませんが、</p>
+        <p class="warntxt more"> 終了しますか？</p>
+        </div>
+        <div class="buttons-small">
+        <div class="cancelbutton btn-cancel" onclick={CancelhandleNo}>
+        <p class="buttontxt">いいえ</p>
+        </div>
+        <div class="searchbutton btn-cancel" onclick={CancelhandleYes}>
+        <p class="buttontxt2">はい</p>
+        </div>
+        </div>
+        </div>
+        </div>
+        </template>	
+    <template if:true={showModal}>
+        <div class="modal-background-last">
+            <div class="modal-window-loader">
+                    <p class="warntxt">基本情報の編集が保存しました。</p>
+            </div>
+        </div>
+    </template>
+</template>

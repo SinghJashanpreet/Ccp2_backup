@@ -1,0 +1,106 @@
+<template>
+    <div class="main">
+        <div class="half top">
+            <img src={backgroundImagePC} class="main_image" alt="background_Image">
+         </div>
+        <div class="half bottom">
+            <div class="center-content">
+                <template if:true={showSpinner}>
+                    <lightning-spinner style="border-radius:8px;" alternative-text="Loading" size="small"></lightning-spinner>
+                </template>
+                <template if:true={showVehicleList}>
+                    <div class="mainveh">
+                        <div class="Header">
+                            <div class="VehCount"><p style="color: #0A0A0A; font-weight: bold;">Vehicle Count ({VehicleCount} Trucks)</p></div>
+                            <div class="right">
+                                <div class="search">
+                                    <lightning-icon icon-name='utility:search' alternative-text='search' size='xx-small'  class="srch-icn" style="color: #0A0A0A;" title='filterList'></lightning-icon>
+                                    <input type="text" class="search-box" placeholder="Search Vehicle">
+                                </div>
+                                <div class="filter">
+                                    <lightning-icon icon-name='utility:filterList' alternative-text='filterList' size='xx-small'  class="filter-icn" style="color: #0A0A0A;" title='filterList'></lightning-icon>
+                                    <p class="ftext">Filter</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Vehicle_list">
+                            <div class="Vehicle_list_container">
+                                <div class="container-list">
+                                    <template if:true={vehicleData}>
+                                        <template for:each={vehicleData} for:item="vehicle">
+                                            <div key={vehicle.Id} class="card" data-id={vehicle.Id} onclick={handlecardClick}>
+                                                <div class="notifications"></div>
+                                                <div class="headerno"></div>
+                                                <div class="details">
+                                                    <div class="image data">
+                                                        <img src="https://tfltruck.com/wp-content/uploads/2013/12/38504_1_1.jpg" alt="vehicle"/>
+                                                        <!-- {vehicle.TruckImg__c} -->
+                                                    </div>
+                                                    <div class="regno data">
+                                                        <p class="head">Registration No</p>
+                                                        <p class="Datahead">{vehicle.Registration_Number__c}</p>
+                                                    </div>
+                                                    <div class="maker data">
+                                                        <p class="head">Car Name</p>
+                                                        <p class="Datahead">{vehicle.Vehicle_Name__c}</p>
+                                                    </div>
+                                                    <div class="vehicle data">
+                                                        <p class="head">Type of Vehicle</p>
+                                                        <p class="Datahead">{vehicle.Vehicle_Type__c}</p>
+                                                    </div>
+                                                    <div class="regperson data">
+                                                        <p class="head">Mileage</p>
+                                                        <p class="Datahead">{vehicle.Mileage__c} km</p>
+                                                    </div>
+                                                    <div class="year data">
+                                                        <p class="head">Expiration Date</p>
+                                                        <p class="Datahead">{vehicle.Vehicle_Expiration_Date__c}</p>
+                                                    </div>
+                                                    <div class="nextdate data">
+                                                        <p class="head">Next Date</p>
+                                                        <p class="Datahead">{vehicle.First_Registration_Date__c}</p>
+                                                    </div>
+                                                    <div class="addition data"></div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </template>
+                                    <template if:true={vehicleData.error}>
+                                        <!-- <p>{vehicleData.error}</p> -->
+                                         <p>error</p>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <div class="btngrp">
+                                <div class="write">
+                                    <img src={DelVehIcon} alt="delete vehicle" class="imgs1">
+                                     <p class="ftext" style="font-weight: 0px;" >Edit</p>
+                                </div>
+                                <div class="print">
+                                    <lightning-icon icon-name='utility:print' alternative-text='print' size='xx-small'  class="filter0-icn" style="color: #0A0A0A;" title='filterList'></lightning-icon>
+                                    <p class="ftext" style="font-weight: 0px;" >Print</p>
+                                </div>
+                                <div class="download">
+                                    <img src={DownloadIcon} alt="download vehicle list" class="imgs2">
+                                    <p class="ftext" style="font-weight: 0px;">Download</p>
+                                </div>
+                            </div>
+                            <div class="btn" onclick={showVehicleRegistration}>
+                                <p style="color: #0A0A0A;font-weight: bold;">車両登録</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template if:true={showVehicleDetails}>
+                    <c-ccp2-_-vehicle-details vehicle-id={vehicleId} onback={handleBack}></c-ccp2-_-vehicle-details>
+                </template >
+                <template if:true={showVehicleModal}>
+                    <c-ccp2-vehicle-modal onclosemodal={handleCloseModal}  onmovemodal={handlemoveModal}></c-ccp2-vehicle-modal>
+                </template>           
+            </div> 
+        </div>
+    </div>
+     
+</template>

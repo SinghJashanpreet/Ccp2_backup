@@ -71,15 +71,12 @@
   width: calc(100vw - 16px);
 }
 
-.center-content {
-  position: relative;
+.form {
   height: 100%;
-  margin-top: -80.5vh;
-  width: 90%;
   /* background-color: rgba(251, 251, 251, 0.9); */
   background: linear-gradient(to bottom, rgba(251, 251, 251, 0.9), white);
   border-radius: 10px;
-  margin-bottom: 50px;
+  padding: 2rem 0rem 0.5rem 0rem;
 }
 
 .dev {
@@ -236,7 +233,6 @@
   font-family: "Noto Sans JP";
   font-size: x-large;
   text-align: center;
-  margin-top: 5%;
   font-weight: bold;
 }
 
@@ -378,6 +374,14 @@
   border: 1px solid lightgrey;
   padding: 3%;
 }
+.input-field-modal2 {
+  font-family: "Noto Sans JP";
+  width: 10.2vw;
+  height: 50px;
+  border-radius: 8px;
+  border: 1px solid lightgrey;
+  padding: 3%;
+}
 
 .hide-error {
   display: none;
@@ -434,7 +438,7 @@
 
 .input-field2 {
   font-family: "Noto Sans JP";
-  width: 4.5vw;
+  width: 4.4vw;
   height: 50px;
   border-radius: 8px;
   border: 1px solid lightgrey;
@@ -509,7 +513,7 @@
   padding-left: auto;
   background: var(--dropdown-icon) no-repeat;
   background-size: 20px;
-  background-position: 8.2rem 50%;
+  background-position: 6.25rem 50%;
   /* color: white; */
 }
 
@@ -667,6 +671,7 @@
 
 .input-container {
   display: flex;
+  flex-direction: column;
 }
 
 .disp-label {
@@ -770,6 +775,7 @@
   align-items: center;
   color: #e10202;
   gap: 5px;
+  white-space: nowrap;
 }
 
 .input-field-img::placeholder {
@@ -950,6 +956,9 @@
 .input-field-modal::placeholder {
   opacity: 0.5;
 }
+.input-field-modal2::placeholder {
+  opacity: 0.5;
+}
 
 input::placeholder {
   opacity: 0.5 !important;
@@ -1032,4 +1041,209 @@ ul {
 .invalid-input {
   outline: solid 2px #e10202;
   background-color: #feeeed !important;
+}
+
+@media (max-width: 1920px) and (min-width: 1800px) {
+  .input-field{
+    width: 17.5vw;
+  }
+  .input-field1{
+    width: 6vw;
+  }
+  .input-field2{
+    width: 3.4vw;
+  }
+  .input-field3{
+    width: 2.5vw;
+  }
+  .input-field4{
+    width: 5vw;
+  }
+  .inputlight{
+    width: 17.3vw;
+  }
+  .section-header{
+    padding: 0px 6.5% 0px 7.5%;
+  }
+  .input-field-modal{
+    width: 8.5vw;
+  }
+  .input-field-modal2{
+    width: 8.5vw;
+  }
+  .input-field-img{
+    width: 17.5vw;
+  }
+  .input-field-mil{
+    width: 15.9vw;
+  }
+  .Inputs12{
+    width: 8.25vw;
+  }
+  .addMain{
+    width: 12vw;
+  }
+  .dataScroll{
+    width: 8.25vw;
+  }
+  .Inputs1{
+   width: 17.5vw;
+  }
+  .lists2{
+    width: 17.5vw;
+  }
+  .icon2{
+    background-position: 15.6vw;
+  }
+  .icon{
+    background-position: 8.25rem 50%;
+  }
+  .lists{
+    width: 8.25vw;
+  }
+}
+@media (max-width: 1799px) and (min-width: 1601px) {
+  .section-header{
+    padding: 0px 3.6% 0px 7.5%;
+  }
+  .input-field{
+    width: 20.5vw;
+  }
+  .input-field1{
+    width: 7vw;
+  }
+  .input-field2{
+    width: 4.4vw;
+  }
+  .input-field3{
+    width: 3vw;
+  }
+  .input-field4{
+    width: 5.3vw;
+  }
+  .inputlight{
+    width: 20.3vw;
+  }
+  .input-field-modal{
+    width: 9.95vw;
+  }
+  .input-field-modal2{
+    width: 9.2vw;
+  }
+  .input-field-img{
+    width: 20.5vw;
+  }
+  .input-field-mil{
+    width: 18.5vw;
+  }
+  .Inputs12{
+    width: 9.25vw;
+  }
+  .addMain{
+    width: 13vw;
+  }
+  .dataScroll{
+    width: 10.5vw;
+  }
+  .Inputs1{
+   width: 20.6vw;
+  }
+  .lists2{
+    width: 20.6vw;
+  }
+  .icon2{
+    background-position: 17.6vw;
+  }
+  .icon{
+    background-position: 5.25rem 50%;
+  }
+  .lists{
+    width: 9.25vw;
+  }
+}
+@media (max-width: 1600px) and (min-width: 1537px) {
+  .section-header{
+    padding: 0px 6.2% 0px 7.5%;
+  }
+  .input-field{
+    width: 20.5vw;
+  }
+  .input-field1{
+    width: 7vw;
+  }
+  .input-field2{
+    width: 4.4vw;
+  }
+  .input-field3{
+    width: 3vw;
+  }
+  .input-field4{
+    width: 5.3vw;
+  }
+  .inputlight{
+    width: 20.3vw;
+  }
+  .input-field-modal{
+    width: 9.95vw;
+  }
+  .input-field-modal2{
+    width: 9.2vw;
+  }
+  .input-field-img{
+    width: 20.5vw;
+  }
+  .input-field-mil{
+    width: 18.5vw;
+  }
+  .Inputs12{
+    width: 9.25vw;
+  }
+  .addMain{
+    width: 13vw;
+  }
+  .dataScroll{
+    width: 10.5vw;
+  }
+  .Inputs1{
+   width: 20.6vw;
+  }
+  .lists2{
+    width: 20.6vw;
+  }
+  .icon2{
+    background-position: 17.6vw;
+  }
+  .icon{
+    background-position: 7.25rem 50%;
+  }
+  .lists{
+    width: 9.25vw;
+  }
+
+}
+@media (max-width: 1537px) and (min-width: 1281px) {
+  .section-header{
+    padding: 0px 5% 0px 7.5%;
+  }
+  .inputlight{
+    width: 21.3vw;
+  }
+}
+@media (max-width: 1024px){
+  .addMain{
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  .icon2{
+    background-size: 14px;
+  }
+  .icon{
+    background-size: 14px;
+    background-position: 5.25rem 50%;
+  }
+}
+@media (max-width: 864px) {
+  .icon{
+    background-position: 4.25rem 50%;
+  }
 }

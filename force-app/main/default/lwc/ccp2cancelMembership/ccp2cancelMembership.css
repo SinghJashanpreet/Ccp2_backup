@@ -1,0 +1,1395 @@
+.withdraw-div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    /* gap: 448px; */
+    width: 80%;
+    height: 49px;
+    /* margin-left: 18.5%; */
+    /* border: solid; */
+}                
+
+@media (min-width: 1580px) {
+    .withdraw-div {
+        width: 70%;
+    }
+}
+@media (min-width: 1900px) {
+    .withdraw-div {
+        width: 60%;
+    }
+}
+@media (min-width: 2500px) {
+    .withdraw-div {
+        width: 42%;
+    }
+}
+
+.withdraw-btn{
+    color: black;
+    /* background-color: #F4F4F4; */
+    background-color: white;
+    padding: 8px 0;
+    border: none;
+    margin-right: 7%;
+    font-size: 18px;
+    border-radius: 12px;
+    height: 48px;
+    width: 176px;
+    box-shadow: 0px 0px 10px 0px #00000015; 
+}
+
+.withdraw-btn-side{
+    color: black;
+    margin-left: 7%;
+    background-color: #E7E7E7;
+    /* background-color: white; */
+    padding: 8px 0;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    height: 48px;
+    width: 176px;
+    box-shadow: 0px 0px 10px 0px #00000026;
+}
+ 
+.withdraw-btn-side:hover{
+    background-color: white;
+    color: #8F98AA;
+    border: solid;
+    border-width: 1px;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+    border-color: #8F98AA;
+}
+.withdraw-btn:hover {
+    /* background-color: white;
+    color: #8F98AA;
+    border: solid;
+    border-width: 1px;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+    border-color: #8F98AA; */
+    cursor: pointer;
+}
+
+
+
+/* .main{ */
+    /* position: relative;
+    width: 100%;
+    height: 200vh; */
+    /* position: relative;
+    width: calc(100vw - 16px);
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: -16px 0 0 -16px; */
+/* } */
+
+
+.main {
+    position: relative;
+    width: calc(100vw - 16px);
+    margin: -16px 0 0 -16px;
+    height: max-content;
+  }
+.half {
+    width: 100%;
+    left: 0;
+}
+.top {
+    height: 96vh;
+    background: linear-gradient(to bottom, #BFBFBF, #F4F4F4);
+
+}
+
+.bottom {
+    
+    position: relative;
+    height: max-content;
+    background-color: rgb(243 243 243 / 99%);
+    display: flex;
+    justify-content: center;
+    /* z-index: 1; */
+    /* margin: 0px 0px -16px -16px; */
+    width: calc(100vw - 16px);
+    
+}
+
+.bottom2{
+    position: relative;
+    background-color: rgba(251, 251, 251, 0.8);
+    display: flex;
+    justify-content: center;
+    /* margin-left: 10%; */
+    /* width: calc(85vw - 16px); */
+    /* width: 80%; */
+    /* margin-left: 3.8%; */
+    border-radius: 10px;
+    height: 80px;
+    width: 91.8%;
+}
+
+.half-bottom2 {
+    display: flex;
+    justify-content: center;
+    width: calc(100vw - 16px);
+    margin-left: -16px;
+}
+
+
+/* .center-content {
+    position: relative;
+    height: 100%;
+    margin-top: -52vh;
+    width: 90%;
+    background-color:    rgba(251, 251, 251, 0.8);
+    z-index: 2;
+    transform: translate(0%, -10%);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+} */
+
+.center-content {
+    position: relative;
+    height: 100%;
+    margin-top: -80.5vh;
+    width: 90%;
+    background-color: rgba(251, 251, 251, 0.8);
+    /* z-index: 1; */
+    border-radius: 10px;
+    margin-bottom: 20px;
+    /* left: 20px; */
+}
+
+.center-content-top{
+    position: relative;
+    height: 100%;
+    /* margin-top: -80.5vh; */
+    width: 90%;
+    background-color: rgba(251, 251, 251, 0.8);
+    /* z-index: 1; */
+    border-radius: 10px;
+    margin-bottom: 50px;
+    /* left: 20px; */
+}
+
+.heading-form{
+    font-weight: bolder;
+    font-size: x-large;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3%;
+}
+
+.heading-over-info{
+    font-weight: bold;
+    font-size: medium;
+    display: flex;
+    justify-content: left;
+    margin-top: 5%;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.center-content img{
+    width: 50%;
+    height: 18%;
+    display: block;
+    margin: auto;
+}
+
+.main-content{
+    padding: 20px 30px 30px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+
+.radio-btns{
+    font-size: 1.2em;
+    font-weight: 500;
+    /* margin-top: 4%; */
+    margin-left: 3%;
+    display: flex;
+    flex-direction: column;
+}
+
+.hr-class{
+    background-color: lightgrey;
+    margin-top: 2%;
+    margin-bottom: 5%;
+}
+
+.form{
+    display: block;
+    margin: auto;
+    margin-top: 2%;
+    /* flex-direction: column; */
+    height: 100%;
+    width: 70%;
+    block-size: auto;
+    /* align-items: center;
+    justify-content: center;
+    padding-top: 25px; */
+
+}
+
+
+.form_container{
+    margin-top: 4%;
+    width: 100%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #b7b7b7 ;
+    border-radius: 7px;
+    padding: 25px;
+}
+
+.form2-head{
+    display: flex;
+    justify-content: center;
+    font-size: large;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.part1{
+    font-size: x-large;
+    font-weight: bold;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin-bottom: 0;
+}
+/* .form_container{
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+} */
+
+.datarec{
+    width: 90%;
+}
+
+
+
+.head{
+    font-size: medium;
+    font-weight: bold;
+    color: #0A0A0A;
+    width: 150px;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin-left: inherit;
+}
+
+
+
+.data{
+    margin-left: 80px;
+    margin-top: 1px;
+    font-size: medium;
+    margin-bottom: 2px;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+
+.form_footer{
+    display: flex;
+    flex-direction: row;
+    height: 30%;
+    width: 100%;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.records{
+    margin-bottom: 25px;
+    display: flex;
+}
+
+
+
+
+.databranch{
+    display:flex;
+    flex-direction: column;
+}
+
+.toedit{
+    color: white;
+    transition: color 0.3s ease;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.btn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 170px;
+    height: 40px;
+    background-color: #8F98AA; 
+    transition: background-color 0.3s ease, border 0.3s ease, color 0.3s ease;
+}
+.button{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+}
+.btn:hover{
+    background-color: white;
+    border: 1px solid #E10202;
+    cursor: pointer;
+    color: #0A0A0A;
+}
+.btn:hover .toedit {
+    color: red;
+}
+.btn1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 170px;
+    height: 40px;
+    background-color: #8F98AA;
+    transition: background-color 0.3s ease, border 0.3s ease, color 0.3s ease;
+}
+.btn1:hover{
+    background-color: white;
+    border: 1px solid #8F98AA;
+    cursor: pointer;
+}
+.btn1:hover .toedit {
+    color: #8F98AA;
+}
+
+/* .imghead{
+    object-fit: fill;
+} */
+.overlay {
+    position: absolute;
+    /* top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1); 
+    display: flex;
+    justify-content: center;
+    align-items: center; */
+    top:20vh;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.centered-text {
+    color: white; 
+    font-size: 2.5em; 
+    font-weight: bolder;
+    margin-bottom: 30px;
+}
+
+
+
+img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.slds-modal__container {
+    max-width: 50rem;
+    max-height: 30rem;
+    width: 30%;
+}
+
+.modal1{
+    border-radius: 8px
+}
+
+.btn-no{
+    width: 120px;
+    height: 35px;
+}
+.btn-yes{
+    width:120px;
+    height: 35px;
+}
+
+.content-modal{
+    height: 7rem;
+}
+.content-modal h1{
+    margin-top: 10%;
+    text-align: center;
+    font-size: medium;
+    font-weight: bold;
+}
+.content-modal .btn-modal{
+    display: flex;
+    flex-direction: row;
+    margin-top: 5%;
+    margin-left: 15%;
+    margin-right: 15%;
+    font-size:small;
+    /* align-items: center; */
+    justify-content: space-between;
+}
+
+/* .content-modal .btn-modal button{
+    border: none;
+    border-radius: none;
+    color: black;
+    background-color:#D9D9D9;
+} */
+
+.other-input::placeholder{
+    color: #BFBFBF;
+}
+
+.content .btn-modal .btn-yes{
+    border: none;
+    font-weight: 300;
+    color: white;
+    background-color: #E10202;
+    font-family: 'Noto Sans JP', sans-serif;
+    box-shadow: 0px 0px 10px 0px #00000026;
+    border-radius: 8px;
+    /* padding: 0.5rem 1rem; */
+    cursor: pointer;
+}
+
+.content-modal .btn-modal .btn-yes:hover{
+    background-color: white;
+    color: #E10202;
+    font-weight: 300;
+    font-family: 'Noto Sans JP', sans-serif;
+    border: solid;
+    border-width: 1px;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+    border-color: #E10202;
+}
+
+/* .content-modal2{
+    height: 13rem;
+}
+
+.content-modal2 h1{
+    /* margin-top: 10%; */
+    /* text-align: center;
+    padding:2%;
+} */
+
+/* .content-modal2 .btn-modal{
+
+    display: flex;
+    flex-direction: row;
+    margin-top: 3%;
+    margin-left: 20%;
+    margin-right: 20%;
+    padding-bottom: 2%; */
+    /* align-items: center; */
+    /* justify-content: space-between;
+}
+
+.content-modal2 .btn-modal button{
+
+    border: none;
+    border-radius: none;
+    color: black;
+    background-color:#D9D9D9;
+}  */
+
+.custom-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    background-color: #ffffff0d;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1040;
+}
+
+.custom-modal-container {
+    
+    width: 30rem; /* Same width */
+    height: 20rem; /* Adjust the height as needed */
+    max-width: 90%;
+    max-height: 90%;
+    background-color: rgba(255, 255, 255, 0.9);
+    /* box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2); */
+    /* margin-top: 5%; */
+    border-radius: 7px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.content-modal2 {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    margin: 15% 20% 15% 10%;
+    /* padding: 5% 5% 5% 5%; */
+}
+
+.modal-h1 {
+    text-align: left;
+    font-size: medium;
+    font-weight: 500;
+    width: 400px;
+    /* padding: 2%; */
+    font-family: 'Noto Sans JP', sans-serif;
+    margin-top: 20%;
+}
+
+.reqtxt{
+    color: white;
+    font-size: 10px;
+    background-color: #E10202;
+    padding: 5px 6px;
+    width: 45px;
+    height: 22px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* margin-left: 4px; */
+ }
+
+.content-modal2 ul{
+    font-size: medium;
+    list-style-type: disc;
+    font-weight: 400;
+    margin-left: 10%;
+    margin-top: 5%;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin-bottom: 5%;
+}
+.content-modal2 .btn-modal {
+    display: flex;
+    flex-direction: row;
+    margin-top: 3%;
+    margin-bottom: 5%;
+    padding-bottom: 2%;
+    margin-left: 25px;
+    gap: 17px;
+    justify-content: center;
+    width: 100%;
+    /* padding-bottom: 2%; */
+}
+
+
+.btn-modal .btn-no {
+    border: none;
+    color: black;
+    font-weight: 300;
+    background-color: #F5F5F5;
+    box-shadow: 0px 0px 10px 0px #00000026;
+    font-family: 'Noto Sans JP', sans-serif;
+    border-radius: 8px;
+    /* padding: 0.5rem 1rem; */
+    cursor: pointer;
+}
+
+/* red yes color : #E10202 */
+
+.btn-modal .btn-no:hover{
+    background-color: white;
+    font-weight: 300;
+    color: #8F98AA;
+    font-family: 'Noto Sans JP', sans-serif;
+    border: solid;
+    border-width: 1px;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+    border-color: #8F98AA;
+}
+
+.btn-modal .btn-yes{
+    border: none;
+    font-weight: 300;
+    color: white;
+    background-color: #E10202;
+    font-family: 'Noto Sans JP', sans-serif;
+    box-shadow: 0px 0px 10px 0px #00000026;
+    border-radius: 8px;
+    /* padding: 0.5rem 1rem; */
+    cursor: pointer;
+}
+
+.btn-modal .btn-yes:hover{
+    background-color: white;
+    color: #E10202;
+    font-weight: 300;
+    font-family: 'Noto Sans JP', sans-serif;
+    border: solid;
+    border-width: 1px;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+    border-color: #E10202;
+}
+
+.custom-backdrop {
+    z-index: 1030;
+    opacity: 0.9;
+}
+
+.slds-backdrop.custom-backdrop.slds-backdrop_open {
+    opacity: 0.9;
+}
+
+
+
+@media (max-width: 768px) {
+
+    .withdraw-btn{
+        width: 150px;
+        height: 30px;
+        font-size: 10px;
+    }
+
+    .heading-radio{
+        margin-top: 5%;
+    }
+    
+    .heading-radio h1{
+        font-size: 0.7em;
+        /* font-weight: bolder; */
+    
+    }
+
+    .radio-btns{
+        font-size: 0.8em;
+        font-weight: bold;
+        /* margin-top: 4%; */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .check-btn label{
+        font-size: 0.7em;
+        font-weight: bold;
+        width: 100%;
+        
+    }
+
+    .month h1{
+        margin-left:2.5%;
+        font-size: 9px;
+        font-weight: lighter;
+        /* text-align: end; */
+    }
+
+    .center-content {
+        width: 90%; 
+        top: 50%; 
+        margin-top: -42vh;
+    }
+
+    .btn-no{
+        width: 50px;
+        height: 30px;
+        font-size:x-small;
+        font-weight: bold;
+    }
+    .btn-yes{
+        width:50px;
+        height: 30px;
+        font-size: x-small;
+        font-weight: bold;
+    }
+
+    .content-modal h1{
+        margin-top: 10%;
+        text-align: center;
+        font-size: small;
+        font-weight: bolder;
+    }
+
+    .head{
+        font-size: 10px;
+        margin-left: 20px;
+    }
+
+    
+    
+
+    .data{
+        font-size: 10px;
+    }
+
+    .main-content{
+        width: 100%;
+    }
+
+    .form_container {
+        width: 90%; 
+        height: 80%; 
+    }
+
+    .btn, .btn1 {
+        width: 100px; 
+        height: 40px; 
+    }
+}
+
+.card{
+    /* font-size: larger; */
+    /* font-weight: bolder; */
+    color:black;
+}
+
+.heading-radio{
+    display: flex;
+    font-size: 1.3em;
+    margin-top: 5%;
+}
+
+.heading-radio h1{
+    font-weight: bolder;
+
+}
+
+input[type="radio"]:checked + label {
+    accent-color: red;
+}
+
+.selected {
+    accent-color: red;
+    font-size: large;
+    margin-top: 5%;
+    margin-right: 1%;
+    font-family: 'Noto Sans JP', sans-serif;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.selected2{
+    accent-color: red;    
+    transform: scale(1.2);
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.other-input{
+    border-radius: 7px;
+    margin-left: 3%;
+    margin-top: 0.5%;
+    width: 80%;
+    height: 40px;
+    padding-left: 2%;
+    padding-top: 16px;
+    padding-bottom: 53px;
+        border: 1px solid lightgrey;
+    font-size: medium;
+    background-color: white;
+}
+.form-footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.button2{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+}
+.btn2:hover{
+    background-color: white;
+    border: 1px solid grey;
+    cursor: pointer;
+    color: #0A0A0A;
+}
+.btn2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    width: 180px;
+    height: 40px;
+    background-color:  #ededed;
+    color: black;
+    transition: background-color 0.3s ease, border 0.3s ease, color 0.3s ease;
+}
+.toedit2{
+     color:black;
+    transition: color 0.3s ease;
+    font-family: Helvetica, Arial, sans-serif;
+}
+.btn2:hover .toedit2 {
+    color: #8f98aa;
+}
+
+.next-button{
+    color: white;
+    background-color: #E10202;
+    /* padding: 8px 0; */
+    border: none;
+    height: 40px;
+    width: 170px;
+    font-family: 'Noto Sans JP', sans-serif;
+    box-shadow: 0px 0px 10px 0px #00000026;
+    border-radius: 8px;
+    /* padding: 0.5rem 1rem; */
+    cursor: pointer;
+}
+
+.modal-title{
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: small;
+}
+/* .btn-modal {
+    bottom: 0;
+    left: 16%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    gap: 10px;
+    position: absolute;
+  
+} */
+.form-footer-modal{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin-top: 40px;
+            /* width: 400px;
+        margin-left: 50px;
+        margin-top: 80px; */
+}
+.custom-modal-content {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    width: 500px; /* Adjust the width as needed */
+    height: 250px;
+
+}
+.content-modal{
+    display: flex;
+    flex-direction: column;
+}
+
+.buttonYes{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+    margin-right: 60px;
+  
+  }
+  .btnYes:hover{
+    background-color: white;
+    border: 1px solid #e10202;
+    cursor: pointer;
+    color: #0A0A0A;
+  }
+  .btnYes{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 130px;
+    height: 35px;
+    border-radius: 8px;
+    background-color: #e10202;
+    color: white;
+    transition: background-color 0.3s ease, border 0.3s ease, color 0.3s ease;
+  }
+  .toeditYes{
+    color: rgb(255, 255, 255); 
+    font-size: 14px;
+   transition: color 0.3s ease;
+   font-family: Helvetica, Arial, sans-serif;
+  }
+  .btnYes:hover .toeditYes {
+   color: #e10202;
+  }
+  
+  .button2No{
+    width: 100%;
+    margin-left: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+  }
+  .btn2No:hover{
+    background-color: white;
+    border: 1px solid grey;
+    cursor: pointer;
+    color: #0A0A0A;
+  }
+  .btn2No{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    width: 130px;
+    height: 35px;
+    background-color: #ededed;
+    color: black;
+    transition: background-color 0.3s ease, border 0.3s ease, color 0.3s ease;
+  }
+  .toedit2No{
+     color:black;
+     font-size: 14px;
+    transition: color 0.3s ease;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+  .btn2No:hover .toedit2No {
+    color: #8f98aa;
+  }
+
+.next-button:hover{
+    background-color: white;
+    color: #E10202;
+    font-weight: 300;
+    font-family: 'Noto Sans JP', sans-serif;
+    border: solid;
+    border-width: 1px;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+    border-color: #E10202;
+}
+
+.check-btn{
+    font-size: 1.2em;
+    /* font-weight: bold; */
+    width: 100%;
+    /* margin-top: 4%; */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: center;
+}
+
+.check-label{
+    font-weight: bolder;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin-top: 5%;
+}
+.checkbox-div{
+    width: 80%;
+    margin-left: 5%;
+    display: flex;
+    align-items: flex-start;
+    font-weight: 400;
+    font-family: 'Noto Sans JP', sans-serif;
+    flex-direction: column;
+    margin-top: 3%;
+    margin-bottom: 5%;
+}
+
+/* @media (max-width: 1280px) {
+    .bottom2 {
+        width: 90%;
+    }
+} */
+
+.month{
+    margin-top: 1%;
+    margin-left:3.5%;
+    font-size: 0.8em;
+    font-weight: 540;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.head-input{
+    /* margin-left: 3%; */
+    font-weight: bold;
+    font-size: x-large;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.step2-input{
+    margin-bottom: 8%;
+    margin-top: 3%;
+}
+.main-head{
+    font-weight: bold;
+    font-size: x-large;
+    width: 700px;
+    text-align: left;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.main-head2{
+    margin-top: 35px;
+    width: 700px;
+    text-align: left;
+    font-weight: bold;
+    font-size: x-large;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.hrclass2line{
+    border-bottom: grey solid 4px;
+}
+.hrclass2{
+    background-color: lightgrey;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+    
+.data-input{
+    margin-bottom: 2%;
+    font-size: medium;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.prev-btn{
+    padding: 8px 0;
+    margin-right: 7%;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: black;
+    background-color: #F4F4F4;
+    border: none;
+    border-radius: 12px;
+    height: 40px;
+    width: 170px;
+    box-shadow: 0px 0px 10px 0px #00000026;
+}
+
+.prev-btn:hover {
+    background-color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+    color: #8F98AA;
+    border: solid;
+    border-width: 1px;
+    border-color: #8F98AA;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+}
+
+.step2-btns{
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    justify-content: center;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+.step3-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-family: 'Noto Sans JP', sans-serif;
+    padding: 20%;
+    font-size: large;
+    /* margin-left: 180px; */
+}
+
+.custom-modal-container2{
+    width: 25rem; /* Same width */
+    height: 15rem; /* Adjust the height as needed */
+    max-width: 90%;
+    max-height: 90%;
+    background-color: rgba(255, 255, 255, 0.9);
+    /* box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2); */
+    /* margin-top: 5%; */
+    border-radius: 7px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-h1-2{
+    text-align: center;
+    font-size: medium;
+    font-weight: 500;
+    width: 400px;
+    /* padding: 2%; */
+    font-family: 'Noto Sans JP', sans-serif;
+    margin-top: 50px;
+}
+.content-modal2-cancel{
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: left;
+        margin: 12% 20% 15% 0;
+}
+.content-modal2-cancel .btn-modal{
+    display: flex;
+    flex-direction: row;
+    /* margin-top: 19%; */
+    margin-left: 10%;
+    margin-right: 15%;
+    width: 100%;
+    font-size: small;
+    justify-content: space-around;
+    height: 100%;
+}
+
+.content-modal2-cancel .btn-modal .btn-yes{
+    border: none;
+    font-weight: 300;
+    color: white;
+    background-color: #E10202;
+    font-family: 'Noto Sans JP', sans-serif;
+    box-shadow: 0px 0px 10px 0px #00000026;
+    border-radius: 8px;
+    /* padding: 0.5rem 1rem; */
+    cursor: pointer;
+}
+
+.content-modal2-cancel .btn-modal .btn-yes:hover{
+    background-color: white;
+    color: #E10202;
+    font-weight: 300;
+    font-family: 'Noto Sans JP', sans-serif;
+    border: solid;
+    border-width: 1px;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+    border-color: #E10202;
+}
+
+.content-modal2-cancel .btn-modal .btn-no {
+    border: none;
+    color: black;
+    font-weight: 300;
+    background-color: #F5F5F5;
+    box-shadow: 0px 0px 10px 0px #00000026;
+    font-family: 'Noto Sans JP', sans-serif;
+    border-radius: 8px;
+    /* padding: 0.5rem 1rem; */
+    cursor: pointer;
+}
+.modal-background-last{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 109; /* Ensure it is on top */
+}
+.modal-window-small {
+    background-color: rgba(251, 251, 251, 1);
+    border-radius: 8px;
+    padding: 1rem 3rem 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /* width: var(--modal-width, 30%); 
+    height: var(--modal-height, 45%);  */
+    max-width: 90%; /* Max width to ensure it fits on screen */
+    max-height: 90%; /* Max height to ensure it fits on screen */
+    overflow: auto; /* Add scroll if content overflows */
+}
+.warning{
+    width: 100%;
+    height: 64%;
+    display: flex;
+    padding: 3rem;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+.warntxt{
+    font-size: 14px;
+    color: #0A0A0A;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin-bottom: 0.5rem;
+}
+.more{
+    margin-bottom: 2rem;
+}
+.buttons-small{
+    height: 36%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.searchbutton:hover{
+    cursor: pointer;
+}
+.btn21{
+    height: 2rem;
+    width: 8rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cancelbutton{
+    background-color: #f4f4f4;
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.cancelbutton:hover{
+    cursor: pointer;
+}
+.searchbutton{
+    background-color: #ea0202;
+}
+.buttontxt{
+    color: #0A0A0A;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+.buttontxt2{
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+/* red yes color : #E10202 */
+
+.content-modal2-cancel .btn-modal .btn-no:hover{
+    background-color: white;
+    font-weight: 300;
+    color: #8F98AA;
+    font-family: 'Noto Sans JP', sans-serif;
+    border: solid;
+    border-width: 1px;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+    border-color: #8F98AA;
+}
+/* master queries of screen zoom in and out */
+@media (max-width: 2560px) {
+    .center-content{
+        margin-top: -88.5vh;
+        width: 76%;
+    }
+    .bottom2 {
+        width: 76%;
+    }
+}
+@media (max-width: 1920px) {
+    .center-content{
+        margin-top: -85.5vh;
+        width: 79%;
+    }
+    .bottom2 {
+        width: 79%;
+    }
+}
+@media (max-width: 1707px) {
+    .center-content{
+        margin-top: -84.5vh;
+        width: 82%;
+    }
+    .bottom2 {
+        width: 82%;;
+    }
+}
+@media (max-width: 1686px) {
+    .center-content{
+        margin-top: -84vh;
+        width: 84%;
+    }
+}
+@media (max-width: 1600px) {
+    .center-content{
+        margin-top: -83.5vh;
+        width: 85%;
+    }
+    .bottom2 {
+        width: 85%;
+    }
+}
+
+@media (max-width: 1536px) {
+    .center-content{
+        margin-top: -82.5vh;
+        width: 87%;
+    }
+    .bottom2 {
+        width: 87%;
+    }
+}
+
+@media (max-width: 1280px) {
+    .center-content{
+        margin-top: -81.5vh;
+        width: 90%;
+    }
+    .bottom2 {
+        width: 90%;
+    }
+}
+@media (max-width: 1170px) {
+    .center-content{
+        margin-top: -80.5vh;
+    }
+}
+@media (max-width: 1000px) {
+    .center-content{
+        margin-top: -80.5vh;
+    }
+}
+@media (max-width: 1024px) {
+    .center-content{
+        margin-top: -79vh;
+    }
+}
+@media (max-width: 864px) {
+    .center-content{
+        margin-top: -76vh;
+    } 
+}
+@media (max-width: 768px) {
+    .center-content{
+        margin-top: -71vh;
+    }
+}
+@media (max-width: 640px) {
+    .center-content{
+        margin-top: -68vh;
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 768px) and (min-height: 1024px) and (max-height: 1024px) {
+    .center-content{
+        margin-top: -52.6vh;
+    }
+}
+@media only screen and (min-width: 820px) and (max-width: 820px) and (min-height: 1180px) and (max-height: 1180px) {
+    .center-content{
+        margin-top: -89.4vh;
+    }
+}
+@media only screen and (min-width: 1024px) and (max-width: 1024px) and (min-height: 1366px) and (max-height: 1366px) {
+    .center-content{
+        margin-top: -90.2vh;
+    }
+}
+@media only screen and (min-width: 912px) and (max-width: 912px) and (min-height: 1368px) and (max-height: 1368px) {
+    .center-content{
+        margin-top: -90.2vh;
+    }
+}
+@media only screen and (min-width: 1114px) and (max-width: 1114px) and (min-height: 720px) and (max-height: 720px) {
+    .center-content{
+        margin-top: -85.2vh;
+    }
+}

@@ -17,6 +17,10 @@
   cursor: default;
 }
 
+.upload-image {
+  height: 210px;
+}
+
 .main_container {
   display: flex;
   flex-direction: column;
@@ -40,7 +44,10 @@
 }
 
 .content1_right_container {
+  display: flex;
+  justify-content: center;
   width: 30%;
+  height: 230px;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 1);
 }
@@ -55,7 +62,7 @@
 .content1_left_row2 {
   border-radius: 8px;
   background-color: rgba(255, 255, 255, 1);
-  margin: 8px 24px 24px 24px;
+  margin: 8px 24px 24px 0;
 }
 .content1_left_row2_1 {
   display: flex;
@@ -393,6 +400,15 @@
 }
 
 /* not in use */
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
+}
+.close-button {
+  margin-top: -1rem;
+  margin-right: -1.5rem;
+  cursor: pointer;
+}
 
 .modal-background {
   position: fixed;
@@ -411,14 +427,77 @@
   display: flex;
   flex-direction: column;
   background-color: white;
-  border-radius: 8px;
-  padding: 15px;
+  border-radius: 10px;
+  padding: 3rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 82%;
-  max-width: 90%;
+  width: max-content;
   height: max-content;
   max-height: 90%;
   overflow: auto;
+}
+
+.upload-image-icon {
+  cursor: pointer;
+}
+
+.upload-image-list {
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  gap: 1.5rem;
+  width: fit-content;
+  overflow-y: auto;
+}
+
+.imagetext {
+  color: white;
+}
+
+.upload-image-list .upload-image-css {
+  display: inline-block;
+  width: calc(50% - 10px); /* Adjust this to fit two images */
+  margin: 5px; /* Adjust spacing between images */
+}
+
+.upload-image-top {
+  width: 100%;
+  max-width: 330px;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.upload-image-bottom {
+  max-height: 56px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  /* border: 1px solid #d9d9d9; */
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+    align-items: center;
+    z-index: 1100;
+    position: relative;
+    margin-top: -4rem;
+    margin-left: 0.5rem;
+    BACKGROUND-COLOR:#262626;
+    opacity: 0.4;
+    WIDTH: 95%;
+}
+
+.upload-image-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filtericn {
+  --sds-c-icon-color-foreground-default: #e10202;
+  --sds-c-icon-color-foreground: #e10202;
+}
+
+.filtericn {
+  cursor: pointer;
 }
 
 .header {
@@ -499,4 +578,149 @@
   .content1_left_row3 button {
     width: 104px;
   }
+}
+
+.image-container {
+  border-radius: 10px;
+  width: 100%; /* Adjust based on your container */
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.image-modal-content {
+  /* background-color: white; */
+  border-radius: 5px;
+  padding: 10px;
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+}
+
+.pagination-button lightning-icon {
+  color: #E10202; /* Custom color for the icons */
+}
+
+.image-display-area {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-display-container {
+  display: flex;
+  align-items: center;
+}
+
+.pagination-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none; /* Removes the border on focus */
+}
+
+.pagination-button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.pagination-icon2 {
+  color: #E10202;
+}
+.pagination-icon {
+  cursor:not-allowed;
+}
+
+.image-icon {
+  height: 15px;
+  width: 15px;
+  filter: invert(29%) sepia(93%) saturate(2797%) hue-rotate(338deg) brightness(94%) contrast(92%);
+}
+
+
+.pagination-button:focus {
+  outline: none; /* Ensures no outline on focus */
+}
+
+.custom-icon {
+  fill: #E10202; /* Sets the desired color */
+}
+
+.image-display-top {
+  width: 100%; /* Ensures the image container takes the full width */
+  height: 100%; /* Set this to your desired height */
+  display: flex;
+  position: relative;
+  /* align-items: center;
+  justify-content: center;
+  overflow: hidden; Ensures that any overflow is hidden */
+}
+
+.image-display-top img {
+  border-radius: 10px;
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: fill; /* Ensures the image scales to fit the container */
+}
+
+.image-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  background-color: #ccc;
+  border-radius: 50%;
+}
+
+.image-dots-container {
+  white-space: nowrap;
+}
+
+.image-pagination-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 8px;
+  left: 50%;     
+  transform:translateX(-50%);
+}
+
+.image-dot.active {
+  background-color: #E10202;
+}
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px; /* Add padding to ensure some spacing around the loader */
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #E10202; /* Red color for the loader */
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333; /* Text color */
+  font-weight: bold;
 }

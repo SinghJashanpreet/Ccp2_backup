@@ -1,0 +1,345 @@
+<template>
+    <template if:true={main}>
+        <div class="main">
+            <div class="half top">
+                <img src={backgroundImagePC}  alt="background Image">
+            </div>
+            </div>
+            <div class="half bottom">
+                <div class="center-content">
+                    <template if:true={showSpinner}>
+                        <lightning-spinner style="background-color: var(--slds-g-color-neutral-100-opacity-75, rgba(255, 255, 255, 0.735));" alternative-text="Loading" size="medium"></lightning-spinner>
+                    </template>
+                    <template if:false={showSpinner}>
+                        <template if:true={showDetails}>
+                            <div class="form">
+                                <div class="form_header">
+                                    <h1 class="centered-text">{labels.CCP2_LocationInformation}</h1>
+                                </div>
+                                <div class="form_container">
+                                    <div class="b">
+                                        <div class="delete" onclick={suremodal}>
+                                            <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete" class="filtericn"></lightning-icon>
+                                            <p class="deletetxt">この所属を削除する</p>
+                                        </div>
+                                        <div class="button">
+                                            <div class="btn" onclick={handleChange}>
+                                                <P class="toedit">{labels.CCP2_ToEdit}</P>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="datarec pure-g">
+                                        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                                            <div class="records">
+                                                <div class="head">{labels.CCP2_CompanyName}</div>
+                                                <div class="data">{CompanyName}</div>
+                                            </div>
+                                        </div>
+                                        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                                            <div class="records">
+                                                <div class="head">所属番号</div>
+                                                <div class="data">{siebelcode} - {BranchNumber}</div>
+                                            </div>
+                                         </div>
+                                         <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                                            <div class="records">
+                                                <div class="head">{labels.CCP2_BranchName}</div>
+                                                <div class="data">{branchName}</div>
+                                            </div>
+                                        </div>
+                                        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                                            <div class="records">
+                                                <div class="head">{labels.CCP2_Address}</div>
+                                                <template lwc:if={hasCombinedAddress}><div class="data display">
+                                                     <template lwc:if={hasPostalAddress}><p>〒</p></template>
+                                                   <p class="pure-u-align-left">{combinedAddress}</p></div>
+                                                </template>
+                                                <template lwc:else><div class="data center"><p class="dashsize"> - </p></div></template>
+                                            </div>
+                                        </div>
+                                        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                                            <div class="records">
+                                                <div class="head">{labels.CCP2_Contact}</div>
+                                                <template lwc:if={hasContact}><div class="data">{Contact}</div></template>
+                                                <template lwc:else><div class="data center"><p class="dashsize"> - </p></div></template>
+                                            </div>
+                                        </div>
+                                        <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                                        <div class="records-veh">
+                                             <div class="head">{labels.CCP2_Users}</div>
+                                             <template lwc:if={hasUsers}>
+                                                    <div class="datamain no-scroll"> 
+                                                        <template for:each={contacts} for:item="veh">
+                                                        <div key={veh.Id} class="record-item">
+                                                            <span>{veh.Name}</span>
+                                                            <br>
+                                                        </div>
+                                                        </template>
+                                                    </div>
+                                             </template>
+                                             <template lwc:else>
+                                                <div class="data center">
+                                                    <p class="dashsize"> - </p>
+                                                </div>
+                                             </template>
+                                        </div>
+                                    </div>
+                                    <div class="pure-u-1 pure-u-md-1-2 pure-u-lg-1-3">
+                                            <div class="records-end">
+                                                <div class="head">{labels.CCP2_AffiliatedVehicles}   
+                                                </div>
+                                                    <template lwc:if={hasVehicles}>
+                                                        <div class="datamain no-scroll">
+                                                            <template for:each={vehicle} for:item="veh">
+                                                                <div key={veh.Id} class="record-item">
+                                                                    <span>{veh.Name}</span>
+                                                                    <br>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <div class="data center">
+                                                            <p class="dashsize"> - </p>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                     </div>
+                                </div>
+                                <div class="form_footer">
+                                    <div class="btn1" onclick={goToMain}>
+                                        <P class="toedit1">所属管理へ</P>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:false={showDetails}>
+                            <div class="form" onclick={toggleDropdown}>
+                                <div class="form_header">
+                                    <h1 class="centered-text">{labels.CCP2_LocationInformation}</h1>
+                                </div>
+                                <div class="form_container2">
+                                    <div class="records margin-top">
+                                        <div class="headH">{labels.CCP2_CompanyName}</div>
+                                        <div class="data">{CompanyName}</div>
+                                    </div>
+                                    <div class="records">
+                                        <div class="headH">{labels.CCP2_BranchNumber}</div>
+                                        <div class="data">{siebelcode} - {BranchNumber}</div>
+                                    </div>
+                                    <div class="recordsI">
+                                        <div class="field">
+                                            <div class="headI">{labels.CCP2_BranchName}</div>
+                                            <div class="req"><p class="reqtxt">{labels.CCP2_Required}</p></div>
+                                        </div>
+                                        <div class="errors">
+                                            <div class="dataI"><input type="text" value={branchName} name="branch" oninput={handlevalidation} onchange={handleBranchChange} placeholder={labels.CCP2_PleaseEnter} maxlength="24" class="Inputs {branchNameClass}" required></div>
+                                            <template if:true={showerrorbranch}><p class="txterror">名前は 24 文字未満にする必要があります</p></template>
+                                            <template if:true={showerrorbranchNull}><p class="txterror">この項目は必須です</p></template>
+                                        </div>
+                                    </div>
+                                    <div class="recordsI">
+                                        <div class="field">
+                                            <div class="headAdd" >{labels.CCP2_Address}</div>
+                                            <!-- <div class="req"><p class="reqtxt">{labels.CCP2_Required}</p></div> -->
+                                        </div>
+                                        <div class="dataAdd">
+                                            <p class="txtnew">郵便番号をハイフンなしでご入力ください。</p>
+                                            <p class="txtnew back">郵便番号を入力すると、住所の自動一部が自動的表示されます。</p>
+                                            <div class="postalcode">
+                                                <p class="letter">〒</p>
+                                                <input type="text" value={postalCode} oninput={handlevalidationpostal}  placeholder="郵便番号を入力してください" class="Inputs12postal {addressClass}" >
+                                            </div>
+                                            <div class="addressversions">
+                                                <p class="addresshead">都道府県</p>
+                                                <input type="text" value={prefectures} onchange={handlePrefectureChange} placeholder="例：東京都" class="Inputs12 {addressClass}" maxlength="24">
+                                            </div>
+                                            <div class="addressversions">
+                                                <p class="addresshead">市区町村</p>
+                                                <input type="text" value={municipalities} onchange={handlemunicipalitiesChange} placeholder="例：品川区品川" class="Inputs12 {addressClass}" maxlength="24">
+                                            </div>
+                                            <div class="addressversions">
+                                                <p class="addresshead">番地</p>
+                                                <input type="text" value={streetAddress} onchange={handleStreetChange} placeholder="例：4-6-5" class="Inputs12 {addressClass}" maxlength="30">
+                                            </div>
+                                            <div class="addressversions">
+                                                <p class="addresshead">建物名・会社名</p>
+                                                <input type="text" value={buildingName} onchange={handlebuildingChange} placeholder="例：〇〇マンション000号/会社名など" class="Inputs12 {addressClass}" maxlength="24">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="recordsI">
+                                        <div class="fieldCon">
+                                         <div class="headCon">{labels.CCP2_Contact}</div>
+                                         <!-- <div class="req1"><p class="reqtxt">{labels.CCP2_Required}</p></div> -->
+                                        </div>
+                                        <div class="dataCon">
+                                            <div class="ins">{labels.CCP2_WithoutHyphen}</div>
+
+                                         <input type="text" name="contactNumber" value={Contact} onchange={handleContactNoChange} placeholder={labels.CCP2_PleaseEnter} class="Inputs12 {contactClass}" maxlength="11" pattern="\d*">
+                                         <template if:true={fullwidthnum}><p class="txterror">電話番号・携帯番号は半角数字（ハイフンなし）でご入力ください</p></template>
+                                         <!-- <div class="ins">{labels.CCP2_WithoutHyphen}</div> -->
+                                        </div>
+                                    </div>
+                                    <div class="recordsContacts">
+                                        <div class="records1">
+                                            <div class="head1">{labels.CCP2_AddUsers}</div>
+                                            <div class="comboboxheader">
+                                                <div class="instructions">
+                                                    <p class="instruct">{labels.CCP2_AssignMem}</p>
+                                                </div>
+                                                <div class="comboboxes">
+                                                        <div class="dataC com">
+                                                            <div class="dataDrop2">
+                                                                <input type="text"  onclick={handleConChange} class="Inputs1 icon" placeholder={labels.CCP2_PleaseSelect} readonly>
+                                                                <template if:true={showList}>
+                                                                    <div class="lists2 no-scroll" onclick={handleInsideClick}>
+                                                                        <template for:each={filteredContacts} for:item="veh">
+                                                                            <div key={veh.value} class="list-item" onclick={handleContactSelect} data-id={veh.value}>
+                                                                                <p>{veh.label}</p>
+                                                                            </div>
+                                                                        </template>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="recordsUser">
+                                            <div class="scrollbar">
+                                                <template if:true={hasContacts}>
+                                                    <template for:each={contacts} for:item="veh">
+                                                        <div key={veh.Id} class="record-item">
+                                                            <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete" onclick={handleDeleteContact} data-id={veh.Id} class="filtericn"></lightning-icon>
+                                                            <span class="colorcode">{veh.Name}</span>
+                                                            <br>
+                                                        </div>
+                                                    </template>
+                                                    <template for:each={moreContacts} for:item="veh">
+                                                        <div key={veh.Id} class="record-item">
+                                                            <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete" onclick={handleDeleteContact} data-id={veh.Id} class="filtericn"></lightning-icon>
+                                                            <span class="colorcode">{veh.Name}</span>
+                                                            <br>
+                                                        </div>
+                                                    </template>
+                                                </template>
+                                                <template if:false={hasContacts}>
+                                                    <p class="empty">{labels.CCP2_SelectedMembers}</p>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="recordsVehicleBox">
+                                        <div class="records1" onclick={handleOutsideClick}>
+                                            <div class="head1">{labels.CCP2_AddVehicles}</div> 
+                                            <div class="vehicleall">
+                                                    <div class="vehIns">
+                                                        <p class="vehInstruc">{labels.CCP2_AssignVeh}</p>
+                                                    </div>
+                                                    <div class="vehicles">
+                                                        <div class="dataDrop">
+                                                            <input type="text"  onclick={handlevehChange} class="Inputs1 icon" placeholder={labels.CCP2_PleaseSelect} readonly>
+                                                            <template if:true={showlist}>
+                                                                <div class="lists no-scroll" onclick={handleInsideClick}>
+                                                                    <template for:each={filteredVehicles} for:item="veh">
+                                                                        <div key={veh.value} class="list-item" onclick={handleVehicleSelect} data-id={veh.value}>
+                                                                            <p>{veh.label}</p>
+                                                                        </div>
+                                                                    </template>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                              </div>
+                                        </div>
+                                        <div class="records">
+                                            <div class="dataScroll">
+                                                <div class="scrollbar">
+                                                    <template if:true={hasVehicles}>
+                                                        <template for:each={vehicle} for:item="veh">
+                                                            <div key={veh.Id} class="record-item">
+                                                                <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete" onclick={handleDeleteVehicle} data-id={veh.Id} class="filtericn"></lightning-icon>
+                                                                <span class="vehicleInBox">{veh.Name}</span>
+                                                                <br>
+                                                            </div>
+                                                        </template>
+                                                        <template for:each={morevehicles} for:item="veh1">
+                                                            <div key={veh1.Id} class="record-item">
+                                                                <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete" onclick={handleDeleteVehicle} data-id={veh1.Id} class="filtericn"></lightning-icon>
+                                                                <span class="vehicleInBox">{veh1.Name}</span>
+                                                            </div>
+                                                        </template>
+                                                    </template>
+                                                    <template if:false={hasVehicles}>
+                                                        <p class="empty1">{labels.CCP2_SelectedVehicle}</p>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form_footerSave">
+                                    <div class="button2">
+                                        <div class="btn2" onclick={handleCancel}>
+                                            <P class="toedit2">キャンセル</P>
+                                        </div>
+                                    </div> 
+                                    <div class="btnSave" onclick={handleSave}>
+                                        <P class="toeditSave">保存</P>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+                <template if:true={showsure}>
+                    <div class="modal-background-last">
+                        <div class="modal-window-small">
+                            <div class="warning">
+                                <p class="warntxt more">この所属を削除しますか？</p>
+                            </div>
+                            <div class="buttons-small">
+                                <div class="cancelbutton btn" onclick={closesure}>
+                                    <p class="buttontxt">いいえ</p>
+                                </div>
+                                <div class="searchbutton btn" onclick={checkAndDeleteBranch}>
+                                    <p class="buttontxt2">はい</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template if:true={showModal}>
+                    <div class="modal-background-last">
+                        <div class="modal-window-loader">
+                                <p class="warntxt">所属管理の編集が保存しました。</p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+    </template>
+    <template if:false={main}>
+        <c-ccp2-Delete-Branch branch-id={branchId} onclosemodal={closesystem}></c-ccp2-Delete-Branch>
+    </template>
+    <template if:true={showCancelModal}>
+        <div class="modal-background-last">
+            <div class="modal-window-small">
+                <div class="warning">
+                    <p class="warntxt clone">入力された内容が保存していませんが、</p>
+                        <p class="warntxt more">終了しますか？</p>
+                </div>
+                <div class="buttons-small">
+                    <div class="cancelbutton btn" onclick={handleNo}>
+                        <p class="buttontxt">いいえ</p>
+                    </div>
+                    <div class="searchbutton btn" onclick={handleYes}>
+                        <p class="buttontxt2">はい</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+   
+</template>

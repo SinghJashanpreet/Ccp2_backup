@@ -39,10 +39,10 @@
 .modal-window-small {
     background-color: rgba(251, 251, 251, 1);
     border-radius: 8px;
-    padding: 15px;
+    padding: 1rem 3rem 2rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: var(--modal-width, 30%); /* Default width: 50% */
-    height: var(--modal-height, 45%); /* Default height: 50% */
+    /* width: var(--modal-width, 30%); 
+    height: var(--modal-height, 45%);  */
     max-width: 90%; /* Max width to ensure it fits on screen */
     max-height: 90%; /* Max height to ensure it fits on screen */
     overflow: auto; /* Add scroll if content overflows */
@@ -74,6 +74,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    gap: 1rem;
 }
 .close{
     margin-left: auto;
@@ -93,9 +94,13 @@
     width: 100%;
     height: 64%;
     display: flex;
-    padding: 3rem;
+    padding: 3rem 0rem;    
     justify-content: center;
     text-align: center;
+    flex-direction: column;
+}
+.more{
+    margin-bottom: 2rem;
 }
 .warntxt{
     font-size: 14px;
@@ -234,7 +239,7 @@ img{
     border: 1px solid #ccc;
     border-radius: 8px;
     width: 185px;
-        text-align: center;
+    text-align: center;
     margin-left: 10px;
 }
 .input-field-modal-invalid{
@@ -321,6 +326,7 @@ input::placeholder {
 }
 .mainforInputs{
     display: flex;
+    white-space: nowrap;
 }
 .textinvalid{
     color: #ea0202;
@@ -355,6 +361,7 @@ input::placeholder {
 }
 .cancelbutton2{
     background-color: #ea0202;
+    cursor: pointer;
 }
 .cancelbutton2.buttontxt{
     color: white;
@@ -431,22 +438,84 @@ input::placeholder {
         width: var(--modal-width, 60%);
     }
     .txt1{
-     font-size: 14px;
+     font-size: 12px;
     }
     .modal-window-small{
         width: var(--modal-width, 50%);
     }
     .cardInput{
         width: 100%;
-        height: 16rem;
+        height: 14rem;
     }
 }
-@media (max-width: 1024px) and (min-width: 769px) {
+@media (max-width: 2560px) and (min-width: 1921px) {
+    .modal-windowChassis{
+        width: var(--modal-width, 30%);
+        height: var(--modal-height, 50%);
+      }
+      .modal-finalWindow{
+        width: var(--modal-width, 20%);
+        height: var(--modal-height, 60%);
+      }
+}
+@media (max-width: 1920px) and (min-width: 1708px) {
+    .modal-windowChassis{
+        width: var(--modal-width, 35%);
+        height: var(--modal-height, 55%);
+      }
+      .modal-finalWindow{
+        width: var(--modal-width, 25%);
+        height: var(--modal-height, 65%);
+      }
+}
+@media (max-width: 1707px) and (min-width: 1699px) {
+    .modal-windowChassis{
+        width: var(--modal-width, 40%);
+        height: var(--modal-height, 60%);
+      }
+      .modal-finalWindow{
+        width: var(--modal-width, 30%);
+        height: var(--modal-height, 70%);
+      }
+      
+}
+@media (max-width: 1686px) {
+   
+}
+@media (max-width: 1600px) and (min-width: 1537px) {
+    .modal-windowChassis{
+        width: var(--modal-width, 45%);
+        height: var(--modal-height, 65%);
+      }
+      .modal-finalWindow{
+        width: var(--modal-width, 35%);
+        height: var(--modal-height, 75%);
+      }
+}
+
+@media (max-width: 1536px) and (min-width: 1281px) {
+  .modal-windowChassis{
+    width: var(--modal-width, 50%);
+    height: var(--modal-height, 70%);
+  }
+  .modal-finalWindow{
+    width: var(--modal-width, 38%);
+    height: var(--modal-height, 78%);
+  }
+}
+@media (max-width: 1170px) {
+ 
+}
+@media (max-width: 1000px) {
+   
+}
+@media (max-width: 1024px) {
+
     .modal-windowChassis{
         width: var(--modal-width, 60%);
     }
     .modal-finalWindow{
-        width: var(--modal-width, 50%);
+        width: var(--modal-width, 40%);
     }
     .txt1{
         font-size: 14px;
@@ -456,5 +525,57 @@ input::placeholder {
     }
     .cardInput{
         width: 30%;
+        height: 15rem;
     }
+}
+@media (max-width: 864px) {
+    .input-field-modal{
+        width: 145px;
+    } 
+    .label{
+        font-size: 10px;
+    }
+    .modal-windowChassis{
+        height: var(--modal-height, 90%);
+    }
+    .lists2{
+        width: 20.4rem;
+    }
+    .warntxt{
+        font-size: 10px;
+    }
+    .cardInput{
+        height: 12rem;
+    }
+}
+@media (max-width: 768px) {
+    .input-field-modal{
+        width: 145px;
+    } 
+    .label{
+        font-size: 10px;
+    }
+}
+@media (max-width: 640px) {
+    .input-field-modal{
+        width: 145px;
+    } 
+    .label{
+        font-size: 10px;
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 768px) and (min-height: 1024px) and (max-height: 1024px) {
+   
+}
+@media only screen and (min-width: 820px) and (max-width: 820px) and (min-height: 1180px) and (max-height: 1180px) {
+   
+}
+@media only screen and (min-width: 1024px) and (max-width: 1024px) and (min-height: 1366px) and (max-height: 1366px) {
+    
+}
+@media only screen and (min-width: 912px) and (max-width: 912px) and (min-height: 1368px) and (max-height: 1368px) {
+   
+}
+@media only screen and (min-width: 1114px) and (max-width: 1114px) and (min-height: 720px) and (max-height: 720px) {
+   
 }

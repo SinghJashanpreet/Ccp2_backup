@@ -40,7 +40,7 @@ ul li {
   flex-direction: column;
   justify-content: center;
   gap: 32px;
-  margin: 0 0 64px 0;
+  margin: 0 0 32px 0;
 }
 
 .full-width-one-element {
@@ -228,4 +228,29 @@ ul li {
   /* background-color: #bbbbbb; */
   cursor: not-allowed;
   /* pointer-events: none; */
+}
+@media (max-width: 1024px){
+   .upload-container{
+    width: 550px;
+   }
+   .upload-image-bottom{
+    align-items: center;
+   }
+   .upload-image-icon-container{
+    min-height: 170px;
+    height: 170px;
+   }
+   .upload-image{
+    min-height: 170px;
+    height: 170px;
+   }
+   .upload-image-sample{
+    height: 170px;
+   }
+}
+@media (max-width: 864px) {
+ /* .full-width-two-element{
+  width: 500px;
+ } */
+
 }
