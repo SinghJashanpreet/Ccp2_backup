@@ -1,71 +1,121 @@
 <template>
-    <div class="main">
-        <div class="main_container">
-            <div class="logo">
-                <a href={homeUrl} class="header_link">
-                    <img src={FusoLogo} alt="Luso logo" class="header_logo" />
-                </a>
-            </div>
-            <div class="links">
-                <a href={homeUrl} class="Home Linkend">{labels.Home}</a>
-                <template if:true={vehicleList}>
-                    <a href={vehicleListUrl} class="Vehicle Link">{labels.Vehicles}</a>
-                    
-                </template>
-                <template if:true={directBook}>
-                    <a href={homeUrl} class="Monthly Link">{labels.CCP2_MRL}</a>
+  <div class="main">
+    <div class="main_container">
+      <div class="logo">
+        <a href={homeUrl} class="header_link">
+          <svg
+            width="159"
+            height="40"
+            viewBox="0 0 159 40"
+            fill="none"
+            class="header_logo"
+            xmlns="http://www.w3.org/2000/svg"
+          > 
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M23.5094 6L18.3356 15.3499L23.5044 24.6677H13.1668L8 34H18.3376L23.5054 24.6698L28.6802 34H39.095L33.843 24.6677H23.5064L28.6672 15.3499L23.5094 6Z"
+              fill="#262626"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M46.6172 14.2963V34H51.6064V26.7023H66.844V22.6019H51.6064V18.7597H67.6816V14.2963H46.6172Z"
+              fill="#262626"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M145.217 18.7179C144.563 18.1713 141.902 18.1164 138.49 18.1164C136.142 18.1164 134.158 18.1713 133.109 18.2609C132.537 18.3098 132.06 18.455 131.722 18.7179C131.12 19.1964 131.04 19.8883 131.04 23.5142C131.04 24.2105 131.04 24.9172 131.07 25.6142C131.097 27.432 131.205 28.1298 131.569 28.5661C131.807 28.8638 132.254 29.0653 132.799 29.1587C133.905 29.3557 136.227 29.469 138.811 29.469C142.749 29.469 144.684 29.469 145.36 28.712C145.838 28.1609 145.956 27.2498 145.956 23.4298C145.956 22.2327 146.097 19.4876 145.217 18.7179ZM150.719 29.1587C150.521 30.2831 150.012 31.2801 149.245 32.0157C147.572 33.6164 145.047 33.6779 138.811 33.6779C131.205 33.6779 129.193 33.6164 127.491 31.8401C126.266 30.5513 126.018 29.1779 126.018 24.3305C126.018 23.2498 126.018 22.1727 126.044 21.0616C126.132 18.1164 126.559 16.6201 127.659 15.5031C129.051 14.169 130.98 13.8187 137.76 13.8187C138.609 13.8187 140.284 13.8409 142.805 13.9024C146.348 13.9653 147.572 14.169 148.925 15.0476C150.548 16.0705 151 17.8801 151 23.3624C151 26.2313 150.896 28.0394 150.719 29.1587ZM121.712 32.2661C120.803 33.2913 119.72 33.5824 117.537 33.5824H100.721V29.2572H115.927C116.831 29.2572 117.196 29.2572 117.561 29.0305C117.881 28.8253 117.991 28.469 117.991 27.4431C117.991 26.6327 117.904 26.3705 117.594 26.1038C117.313 25.8735 117.056 25.8142 116.086 25.8142H106.507C103.95 25.8142 103.102 25.6142 102.053 24.7616C101.007 23.9164 100.607 22.4838 100.607 19.5653C100.607 17.5683 100.836 16.5853 101.489 15.6201C101.798 15.1861 102.228 14.8305 102.734 14.595C103.701 14.1579 104.156 14.1024 106.419 14.1024H122.243V18.3053H107.446C105.883 18.3053 105.573 18.5661 105.573 19.969C105.573 21.2283 105.973 21.549 107.385 21.549H117.278C120.151 21.549 121.766 22.3401 122.504 24.0846C122.875 24.9624 123.01 25.9601 123.01 27.6809C123.01 29.9898 122.673 31.1846 121.712 32.2661ZM95.8704 31.9326C94.8276 33.3889 93.2411 33.9481 89.7488 33.9815L86.5758 34L82.6383 33.9815C78.9467 33.9481 77.3552 33.3333 76.1987 31.6318C75.4846 30.6141 75.2041 29.3037 75.2041 26.9963V14.2837H80.1384V26.497C80.1384 29.0985 80.6447 29.5081 83.6875 29.5326L86.3233 29.563L88.9002 29.5081C91.7021 29.4444 92.0768 29.0726 92.0768 25.9407V14.2837H97.0686V25.9118C97.0686 29.4444 96.8104 30.6141 95.8704 31.9326Z"
+              fill="#262626"
+            />
+          </svg>
+        </a>
+      </div>
+      <div class="links">
+        <a href={homeUrl} class="Home Linkend" onclick={handleLinkClick}
+          >{labels.Home}</a
+        >
+        <template if:true={vehicleList}>
+          <a
+            href={vehicleListUrl}
+            class="Vehicle Link"
+            onclick={handleLinkClick}
+            >{labels.Vehicles}</a
+          >
+        </template>
+        <template if:true={directBook}>
+          <a href={homeUrl} class="Monthly Link" onclick={handleLinkClick}
+            >{labels.CCP2_MRL}</a
+          >
+        </template>
+        <template if:true={eInvoice}>
+          <a href={homeUrl} class="Finance Link" onclick={handleLinkClick}
+            >{labels.CCP2_FSH}</a
+          >
+        </template>
 
-                </template>
-                <template if:true={eInvoice}>
-                    <a href={homeUrl} class="Finance Link">{labels.CCP2_FSH}</a>
-
-                </template>
-                
-                <div class="exteral">
-                    <a href={FusoShop} class="Shop Link">{labels.CCP2_FusoShop}</a>
-                    <img src={link} class="small">
-                </div>
-            </div>
-
-
-            <div class="menu">
-                <div class="user">
-                    <img src={UserIcon} class="menu_icons" onclick={openuserlist}>
-                    
-                    <template if:true={showUserList}>
-                        <template if:false={amIGuestUser}>
-                            <div class="lists">
-                                <div class="centerlists">
-                                    <template if:true={showInfo}>
-                                    <ul><a class="lists_anchor" href={profileUrl}>{labels.CCP2_BasicInfo}</a></ul>
-                                </template>
-                                <template if:true={UserManagment}>
-                                    <ul><a class="lists_anchor" href={UserManagementUrl}>{labels.CCP2_MemManage}</a></ul>
-                                </template>
-                                <template if:true={BranchManagment}>
-                                    <ul><a class="lists_anchor" href={addBranchUrl}>{labels.CCP2_BranchManage}</a></ul>
-                                </template>
-                                <template if:true={IsUserLogin}>
-                                    <ul><a class="logout" onclick={handleLogout}>{labels.CCP2_Logout}</a></ul>
-                                </template>
-                                </div>
-                            </div>
-                        </template>
-                        <template if:true={amIGuestUser}>
-                            <div class="lists">
-                                <ul><a href={loginLink}>ログイン</a></ul>
-                            </div>
-                            
-                        </template>
-                    </template>
-                </div>
-                <div class="Notifications">
-                    <img src={MessageIcon} class="menu_icons">
-                </div>
-                <div class="more">
-                    <img src={QuesIcon} class="menu_icons">
-                </div>
-            </div> 
+        <div class="exteral">
+          <a href={FusoShop} class="Shop Link">{labels.CCP2_FusoShop}</a>
+          <img src={link} class="small" />
         </div>
+      </div>
+
+      <div class="menu">
+        <div class="user">
+          <img src={UserIcon} class="menu_icons" alt="Menu" onclick={openUserList} />
+
+          <template if:true={showUserList}>
+            <template if:false={amIGuestUser}>
+              <div class="lists">
+                <div class="centerlists">
+                  <template if:true={showInfo}>
+                    <ul>
+                      <a class="lists_anchor" href={profileUrl}
+                        >{labels.CCP2_BasicInfo}</a
+                      >
+                    </ul>
+                  </template>
+                  <template if:true={UserManagment}>
+                    <ul>
+                      <a class="lists_anchor" href={UserManagementUrl}
+                        >{labels.CCP2_MemManage}</a
+                      >
+                    </ul>
+                  </template>
+                  <template if:true={BranchManagment}>
+                    <ul>
+                      <a class="lists_anchor" href={addBranchUrl}
+                        >{labels.CCP2_BranchManage}</a
+                      >
+                    </ul>
+                  </template>
+                  <template if:true={IsUserLogin}>
+                    <ul>
+                      <a class="logout" onclick={handleLogout}
+                        >{labels.CCP2_Logout}</a
+                      >
+                    </ul>
+                  </template>
+                </div>
+              </div>
+            </template>
+            <template if:true={amIGuestUser}>
+              <div class="lists">
+                <ul>
+                  <a href={loginLink}>ログイン</a>
+                </ul>
+              </div>
+            </template>
+          </template>
+        </div>
+        <div class="Notifications">
+          <img src={MessageIcon} class="menu_icons" />
+        </div>
+        <div class="more">
+          <img src={QuesIcon} class="menu_icons" />
+        </div>
+      </div>
     </div>
+  </div>
 </template>

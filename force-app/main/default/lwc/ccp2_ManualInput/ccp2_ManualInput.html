@@ -4,7 +4,7 @@
 
                     <div class={formBodyCss}>
                         <div class="mainHeading" onclick={newfun}>
-                            <p>車両手動登録</p>
+                            <p>{labels.label24}</p>
                         </div>
                         <div class="form-container">
 
@@ -13,7 +13,7 @@
                             </div>
                             <div class="section-header">
                                 <div class="mainheading2">
-                                    <p>車両の情報を入力してください。</p>
+                                    <p>{labels.label25}</p>
                                 </div>
                                 <div class="header">
                                     <button class="nav-button" onclick={handlePrevious} title="Previous"
@@ -47,29 +47,30 @@
                                         <div class="form-group-wr">
                                             <label for="vehicleNumber">
                                                 <div class="addMain">
-                                                    車両番号
+                                                    {labels.label1}
                                                 </div>
                                             </label>
-                                            <input type="text" id="vehicleNumber" class="input-field"
+                                            <input type="text" id="vehicleNumber" class="input-cursor input-field"
                                                 placeholder="10桁以内で入力してください" value={formdata.vehicleNumber}
-                                                name="vehicleNumber" oninput={handleInputChange} maxlength="10">
+                                                name="vehicleNumber" oninput={handlevalchange} onchange={handleInputChange} maxlength="10">
                                         </div>
 
                                         <div class="form-group-ChassisNumber">
                                             <label for="vehicleNumber">
                                                 <div class="addMain">
-                                                    車台番号
-                                                    <span class="reqtxt">必須</span>
+                                                    {labels.label3}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
-                                            <input type="text" class="input-field-modal chassis-color"
+                                            <input type="text" class="input-cursor input-field-modal chassis-color"
                                                 placeholder="5桁の英数字" name="chassisNum1" data-type="part1"
                                                 value={formdata.carPlatformNoPart1} oninput={handleInputChange}
+                                                
                                                 readonly>
                                             <span class="input-separator">
                                                 -
                                             </span>
-                                            <input type="text" class="input-field-modal2 chassis-color"
+                                            <input type="text" class="input-cursor input-field-modal2 chassis-color"
                                                 placeholder="7桁の英数字" name="chassisNum2" data-type="part2"
                                                 value={formdata.carPlatformNoPart2} oninput={handleInputChange}
                                                 readonly>
@@ -78,9 +79,9 @@
 
                                         <div class="form-group">
                                             <label for="loginNum">
-                                                <div class="addMain">
-                                                    登錄番号
-                                                    <span class="reqtxt">必須</span>
+                                                <div class={errorLoginParent}>
+                                                    {labels.label5}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
 
@@ -108,11 +109,11 @@
                                         <div class="form-group-wr">
                                             <label for="dateOfIssuance">
                                                 <div class="addMain">
-                                                    交付年月日
-                                                    <span class="reqtxt">必須</span>
+                                                    {labels.label7}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
-                                            <div class="input-field" style="position: relative;">
+                                            <div class="input-cursor input-field" style="position: relative;">
                                                 <lightning-input type="date" class="inputlight inputissue"
                                                     placeholder="日付を選択してください" name="dateOfIssuance"
                                                     value={formdata.dateOfIssuance}
@@ -123,11 +124,11 @@
                                         <div class="form-group-wr">
                                             <label for="initialRegistrationDate">
                                                 <div class="addMain">
-                                                    初度登録年月
-                                                    <span class="reqtxt">必須</span>
+                                                    {labels.label9}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
-                                            <div class="input-field" style="position: relative;">
+                                            <div class="input-cursor input-field" style="position: relative;">
                                                 <lightning-input type="date" class="inputlight inputreg"
                                                     placeholder="日付を選択してください" name="initialRegistrationDate"
                                                     value={formdata.initialRegistrationDate}
@@ -137,12 +138,12 @@
                                         <div class="form-group-wr">
                                             <label for="expirationDate">
                                                 <div class="addMain">
-                                                    有効期間の満了日
-                                                    <span class="reqtxt">必須</span>
+                                                    {labels.label11}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
 
-                                            <div class="input-field" style="position: relative;">
+                                            <div class="input-cursor input-field" style="position: relative;">
                                                 <lightning-input type="date" class="inputlight inputexp"
                                                     placeholder="日付を選択してください" name="expirationDate"
                                                     value={formdata.expirationDate}
@@ -154,8 +155,8 @@
 
                                             <label for="WorkLocation">
                                                 <div class="addMain">
-                                                    車名
-                                                    <span class="reqtxt">必須</span>
+                                                    {labels.label13}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
 
@@ -184,8 +185,8 @@
                                         <div class="form-group-wr">
                                             <label for="branch">
                                                 <div class="addMain">
-                                                    自動車の種別
-                                                    <span class="reqtxt">必須</span>
+                                                    {labels.label15}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
                                             <div class="Combox-input-wr">
@@ -214,7 +215,7 @@
                                         <div class="form-group-wr">
                                             <label for="Type of Car">
                                                 <div class="addMain">
-                                                    ドアナンバー
+                                                    {labels.label17}
 
                                                 </div>
 
@@ -225,16 +226,16 @@
                                                 <div>
                                                     <input type="text" id="DoorNum" class={errorDoorDiv}
                                                         placeholder="選択してください" value={formdata.doorNumber}
-                                                        name="doorNumber" onchange={handleInputChange} maxlength="10">
-                                                    <p style="color: red; margin-top: 3px;" class={errorDoorCss}>{errorDoor}</p>
+                                                        name="doorNumber" onchange={handleInputChange} oninput={handlevalchange} maxlength="10">
+                                                    <p style="color: red; margin-top: 3px;margin-left: 2%;" class={errorDoorCss}>{errorDoor}</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group-wr">
                                             <label for="CarName">
                                                 <div class="addMain">
-                                                    燃料のタイプ
-                                                    <span class="reqtxt">必須</span>
+                                                    {labels.label19}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
                                             <div class="Combox-input-wr">
@@ -264,8 +265,8 @@
                                         <div class="form-group form-margin">
                                             <label for="VehicleInspectionImage">
                                                 <div class="addMain">
-                                                    車検証画像
-                                                    <span class="reqtxt">必須</span>
+                                                    {labels.label2}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
 
                                             </label>
@@ -281,7 +282,7 @@
                                         <div class="form-group-wr form-margin">
                                             <label for="VehicleImage">
                                                 <div class="addMain">
-                                                    車両写真
+                                                    {labels.label4}
                                                 </div>
 
                                             </label>
@@ -296,9 +297,9 @@
 
                                         <div class="form-group-ChassisNumber form-margin">
                                             <label for="Model">
-                                                <div class="addMain">
-                                                    型式
-                                                    <span class="reqtxt">必須</span>
+                                                <div class={errorModelParent}>
+                                                    {labels.label6}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
                                             <div class="model-div-container">
@@ -306,20 +307,18 @@
                                                     <div>
                                                         <input type="text" class={errorModelDiv} placeholder="US9"
                                                             value={formdata.model1} name="model1" onchange={handleInputChange}
+                                                            oninput={handlevalchange}
                                                             maxlength="3">
-                                                        <!-- <p style="color: red; width: 10.2vw;" class={errorModelCss}>{errorModel}
-                                                        </p> -->
                                                     </div>
                                                     <span class="input-separator"> - </span>
                                                     <div>
                                                         <input type="text" class={errorModelDiv} placeholder="48I5"
-                                                            value={formdata.model2} name="model2" onchange={handleInputChange}
+                                                            value={formdata.model2} name="model2" oninput={handlevalchange} onchange={handleInputChange}
                                                             maxlength="7">
-                                                        <!-- <p style="color: red; width: 10.2vw;" class={errorModelCss}>{errorModel}
-                                                        </p> -->
+
                                                     </div>
                                                 </div>
-                                                <p style="color: red; width: 21.5vw; white-space:nowrap; margin-top: 3px;" class={errorModelCss}>{errorModel}
+                                                <p style="color: red; width: 21.5vw; white-space:nowrap; margin-top: 3px; margin-left: 2%;" class={errorModelCss}>{errorModel}
                                                 </p>
                                             </div>
                                         </div>
@@ -327,8 +326,8 @@
                                         <div class="form-group form-margin">
                                             <label for="PrivateBusiness">
                                                 <div class="addMain">
-                                                    自家用・事業用
-                                                    <span class="reqtxt">必須</span>
+                                                    {labels.label8}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
 
@@ -364,8 +363,8 @@
                                         <div class="form-group form-margin">
                                             <label for="BodyShape">
                                                 <div class="addMain">
-                                                    車体の形状
-                                                    <span class="reqtxt">必須</span>
+                                                    {labels.label10}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
                                             <div class="Combox-input-wr">
@@ -395,8 +394,8 @@
                                         <div class="form-group form-margin">
                                             <label for="Use">
                                                 <div class="addMain">
-                                                    用途
-                                                    <span class="reqtxt">必須</span>
+                                                    {labels.label12}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
 
                                             </label>
@@ -427,16 +426,16 @@
 
                                         <div class="form-group-wr form-margin">
                                             <label for="mileage">
-                                                <div class="addMain">
-                                                    走行距離
-                                                    <span class="reqtxt">必須</span>
+                                                <div class={errorMileageParent}>
+                                                    {labels.label14}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
                                             <div>
                                                 <input type="text" id="Mileage" class={errorMileageDiv}
                                                     placeholder="選択してください" value={formdata.mileage} name="mileage"
                                                     onchange={handleInputChange} oninput={handleInputCheck} maxlength="6">
-                                                <p style="color: red;  margin-top: 3px;" class={errorMileageCss}>{errorMileage}</p>
+                                                <p style="color: red;  margin-top: 3px; margin-left: 4%;" class={errorMileageCss}>{errorMileage}</p>
                                             </div>
                                             <span class="unit">Km</span>
 
@@ -444,9 +443,9 @@
 
                                         <div class="form-group-wr second-last-second-section">
                                             <label for="Weight">
-                                                <div class="addMain">
-                                                    車両重量
-                                                    <span class="reqtxt">必須</span>
+                                                <div class={errorCurbParent}>
+                                                    {labels.label16}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
                                             <div>
@@ -454,32 +453,33 @@
                                                     placeholder="選択してください" value={formdata.curbWeight} name="curbWeight"
                                                     onchange={handleInputChange} oninput={handleInputCheck} maxlength="4">
 
-                                                <p style="color: red;  margin-top: 3px;" class={errorCurbCss}>{errorCurb}</p>
+                                                <p style="color: red;  margin-top: 3px; margin-left: 4%;" class={errorCurbCss}>{errorCurb}</p>
                                             </div>
                                             <span class="unit">Kg</span>
                                         </div>
 
                                         <div class="form-group-branch">
-                                            <label for="branches">
-                                                <div class="addMain branch">
-                                                    所属
-                                                    <span class="reqtxt">必須</span>
+                                            <label for="branches" class="branches-16">
+                                                <div class="addMain branch branch-branch">
+                                                    {labels.label18}
+                                                    <span class="reqtxt">{labels.label23}</span>
                                                 </div>
                                             </label>
                                             <div class="dataDrop">
                                                 <input type="text" onclick={handlevehChange} readonly
                                                     class="Inputs12 icon"
                                                     placeholder="選択する">
-                                                <template if:true={showlist}>
-                                                    <div class="lists no-scroll" onclick={handleInsideClick}>
-                                                        <template for:each={branches} for:item="veh">
-                                                            <div key={veh.value} class="list-item"
-                                                                onclick={handleBranchSelect} data-id={veh.value}>
-                                                                <p>{veh.label}</p>
+                                                        <template if:true={showlist}>
+                                                            <div class="lists" onclick={handleInsideClick}>
+                                                                <template for:each={branches} for:item="veh">
+                                                                    <div key={veh.value} class="list-item"
+                                                                        onclick={handleBranchSelect} data-id={veh.value}>
+                                                                        <p>{veh.label}</p>
+                                                                    </div>
+                                                                </template>
                                                             </div>
                                                         </template>
-                                                    </div>
-                                                </template>
+                                                
                                             </div>
                                             <div class="dataScroll">
                                                 <div class="scrollbar">
@@ -507,22 +507,21 @@
                             <div class="form-footer">
                                 <div class="button cancel-btn">
                                     <div class="btn" onclick={showexit}>
-                                        <P class="toedit">出口</P>
+                                        <P class="toedit">中止</P>
                                         <!-- cancel -->
                                     </div>
                                 </div>
 
-                                <div style="display: flex; justify-content:right; align-items:center; gap:25px">
-                                    <button style="background-color: white; color:black; border:1px solid #bfbfbf;"
+                                <div style="display: flex; justify-content:right; align-items:center; gap:25px" >
+                                    <button style="border-radius: 10px;"
                                         class={finalCompletionButtonCss} name="completion-button"
-                                        onclick={handleSaveData} disabled={disableSaveButton}>完了</button>
+                                        onclick={handleSaveData} disabled={disableSaveButton}>{labels.label21}</button>
 
 
                                     <template if:false={isLastPage}>
 
-                                        <button class="searchbutton btn buttontxt2 searchbuttonnew" name="next-button"
-                                            style="color: white;" disabled={disableSaveButton}
-                                            onclick={handleSaveData}>保存して次へ</button>
+                                        <button class="searchbuttonnew" name="next-button" disabled={disableSaveButton}
+                                            onclick={handleSaveData}>{labels.label22}</button>
 
                                     </template>
                                 </div>
@@ -539,7 +538,7 @@
                             <p>車両が登録されました。</p>
                         </div>
                         <div class="footer2">
-                            <button class="searchbutton btn" onclick={handleClick}>車両一覧へ</button>
+                            <button class="searchbutton btn searchbuttonfinal" onclick={handleClick}>車両一覧へ</button>
                         </div>
                     </div>
                 </template>
@@ -554,20 +553,16 @@
 
                     <template if:true={missingChassisNumbers.length}>
                         <h3 class="headmeow gaps">下記の車両の情報がまだ入力されていません。</h3>
-                        <ul>
                             <template for:each={missingChassisNumbers} for:item="chassis">
-                                <li class="superfun" key={chassis}>{chassis}</li>
+                                <div class="superfun" key={chassis}><span class="bullet-point">•</span>{chassis}</div>
                             </template>
-                        </ul>
                     </template>
                     <template if:true={commonChassisNumbers.length}>
                         <h3 class="headmeow">下記の車両だけ登録しますか？</h3>
 
-                        <ul>
-                            <template for:each={commonChassisNumbers} for:item="chassis">
-                                <li class="superfun" key={chassis}>{chassis}</li>
-                            </template>
-                        </ul>
+                        <template for:each={commonChassisNumbers} for:item="chassis">
+                            <div class="superfun" key={chassis}><span class="bullet-point">•</span>{chassis}</div>
+                        </template>
                     </template>
 
                 </div>
@@ -575,8 +570,8 @@
                     <div class="cancelbutton btn" onclick={closesure}>
                         <p class="buttontxt">いいえ</p>
                     </div>
-                    <div class="searchbutton btn" onclick={handleShowRegisteredVehiclesFinalScreem}>
-                        <p class="buttontxt2">はい</p>
+                    <div class="searchbutton btn searchbuttonfinal2" onclick={handleShowRegisteredVehiclesFinalScreem}>
+                        <p class="buttontxt2 searchbuttontxt2">はい</p>
                     </div>
                 </div>
             </div>
@@ -603,14 +598,14 @@
         <div class="modal-background">
             <div class="modal-background-exit">
                 <div
-                    style=" color: #262626; height: 54px; width: 328px; font-weight: 400; line-height: 27px; font-size: 18px; display: flex; justify-content: center; align-items: center; margin: auto;">
+                    style=" color: #262626; height: 54px; width: 328px; font-weight: 400; line-height: 27px; font-size: 18px; display: flex; justify-content: center; align-items: center; margin: 6% auto auto;">
                     未アップロードの車両が残っています、
                     車両登録を終了しますか？</div>
                 <div class="heads heads-exit">
 
-                    <center>
+                    <!-- <center> -->
                         <h1 class="exittest">終了しますか？</h1>
-                    </center>
+                    <!-- </center> -->
                     <template if:true={missingChassisNumbers.length}>
                         <h3 class="headmeow gaps">下記の車両の情報がまだ入力されていません。</h3>
                         <ul>
@@ -632,8 +627,8 @@
                     <div class="cancelbutton btn" onclick={Closeexit}>
                         <p class="buttontxt">いいえ</p>
                     </div>
-                    <div class="searchbutton btn" onclick={handleClick}>
-                        <p class="buttontxt2">はい</p>
+                    <div class="searchbutton btn searchbutton-btn" onclick={handleClick}>
+                        <p class="buttontxt2 buttontxt333">はい</p>
                     </div>
                 </div>
             </div>

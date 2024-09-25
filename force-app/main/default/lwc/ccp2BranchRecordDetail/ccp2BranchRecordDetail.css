@@ -13,10 +13,8 @@
     height: 96vh;
     background: linear-gradient(to bottom, #BFBFBF, #F4F4F4);
   }
-  
    
   .bottom {
-    /* height: 60%; */
     position: relative;
     margin: 0px 0px -16px -16px;
     height: max-content;
@@ -66,12 +64,11 @@
     height: 100%;
 }
 .form_container2{
-    width: 64%;
     display: flex;
     flex-direction: column;
     border: 1.2px solid #D9D9D9 ;
     border-radius: 8px;
-    padding: 10px;
+    padding: 25px;
     height: 100%;
 }
 .empty{
@@ -102,6 +99,7 @@
   .txtnew{
     font-size: 0.7rem;
     color: #0A0A0A;
+    margin-bottom: 5px;
     font-family: 'Noto Sans JP', sans-serif;
   }
   .txterror{
@@ -124,14 +122,13 @@
     gap: 0.4rem;
     align-items: center;
   }
-  .colorcode{
-    color: #E10202;
-  }
+
 .form_footer{
     display: flex;
     flex-direction: row;
     padding: 5px;
-    justify-content: center;
+    justify-content: flex-start;
+    width: 65%;
     margin-top: 24px;
     margin-bottom: 28px;
     height: 4.6rem;
@@ -156,7 +153,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: 10px;
     width: 132px;
     height: 38px;
     background-color: #ededed;
@@ -165,6 +162,7 @@
 }
 .toedit2{
      color:black;
+     cursor: pointer;
     transition: color 0.3s ease;
     font-family: Helvetica, Arial, sans-serif;
 }
@@ -180,32 +178,18 @@
     justify-content: center;
     font-size: small;
 }
-/* .btn-modal {
-    bottom: 0;
-    left: 16%;
-    display: flex;
-    justify-content: center;
-    align-items: end;
-    gap: 10px;
-    position: absolute;
-  
-} */
 .form-footer-modal{
     text-align: center;
     display: flex;
     justify-content: center;
     flex-direction: row;
     margin-top: 70px;
-        /* width: 400px;
-        margin-left: 50px;
-        margin-top: 80px; */
 }
 .custom-modal-content {
     padding: 20px;
-    /* border: 1px dashed #ccc; */
     background-color: white;
     border-radius: 8px;
-    width: 500px; /* Adjust the width as needed */
+    width: 500px;
     height: 250px;
 
 }
@@ -219,6 +203,7 @@
     justify-content: center;
     margin-top: 10px;
     margin-bottom: 7px;
+    margin-left: -5%;
 }
 .datarec{
     height: 80%;
@@ -239,9 +224,9 @@
     width: 60%;
 }
 .deletetxt{
-    color: #ea0202;
+    color: #e10202;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 400;
 }
 .records{
     margin-bottom: 25px;
@@ -271,8 +256,6 @@
     flex-direction: column;
     width: 180px;
     border: 1px solid #d9d9d9;
-    padding-left: 6px;
-    padding-top: 10px;
     padding: 5px;
     border-radius: 8px;
     background-color: #ffffff;
@@ -332,6 +315,10 @@
     width: 168px;
     font-family: 'Noto Sans JP', sans-serif;
     margin-left: 20px;
+    margin-top: 10px;
+}
+.recordsIcontact {
+    align-items: center;
 }
 .headAdd{
     font-size: 12px;
@@ -430,11 +417,12 @@
     max-height: 100%;
     overflow-y: auto;
     width: 95%;
+    min-height: 20px;
 }
 
 .scrollbar::-webkit-scrollbar {
-    width: 7px; 
-   
+    width: 12px;
+    height: 12px;
 }
 
 .scrollbar::-webkit-scrollbar-track {
@@ -514,9 +502,6 @@
     margin-left: 72px;
     margin-bottom: 6px;
 }
-/* .instructions{
-    
-} */
 .icon {
     padding-left: auto;
     background: var(--dropdown-icon)no-repeat;
@@ -526,36 +511,52 @@
 
 .toedit{
     color: #0A0A0A;
+    cursor: pointer;
      font-family: 'Noto Sans JP', sans-serif;
 }
 .toedit1{
     color: #0A0A0A;
+    cursor: pointer;
      font-family: 'Noto Sans JP', sans-serif;
 }
 .toeditSave{
     color: #ffffff;
      font-family: 'Noto Sans JP', sans-serif;
      transition: color 0.5s ease;
+     cursor: pointer;
 }
 .btn{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 120px;
-    height: 36px;
+    width: 176px;
+    height: 48px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    border-radius: 6px;
+    border-radius: 10px;
     background-color: #f9f9f9; 
 }
+
+.btn:hover {
+    cursor: pointer;
+}
+.btn-search{
+    height: 2rem;
+    width: 8rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .btnSave{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 120px;
-    height: 36px; 
-    border-radius: 6px;
+    width: 132px;
+    height: 38px; 
+    border-radius: 10px;
     background-color: #E10202; 
     transition: background-color 0.5s ease, border 0.5s ease;
 }
@@ -571,8 +572,11 @@
     justify-content: flex-end;
     height: 50px;
 }
-.btn:hover{
+.btn-cancel:hover{
     cursor: pointer;
+    background-color: white;
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0);
 }
 .btnSave:hover .toeditSave {
     color: red;
@@ -661,10 +665,12 @@ input::placeholder {
     justify-content: center;
     width: 120px;
     height: 36px;
+    color: #191919;
     border-radius: 6px;
+    border: 1px solid #D9D9D9;
     background-color: #EDEDED;
     transition: background-color 0.5s ease, border 0.5s ease, box-shadow 0.5s ease;
-    box-shadow: 0 0 10px 5px rgba(204, 204, 204, 0.8); /* Box shadow for glow */
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
 }
 .btn1:hover{
     background-color: white;
@@ -674,9 +680,9 @@ input::placeholder {
 }
 .btn1:hover .toedit {
     text-shadow: 
-    0 0 10px #ffffff, /* White shadow */
-    0 0 20px #ffffff, /* White shadow */
-    0 0 30px #ffffff, /* White shadow */
+    0 0 10px #ffffff, 
+    0 0 20px #ffffff, 
+    0 0 30px #ffffff, 
     
 }
 
@@ -706,6 +712,7 @@ img {
 .record-item{
     margin-bottom: 10px;
     font-family: 'Noto Sans JP', sans-serif;
+    white-space: nowrap;
 }
 
 .record-item lightning-icon {
@@ -735,9 +742,6 @@ img {
     margin-top: 10rem;
 }
 
-/* .spinner__dot-a, .spinner__dot-b {
-    background-color: #E10202; 
-} */
 .invalid-input {
     outline: solid 2px #E10202;
     background-color: #FEEEED;
@@ -750,7 +754,6 @@ img {
     --slds-c-input-color-border : #D9D9D9;
     --slds-c-input-color-background : #ffffff;
     width: 190px;
-    /* --sds-c-input-height: 120px; */
  }
  
  .Inputs{
@@ -875,19 +878,17 @@ img {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    background-color: rgba(0, 0, 0, 0.5); 
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 109; /* Ensure it is on top */
+    z-index: 109; 
 }
 .modal-window-small {
     background-color: rgba(251, 251, 251, 1);
     border-radius: 8px;
     padding: 1rem 3rem 2rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    /* width: var(--modal-width, 30%); 
-    height: var(--modal-height, 45%);  */
     max-width: 90%; /* Max width to ensure it fits on screen */
     max-height: 90%; /* Max height to ensure it fits on screen */
     overflow: auto; /* Add scroll if content overflows */
@@ -945,31 +946,49 @@ img {
     justify-content: center;
     gap: 10px;
 }
-.btn{
+
+
+.btn-cancel{
     height: 2rem;
     width: 8rem;
     border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.3s ease, border 0.3s ease, color 0.3s ease;
 }
+
 .cancelbutton{
     background-color: #f4f4f4;
     border: 1px solid #d9d9d9;
+    cursor: pointer;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 .buttontxt{
     color: #0A0A0A;
+    cursor: pointer;
     font-family: 'Noto Sans JP', sans-serif;
 }
 .buttontxt2{
     color: white;
+    cursor: pointer;
     font-family: 'Noto Sans JP', sans-serif;
 }
 .searchbutton{
     background-color: #ea0202;
+    cursor: pointer;
 }
 
+.searchbutton:hover {
+    background-color: white;
+    border: 1px solid #e10202;
+    cursor: pointer;
+}
+
+.searchbutton:hover .buttontxt2{
+    cursor: pointer;
+    color: #E10202;
+}
 @media (max-width: 768px) {
 
     .top{
@@ -1277,17 +1296,32 @@ img {
         margin-top: -88.5vh;
         width: 76%;
     }
+    .main{
+        margin: -16px 0 0 -33px;
+    }
 }
 @media (max-width: 1920px) {
     .center-content{
         margin-top: -85.5vh;
         width: 79%;
     }
+    .bottom{
+        width: calc(100vw - 25px);
+    }
+    .main{
+        margin: -16px 0 0 -25px;
+    }
 }
 @media (max-width: 1707px) {
     .center-content{
         margin-top: -84.5vh;
         width: 82%;
+    }
+    .main{
+        margin: -16px 0 0 -23px;
+    }
+    .bottom{
+        width: calc(100vw - 22px);
     }
 }
 @media (max-width: 1686px) {
@@ -1301,12 +1335,21 @@ img {
         margin-top: -83.5vh;
         width: 85%;
     }
+    .main{
+        margin: -16px 0 0 -21px;
+    }
+    .bottom{
+        width: calc(100vw - 21px);
+    }
 }
 
 @media (max-width: 1536px) {
     .center-content{
         margin-top: -82.5vh;
         width: 87%;
+    }
+    .main{
+        margin: -16px 0 0 -19px;
     }
 }
 
@@ -1315,16 +1358,19 @@ img {
         margin-top: -81.5vh;
         width: 90%;
     }
+    .main{
+        margin: -16px 0 0 -17px;
+    }
 }
 @media (max-width: 1170px) {
     .center-content{
         margin-top: -80.5vh;
     }
     .main{
-        width: calc(100vw - 10px);
-    }
+        width:calc(100vw - 14px);
+      }
     .bottom{
-        width: calc(100vw - 10px);
+        width: calc(100vw - 15px);
     }
 }
 @media (max-width: 1000px) {
@@ -1343,10 +1389,10 @@ img {
         margin-top: -79vh;
     }
     .main{
-        width: calc(100vw - 10px);
+        width:calc(100vw - 13px);
     }
     .bottom{
-        width: calc(100vw - 10px);
+        width: calc(100vw - 15px);
     }
     .form_container2{
         width: max-content;
@@ -1355,12 +1401,14 @@ img {
 @media (max-width: 864px) {
     .center-content{
         margin-top: -76vh;
+        width: 89.5%;
+        margin-right: 7px;
     } 
     .main{
         width: calc(100vw - 10px);
     }
     .bottom{
-        width: calc(100vw - 10px);
+        width: calc(100vw - 11px);
     }
     .form_container2{
         width: max-content;

@@ -1,10 +1,13 @@
+* {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
 .main {
     display: flex;
     flex-direction: column;
     position: fixed;
     top: 1.3rem;
     width: calc(100vw - 16px);
-    /* height: 62px; */
     align-items: center;
     justify-content: center;
     z-index: 6;
@@ -44,18 +47,22 @@
     justify-content: space-around;
     padding: 0.5rem;
 }
-.header_logo{
+
+.header_logo {
     width: 70%;
     height: 70%;
     margin-left: 10px;
 }
-.menu_icons{
+
+.menu_icons {
     width: 80%;
 }
-.user{
+
+.user {
     position: relative;
 }
-.Link{
+
+.Link {
     font-family: 'Noto Sans JP', sans-serif;
     font-size: 12px;
     font-weight: bold;
@@ -64,7 +71,8 @@
     z-index: 10;
     margin-left: 50px;
 }
-.Linkend{
+
+.Linkend {
     font-family: 'Noto Sans JP', sans-serif;
     font-size: 12px;
     font-weight: bold;
@@ -72,7 +80,8 @@
     color: #0A0A0A;
     z-index: 10;
 }
-.logout{
+
+.logout {
     font-size: 10px;
     font-family: 'Noto Sans JP', sans-serif;
     text-decoration: underline;
@@ -80,17 +89,19 @@
     z-index: 105;
     color: #e10202;
 }
-.small{
+
+.small {
     height: 14px;
     width: 14px;
     margin-left: 3px;
 }
+
 .lists {
     position: absolute;
     background: rgba(255, 255, 255, 0.874);
     border: 1px solid #D9D9D9;
     border-radius: 8px;
-    width: 120px;
+    width: 90px;
     max-height: 200px;
     overflow-y: auto;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -101,7 +112,8 @@
     left: 50%;
     transform: translateX(-50%);
 }
-.centerlists{
+
+.centerlists {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -109,15 +121,22 @@
     align-items: center;
     gap: 10px;
 }
-.lists_anchor{
+
+.lists_anchor {
     font-size: 10px;
-    font-family: 'Noto Sans JP', sans-serif;
     text-decoration: none;
     color: #0A0A0A;
     font-weight: bold;
     z-index: 105;
 
 }
-.user:hover{
-cursor: pointer;
+
+.user:hover {
+    cursor: pointer;
+}
+
+.active {
+    text-decoration: underline;
+    text-decoration-color: red;
+    text-decoration-thickness: 2px;
 }

@@ -27,9 +27,10 @@ import VEHICLE_TYPE_FIELD from "@salesforce/schema/ccp2_Registered_Vehicle__c.Ve
 import USE_FIELD from "@salesforce/schema/ccp2_Registered_Vehicle__c.Use__c";
 import FUEL_TYPE_FIELD from "@salesforce/schema/ccp2_Registered_Vehicle__c.Fuel_Type__c";
 import PRIVATE_BUSINESS_FIELD from "@salesforce/schema/ccp2_Registered_Vehicle__c.Private_Business_use__c";
+import i18nextStaticResource from '@salesforce/resourceUrl/i18next';
 
 const BACKGROUND_IMAGE_PC =
-  Vehicle_StaticResource + "/CCP2_Resources/Common/Main_Background.png";
+  Vehicle_StaticResource + "/CCP2_Resources/Common/Main_Background.webp";
 const DASH = Vehicle_StaticResource + "/CCP2_Resources/Vehicle/dash.png";
 const UPLPIC =
   Vehicle_StaticResource + "/CCP2_Resources/Vehicle/upload-manual.png";
@@ -38,6 +39,59 @@ const TRUCKPIC =
 const arrowicon =
   Vehicle_StaticResource + "/CCP2_Resources/Common/arrow_under.png";
 
+  import mi_label1_en from '@salesforce/label/c.mi_label1_en';
+import mi_label2_en from '@salesforce/label/c.mi_label2_en';
+import mi_label3_en from '@salesforce/label/c.mi_label3_en';
+import mi_label4_en from '@salesforce/label/c.mi_label4_en';
+import mi_label5_en from '@salesforce/label/c.mi_label5_en';
+import mi_label6_en from '@salesforce/label/c.mi_label6_en';
+import mi_label7_en from '@salesforce/label/c.mi_label7_en';
+import mi_label8_en from '@salesforce/label/c.mi_label8_en';
+import mi_label9_en from '@salesforce/label/c.mi_label9_en';
+import mi_label10_en from '@salesforce/label/c.mi_label10_en';
+import mi_label11_en from '@salesforce/label/c.mi_label11_en';
+import mi_label12_en from '@salesforce/label/c.mi_label12_en';
+import mi_label13_en from '@salesforce/label/c.mi_label13_en';
+import mi_label14_en from '@salesforce/label/c.mi_label14_en';
+import mi_label15_en from '@salesforce/label/c.mi_label15_en';
+import mi_label16_en from '@salesforce/label/c.mi_label16_en';
+import mi_label17_en from '@salesforce/label/c.mi_label17_en';
+import mi_label18_en from '@salesforce/label/c.mi_label18_en';
+import mi_label19_en from '@salesforce/label/c.mi_label19_en';
+import mi_label20_en from '@salesforce/label/c.mi_label20_en';
+import mi_label21_en from '@salesforce/label/c.mi_label21_en';
+import mi_label22_en from '@salesforce/label/c.mi_label22_en';
+import mi_label23_en from '@salesforce/label/c.mi_label23_en';
+import mi_label24_en from '@salesforce/label/c.mi_label24_en';
+import mi_label25_en from '@salesforce/label/c.mi_label25_en';
+
+// Import Japanese labels
+import mi_label1_jp from '@salesforce/label/c.mi_label1_jp';
+import mi_label2_jp from '@salesforce/label/c.mi_label2_jp';
+import mi_label3_jp from '@salesforce/label/c.mi_label3_jp';
+import mi_label4_jp from '@salesforce/label/c.mi_label4_jp';
+import mi_label5_jp from '@salesforce/label/c.mi_label5_jp';
+import mi_label6_jp from '@salesforce/label/c.mi_label6_jp';
+import mi_label7_jp from '@salesforce/label/c.mi_label7_jp';
+import mi_label8_jp from '@salesforce/label/c.mi_label8_jp';
+import mi_label9_jp from '@salesforce/label/c.mi_label9_jp';
+import mi_label10_jp from '@salesforce/label/c.mi_label10_jp';
+import mi_label11_jp from '@salesforce/label/c.mi_label11_jp';
+import mi_label12_jp from '@salesforce/label/c.mi_label12_jp';
+import mi_label13_jp from '@salesforce/label/c.mi_label13_jp';
+import mi_label14_jp from '@salesforce/label/c.mi_label14_jp';
+import mi_label15_jp from '@salesforce/label/c.mi_label15_jp';
+import mi_label16_jp from '@salesforce/label/c.mi_label16_jp';
+import mi_label17_jp from '@salesforce/label/c.mi_label17_jp';
+import mi_label18_jp from '@salesforce/label/c.mi_label18_jp';
+import mi_label19_jp from '@salesforce/label/c.mi_label19_jp';
+import mi_label20_jp from '@salesforce/label/c.mi_label20_jp';
+import mi_label21_jp from '@salesforce/label/c.mi_label21_jp';
+import mi_label22_jp from '@salesforce/label/c.mi_label22_jp';
+import mi_label23_jp from '@salesforce/label/c.mi_label23_jp';
+import mi_label24_jp from '@salesforce/label/c.mi_label24_jp';
+import mi_label25_jp from '@salesforce/label/c.mi_label25_jp';
+
 export default class Ccp2backgroundTemplate extends LightningElement {
   backgroundImagePC = BACKGROUND_IMAGE_PC;
   backgroundImageStyle = `background-image: url(${BACKGROUND_IMAGE_PC});`;
@@ -45,7 +99,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   uplpic = UPLPIC;
   truckpic = TRUCKPIC;
   _resourcesLoaded = false;
-  @track finalCompletionButtonCss = "searchbutton btn buttontxt2";
+  @track finalCompletionButtonCss = "button-save-100";
   @track uploadText1 = "アップロード";
   @track uploadText2 = "アップロード";
   @track uploadDivCss1 = "input-field-img no-scrollbar";
@@ -152,6 +206,9 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   tempUploadText2;
   tempUploadUploadIconToggle2;
 
+  errorModelParent = "addMain";
+  errorMileageParent = "addMain";
+  errorCurbParent = "addMain";
   errorMileage = "";
   errorMileageCss = "hide-error";
   errorModel = "";
@@ -162,6 +219,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   errorDoorCss = "hide-error";
   errorLogin = "";
   errorLoginCss = "hide-error";
+  errorLoginParent = "addMain";
   errorlogin1div = "input-field1";
   errorlogin2div = "input-field2";
   errorlogin3div = "input-field3";
@@ -171,7 +229,73 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   errorCurbDiv = "input-field-mil";
   errorDoorDiv = "input-field";
 
+
+// Import English labels
+
+
+    @track labelsEn = {
+        label1: mi_label1_en,
+        label2: mi_label2_en,
+        label3: mi_label3_en,
+        label4: mi_label4_en,
+        label5: mi_label5_en,
+        label6: mi_label6_en,
+        label7: mi_label7_en,
+        label8: mi_label8_en,
+        label9: mi_label9_en,
+        label10: mi_label10_en,
+        label11: mi_label11_en,
+        label12: mi_label12_en,
+        label13: mi_label13_en,
+        label14: mi_label14_en,
+        label15: mi_label15_en,
+        label16: mi_label16_en,
+        label17: mi_label17_en,
+        label18: mi_label18_en,
+        label19: mi_label19_en,
+        label20: mi_label20_en,
+        label21: mi_label21_en,
+        label22: mi_label22_en,
+        label23: mi_label23_en,
+        label24: mi_label24_en,
+        label25: mi_label25_en};
+
+    @track labelsJp = {
+        label1: mi_label1_jp,
+        label2: mi_label2_jp,
+        label3: mi_label3_jp,
+        label4: mi_label4_jp,
+        label5: mi_label5_jp,
+        label6: mi_label6_jp,
+        label7: mi_label7_jp,
+        label8: mi_label8_jp,
+        label9: mi_label9_jp,
+        label10: mi_label10_jp,
+        label11: mi_label11_jp,
+        label12: mi_label12_jp,
+        label13: mi_label13_jp,
+        label14: mi_label14_jp,
+        label15: mi_label15_jp,
+        label16: mi_label16_jp,
+        label17: mi_label17_jp,
+        label18: mi_label18_jp,
+        label19: mi_label19_jp,
+        label20: mi_label20_jp,
+        label21: mi_label21_jp,
+        label22: mi_label22_jp,
+        label23: mi_label23_jp,
+        label24: mi_label24_jp,
+        label25: mi_label25_jp
+    };
+
+
   connectedCallback() {
+    this.loadI18nextLibrary().then(() => {
+      this.loadLabels();
+  }).catch((error) => {
+      console.error("Error loading i18next library: ", error);
+  });
+
     this.updatePagination();
     this.template.host.style.setProperty(
       "--upload-icon",
@@ -182,9 +306,9 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     });
 
     if (this.isLastPage) {
-      this.finalCompletionButtonCss = "searchbutton btn buttontxt2 red";
+      this.finalCompletionButtonCss = "button-final-100 button-save-100";
     } else {
-      this.finalCompletionButtonCss = "searchbutton btn buttontxt2";
+      this.finalCompletionButtonCss = "button-save-100";
     }
 
     this.template.host.style.setProperty(
@@ -209,6 +333,11 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       document.addEventListener("click", this.handleOutsideClick8.bind(this));
       this.outsideClickHandlerAdded = true;
     }
+    if (this.isLastPage) {
+      this.finalCompletionButtonCss = "button-final-100 button-save-100";
+    } else {
+      this.finalCompletionButtonCss = "button-save-100";
+    }
   }
 
   disconnectedCallback() {
@@ -221,10 +350,61 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     document.removeEventListener("click", this.handleOutsideClick8.bind(this));
   }
 
+  @track labels = {};
+
+  loadI18nextLibrary() {
+    return new Promise((resolve, reject) => {
+        if (!window.i18next) {
+            const script = document.createElement("script");
+            script.src = i18nextStaticResource; // Load i18next from the static resource
+            script.onload = () => {
+                resolve();
+            };
+            script.onerror = () => {
+                reject(new Error("Failed to load i18next script"));
+            };
+            document.head.appendChild(script);
+        } else {
+            resolve();
+        }
+    });
+  }
+
+  loadLabels() {
+// Assuming label_chunk_custom is already available
+const userLocale = 'jp'; // Method to determine user locale (e.g., 'en', 'jp')
+
+// Define the label resources directly
+const labelResources = userLocale === 'jp' ? this.labelsJp : this.labelsEn;
+
+// Initialize i18next with the provided labels
+i18next.init({
+    lng: userLocale,
+    resources: {
+        [userLocale]: {
+            translation: labelResources
+        }
+    }
+}).then(() => {
+    this.labels = i18next.store.data[userLocale].translation;
+    console.log("User Locale: ", userLocale);
+    console.log("User Labels: ", JSON.stringify(this.labels));
+}).catch((error) => {
+    console.error("Error initializing i18next: ", error);
+});
+}
+  
+  
+    getLocale() {
+      const region = Intl.DateTimeFormat().resolvedOptions().locale;
+      return region === "ja" ? "jp" : "en";
+    }
+
   /*All api call methods*/
   @wire(getfields, { chassisNumbers: "$vehicleInfo" })
   fun({ data, error }) {
     if (data) {
+      console.log('this is the data we have to see for the account id : - ' , JSON.stringify(data))
       this.currentVehicles = data.VehicleInfo;
       this.updateFormData(); // Update form data when data is received
     } else if (error) {
@@ -249,6 +429,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       carPlatformNumber: this.currentChessisNumber
     })
       .then((result) => {
+        console.log("Super Data!!! : ", result);
         this.formLoader = true;
         this.LastPageFormData = this.formdata;
         let registrationNumber =
@@ -496,7 +677,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   handlevehChange(event) {
     event.stopPropagation();
     this.showlist = !this.showlist;
-    if (this.vehicles.length === 0) {
+    if (this.branches.length === 0) {
       this.showlist = false;
     }
   }
@@ -576,8 +757,6 @@ export default class Ccp2backgroundTemplate extends LightningElement {
 
     // Push the deleted branch ID to deletedBranchIds array
     this.deletedBranchIds.push(branchId);
-    console.log("ok4");
-    // console.log("newe2",JSON.stringify(this.deletedBranchIds));
 
     // Remove the branch from branch array
     this.selectedbranches = this.selectedbranches.filter(
@@ -586,11 +765,6 @@ export default class Ccp2backgroundTemplate extends LightningElement {
 
     let selectedbranchesIds = this.selectedbranches.map((elm) => elm.value);
     this.formdata.affiliation = selectedbranchesIds;
-    console.log("selectedbranchesIds", JSON.stringify(selectedbranchesIds));
-    console.log("formdata", JSON.stringify(this.formdata));
-    console.log("ok5");
-
-    // console.log("newe2",JSON.stringify(this.branch));
 
     // Add the deleted branch back to another array if needed
 
@@ -776,6 +950,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   };
 
   handleInsideClick(event) {
+    console.log("Current Branch Members: ", JSON.stringify(this.branches));
     event.stopPropagation();
   }
   /*Picklist Methods*/
@@ -1040,7 +1215,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
         "this.currentChessisNumber when made from class",
         this.currentChessisNumber,
         " ",
-        this.currentChessisNumber.length
+        JSON.stringify(currentVehicle)
       );
 
       // Remove hyphen
@@ -1081,7 +1256,8 @@ export default class Ccp2backgroundTemplate extends LightningElement {
         typeOfVehicle: "",
         doorNumber: "",
         bodyShape: "",
-        privateOrBusinessUse: ""
+        privateOrBusinessUse: "",
+        userAccountCode: currentVehicle?.userAccountCode__c || 0
       };
     } else {
       // No data available, set form data to default values
@@ -1173,7 +1349,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     }
     
     if (this.currentPage > 1) {
-      // this.saveFormData();
+    
       this.currentPage -= 1;
       this.updateFormData();
       this.formBodyCss =
@@ -1216,9 +1392,9 @@ export default class Ccp2backgroundTemplate extends LightningElement {
           : "form-body disable-editing";
 
       if (this.isLastPage) {
-        this.finalCompletionButtonCss = "searchbutton btn buttontxt2 red";
+        this.finalCompletionButtonCss = "button-final-100 button-save-100";
       } else {
-        this.finalCompletionButtonCss = "searchbutton btn buttontxt2";
+        this.finalCompletionButtonCss = "button-save-100";
       }
       
       if (this.currentPage < this.lastPageNumberTillSavedToBackend) {
@@ -1392,14 +1568,16 @@ export default class Ccp2backgroundTemplate extends LightningElement {
 
   resetErrorCss() {
     // this.errorVehicleNumberCss = ""
+    this.errorMileageParent = "addMain";
+    this.errorModelParent = "addMain";
     this.errorMileageCss = "hide-error";
     this.errorModelCss = "hide-error";
-    // this.errorModel2Css = "hide-error";
+    this.errorLoginParent = "addMain";
     this.errorLoginCss = "hide-error";
+    this.errorCurbParent = "addMain";
     this.errorCurbCss = "hide-error";
     this.errorDoorCss = "hide-error";
     this.errorModelDiv = "input-field-modal";
-    // this.errorModel2Div = "input-field-modal";
     this.errorMileageDiv = "input-field-mil";
     this.errorCurbDiv = "input-field-mil";
     this.errorDoorDiv = "input-field";
@@ -1411,11 +1589,11 @@ export default class Ccp2backgroundTemplate extends LightningElement {
 
   validateFormData() {
     let isValid = true;
-    const regexJapanese = /^[一-龠ぁ-ゔァ-ヴー々〆〤ヶ]+$/; // Any Japanese characters including Kanji, Hiragana, Katakana, and special characters
-    const regexNumbers = /^\d+$/; // Only digits  
-    const regexNumbers1 =/^\d+・*$/;
- // Only digits  
-    // let cleanedString = this.formdata.loginNumberPart4.replace(/\・+$/, '');
+    
+    const regexJapanesealpha = /^[一-龠ぁ-ゔァ-ヴー々〆〤ヶA-Z]+$/; 
+    const regexNumbersdig = /^[0-9０-９]*$/;
+    const regexNumbers1 =/^[0-9０-９]+・*$/;
+    const regexNumbers2 = /^[0-9０-９]+$/;
 
     if (
       !this.formdata.loginNumberPart1 ||
@@ -1425,9 +1603,9 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     ) {
       this.toastIt("ログイン番号");
       isValid = false;
-    } else if(!regexJapanese.test(this.formdata.loginNumberPart1) ||
-              !regexJapanese.test(this.formdata.loginNumberPart3) ||
-              !regexNumbers.test(this.formdata.loginNumberPart2) ||
+    } else if(!regexJapanesealpha.test(this.formdata.loginNumberPart1) ||
+              !regexJapanesealpha.test(this.formdata.loginNumberPart3) ||
+              !regexNumbers2.test(this.formdata.loginNumberPart2) ||
               !regexNumbers1.test(this.formdata.loginNumberPart4)
           ) {
             this.errorlogin1div = "input-field1 invalid-input";
@@ -1435,6 +1613,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
             this.errorlogin3div = "input-field3 invalid-input";
             this.errorlogin4div = "input-field4 invalid-input";
         this.errorLogin = "正しい登録番号を入力してください";
+        this.errorLoginParent = "addMain mileagesecond";
         this.errorLoginCss = "show-error";
         console.log("errorLoginCss: ",this.errorLoginCss);
         this.toastCustom("Registration Number Wrong");
@@ -1503,6 +1682,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       ) {
         this.errorModelDiv = "input-field-modal invalid-input";
         this.errorModel = "英数字のみを入力してください。";
+      this.errorModelParent = "addMain mileagesecond";
         this.errorModelCss = "show-error";
         this.toastCustom("英数字のみを入力してください。");
         isValid = false;
@@ -1530,20 +1710,23 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       this.errorMileageDiv = "input-field-mil invalid-input";
       this.errorMileage = "this is required mileage";
       this.errorMileageCss = "show-error";
+      this.errorMileageParent = "addMain mileagefirst";
       this.toastIt("走行距離");
       isValid = false;
     } else {
-      if (!/^\d+$/.test(this.formdata.mileage)) {
+      if (!regexNumbersdig.test(this.formdata.mileage)) {
         this.errorMileageDiv = "input-field-mil invalid-input";
-        this.errorMileage = "数字のみを入力してください。";
+        this.errorMileage = "半角数字をご入力ください。";
+        this.errorMileageParent = "addMain mileagefirst";
         this.errorMileageCss = "show-error";
-        this.toastCustom("数字のみを入力してください。");
+        this.toastCustom("半角数字をご入力ください。");
         isValid = false;
       }
 
       if (/^0/.test(this.formdata.mileage)) {
         this.errorMileageDiv = "input-field-mil invalid-input";
         this.errorMileage = "走行距離は0から始まることはできません。";
+        this.errorMileageParent = "addMain mileagefirst";
         this.errorMileageCss = "show-error";
         this.toastCustom("走行距離は0から始まることはできません。");
         isValid = false;
@@ -1557,23 +1740,25 @@ export default class Ccp2backgroundTemplate extends LightningElement {
       this.toastIt("車両重量");
       isValid = false;
     } else {
-      if (!/^\d+$/.test(this.formdata.curbWeight)) {
+      if (!regexNumbersdig.test(this.formdata.curbWeight)) {
         this.errorCurbDiv = "input-field-mil invalid-input";
-        this.errorCurb = "数字のみを入力してください。。";
+        this.errorCurb = "半角数字をご入力ください。";
+        this.errorCurbParent = "addMain mileagefirst";
         this.errorCurbCss = "show-error";
-        this.toastCustom("数字のみを入力してください。。");
+        this.toastCustom("半角数字をご入力ください。");
         isValid = false;
       }
 
       if (/^0/.test(this.formdata.curbWeight)) {
         this.errorCurbDiv = "input-field-mil invalid-input";
         this.errorCurb = "車両重量は 0 から始めることはできません。";
+        this.errorCurbParent = "addMain mileagefirst";
         this.errorCurbCss = "show-error";
         this.toastCustom("車両重量は 0 から始めることはできません。");
         isValid = false;
       }
     }
-    const regexdoor = /^[\dA-Za-z一-龠ぁ-ゔァ-ヴー々〆〤ヶ]+$/;
+    const regexdoor = /^[\dA-Za-z一-龠ぁ-ゔァ-ヴー々〆〤ヶ\uff10-\uff19]+$/;
     if (
       this.formdata.doorNumber !== null &&
       this.formdata.doorNumber !== "" &&
@@ -1839,14 +2024,52 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     window.location.reload();
   }
 
-  handleInputCheck(event) {
-    const input = event.target;
-    input.value = input.value.replace(/[^\d０-９]/g, '').slice(0,6);
+handleInputCheck(event) {
+  const input = event.target;
+  input.value = input.value.replace(/[^\d０-９]/g, '');
+  this.handlevalchange();
+  
+}
+
+
+
+//   handleInputJapanese(event) {
+//     const input = event.target;
+//     // Allow Japanese Kanji, Hiragana, Katakana, and spaces (Furigana typically includes Hiragana and Katakana)
+//     input.value = input.value.replace(/[^\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FBF\uFF66-\uFF9D]/g, '');
+//     const maxLength = event.target.maxLength;
+//     let value = event.target.value;
+//     if (value.length > maxLength) {
+//         event.target.value = value.substring(0, maxLength);
+//     }
+// }
+handleInputJapanese(event) {
+  const input = event.target;
+  const inputName = input.getAttribute('name');
+  const maxLength = input.maxLength;
+  let value = input.value;
+
+  if (inputName === 'regNum1') {
+      // Allow Kanji, Hiragana, Katakana, and spaces for regnum1
+      input.value = value.replace(/[^\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FBF\uFF66-\uFF9D]/g, '');
+  } else if (inputName === 'regNum3') {
+      // Allow only Hiragana for regnum3
+      input.value = value.replace(/[^\u3040-\u309F]/g, '');
   }
-  handleInputJapanese(event) {
-    const input = event.target;
-    // Allow Japanese Kanji, Hiragana, Katakana, and spaces (Furigana typically includes Hiragana and Katakana)
-    input.value = input.value.replace(/[^\u3000-\u303F\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FBF\uFF66-\uFF9D]/g, '');
+
+  // Ensure the value does not exceed the maxLength
+  if (input.value.length > maxLength) {
+      input.value = input.value.substring(0, maxLength);
+  }
+}
+
+
+handlevalchange(event){
+  const maxLength = event.target.maxLength;
+    let value = event.target.value;
+    if (value.length > maxLength) {
+        event.target.value = value.substring(0, maxLength);
+    }
 }
 
 }

@@ -1,333 +1,981 @@
 <template>
-    <template if:true={showvehDetails}>
-        <div class="main_container">
-            <div class="main_container">
-                <template if:true={vehicleByIdLoader}>
-                    <div
-                        style="position: relative; width:100%; height:550px; display:flex; justify-content:center; align-items:center;">
-                        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
-                    </div>
-                </template>
-    
-                <template if:false={vehicleByIdLoader}>
-                    <div class="content1_container">
-                        <div class="content1_left_container">
-                            <div class="content1_left_row1">
-                                <div class="content1_left_row1_left">
-                                    <lightning-icon icon-name='utility:chevronleft' class="back-icon"
-                                        alternative-text='chevronleft' size='x-small' onclick={closeDetailPage}
-                                        title='chevronleft'></lightning-icon>
-                                    <h1 class="RegNoData">{vehicleByIdData.vehicleNumber}</h1>
-                                </div>
-                                <!-- <div class="buttons">
-                                    <div class="btnico">
-                                        <lightning-icon icon-name='utility:note' alternative-text='note' size='x-small'
-                                            title='note' class="i"></lightning-icon>
-                                        <span class="notetext">{label.CCP2_ScheduleRegistration}</span>
-                                    </div>
-                                    <div class="btnico1">
-                                        <lightning-icon icon-name='utility:date_input' alternative-text='date_input'
-                                            size='x-small' title='date_input' class="i"></lightning-icon>
-                                        <span class="notetext">{label.CCP2_ExpenseRegistration}</span>
-                                    </div>
-                                </div> -->
-                            </div>
-                            <div class="content1_left_row2">
-                                <div class="content1_left_row2_1">
-                                    <div class="content1_left_row2_element">
-                                        <h4 class="Head">登録番号</h4>
-                                        <p class="recdata">{vehicleByIdData.registerationNumber}</p>
-                                    </div>
-                                    <div class="content1_left_row2_element">
-                                        <h4 class="Head">車名</h4>
-                                        <p class="recdata">{vehicleByIdData.name}</p>
-                                    </div>
-                                    <div class="content1_left_row2_element">
-                                        <h4 class="Head">自動車の種別</h4>
-                                        <p class="recdata">{vehicleByIdData.type}</p>
-                                    </div>
-                                    <div class="content1_left_row2_element">
-                                        <h4 class="Head">走行距離</h4>
-                                        <p class="recdata">{vehicleByIdData.mileage}km</p>
-                                    </div>
-                                    <div class="content1_left_row2_element">
-                                        <h4 class="Head">車検証有効期限</h4>
-                                        <p class="recdata">{vehicleByIdData.expirationDate}</p>
-                                    </div>
-    
-    
-                                </div>
-    
-                                <div class="content1_left_row2_2">
-                                    <div class="content1_left_left_row3">
-                                        <lightning-icon icon-name={starIcon} class="back-icon" alternative-text="Star"
-                                            size="x-small" onclick={toggleStar}></lightning-icon>
-                                        <p class="back-icon">お気に入り</p>
-                                    </div>
-                                    <div class="content1_left_row3">
-                                        <button onclick={gotoMaintainencePage}>予定登録</button>
-                                        <button>費用登録</button>
-                                    </div>
-                                </div>
-                            </div>
-    
-                        </div>
-                        <div class="content1_right_container">
-                            <template if:true={isImageModalOpen}>
-                                <template if:true={vehicleByIdLoader2}>
-                                    <div class="loader-container">
-                                        <div class="spinner"></div>
-                                        <p class="loading-text">Loading...</p>
-                                    </div>
-                                </template>
-                                <template if:false={vehicleByIdLoader2}>
-                                        <div class="image-display-area">
-                                            <template if:true={imagesAvailable}>
-                                                <template if:true={vehicleByIdLoader3}>
-                                                    <div class="loader-container">
-                                                        <div class="spinner"></div>
-                                                        <p class="loading-text">Loading...</p>
-                                                    </div>
-                                                </template>
-                                                <template if:false={vehicleByIdLoader3}>
+  <template if:true={showvehDetails}>
+    <div class="main_container">
+      <div class="main_container">
+        <template if:true={vehicleByIdLoader}>
+          <div
+            style="
+              position: relative;
+              width: 100%;
+              height: 550px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <lightning-spinner
+              alternative-text="Loading"
+              size="small"
+            ></lightning-spinner>
+          </div>
+        </template>
 
-                                                    <div class="image-display-top">
-                                                        <img src={currentImage.fileURL} alt="Uploaded Image" />
-                                                        <div class="image-pagination-container">
-                                                            <!-- Previous Button -->
-                                                            <template if:true={isFirstPage}>
-                                                                <button class="pagination-button" onclick={showPreviousImage} disabled={isPreviousDisabled}>
-                                                                    <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous" size="xx-small" class="pagination-icon"></lightning-icon>
-                                                                </button>
-                                                            </template>
-                                                        
-                                                            <!-- If not on the first page, show the image icon -->
-                                                            <template if:false={isFirstPage}>
-                                                                <button class="pagination-button" onclick={showPreviousImage} disabled={isPreviousDisabled}>
-                                                                    <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous" size="xx-small" class="pagination-icon2  slds-current-color"></lightning-icon>
-                                                                </button>
-                                                            </template>
-                                
-                                                            <!-- Page Indicators -->
-                                                            <div class="image-dots-container">
-                                                                <template for:each={visibleDots} for:item="dot">
-                                                                    <span key={dot.key} class={dot.class}></span>
-                                                                </template>
-                                                            </div>
-                                
-                                                            <!-- Next Button -->
-                                                            <template if:true={isLastPage}>
-                                                                <button class="pagination-button" onclick={showNextImage} disabled={isNextDisabled}>
-                                                                    <lightning-icon icon-name="utility:chevronright" alternative-text="Next" size="xx-small" class="pagination-icon"></lightning-icon>
-                                                                </button>
-                                                            </template>
-                                                        
-                                                            <!-- If not on the first page, show the image icon -->
-                                                            <template if:false={isLastPage}>
-                                                                <button class="pagination-button" onclick={showNextImage} disabled={isNextDisabled}>
-                                                                    <lightning-icon icon-name="utility:chevronright" alternative-text="Next" size="xx-small" class="pagination-icon2 slds-current-color"></lightning-icon>
-                                                                </button>
-                                                            </template>
-                                                            <!-- <button class="pagination-button" onclick={showNextImage} disabled={isNextDisabled}>
-                                                                <lightning-icon icon-name="utility:chevronright" alternative-text="Next" size="xx-small" class="pagination-icon"></lightning-icon>
-                                                            </button> -->
-                                                        </div>
-                                                    </div>
-                                                </template>
-                                            </template>
-                                            <template if:false={imagesAvailable}>
-                                                <p>No images available.</p>
-                                            </template>
-                                        </div>
-                                </template>
-                            </template>
-                            <template if:false={isImageModalOpen}>
-                                <div class="loader-container">
-                                    <div class="spinner"></div>
-                                    <p class="loading-text">Loading...</p>
-                                </div>
-                            </template>
-                        </div>
-                        
-                    </div>
-    
-    
-    
-    
-                    <div class="content2_container">
-                        <div class="recbar">
-                            <button class="underline-button">
-                                {label.CCP2_VehicleDetails}
-                                <span class={classVehicleDetails}></span>
-                            </button>
-                            <button class="underline-button">
-                                {label.CCP2_MaintenanceList}
-                                <span class={classMaintainList}></span>
-                            </button>
-                            <button class="underline-button">
-                                {label.CCP2_ExpenseManagement}
-                                <span class={classCostManagement}></span>
-                            </button>
-                            <div class="truckonnect">
-                                <p>Truckonnect</p>
-                                <img src={truckLogoUrl} alt="Truckonnect"
-                                    style="height:15px; width:15px; align-self:center;">
-                            </div>
-                        </div>
-    
-                        <div class="recMain no-scroll">
-                            <template if:true={showVehicleDetails}>
-                                <div class="vehicle_container no-scroll">
-                                    <!-- <div class="vehicle_header">
-                                        <h3>{label.CCP2_ChassisInformation}</h3>
-                                        <h3>{label.CCP2_LoadingPlatformInformation}</h3>
-                                        <h3>{label.CCP2_PartsInformation}</h3>
-                                        <h3>{label.CCP2_LeaseInformation}</h3>
-                                    </div> -->
-                                    <div style="">
-                                        <div class="vehicle_child1">
-                                            <div class="vehicle_child1_container"
-                                                style="border-right: 1px solid #00000014;">
-                                                <div class="vehicle_child1_list">
-                                                    <h3>勤務地</h3>
-                                                    <h3>車台番号</h3>
-                                                    <h3>車検証交付年月日</h3>
-                                                    <h3>初度登録年月</h3>
-                                                    <h3>自家用・事業用</h3>
-                                                    <h3>車体形状</h3>
-                                                </div>
-                                                <div class="vehicle_child1_list">
-                                                    <h3>NA</h3>
-                                                    <h3>{vehicleByIdData.chassisNumber}</h3>
-                                                    <h3>{vehicleByIdData.devileryDate}</h3>
-                                                    <h3>{vehicleByIdData.firstRegistrationDate}</h3>
-                                                    <h3>{vehicleByIdData.privateBusinessUse}</h3>
-                                                    <h3>{vehicleByIdData.carBodyShape}</h3>
-                                                </div>
-                                            </div>
-                                            <div class="vehicle_child1_container" style="padding-left: 36px;">
-                                                <div class="vehicle_child1_list">
-                                                    <h3>車検証画像</h3>
-                                                    <h3>用途</h3>
-                                                    <h3>型式</h3>
-                                                    <h3>燃料の種類</h3>
-                                                    <h3>車両重量</h3>
-                                                    <h3>ドアナンバー</h3>
-                                                </div>
-                                                <div class="vehicle_child1_list">
-                                                    <h3
-                                                    style="color: #E10202; text-decoration:underline; white-space:nowrap; cursor: pointer;"
-                                                    onclick={handleCertificateClick}>
-                                                    {certificateTitleCount}
-                                                  </h3>
-                                                  <h3>{vehicleByIdData.purpose}</h3>
-                                                  <h3>{vehicleByIdData.model}</h3>
-                                                  <h3>{vehicleByIdData.typeOfFuel}</h3>
-                                                  <h3>{vehicleByIdData.vehicleWeigth}kg</h3>
-                                                  <h3>{vehicleByIdData.doorNumber}</h3>
-                                                </div>
-                                            </div>
-                                            <!-- <div class="vehicle_child1_container">
-                                                <div class="vehicle_child1_list">
-                                                    <h3>{label.CCP2_DriversLicence}</h3>
-                                                    <h3>{label.CCP2_FirstYearRegistrationDate}</h3>
-                                                </div>
-                                                <div class="vehicle_child1_list">
-                                                    <h3>Not found</h3>
-                                                    <h3>{vehicleByIdData.initialRegistrationDate}</h3>
-                                                </div>
-                                            </div> -->
-                                        </div>
-                                        <!-- <div class="vehicle_child2">{label.CCP2_LoadingPlatformInformation}</div>
-                                        <div class="vehicle_child3">
-                                            <div class="vehicle_child1_list">
-                                                <h3>{label.CCP2_BodyMaker}</h3>
-                                                <h3>{label.CCP2_BodyInternalDimmension}</h3>
-                                                <h3>{label.CCP2_BodyShape}</h3>
-                                                <h3>{label.CCP2_MaximumLoadingCapacity}</h3>
-                                                <h3>{label.CCP2_BodyMounting}</h3>
-                                            </div>
-                                            <div class="vehicle_child1_list">
-                                                <h3>{vehicleByIdData.bodymaker}</h3>
-                                                <h3>Not found</h3>
-                                                <h3>{vehicleByIdData.bodyShape}</h3>
-                                                <h3>Not found</h3>
-                                                <h3>Not found</h3>
-                                            </div>
-                                        </div> -->
-                                    </div>
-                                </div>
-                            </template>
-                            
-    
-                        </div>
-    
-    
-    
-                        <div class="btnrec">
-                            <img src={vehicleIcon} alt="Delete Vehicle" onclick={dothis} class="bottom-icons" />
-                            <span class="b">車両削除</span>
-    
-                            <img src={downloadIcon} alt="Download" onclick={dothis} class="bottom-icons" />
-                            <!-- <lightning-button-icon icon-name="utility:print" size="medium" variant="container"
-                            alternative-text={label.CCP2_Print} class="slds-m-left_small Abtn" onclick={dothis}
-                            title={label.CCP2_Print}></lightning-button-icon> -->
-                            <span class="b">ダウンロード</span>
-    
-                            <img src={editIcon} alt="Edit" onclick={dothis} class="bottom-icons" />
-                            <!-- <lightning-button-icon icon-name="utility:download" size="medium" variant="container"
-                                alternative-text={label.CCP2_Download} class="slds-m-left_small Abtn" onclick={dothis}
-                                title={label.CCP2_Download}></lightning-button-icon> -->
-                            <span class="b">編集する</span>
-                        </div>
-                    </div>
-                </template>
-    
-            </div>
-        </div>
-    </template>
-    <template if:true={isModalOpen}>
-        <div class="modal-background">
-            <div class="modal-window">
-                <div class="modal-header">
-                    <lightning-icon 
-                        icon-name="utility:close" 
-                        size="x-small" 
-                        alternative-text="Close"
-                        onclick={handleCloseModal} 
-                        class="close-button">
-                    </lightning-icon>
+        <template if:false={vehicleByIdLoader}>
+          <div class="content1_container">
+            <div class="content1_left_container">
+              <div class="content1_left_row1">
+                <div class="content1_left_row1_left">
+                  <lightning-icon
+                    icon-name="utility:chevronleft"
+                    class="back-icon"
+                    alternative-text="chevronleft"
+                    size="x-small"
+                    onclick={closeDetailPage}
+                  ></lightning-icon>
+                  <h1 class="RegNoData">{vehicleByIdData.vehicleNumber}</h1>
                 </div>
-                        <template if:true={imagesAval}>
-                                <div class="upload-image-list">
-                                    <template for:each={uploadImagesArray} for:item="elm">
-                                        <div class={uploadImageCss} key={elm.fileName}>
-                                            <div class="upload-image-top">
-                                                <img src={elm.fileURL} alt="Uploaded Image" style="border-radius: 10px; height: 100%; width: 100%;" />
-                                            </div>
-                                            <div class="upload-image-bottom">
-                                                <p class="imagetext">{elm.fileName}</p>
-                                                <svg class="upload-image-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"  onclick={handleDownloadImage} data-url={elm.fileURL} data-name={elm.fileName}>
-                                                    <path d="M14 11V14H2V11H0V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V11H14ZM13 7L11.59 5.59L9 8.17V0H7V8.17L4.41 5.59L3 7L8 12L13 7Z" fill="white"/>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </template>
-                                </div>
-                
-                        </template>
-                        <template if:false={imagesAval}>
-                            <p>No images available.</p>
-                        </template>
-           
-             
+              </div>
+              <div class="content1_left_row2">
+                <div class="content1_left_row2_1">
+                  <div class="content1_left_row2_element">
+                    <h4 class="Head">登録番号</h4>
+                    <p class="recdata">{vehicleByIdData.registerationNumber}</p>
+                  </div>
+                  <div class="content1_left_row2_element">
+                    <h4 class="Head">車名</h4>
+                    <p class="recdata">{vehicleByIdData.name}</p>
+                  </div>
+                  <div class="content1_left_row2_element">
+                    <h4 class="Head">自動車の種別</h4>
+                    <p class="recdata">{vehicleByIdData.type}</p>
+                  </div>
+                  <div class="content1_left_row2_element">
+                    <h4 class="Head">走行距離</h4>
+                    <p class="recdata">{vehicleByIdData.mileage}km</p>
+                  </div>
+                  <div class="content1_left_row2_element">
+                    <h4 class="Head">車検証有効期限</h4>
+                    <p class="recdata">{vehicleByIdData.expirationDate}</p>
+                  </div>
+                </div>
+
+                <div class="content1_left_row2_2">
+                  <div class="content1_left_left_row3">
+                    <lightning-icon
+                      icon-name={vehicleByIdData.Favourite}
+                      class="back-icon"
+                      alternative-text="Star"
+                      size="x-small"
+                      data-vehicle-id={vehicleId}
+                      onclick={toggleStar}
+                    ></lightning-icon>
+                    <p class="back-icon">お気に入り</p>
+                  </div>
+                  <div class="content1_left_row3">
+                    <button onclick={gotoMaintainencePage}>予定登録</button>
+                    <button>費用登録</button>
+                  </div>
+                </div>
+              </div>
             </div>
+            <div class="content1_right_container">
+              <template if:true={isImageModalOpen}>
+                <template if:true={vehicleByIdLoader2}>
+                  <div class="loader-container">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Loading...</p>
+                  </div>
+                </template>
+                <template if:false={vehicleByIdLoader2}>
+                  <div class="image-display-area">
+                    <template if:true={imagesAvailable}>
+                      <template if:true={vehicleByIdLoader3}>
+                        <div class="loader-container">
+                          <div class="spinner"></div>
+                          <p class="loading-text">Loading...</p>
+                        </div>
+                      </template>
+                      <template if:false={vehicleByIdLoader3}>
+                        <div class="image-display-top">
+                          <img
+                            src={currentImage.fileURL}
+                            alt="Uploaded Image"
+                          />
+                          <div class="image-pagination-container">
+                            <!-- Previous Button -->
+                            <template if:true={isFirstPage}>
+                              <button
+                                class="pagination-button"
+                                onclick={showPreviousImage}
+                                disabled={isPreviousDisabled}
+                              >
+                                <lightning-icon
+                                  icon-name="utility:chevronleft"
+                                  alternative-text="Previous"
+                                  size="xx-small"
+                                  class="pagination-icon"
+                                ></lightning-icon>
+                              </button>
+                            </template>
+
+                            <!-- If not on the first page, show the image icon -->
+                            <template if:false={isFirstPage}>
+                              <button
+                                class="pagination-button"
+                                onclick={showPreviousImage}
+                                disabled={isPreviousDisabled}
+                              >
+                                <lightning-icon
+                                  icon-name="utility:chevronleft"
+                                  alternative-text="Previous"
+                                  size="xx-small"
+                                  class="pagination-icon2 slds-current-color"
+                                ></lightning-icon>
+                              </button>
+                            </template>
+
+                            <!-- Page Indicators -->
+                            <div class="image-dots-container">
+                              <template for:each={visibleDots} for:item="dot">
+                                <span key={dot.key} class={dot.class}></span>
+                              </template>
+                            </div>
+
+                            <!-- Next Button -->
+                            <template if:true={isLastPage}>
+                              <button
+                                class="pagination-button"
+                                onclick={showNextImage}
+                                disabled={isNextDisabled}
+                              >
+                                <lightning-icon
+                                  icon-name="utility:chevronright"
+                                  alternative-text="Next"
+                                  size="xx-small"
+                                  class="pagination-icon"
+                                ></lightning-icon>
+                              </button>
+                            </template>
+
+                            <!-- If not on the first page, show the image icon -->
+                            <template if:false={isLastPage}>
+                              <button
+                                class="pagination-button"
+                                onclick={showNextImage}
+                                disabled={isNextDisabled}
+                              >
+                                <lightning-icon
+                                  icon-name="utility:chevronright"
+                                  alternative-text="Next"
+                                  size="xx-small"
+                                  class="pagination-icon2 slds-current-color"
+                                ></lightning-icon>
+                              </button>
+                            </template>
+                          </div>
+                        </div>
+                      </template>
+                    </template>
+                    <template if:false={imagesAvailable}>
+                      <p>No images available.</p>
+                    </template>
+                  </div>
+                </template>
+              </template>
+              <template if:false={isImageModalOpen}>
+                <div class="loader-container">
+                  <div class="spinner"></div>
+                  <p class="loading-text">Loading...</p>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <div class="content2_container">
+            <div class="recbar">
+              <button
+                class={classVehicleDetails}
+                onclick={showVehicleDetailFun}
+              >
+                <p>{label.CCP2_VehicleDetails}</p>
+                <div></div>
+              </button>
+              <button class="underline-button">
+                {label.CCP2_MaintenanceList}
+                <span class={classMaintainList}></span>
+              </button>
+              <button class="underline-button">
+                {label.CCP2_ExpenseManagement}
+                <span class={classCostManagement}></span>
+              </button>
+              <button class={classMarketMeasure} onclick={showMarketMeasureFun}>
+                市場措置
+                <span class=""></span>
+              </button>
+              <div class="truckonnect">
+                <p>Truckonnect</p>
+                <img
+                  src={truckLogoUrl}
+                  alt="Truckonnect"
+                  style="height: 15px; width: 15px; align-self: center"
+                />
+              </div>
+            </div>
+
+            <div class="recMain no-scroll">
+              <template if:true={showVehicleDetails}>
+                <div class="vehicle_container no-scroll">
+                  <div>
+                    <div class="vehicle_child1">
+                      <div
+                        class="vehicle_child1_container"
+                        style="border-right: 1px solid #00000014"
+                      >
+                        <div class="vehicle_child1_list opacity">
+                          <h3>所属</h3>
+                          <h3>車台番号</h3>
+                          <h3>車検証交付年月日</h3>
+                          <h3>初度登録年月</h3>
+                          <h3>自家用・事業用</h3>
+                          <h3>車体形状</h3>
+                        </div>
+                        <div class="vehicle_child1_list">
+                          <div class="branches">
+                            <h3 title={vehicleByIdData.branchReal}>
+                              {vehicleByIdData.branch}
+                            </h3>
+                            <template if:true={morethanOneBranch}>
+                              <h3 class="branch-All" onclick={branchopen}>
+                                +{vehicleByIdData.OnScreenBranchCount} ほか
+                              </h3>
+                            </template>
+                          </div>
+                          <h3>{vehicleByIdData.chassisNumber}</h3>
+                          <h3>{vehicleByIdData.devileryDate}</h3>
+                          <h3>{vehicleByIdData.firstRegistrationDate}</h3>
+                          <h3>{vehicleByIdData.privateBusinessUse}</h3>
+                          <h3>{vehicleByIdData.carBodyShape}</h3>
+                        </div>
+                      </div>
+                      <div
+                        class="vehicle_child1_container"
+                        style="padding-left: 36px"
+                      >
+                        <div class="vehicle_child1_list opacity">
+                          <h3>車検証画像</h3>
+                          <h3>用途</h3>
+                          <h3>型式</h3>
+                          <h3>燃料の種類</h3>
+                          <h3>車両重量</h3>
+                          <h3>ドアナンバー</h3>
+                        </div>
+                        <div class="vehicle_child1_list">
+                          <h3
+                            style="
+                              color: #e10202;
+                              text-decoration: underline;
+                              white-space: nowrap;
+                              cursor: pointer;
+                            "
+                            onclick={handleCertificateClick}
+                          >
+                            {certificateTitleCount}
+                          </h3>
+                          <h3>{vehicleByIdData.purpose}</h3>
+                          <h3>{vehicleByIdData.model}</h3>
+                          <h3>{vehicleByIdData.typeOfFuel}</h3>
+                          <h3>{vehicleByIdData.vehicleWeigth}kg</h3>
+                          <h3>{vehicleByIdData.doorNumber}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+
+              <template if:true={showMarketMeasure}>
+                <div class="vehicle_container2 no-scroll no-padding">
+                  <table class="mm-main-container">
+                    <thead>
+                      <th>
+                        <span onclick={ToggleFirstDropDown}>
+                          区分
+                          <svg
+                            width="17"
+                            height="21"
+                            viewBox="0 0 20 21"
+                            fill="none"
+                            class="mm-drop-down-icon1"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g clip-path="url(#clip0_14998_62367)">
+                              <g filter="url(#filter0_d_14998_62367)">
+                                <path
+                                  d="M17.5 7.3877L15.7375 5.48486L10 11.6657L4.2625 5.48486L2.5 7.3877L10 15.4849L17.5 7.3877Z"
+                                  fill="#262626"
+                                />
+                              </g>
+                            </g>
+                            <defs>
+                              <filter
+                                id="filter0_d_14998_62367"
+                                x="-17.5"
+                                y="-14.5151"
+                                width="55"
+                                height="50"
+                                filterUnits="userSpaceOnUse"
+                                color-interpolation-filters="sRGB"
+                              >
+                                <feFlood
+                                  flood-opacity="0"
+                                  result="BackgroundImageFix"
+                                />
+                                <feColorMatrix
+                                  in="SourceAlpha"
+                                  type="matrix"
+                                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                  result="hardAlpha"
+                                />
+                                <feOffset />
+                                <feGaussianBlur stdDeviation="10" />
+                                <feComposite in2="hardAlpha" operator="out" />
+                                <feColorMatrix
+                                  type="matrix"
+                                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
+                                />
+                                <feBlend
+                                  mode="normal"
+                                  in2="BackgroundImageFix"
+                                  result="effect1_dropShadow_14998_62367"
+                                />
+                                <feBlend
+                                  mode="normal"
+                                  in="SourceGraphic"
+                                  in2="effect1_dropShadow_14998_62367"
+                                  result="shape"
+                                />
+                              </filter>
+                              <clipPath id="clip0_14998_62367">
+                                <rect
+                                  width="20"
+                                  height="20"
+                                  fill="white"
+                                  transform="translate(0 0.484863)"
+                                />
+                              </clipPath>
+                            </defs>
+                          </svg>
+                        </span>
+                        <template if:true={showRecallCategoryDropdown}>
+                          <div
+                            class="mm-filter-dropdown1"
+                            onclick={handleinsideclick}
+                          >
+                            <div class="mm-filter-dropdown-rows1">
+                              <input
+                                type="checkbox"
+                                name="All"
+                                checked={recallCatFilter.selectAll}
+                                onchange={handleRecallCategoryChangeAll}
+                              />
+                              <p>全て</p>
+                            </div>
+                            <div class="mm-filter-dropdown-rows1">
+                              <input
+                                type="checkbox"
+                                name="Option 1"
+                                checked={recallCatFilter.option1}
+                                onchange={handleRecallCategoryChange}
+                              />
+                              <p>リコール</p>
+                            </div>
+                            <div class="mm-filter-dropdown-rows1">
+                              <input
+                                type="checkbox"
+                                name="Option 2"
+                                checked={recallCatFilter.option2}
+                                onchange={handleRecallCategoryChange}
+                              />
+                              <p>サービス キャンペーン</p>
+                            </div>
+                            <div class="mm-filter-dropdown-rows1">
+                              <input
+                                type="checkbox"
+                                name="Option 3"
+                                checked={recallCatFilter.option3}
+                                onchange={handleRecallCategoryChange}
+                              />
+                              <p>改善対策</p>
+                            </div>
+                          </div>
+                        </template>
+                      </th>
+                      <th>
+                        <span onclick={ToggleSecondDropDown}>
+                          実施状況
+                          <svg
+                            width="17"
+                            height="21"
+                            viewBox="0 0 20 21"
+                            fill="none"
+                            class="mm-drop-down-icon1"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <g clip-path="url(#clip0_14998_62367)">
+                              <g filter="url(#filter0_d_14998_62367)">
+                                <path
+                                  d="M17.5 7.3877L15.7375 5.48486L10 11.6657L4.2625 5.48486L2.5 7.3877L10 15.4849L17.5 7.3877Z"
+                                  fill="#262626"
+                                />
+                              </g>
+                            </g>
+                            <defs>
+                              <filter
+                                id="filter0_d_14998_623677"
+                                x="-17.5"
+                                y="-14.5151"
+                                width="55"
+                                height="50"
+                                filterUnits="userSpaceOnUse"
+                                color-interpolation-filters="sRGB"
+                              >
+                                <feFlood
+                                  flood-opacity="0"
+                                  result="BackgroundImageFix"
+                                />
+                                <feColorMatrix
+                                  in="SourceAlpha"
+                                  type="matrix"
+                                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                  result="hardAlpha"
+                                />
+                                <feOffset />
+                                <feGaussianBlur stdDeviation="10" />
+                                <feComposite in2="hardAlpha" operator="out" />
+                                <feColorMatrix
+                                  type="matrix"
+                                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
+                                />
+                                <feBlend
+                                  mode="normal"
+                                  in2="BackgroundImageFix"
+                                  result="effect1_dropShadow_14998_62367"
+                                />
+                                <feBlend
+                                  mode="normal"
+                                  in="SourceGraphic"
+                                  in2="effect1_dropShadow_14998_62367"
+                                  result="shape"
+                                />
+                              </filter>
+                              <clipPath id="clip0_14998_623677">
+                                <rect
+                                  width="20"
+                                  height="20"
+                                  fill="white"
+                                  transform="translate(0 0.484863)"
+                                />
+                              </clipPath>
+                            </defs>
+                          </svg>
+                        </span>
+                        <template if:true={showImplementationDropdown}>
+                          <div
+                            class="mm-filter-dropdown"
+                            onclick={handleinsideclick}
+                          >
+                            <div class="mm-filter-dropdown-rows">
+                              <input
+                                type="checkbox"
+                                name="All"
+                                checked={implementationFilter.selectAll}
+                                onchange={handleImplementationChangeAll}
+                              />
+                              <p>全て</p>
+                            </div>
+                            <div class="mm-filter-dropdown-rows">
+                              <input
+                                type="checkbox"
+                                name="Option 1"
+                                checked={implementationFilter.option1}
+                                onchange={handleImplementationChange}
+                              />
+                              <p>未実施</p>
+                            </div>
+                            <div class="mm-filter-dropdown-rows">
+                              <input
+                                type="checkbox"
+                                name="Option 2"
+                                checked={implementationFilter.option2}
+                                onchange={handleImplementationChange}
+                              />
+                              <p>一部実施済み</p>
+                            </div>
+                            <div class="mm-filter-dropdown-rows">
+                              <input
+                                type="checkbox"
+                                name="Option 3"
+                                checked={implementationFilter.option3}
+                                onchange={handleImplementationChange}
+                              />
+                              <p>実施済み</p>
+                            </div>
+                          </div> 
+                        </template>
+                      </th>
+                      <th>
+                        <span
+                          if:true={showNormalSortIcon1}
+                          onclick={handleSortImplementationDate}
+                        >
+                          実施日
+                          <svg
+                            width="10"
+                            height="19"
+                            viewBox="0 0 12 19"
+                            fill="none"
+                            class="mm-drop-down-icon2"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M11.6826 10.6407H0.317408C0.257956 10.6404 0.199623 10.6568 0.149121 10.6881C0.0986185 10.7193 0.0580008 10.7642 0.0319421 10.8175C0.00588349 10.8707 -0.0045567 10.9303 0.00182323 10.9892C0.00820316 11.0481 0.0311438 11.1041 0.0680048 11.1506L5.7506 18.3895C5.78011 18.4274 5.81792 18.458 5.86115 18.4792C5.90437 18.5003 5.95187 18.5112 6 18.5112C6.04813 18.5112 6.09563 18.5003 6.13885 18.4792C6.18208 18.458 6.21989 18.4274 6.2494 18.3895L11.932 11.1506C11.9689 11.1041 11.9918 11.0481 11.9982 10.9892C12.0046 10.9303 11.9941 10.8707 11.9681 10.8175C11.942 10.7642 11.9014 10.7193 11.8509 10.6881C11.8004 10.6568 11.742 10.6404 11.6826 10.6407ZM0.317408 8.38176H11.6826C11.742 8.38208 11.8004 8.36566 11.8509 8.33439C11.9014 8.30311 11.942 8.25826 11.9681 8.20498C11.9941 8.15171 12.0046 8.09219 11.9982 8.03326C11.9918 7.97433 11.9689 7.91839 11.932 7.87189L6.2494 0.632999C6.21989 0.595091 6.18208 0.564412 6.13885 0.543307C6.09563 0.522202 6.04813 0.51123 6 0.51123C5.95187 0.51123 5.90437 0.522202 5.86115 0.543307C5.81792 0.564412 5.78011 0.595091 5.7506 0.632999L0.0680048 7.87189C0.0311438 7.91839 0.00820316 7.97433 0.00182323 8.03326C-0.0045567 8.09219 0.00588349 8.15171 0.0319421 8.20498C0.0580008 8.25826 0.0986185 8.30311 0.149121 8.33439C0.199623 8.36566 0.257956 8.38208 0.317408 8.38176Z"
+                              fill="#262626"
+                            />
+                          </svg>
+                        </span>
+                        <span
+                          if:true={showAscSortIcon1}
+                          onclick={handleSortImplementationDate}
+                        >
+                          実施日
+                          <svg
+                            width="12"
+                            height="18"
+                            viewBox="0 0 12 18"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="mm-drop-down-icon2"
+                          >
+                            <path
+                              d="M11.6826 10.1294H0.317408C0.257956 10.1291 0.199623 10.1455 0.149121 10.1768C0.0986185 10.208 0.0580008 10.2529 0.0319421 10.3062C0.00588349 10.3594 -0.0045567 10.419 0.00182323 10.4779C0.00820316 10.5368 0.0311438 10.5928 0.0680048 10.6393L5.7506 17.8782C5.78011 17.9161 5.81792 17.9467 5.86115 17.9679C5.90437 17.989 5.95187 17.9999 6 17.9999C6.04813 17.9999 6.09563 17.989 6.13885 17.9679C6.18208 17.9467 6.21989 17.9161 6.2494 17.8782L11.932 10.6393C11.9689 10.5928 11.9918 10.5368 11.9982 10.4779C12.0046 10.419 11.9941 10.3594 11.9681 10.3062C11.942 10.2529 11.9014 10.208 11.8509 10.1768C11.8004 10.1455 11.742 10.1291 11.6826 10.1294Z"
+                              fill="#262626"
+                            />
+                            <path
+                              d="M0.317408 7.87053H11.6826C11.742 7.87085 11.8004 7.85443 11.8509 7.82316C11.9014 7.79188 11.942 7.74703 11.9681 7.69375C11.9941 7.64048 12.0046 7.58095 11.9982 7.52203C11.9918 7.4631 11.9689 7.40716 11.932 7.36066L6.2494 0.121769C6.21989 0.0838608 6.18208 0.0531816 6.13885 0.0320767C6.09563 0.0109718 6.04813 0 6 0C5.95187 0 5.90437 0.0109718 5.86115 0.0320767C5.81792 0.0531816 5.78011 0.0838608 5.7506 0.121769L0.0680048 7.36066C0.0311438 7.40716 0.00820316 7.4631 0.00182323 7.52203C-0.0045567 7.58095 0.00588349 7.64048 0.0319421 7.69375C0.0580008 7.74703 0.0986185 7.79188 0.149121 7.82316C0.199623 7.85443 0.257956 7.87085 0.317408 7.87053Z"
+                              fill="#BBBBBB"
+                            />
+                          </svg>
+                        </span>
+                        <span
+                          if:true={showDescSortIcon1}
+                          onclick={handleSortImplementationDate}
+                        >
+                          実施日
+                          <svg
+                            width="12"
+                            height="18"
+                            viewBox="0 0 12 18"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="mm-drop-down-icon2"
+                          >
+                            <path
+                              d="M11.6826 10.1294H0.317408C0.257956 10.1291 0.199623 10.1455 0.149121 10.1768C0.0986185 10.208 0.0580008 10.2529 0.0319421 10.3062C0.00588349 10.3594 -0.0045567 10.419 0.00182323 10.4779C0.00820316 10.5368 0.0311438 10.5928 0.0680048 10.6393L5.7506 17.8782C5.78011 17.9161 5.81792 17.9467 5.86115 17.9679C5.90437 17.989 5.95187 17.9999 6 17.9999C6.04813 17.9999 6.09563 17.989 6.13885 17.9679C6.18208 17.9467 6.21989 17.9161 6.2494 17.8782L11.932 10.6393C11.9689 10.5928 11.9918 10.5368 11.9982 10.4779C12.0046 10.419 11.9941 10.3594 11.9681 10.3062C11.942 10.2529 11.9014 10.208 11.8509 10.1768C11.8004 10.1455 11.742 10.1291 11.6826 10.1294Z"
+                              fill="#BBBBBB"
+                            />
+                            <path
+                              d="M0.317408 7.87053H11.6826C11.742 7.87085 11.8004 7.85443 11.8509 7.82316C11.9014 7.79188 11.942 7.74703 11.9681 7.69375C11.9941 7.64048 12.0046 7.58095 11.9982 7.52203C11.9918 7.4631 11.9689 7.40716 11.932 7.36066L6.2494 0.121769C6.21989 0.0838608 6.18208 0.0531816 6.13885 0.0320767C6.09563 0.0109718 6.04813 0 6 0C5.95187 0 5.90437 0.0109718 5.86115 0.0320767C5.81792 0.0531816 5.78011 0.0838608 5.7506 0.121769L0.0680048 7.36066C0.0311438 7.40716 0.00820316 7.4631 0.00182323 7.52203C-0.0045567 7.58095 0.00588349 7.64048 0.0319421 7.69375C0.0580008 7.74703 0.0986185 7.79188 0.149121 7.82316C0.199623 7.85443 0.257956 7.87085 0.317408 7.87053Z"
+                              fill="#262626"
+                            />
+                          </svg>
+                        </span>
+                      </th>
+                      <th>市場措置件名</th>
+                      <th>
+                        <span
+                          onclick={handleSortNotificationDate}
+                          if:true={showNormalSortIcon2}
+                        >
+                          届出日
+                          <svg
+                            width="10"
+                            height="19"
+                            viewBox="0 0 12 19"
+                            fill="none"
+                            class="mm-drop-down-icon2"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M11.6826 10.6407H0.317408C0.257956 10.6404 0.199623 10.6568 0.149121 10.6881C0.0986185 10.7193 0.0580008 10.7642 0.0319421 10.8175C0.00588349 10.8707 -0.0045567 10.9303 0.00182323 10.9892C0.00820316 11.0481 0.0311438 11.1041 0.0680048 11.1506L5.7506 18.3895C5.78011 18.4274 5.81792 18.458 5.86115 18.4792C5.90437 18.5003 5.95187 18.5112 6 18.5112C6.04813 18.5112 6.09563 18.5003 6.13885 18.4792C6.18208 18.458 6.21989 18.4274 6.2494 18.3895L11.932 11.1506C11.9689 11.1041 11.9918 11.0481 11.9982 10.9892C12.0046 10.9303 11.9941 10.8707 11.9681 10.8175C11.942 10.7642 11.9014 10.7193 11.8509 10.6881C11.8004 10.6568 11.742 10.6404 11.6826 10.6407ZM0.317408 8.38176H11.6826C11.742 8.38208 11.8004 8.36566 11.8509 8.33439C11.9014 8.30311 11.942 8.25826 11.9681 8.20498C11.9941 8.15171 12.0046 8.09219 11.9982 8.03326C11.9918 7.97433 11.9689 7.91839 11.932 7.87189L6.2494 0.632999C6.21989 0.595091 6.18208 0.564412 6.13885 0.543307C6.09563 0.522202 6.04813 0.51123 6 0.51123C5.95187 0.51123 5.90437 0.522202 5.86115 0.543307C5.81792 0.564412 5.78011 0.595091 5.7506 0.632999L0.0680048 7.87189C0.0311438 7.91839 0.00820316 7.97433 0.00182323 8.03326C-0.0045567 8.09219 0.00588349 8.15171 0.0319421 8.20498C0.0580008 8.25826 0.0986185 8.30311 0.149121 8.33439C0.199623 8.36566 0.257956 8.38208 0.317408 8.38176Z"
+                              fill="#262626"
+                            />
+                          </svg>
+                        </span>
+                        <span
+                          if:true={showAscSortIcon2}
+                          onclick={handleSortNotificationDate}
+                        >
+                          実施日
+                          <svg
+                            width="12"
+                            height="18"
+                            viewBox="0 0 12 18"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="mm-drop-down-icon2"
+                          >
+                            <path
+                              d="M11.6826 10.1294H0.317408C0.257956 10.1291 0.199623 10.1455 0.149121 10.1768C0.0986185 10.208 0.0580008 10.2529 0.0319421 10.3062C0.00588349 10.3594 -0.0045567 10.419 0.00182323 10.4779C0.00820316 10.5368 0.0311438 10.5928 0.0680048 10.6393L5.7506 17.8782C5.78011 17.9161 5.81792 17.9467 5.86115 17.9679C5.90437 17.989 5.95187 17.9999 6 17.9999C6.04813 17.9999 6.09563 17.989 6.13885 17.9679C6.18208 17.9467 6.21989 17.9161 6.2494 17.8782L11.932 10.6393C11.9689 10.5928 11.9918 10.5368 11.9982 10.4779C12.0046 10.419 11.9941 10.3594 11.9681 10.3062C11.942 10.2529 11.9014 10.208 11.8509 10.1768C11.8004 10.1455 11.742 10.1291 11.6826 10.1294Z"
+                              fill="#262626"
+                            />
+                            <path
+                              d="M0.317408 7.87053H11.6826C11.742 7.87085 11.8004 7.85443 11.8509 7.82316C11.9014 7.79188 11.942 7.74703 11.9681 7.69375C11.9941 7.64048 12.0046 7.58095 11.9982 7.52203C11.9918 7.4631 11.9689 7.40716 11.932 7.36066L6.2494 0.121769C6.21989 0.0838608 6.18208 0.0531816 6.13885 0.0320767C6.09563 0.0109718 6.04813 0 6 0C5.95187 0 5.90437 0.0109718 5.86115 0.0320767C5.81792 0.0531816 5.78011 0.0838608 5.7506 0.121769L0.0680048 7.36066C0.0311438 7.40716 0.00820316 7.4631 0.00182323 7.52203C-0.0045567 7.58095 0.00588349 7.64048 0.0319421 7.69375C0.0580008 7.74703 0.0986185 7.79188 0.149121 7.82316C0.199623 7.85443 0.257956 7.87085 0.317408 7.87053Z"
+                              fill="#BBBBBB"
+                            />
+                          </svg>
+                        </span>
+                        <span
+                          if:true={showDescSortIcon2}
+                          onclick={handleSortNotificationDate}
+                        >
+                          実施日
+                          <svg
+                            width="12"
+                            height="18"
+                            viewBox="0 0 12 18"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="mm-drop-down-icon2"
+                          >
+                            <path
+                              d="M11.6826 10.1294H0.317408C0.257956 10.1291 0.199623 10.1455 0.149121 10.1768C0.0986185 10.208 0.0580008 10.2529 0.0319421 10.3062C0.00588349 10.3594 -0.0045567 10.419 0.00182323 10.4779C0.00820316 10.5368 0.0311438 10.5928 0.0680048 10.6393L5.7506 17.8782C5.78011 17.9161 5.81792 17.9467 5.86115 17.9679C5.90437 17.989 5.95187 17.9999 6 17.9999C6.04813 17.9999 6.09563 17.989 6.13885 17.9679C6.18208 17.9467 6.21989 17.9161 6.2494 17.8782L11.932 10.6393C11.9689 10.5928 11.9918 10.5368 11.9982 10.4779C12.0046 10.419 11.9941 10.3594 11.9681 10.3062C11.942 10.2529 11.9014 10.208 11.8509 10.1768C11.8004 10.1455 11.742 10.1291 11.6826 10.1294Z"
+                              fill="#BBBBBB"
+                            />
+                            <path
+                              d="M0.317408 7.87053H11.6826C11.742 7.87085 11.8004 7.85443 11.8509 7.82316C11.9014 7.79188 11.942 7.74703 11.9681 7.69375C11.9941 7.64048 12.0046 7.58095 11.9982 7.52203C11.9918 7.4631 11.9689 7.40716 11.932 7.36066L6.2494 0.121769C6.21989 0.0838608 6.18208 0.0531816 6.13885 0.0320767C6.09563 0.0109718 6.04813 0 6 0C5.95187 0 5.90437 0.0109718 5.86115 0.0320767C5.81792 0.0531816 5.78011 0.0838608 5.7506 0.121769L0.0680048 7.36066C0.0311438 7.40716 0.00820316 7.4631 0.00182323 7.52203C-0.0045567 7.58095 0.00588349 7.64048 0.0319421 7.69375C0.0580008 7.74703 0.0986185 7.79188 0.149121 7.82316C0.199623 7.85443 0.257956 7.87085 0.317408 7.87053Z"
+                              fill="#262626"
+                            />
+                          </svg>
+                        </span>
+                      </th>
+                      <th>管理番号</th>
+                    </thead>
+                    <tbody>
+                      <template for:each={marketMeasureData} for:item="elm">
+                        <tr key={elm.Id} class={elm.trClassName}>
+                          <td>{elm.recallCategory__c}</td>
+                          <td>{elm.implementationStatus__c}</td>
+                          <td>{elm.renovationDate__c}</td>
+                          <td class="recall-subject-length">
+                            <span title={elm.recallSubject__c}
+                              >{elm.recallSubject__c}</span
+                            >
+                          </td>
+                          <td>{elm.notificationDate__c}</td>
+                          <td>{elm.controlNumber__c}</td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+
+                  <div class="empty-container" if:true={showEmptyContiner}>
+                    <img src={emptyRecallDataIcon} />
+                    <p>該当する市場措置情報がありません</p>
+                  </div>
+                </div>
+              </template>
+
+              <template if:true={innerContainerLoader}>
+                <div
+                  style="
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                >
+                  <lightning-spinner
+                    alternative-text="Loading"
+                    size="small"
+                  ></lightning-spinner>
+                </div>
+              </template>
+            </div>
+
+            <div class="buttons">
+              <div class="btnrec">
+                <!-- <img
+                  src={vehicleIcon}
+                  alt="Delete Vehicle"
+                  onclick={dothis}
+                  class="bottom-icons"
+                /> -->
+                <div class="deletevehicle">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M13.8044 9.64993C13.9323 9.12086 14 8.56834 14 8H18.0903V11.2999H20.5448L22.9992 14.5997V18.7245H21.3629C21.3629 20.094 20.2666 21.1994 18.9085 21.1994C17.5504 21.1994 16.454 20.094 16.454 18.7245H11.5452C11.5452 20.094 10.4489 21.1994 9.09073 21.1994C7.73261 21.1994 6.63629 20.094 6.63629 18.7245H5V14.7101C5.52247 14.8656 6.07051 14.9618 6.63629 14.9907V17.0746H7.27445C7.72443 16.5714 8.36258 16.2496 9.09073 16.2496C9.81888 16.2496 10.457 16.5714 10.907 17.0746H16.454V9.64993H13.8044ZM21.7393 14.5997L20.1357 12.5373H18.0903V14.5997H21.7393ZM8.27259 18.7245C8.27259 19.1783 8.64075 19.5495 9.09073 19.5495C9.54071 19.5495 9.90888 19.1783 9.90888 18.7245C9.90888 18.2708 9.54071 17.8996 9.09073 17.8996C8.64075 17.8996 8.27259 18.2708 8.27259 18.7245ZM18.0903 18.7245C18.0903 19.1783 18.4585 19.5495 18.9085 19.5495C19.3585 19.5495 19.7266 19.1783 19.7266 18.7245C19.7266 18.2708 19.3585 17.8996 18.9085 17.8996C18.4585 17.8996 18.0903 18.2708 18.0903 18.7245Z"
+                      class="deletetruck delete vehicle"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M7 14C10.3137 14 13 11.3137 13 8C13 4.68629 10.3137 2 7 2C3.68629 2 1 4.68629 1 8C1 11.3137 3.68629 14 7 14ZM9.12229 4.46445L10.5365 5.87867L8.41518 7.99999L10.5365 10.1213L9.12229 11.5355L7.00097 9.4142L4.87965 11.5355L3.46543 10.1213L5.58675 7.99999L3.46543 5.87867L4.87965 4.46445L7.00097 6.58577L9.12229 4.46445Z"
+                      class="deletetruck delete vehicle"
+                    />
+                  </svg>
+                  <span class="b deletetext">車両削除</span>
+                </div>
+                <div class="download" onclick={openDownloadModalfunction}>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14 11V14H2V11H0V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V11H14ZM13 7L11.59 5.59L9 8.17V0H7V8.17L4.41 5.59L3 7L8 12L13 7Z"
+                      class="printtruck"
+                    />
+                  </svg>
+                  <span class="b downloadvehicle">ダウンロード</span>
+                </div>
+                <div class="editvehicle">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M15 16.001L11 20.001H21V16.001H15Z"
+                      class="edittruck"
+                    />
+                    <path
+                      d="M12.06 7.19098L3 16.251V20.001H6.75L15.81 10.941L12.06 7.19098ZM5.92 18.001H5V17.081L12.06 10.021L12.98 10.941L5.92 18.001Z"
+                      class="edittruck"
+                    />
+                    <path
+                      d="M18.71 8.04098C19.1 7.65098 19.1 7.02098 18.71 6.63098L16.37 4.29098C16.17 4.09098 15.92 4.00098 15.66 4.00098C15.41 4.00098 15.15 4.10098 14.96 4.29098L13.13 6.12098L16.88 9.87098L18.71 8.04098Z"
+                      class="edittruck"
+                    />
+                  </svg>
+                  <span class="b editvehicle">編集する</span>
+                </div>
+              </div>
+
+              <!-- pagination made by jashanpreet singh -->
+              <div class="mm-pagination-container">
+                <template if:true={hasVehicles2}>
+                  <div class="mm-big-div-page">
+                    <button
+                      class="mm-nav-button"
+                      onclick={handlePreviousPage2}
+                      disabled={isPreviousDisabled2}
+                    >
+                      <lightning-icon
+                        icon-name="utility:chevronleft"
+                        alternative-text="Previous"
+                        size="xx-small"
+                      ></lightning-icon>
+                    </button>
+                    <span if:true={showLeftDots2} class="mm-page-button-dots"
+                      >...</span
+                    >
+
+                    <template for:each={visiblePageCount2} for:item="page">
+                      <button
+                        class="mm-page-button"
+                        data-page={page}
+                        onclick={pageCountClick2}
+                        key={page}
+                      >
+                        {page}
+                      </button>
+                    </template>
+
+                    <span if:true={showRightDots2} class="mm-page-button-dots"
+                      >...</span
+                    >
+                    <button
+                      if:true={showRightDots2}
+                      class="mm-page-button"
+                      data-page={totalPageCount2}
+                      onclick={pageCountClick2}
+                    >
+                      {totalPageCount2}
+                    </button>
+
+                    <button
+                      class="mm-nav-button"
+                      onclick={handleNextPage2}
+                      disabled={isNextDisabled2}
+                    >
+                      <lightning-icon
+                        icon-name="utility:chevronright"
+                        alternative-text="Next"
+                        size="xx-small"
+                      ></lightning-icon>
+                    </button>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+  <template if:true={isModalOpen}>
+    <div class="modal-background">
+      <div class="modal-window">
+        <div class="modal-header">
+          <lightning-icon
+            icon-name="utility:close"
+            size="x-small"
+            alternative-text="Close"
+            onclick={handleCloseModal}
+            class="close-button"
+          >
+          </lightning-icon>
         </div>
-    </template>
-    
-    
-    
-    <template if:true={showMaintainencePage}>
-        <c-ccp2-Vehicle-Maintainence-Form  veh-id={vehId}></c-ccp2-Vehicle-Maintainence-Form>
-    </template>
+        <template if:true={imagesAval}>
+          <div class="upload-image-list">
+            <template for:each={uploadImagesArray} for:item="elm">
+              <div class={uploadImageCss} key={elm.fileName}>
+                <div class="upload-image-top">
+                  <img
+                    src={elm.fileURL}
+                    alt="Uploaded Image"
+                    style="border-radius: 10px; height: 100%; width: 100%"
+                  />
+                </div>
+                <div class="upload-image-bottom">
+                  <p class="imagetext" title={elm.fileName}>
+                    {elm.ProcessedFileName}
+                  </p>
+                  <svg
+                    class="upload-image-icon"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    onclick={handleDownloadImage}
+                    data-url={elm.fileURL}
+                    data-name={elm.fileName}
+                  >
+                    <path
+                      d="M14 11V14H2V11H0V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V11H14ZM13 7L11.59 5.59L9 8.17V0H7V8.17L4.41 5.59L3 7L8 12L13 7Z"
+                      fill="white"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
+        <template if:false={imagesAval}>
+          <p>No images available.</p>
+        </template>
+      </div>
+    </div>
+  </template>
+  <template if:true={BranchesModal}>
+    <div class="modal-background">
+      <div class="modal-window-branch">
+        <div class="modal-header-branch">
+          <div class="count">
+            <h1>{vehicleByIdData.branchCount}</h1>
+            <h1 style="font-weight: bold">所属</h1>
+          </div>
+          <lightning-icon
+            icon-name="utility:close"
+            size="x-small"
+            alternative-text="Close"
+            onclick={branchClose}
+            class="close-button-branch"
+          >
+          </lightning-icon>
+        </div>
+        <div class="branch-container">
+          <template for:each={Branches} for:item="branch">
+            <div key={branch.Id} class="branch-card">
+              <P title={branch.originalName}>
+                <strong>⋅</strong> {branch.Name}
+              </P>
+              <P
+                >{branch.Account__r.siebelAccountCode__c} -<template
+                  if:true={showone}
+                  >00</template
+                >{branch.Branch_Code__c}</P
+              >
+              <p class="siebelcode" title={branch.originalMinicipalities}>
+                {branch.Minicipalities__c}
+              </p>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={showMaintainencePage}>
+    <c-ccp2-Vehicle-Maintainence-Form
+      veh-id={vehId}
+      onback={handlebackhere}
+    ></c-ccp2-Vehicle-Maintainence-Form>
+  </template>
+  <template if:true={openDownloadModal}>
+    <div class="modal-background-last">
+      <div class="modal-window-small">
+        <div class="Download-name-container">
+          <p class="Heading-download">ダウンロード 車両リスト</p>
+          <p class="label-download">ファイル名</p>
+          <input
+            type="text"
+            value={DownloadNameValue}
+            onchange={handleDownloadChange}
+            placeholder="名前を入力してください。"
+            class="Download-name"
+            maxlength="24"
+          />
+          <p class="label-end">ダウンロードフォーマットは、 CSV　とする</p>
+        </div>
+        <div class="buttons-small">
+          <div
+            class="cancelbutton-download btn-download"
+            onclick={closeDownloadModal}
+          >
+            <p class="buttontxt">キャンセル</p>
+          </div>
+          <div
+            class="searchbutton-download btn-download"
+            onclick={finaldownload}
+          >
+            <p class="buttontxt2">ダウンロード</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={ShowSuccessDownload}>
+    <div class="modal-background-last">
+      <div class="modal-window-loader">
+        <p class="warntxt">
+          ファイルは指定されたフォルダーに正常にダウンロードされました
+        </p>
+      </div>
+    </div>
+  </template>
 </template>
