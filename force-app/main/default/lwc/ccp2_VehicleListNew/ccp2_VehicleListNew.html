@@ -94,7 +94,6 @@
                             <p>{elm.branchName}</p>
                           </div>
                         </template>
-
                       </div>
                     </div>
                   </div>
@@ -188,7 +187,8 @@
                   </template>
                   <template if:true={jsonParameterForVehicleClassWithoutString.Milage}>
                     <span class="pill">
-                      <span class="pill__label">{milageMin} - {milageMax}km</span>
+                      <span class="pill__label" if:false={isMilageAbove}>{milageMin} - {milageMax}km</span>
+                      <span class="pill__label" if:true={isMilageAbove}>>{milageMax}km</span>
                       <button class="pill__remove" data-key='Milage' onclick={removePill}>
                         ✖
                       </button>
@@ -196,7 +196,8 @@
                   </template>
                   <template if:true={jsonParameterForVehicleClassWithoutString.RegDiff}>
                     <span class="pill">
-                      <span class="pill__label">{regMin} - {regMax}年</span>
+                      <span class="pill__label" if:false={isRegDiffAbove}>{regMin} - {regMax}年</span>
+                      <span class="pill__label" if:true={isRegDiffAbove}>>{regMax}年</span>
                       <button class="pill__remove" data-key='RegDiff' onclick={removePill}>
                         ✖
                       </button>
@@ -204,7 +205,8 @@
                   </template>
                   <template if:true={jsonParameterForVehicleClassWithoutString.ExpDiff}>
                     <span class="pill">
-                      <span class="pill__label">{expMin} - {expMax}ヶ月</span>
+                      <span class="pill__label" if:false={isExpDiffAbove}>{expMin} - {expMax}ヶ月</span>
+                      <span class="pill__label" if:true={isExpDiffAbove}>>{expMax}ヶ月</span>
                       <button class="pill__remove" data-key='ExpDiff' onclick={removePill}>
                         ✖
                       </button>
@@ -352,10 +354,12 @@
                                     <p class="head">{labels2.ccp2_vl_expiration_date6}</p>
                                     <p class="Datahead-deleted">{vehicle.expDate}</p>
                                   </div>
-                                  <div class="nextdate-deleted data">
-                                    <p class="head">{labels2.ccp2_vl_next_maintenance_date9}</p>
-                                    <p class="Datahead-deleted">NA</p>
-                                  </div>
+                                  <template if:false={pinnedFilter}>
+                                    <div class="nextdate-deleted data">
+                                      <p class="head">{labels2.ccp2_vl_next_maintenance_date9}</p>
+                                      <p class="Datahead-deleted">NA</p>
+                                    </div>
+                                  </template>
                                   <div class="addition-deleted data"></div>
                                 </div>
 
@@ -478,12 +482,12 @@
                     <button class="deletebtnscancel borderclass" onclick={handlebackfromdelete}>
                       {labels2.ccp2_vl_cancel3}
                     </button>
-                    <template if:false={isCurrentPageSelectedAll}>
+                    <template if:true={showSelectAllButton}>
                       <button class="deletebtnsall" onclick={handledeleteselectall}>
                         {labels2.ccp2_vl_select_all5}
                       </button>
                     </template>
-                    <template if:true={isCurrentPageSelectedAll}>
+                    <template if:true={showDeselectAllButton}>
                       <button class="deletebtnsalldeselect" onclick={handledeleteDeselectall}>
                         {labels2.ccp2_vl_delete6}
                       </button>
@@ -1237,14 +1241,14 @@
                   </template>
 
                   <template if:true={currentVehicledelete.vehicleWeight__c}>
-                    <h3>{currentVehicledelete.vehicleWeight__c}</h3>
+                    <h3>{currentVehicledelete.vehicleWeight__c} Kg</h3>
                   </template>
                   <template if:false={currentVehicledelete.vehicleWeight__c}>
                     <p>-</p>
                   </template>
 
                   <template if:true={currentVehicledelete.Mileage__c}>
-                    <h3>{currentVehicledelete.Mileage__c}</h3>
+                    <h3>{currentVehicledelete.Mileage__c} Km</h3>
                   </template>
                   <template if:false={currentVehicledelete.Mileage__c}>
                     <p>-</p>

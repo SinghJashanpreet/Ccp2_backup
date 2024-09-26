@@ -182,8 +182,11 @@ export default class Ccp2_VehicleListNew extends LightningElement {
 
   // delete variablesss
   @track totalbranchcountDel = "";
+  @track showSelectAllButton = true;
+  @track showDeselectAllButton = false;
   @track pageSelectionState = {};
   deletecheckboxoverfav = false;
+  selectedVehiclesByPage = new Map();
   deletebuttonsall = false;
   @track deletestatus = false;
   @track cancelmodaldeletevehicle = false;
@@ -238,26 +241,42 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     return this.finalFilterJsonForClass;
   }
 
+  get isMilageAbove() {
+    return this.jsonParameterForVehicleClassWithoutString.Milage[1] === 1000001;
+  }
+  get isExpDiffAbove() {
+    return this.jsonParameterForVehicleClassWithoutString.ExpDiff[1] === 13;
+  }
+  get isRegDiffAbove() {
+    return this.jsonParameterForVehicleClassWithoutString.RegDiff[1] === 16;
+  }
+
   get milageMin() {
     return this.jsonParameterForVehicleClassWithoutString.Milage[0];
   }
 
   get milageMax() {
-    return this.jsonParameterForVehicleClassWithoutString.Milage[1];
+    return this.jsonParameterForVehicleClassWithoutString.Milage[1] === 1000001
+      ? 1000000
+      : this.jsonParameterForVehicleClassWithoutString.Milage[1];
   }
   get expMin() {
     return this.jsonParameterForVehicleClassWithoutString.ExpDiff[0];
   }
 
   get expMax() {
-    return this.jsonParameterForVehicleClassWithoutString.ExpDiff[1];
+    return this.jsonParameterForVehicleClassWithoutString.ExpDiff[1] === 13
+      ? 12
+      : this.jsonParameterForVehicleClassWithoutString.ExpDiff[1];
   }
   get regMin() {
     return this.jsonParameterForVehicleClassWithoutString.RegDiff[0];
   }
 
   get regMax() {
-    return this.jsonParameterForVehicleClassWithoutString.RegDiff[1];
+    return this.jsonParameterForVehicleClassWithoutString.RegDiff[1] === 16
+      ? 15
+      : this.jsonParameterForVehicleClassWithoutString.RegDiff[1];
   }
 
   get isShowVehicleFilterPills() {
@@ -372,6 +391,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     this.vehicleListApiData = result;
     const { data, error } = result;
     if (data) {
+      console.log("lists data", data);
       console.log(
         "vehicel wire is running",
         this.currentPagination,
@@ -839,18 +859,19 @@ export default class Ccp2_VehicleListNew extends LightningElement {
 
   pageCountClick(event) {
     this.currentPage = Number(event.target.dataset.page);
+    this.updateButtonVisibility();
     this.updatePageButtons();
     this.updateVehicleClasses();
     this.updateCheckboxStates();
   }
 
   updatePageButtons() {
-    console.log("in update pagination");
+    // console.log("in update pagination");
     const buttons = this.template.querySelectorAll(".page-button");
     buttons.forEach((button) => {
       const pageNum = Number(button.dataset.page);
       if (pageNum === this.currentPage) {
-        console.log("Current Page Number clicked: ", pageNum);
+        // console.log("Current Page Number clicked: ", pageNum);
         button.classList.add("cuurent-page");
       } else {
         button.classList.remove("cuurent-page");
@@ -871,6 +892,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       this.updatePageButtons();
       this.updateCheckboxStates();
       this.updateVehicleClasses();
+      this.updateButtonVisibility();
     }
   }
   handleNextPage() {
@@ -883,6 +905,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       this.updatePageButtons();
       this.updateCheckboxStates();
       this.updateVehicleClasses();
+      this.updateButtonVisibility();
     }
   }
 
@@ -951,10 +974,12 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   handleSuggestionInputChange(event) {
     if (event.target.value === "") {
       this.currentPagination = Number(this.currentPagination) + 1;
+      // eslint-disable-next-line @lwc/lwc/no-async-operation
       setTimeout(() => {
         this.currentPagination = Number(this.currentPagination) - 1;
       }, 0);
       this.filterData = [];
+      this.filterSuggestionsToSend = "";
       this.searchFilter = false;
       console.log("filterednew", this.filterData);
       this.errorSearch = false;
@@ -1342,8 +1367,11 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         }
       );
       if (!isChecked) {
-        console.log('this.finalVehicleNameList in ischeck',this.finalVehicleNameList)
-        // this.finalVehicleNameList = [];
+        console.log(
+          "this.finalVehicleNameList in ischeck",
+          this.finalVehicleNameList
+        );
+        this.finalVehicleNameList = [];
       }
 
       lengthOfList = this.finalVehicleNameList.length;
@@ -1390,7 +1418,9 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         finalVehicleNameList: this.finalVehicleNameList
       };
     } else {
-      delete this.finalFilterJson.finalVehicleNameList;
+      // eslint-disable-next-line no-unused-vars
+      const { finalVehicleNameList, ...rest } = this.finalFilterJson;
+      this.finalFilterJson = rest;
     }
     console.log(
       "this.finalVehicleNameList",
@@ -1467,7 +1497,9 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         finalVehicleTypeList: this.finalVehicleTypeList
       };
     } else {
-      delete this.finalFilterJson.finalVehicleTypeList;
+      // eslint-disable-next-line no-unused-vars
+      const { finalVehicleTypeList, ...rest } = this.finalFilterJson;
+      this.finalFilterJson = rest;
     }
     console.log(
       "this.finalVehicleTypeList",
@@ -1711,11 +1743,61 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       `input[name="rangeTwo"][data-id="${id}"]`
     );
 
+    console.log("parseFloat(rangeOne.value)", parseFloat(rangeOne.value));
+    // console.log("parseFloat(rangeTwo.value)", parseFloat(rangeTwo.value));
     // Store the decimal values of the ranges for the corresponding slider
     this.rangeValues[id].lower = parseFloat(rangeOne.value);
     this.rangeValues[id].upper = parseFloat(rangeTwo.value);
 
     const multiplier = this.sliderConfigs[id].multiplier;
+
+    let subtractor = 5;
+    if (id === "Slider1") {
+      subtractor = 5;
+    } else if (id === "Slider2") {
+      subtractor = 8.33333333333;
+    } else {
+      subtractor = 6.66666666666;
+    }
+    if (name === "rangeOne" && value >= parseFloat(rangeTwo.value)) {
+      rangeOne.value = parseFloat(rangeTwo.value) - parseFloat(subtractor);
+      this[`rangeOneValue${id}`] =
+        parseFloat(rangeTwo.value) - parseFloat(subtractor);
+
+      this.rangeValues[id].lower =
+        parseFloat(rangeTwo.value) - parseFloat(subtractor);
+
+      // eslint-disable-next-line no-useless-return
+    } else if (name === "rangeTwo" && value <= parseFloat(rangeOne.value)) {
+      rangeTwo.value = parseFloat(rangeOne.value) + parseFloat(subtractor);
+      this[`rangeTwoValue${id}`] =
+        parseFloat(rangeOne.value) + parseFloat(subtractor);
+
+      this.rangeValues[id].upper =
+        parseFloat(rangeOne.value) + parseFloat(subtractor);
+      // eslint-disable-next-line no-useless-return
+    }
+
+    // eslint-disable-next-line no-else-return
+    else {
+      console.log("in valid case");
+      if (name === "rangeOne") {
+        this[`rangeOneValue${id}`] = value;
+        this.rangeValues[id].lower = value;
+      } else {
+        this[`rangeTwoValue${id}`] = value;
+        this.rangeValues[id].upper = value;
+      }
+      this.updateInclusiveRange(rangeOne.value, rangeTwo.value, id);
+      this.updateFloatingValues(id);
+    }
+
+    console.log(
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      Number(Math.ceil(this.rangeValues[id].lower * multiplier).toFixed(0)),
+      Number(Math.ceil(this.rangeValues[id].upper * multiplier).toFixed(0))
+    );
+
     if (id === "Slider1") {
       this.finalFilterJson = {
         ...this.finalFilterJson,
@@ -1740,35 +1822,6 @@ export default class Ccp2_VehicleListNew extends LightningElement {
           Number(Math.ceil(this.rangeValues[id].upper * multiplier).toFixed(0))
         ]
       };
-    }
-
-    console.log(
-      "Slider Left Value: ",
-      Math.ceil(this.rangeValues[id].lower * multiplier).toFixed(0)
-    );
-    console.log(
-      "Slider Right Value: ",
-      Math.ceil(this.rangeValues[id].upper * multiplier).toFixed(0)
-    );
-
-    // Handle case when the min and max are the same
-    if (name === "rangeOne" && value >= parseFloat(rangeTwo.value)) {
-      // Set rangeOne to one step below rangeTwo
-      rangeOne.value = parseFloat(rangeTwo.value) - 1;
-      this[`rangeOneValue${id}`] = parseFloat(rangeTwo.value) - 1; // Update stored value
-    } else if (name === "rangeTwo" && value <= parseFloat(rangeOne.value)) {
-      // Set rangeTwo to one step above rangeOne
-      rangeTwo.value = parseFloat(rangeOne.value) + 1;
-      this[`rangeTwoValue${id}`] = parseFloat(rangeOne.value) + 1; // Update stored value
-    } else {
-      // Valid case where rangeOne < rangeTwo
-      if (name === "rangeOne") {
-        this[`rangeOneValue${id}`] = value;
-      } else {
-        this[`rangeTwoValue${id}`] = value;
-      }
-      this.updateInclusiveRange(rangeOne.value, rangeTwo.value, id);
-      this.updateFloatingValues(id);
     }
   }
 
@@ -1982,7 +2035,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         };
       } else {
         // eslint-disable-next-line no-unused-vars
-        const {Milage, ...rest} = this.finalFilterJson;
+        const { Milage, ...rest } = this.finalFilterJson;
         this.finalFilterJson = rest;
       }
     } else if (checkboxId === "checkboxslider2") {
@@ -2002,7 +2055,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         };
       } else {
         // eslint-disable-next-line no-unused-vars
-        const {ExpDiff, ...rest} = this.finalFilterJson;
+        const { ExpDiff, ...rest } = this.finalFilterJson;
         this.finalFilterJson = rest;
       }
     } else if (checkboxId === "checkboxslider3") {
@@ -2021,7 +2074,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         };
       } else {
         // eslint-disable-next-line no-unused-vars
-        const {RegDiff, ...rest} = this.finalFilterJson;
+        const { RegDiff, ...rest } = this.finalFilterJson;
         this.finalFilterJson = rest;
       }
     }
@@ -2042,41 +2095,78 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     this.deletecheckboxoverfav = false;
     this.selectedall = false;
     this.deletebuttonsall = false;
+    this.showSelectAllButton = true;
+    this.showDeselectAllButton = false;
     this.updateVehicleClasses();
   }
 
   handledeleteselectall() {
-    const currentlyOwnedVehicles = this.vehicleData.filter(
+    const currentlyOwnedVehiclesOnPage = this.vehicleData.filter(
       (vehicle) => vehicle.statusOwned
     );
-
     this.pageSelectionState[this.currentPage] = true;
 
-    currentlyOwnedVehicles.forEach((vehicle) => {
-      this.selectedVehicleStates[vehicle.Id] = true;
+    const selectedVehicleIdsOnPage = currentlyOwnedVehiclesOnPage.map(
+      (vehicle) => vehicle.Id
+    );
 
-      if (!this.deleteselectedVehicleIds.includes(vehicle.Id)) {
-        this.deleteselectedVehicleIds.push(vehicle.Id);
+    this.selectedVehiclesByPage.set(this.currentPage, selectedVehicleIdsOnPage);
+
+    selectedVehicleIdsOnPage.forEach((vehicleId) => {
+      this.selectedVehicleStates[vehicleId] = true;
+      if (!this.deleteselectedVehicleIds.includes(vehicleId)) {
+        this.deleteselectedVehicleIds.push(vehicleId);
       }
     });
+    console.log(
+      "deleteselectedVehicleIds",
+      JSON.stringify(this.deleteselectedVehicleIds)
+    );
 
     this.updateVehicleClasses();
     this.updateCheckboxStates();
-  }
-  get isCurrentPageSelectedAll() {
-    return this.pageSelectionState[this.currentPage];
+    this.updateButtonVisibility();
   }
 
   handledeleteDeselectall() {
-    this.pageSelectionState[this.currentPage] = false;
-    this.deleteselectedVehicleIds = [];
+    const currentlyOwnedVehiclesOnPage = this.vehicleData.filter(
+      (vehicle) => vehicle.statusOwned
+    );
 
-    Object.keys(this.selectedVehicleStates).forEach((key) => {
-      this.selectedVehicleStates[key] = false;
+    this.selectedVehiclesByPage.delete(this.currentPage);
+    this.pageSelectionState[this.currentPage] = false;
+
+    currentlyOwnedVehiclesOnPage.forEach((vehicle) => {
+      this.selectedVehicleStates[vehicle.Id] = false;
+      this.deleteselectedVehicleIds = this.deleteselectedVehicleIds.filter(
+        (id) => id !== vehicle.Id
+      );
     });
 
     this.updateVehicleClasses();
     this.updateCheckboxStates();
+    this.updateButtonVisibility();
+  }
+
+  updateButtonVisibility() {
+    const currentlyOwnedVehiclesOnPage = this.vehicleData.filter(
+      (vehicle) => vehicle.statusOwned
+    );
+    const selectedVehicleIdsOnPage =
+      this.selectedVehiclesByPage.get(this.currentPage) || [];
+    const totalOwnedOnPage = currentlyOwnedVehiclesOnPage.length;
+
+    console.log("currentlyOwnedVehiclesOnPage", currentlyOwnedVehiclesOnPage);
+    console.log("selectedVehicleIdsOnPage", selectedVehicleIdsOnPage);
+    if (totalOwnedOnPage === 0) {
+      this.showSelectAllButton = true;
+      this.showDeselectAllButton = false;
+    } else {
+      this.showSelectAllButton =
+        selectedVehicleIdsOnPage.length < totalOwnedOnPage;
+      this.showDeselectAllButton =
+        selectedVehicleIdsOnPage.length >= totalOwnedOnPage;
+    }
   }
 
   initializePageSelectionState() {
@@ -2092,6 +2182,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
 
     this.selectedVehicleStates[vehicleId] = isChecked;
     this.updateVehicleClasses();
+    this.updateButtonVisibility();
     this.handleCheckboxChangeFromCard(vehicleId, isChecked);
   }
 
@@ -2108,19 +2199,32 @@ export default class Ccp2_VehicleListNew extends LightningElement {
 
     this.updateVehicleClasses();
 
-    const currentlyOwnedVehicles = this.vehicleData.filter(
+    const currentlyOwnedVehiclesOnPage = this.vehicleData.filter(
       (vehicle) => vehicle.statusOwned
     );
-    const totalOwned = currentlyOwnedVehicles.length;
-    const totalSelected = this.deleteselectedVehicleIds.length;
+    const totalOwnedOnPage = currentlyOwnedVehiclesOnPage.length;
+    const totalSelectedOnPage = currentlyOwnedVehiclesOnPage.filter(
+      (vehicle) => this.selectedVehicleStates[vehicle.Id]
+    ).length;
 
-    this.selectedall = totalOwned === totalSelected;
-
-    if (totalSelected < totalOwned) {
+    if (totalSelectedOnPage === totalOwnedOnPage) {
+      this.pageSelectionState[this.currentPage] = true;
+      this.selectedVehiclesByPage.set(
+        this.currentPage,
+        currentlyOwnedVehiclesOnPage.map((vehicle) => vehicle.Id)
+      );
+    } else {
       this.pageSelectionState[this.currentPage] = false;
+      this.selectedVehiclesByPage.set(
+        this.currentPage,
+        currentlyOwnedVehiclesOnPage
+          .filter((vehicle) => this.selectedVehicleStates[vehicle.Id])
+          .map((vehicle) => vehicle.Id)
+      );
     }
 
     this.updateCheckboxStates();
+    this.updateButtonVisibility();
   }
 
   updateCheckboxStates() {
@@ -2138,7 +2242,6 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   updateVehicleClasses() {
     this.vehicleData = this.vehicleData.map((vehicle) => {
       const isSelected = this.deleteselectedVehicleIds.includes(vehicle.Id);
-      // const isSelected = this.selectedVehicleStates[vehicle.Id] || false;
       return {
         ...vehicle,
         className: isSelected ? "card border-class" : "card",
@@ -2169,7 +2272,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         if (Array.isArray(result) && result.length > 0) {
           this.formattedVehicles = result.map((item) => {
             const vehicle = item.vehicle;
-            const certificates = item.certificates;
+            const certificates = item.certificates || [];
             const branches = item.branches || [];
             let branchDisplay = "-";
             let morethanOneBranch = false;
@@ -2302,7 +2405,17 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     }
   }
   prevPage() {
-    if (!this.selectedReason || !this.deletedescription) {
+    if (!this.selectedReason) {
+      this.pageData[this.currentPagedelete] = {
+        SelectedStatus: "保有中",
+        selectedReason: "",
+        deletedescription: "",
+        vehgoesdeletion: false,
+        vehicledeletedescription: false,
+        allselectedDeleted: true
+      };
+    }
+    if (this.selectedReason === "その他" && !this.deletedescription) {
       this.pageData[this.currentPagedelete] = {
         SelectedStatus: "保有中",
         selectedReason: "",
@@ -2572,7 +2685,17 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   }
   handleyesnextdelete() {
     this.openconfmodaldelete = false;
-    if (!this.selectedReason || !this.deletedescription) {
+    if (!this.selectedReason) {
+      this.pageData[this.currentPagedelete] = {
+        SelectedStatus: "保有中",
+        selectedReason: "",
+        deletedescription: "",
+        vehgoesdeletion: false,
+        vehicledeletedescription: false,
+        allselectedDeleted: true
+      };
+    }
+    if (this.selectedReason === "その他" && !this.deletedescription) {
       this.pageData[this.currentPagedelete] = {
         SelectedStatus: "保有中",
         selectedReason: "",
@@ -2599,6 +2722,10 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     const isChecked = event.target.checked;
     console.log("at start");
 
+    this.deleteselectedVehicleIds = [];
+    this.selectedVehicleStates = {};
+    this.showDeselectAllButton = false;
+    this.showSelectAllButton = true;
     if (branchId === "全て") {
       this.branchOptions = this.branchOptions.map((branch) => {
         return { ...branch, selected: isChecked };
@@ -2645,6 +2772,9 @@ export default class Ccp2_VehicleListNew extends LightningElement {
 
   handleFilterSave() {
     this.showFilterModal = false;
+    Object.keys(this.sortChecked).forEach((key) => {
+      this.sortChecked[key] = false;
+    });
     console.log("in final save", this.showFilterModal);
 
     // this.selectedPillsForList = this.finalFilterJson;
@@ -2691,7 +2821,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     this.finalsortingValue = this.sortSelectedValue;
     this.showSortingModal = false;
   }
-  showvehiclelistbottomicons(){
+  showvehiclelistbottomicons() {
     this.showonclickofmorefilter = !this.showonclickofmorefilter;
   }
 }
