@@ -202,7 +202,7 @@
     border-radius: 10px;
     padding: 16px 8px 8px 16px;
     background-color: white;
-    width: 210px;
+    width: 240px;
     z-index: 10;
     right: 0;
 }
@@ -1395,8 +1395,8 @@
 .detailsofcard {
     display: flex;
     gap: 10px;
-    width: 80%;
     justify-content: space-between;
+    width: 100%;
 }
 
 input[type=range] {
@@ -1546,368 +1546,370 @@ input[type=range]:focus {
 }
 
 /* master queries of screen zoom in and out */
+/* master queries of screen zoom in and out */
 @media (max-width: 2560px) {
     .center-content {
         margin-top: -88.5vh;
         width: 80%;
     }
-
+ 
     .modal-window-Filter-Modal {
         margin: 85px 142px -2px 0px;
         height: 79.3vh;
         min-width: 13%;
     }
-
-    .filter-pinned-window {
+    .filter-pinned-window{
         min-width: 16%;
-        height: 80.6vh;
+        height: 79vh;
     }
-
     .main {
         margin: -16px 0 0 -33px;
     }
 }
-
+ 
 @media (max-width: 1920px) {
     .center-content {
         margin-top: -85.5vh;
         width: 83%;
     }
-
+ 
     .modal-window-Filter-Modal {
         margin: 91px 109px -2px 0px;
         height: 83.5vh;
         min-width: 17%;
     }
-
-    .filter-pinned-window {
+    .filter-pinned-window{
         min-width: 20%;
-        height: 85.6vh;
+        height: 83.2vh;
     }
-
     .main {
         margin: -16px 0 0 -25px;
     }
 }
-
+ 
 @media (max-width: 1707px) {
     .center-content {
         margin-top: -84.5vh;
         width: 87%;
     }
-
+ 
     .modal-window-Filter-Modal {
         margin: 91px 99px -2px 0px;
         height: 85.1vh;
         min-width: 19%;
     }
-
-    .filter-pinned-window {
+    .filter-pinned-window{
         min-width: 21%;
-        height: 88vh;
+        height: 85.5vh;
     }
-
     .main {
         margin: -16px 0 0 -23px;
     }
 }
-
+ 
 @media (max-width: 1686px) {
     .center-content {
         margin-top: -84vh;
         width: 88%;
     }
-
-    .filter-pinned-window {
+    .filter-pinned-window{
         min-width: 22%;
-        height: 89.4vh;
+        height: 87vh;
     }
-
     .modal-window-Filter-Modal {
         margin: 91px 95px -2px 0px;
         height: 87vh;
         min-width: 20%;
     }
-
-
+ 
+ 
 }
-
+ 
 @media (max-width: 1600px) {
     .center-content {
         margin-top: -83.5vh;
         width: 89%;
     }
-
+ 
     .main {
         margin: -16px 0 0 -21px;
     }
 }
-
+ 
 @media (max-width: 1536px) {
     .center-content {
         margin-top: -82.5vh;
         width: 89.5%;
     }
-
+ 
     .main {
         margin: -16px 0 0 -19px;
     }
-
+ 
     .modal-window-Filter-Modal {
         margin: 88px 89px 0px 0px;
         min-width: 2;
         min-width: 22%;
         height: 86vh;
     }
-
-    .filter-pinned-window {
+    .filter-pinned-window{
         min-width: 25%;
-        height: 96.3vh;
+        height: 93vh;
     }
-
     .custom-modal {
         width: 50%;
     }
-
+   
 }
-
+ 
 @media (max-width: 1280px) {
     .center-content {
         margin-top: -81.5vh;
         width: 90%;
     }
-
-    .filter-pinned-window {
+    .filter-pinned-window{
         min-width: 28%;
-        height: 99.3vh;
+        height: 96.1vh;
     }
-
     .main {
         margin: -16px 0 0 -17px;
     }
-
+ 
     .modal-window-Filter-Modal {
         margin: 83px 80px 0px 0px;
         height: 85vh;
         min-width: 25%;
     }
 }
-
+ 
 @media (max-width: 1170px) {
     .center-content {
         margin-top: -80.5vh;
     }
-
+ 
     .modal-window-Filter-Modal {
         margin: 82px 75px 0px 0px;
         min-width: 27%;
         height: 84vh;
     }
-
+ 
     .Filter-Name-container {
         height: 80%;
     }
-
+ 
+    .filter-pinned-window{
+        min-width: 30%;
+        height: 98.6vh;
+    }
     .main {
         width: calc(100vw - 14px);
     }
-
+ 
     .vehicle_child1_list {
         gap: 8px;
         font-size: 12px
     }
-
+ 
     .vehicle_child1 {
         padding: 10px 0 10px 10px;
     }
-
+ 
     .custom-modal-body-grey {
         margin-top: 14px;
         padding: 10px;
     }
-
+ 
     .warning-text {
         font-size: 11px;
     }
-
+ 
     .custom-modal {
         width: 52%;
     }
-
+ 
 }
-
+ 
 @media (max-width: 1000px) {
     .center-content {
         margin-top: -80.5vh;
     }
 }
-
+ 
 @media (max-width: 1024px) {
     .center-content {
         margin-top: -79vh;
     }
-
+ 
     .modal-window-Filter-Modal {
         margin: 79px 65px 0px 0px;
         min-width: 31%;
         height: 82vh;
     }
-
+ 
+    .filter-pinned-window{
+        min-width: 34%;
+        height: 108.3vh;
+    }
+ 
     .Filter-Name-container {
         height: 77%;
     }
-
+ 
     .main {
         width: calc(100vw - 13px);
     }
-
+ 
     .custom-modal {
         width: 55%;
     }
-
+ 
     .delete-header {
         font-size: 12px;
     }
-
+ 
     .vehicle_child1 {
         padding: 10px 0 10px 10px;
     }
-
+ 
     .vehicle_child1_list {
         gap: 8px;
         font-size: 11px;
     }
-
+ 
     .custom-modal-body-grey {
         padding: 10px;
         margin-top: 12px;
     }
-
+ 
     .warning-text {
         font-size: 10px;
     }
-
+ 
     .Delete-records {
         font-size: 11px;
     }
-
+ 
     .custom-modal-body {
         margin-top: 8px;
     }
-
+ 
 }
-
+ 
 @media (max-width: 864px) {
     .center-content {
         margin-top: -76vh;
     }
-
+ 
     .modal-window-Filter-Modal {
         margin: 78px 57px 0px 0px;
         min-width: 37%;
         height: 79vh;
     }
-
+ 
     .Filter-Name-container {
         height: 71%;
     }
-
+    .filter-pinned-window{
+        min-width: 42%;
+        height: 116.3vh;
+    }
+ 
     .main {
         width: calc(100vw - 10px);
     }
-
+ 
     .custom-modal {
         width: 60%;
         padding: 8px;
     }
-
+ 
     .delete-header {
         font-size: 10px;
     }
-
+ 
     .custom-modal-body {
         margin-top: 5px;
         margin-top: 3px;
     }
-
+ 
     .vehicle_child1 {
         padding: 6px 0 6px 6px;
     }
-
+ 
     .vehicle_child1_container {
         gap: 10px;
     }
-
+ 
     .vehicle_child1_list {
         gap: 8px;
         font-size: 10px;
     }
-
+ 
     .custom-modal-body-grey {
         margin-top: 8px;
         padding: 6px;
     }
-
+ 
     .Delete-vehicle-picklists {
         font-size: 11px;
     }
-
+ 
     .Inputsdelete {
         width: 156px;
         height: 30px;
     }
-
+ 
     .icon {
         background-position: 128px 50%;
     }
-
+ 
     .warning-text {
         font-size: 9px;
     }
-
+ 
     .Delete-vehicle-footer {
         padding: 0.5rem 0rem 0rem 0rem;
     }
-
+ 
 }
-
+ 
 @media (max-width: 768px) {
     .center-content {
         margin-top: -75vh;
     }
 }
-
+ 
 @media (max-width: 640px) {
     .center-content {
         margin-top: -73vh;
     }
-
+ 
 }
-
+ 
 @media only screen and (min-width: 768px) and (max-width: 768px) and (min-height: 1024px) and (max-height: 1024px) {
     .center-content {
         margin-top: -88.6vh;
     }
 }
-
+ 
 @media only screen and (min-width: 820px) and (max-width: 820px) and (min-height: 1180px) and (max-height: 1180px) {
     .center-content {
         margin-top: -89.4vh;
     }
 }
-
+ 
 @media only screen and (min-width: 1024px) and (max-width: 1024px) and (min-height: 1366px) and (max-height: 1366px) {
     .center-content {
         margin-top: -90.2vh;
     }
 }
-
+ 
 @media only screen and (min-width: 912px) and (max-width: 912px) and (min-height: 1368px) and (max-height: 1368px) {
     .center-content {
         margin-top: -90.2vh;
     }
 }
-
+ 
 @media only screen and (min-width: 1114px) and (max-width: 1114px) and (min-height: 720px) and (max-height: 720px) {
     .center-content {
         margin-top: -80.2vh;
@@ -2810,20 +2812,43 @@ input[type=range]:disabled::-moz-range-thumb {
 
 .listof-selection-container {
     position: absolute;
-    top: 16px;
+    top: 28px;
     box-shadow: 0px 0px 10px 0px #00000026;
     border-radius: 10px;
     padding: 6px 8px 8px 10px;
     background-color: white;
-    width: 130px;
+    width: 150px;
     z-index: 10;
     DISPLAY: FLEX;
     FLEX-DIRECTION: column;
     ALIGN-ITEMS: baseline;
     GAP: 10PX;
     JUSTIFY-CONTENT: flex-start;
+    right: -5px;
 }
-
-.more-in-vehicle-filter {
+.more-in-vehicle-filter{
     position: relative;
 }
+.notify-recall{
+    margin-left: 9px;
+    font-weight: 400;
+    font-size: 14px;
+}
+.notify-recall{
+    margin-left: 9px;
+    font-weight: 400;
+    font-size: 16px;
+}
+.container-empty{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 6px;
+    height: 100%;
+}
+ 
+
+
+

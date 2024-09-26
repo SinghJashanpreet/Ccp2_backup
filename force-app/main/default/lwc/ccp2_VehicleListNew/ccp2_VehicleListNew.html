@@ -98,10 +98,12 @@
                     </div>
                   </div>
 
-                  <div class="filter" onclick={openFilterModal}>
-                    <img src={filtericon} alt="filter vehicle" class="imgs1new" />
-                    <p class="ftextNew">{labels2.ccp2_vl_detailed_search1}</p>
-                  </div>
+                  <template if:false={pinnedFilter}>
+                    <div class="filter" onclick={openFilterModal}>
+                      <img src={filtericon} alt="filter vehicle" class="imgs1new" />
+                      <p class="ftextNew">{labels2.ccp2_vl_detailed_search1}</p>
+                    </div>
+                  </template>
                   <div class="sort-buttons">
                     <img src={SortIcon} alt="sort vehicle" class="imgs1new" onclick={tooglesortmodal} />
                     <p class="ftextNew" onclick={tooglesortmodal}>{labels2.ccp2_vl_sort1}</p>
@@ -111,31 +113,31 @@
                           <div class="radio-containers-of-sort">
                             <div class="sort-major">
                               <input type="radio" name="sortOptions" value="RegDesc" onclick={handleSortChange}
-                                checked={sortChecked.RegDesc} class="sorting-radio-colors">初度登録日に近い順
+                                checked={sortChecked.RegDesc} class="sorting-radio-colors">初度登録年月（新→古）
                             </div>
                             <div class="sort-major">
                               <input type="radio" name="sortOptions" value="RegAsc" onclick={handleSortChange}
-                                checked={sortChecked.RegAsc} class="sorting-radio-colors">初度登録日に古い順
+                                checked={sortChecked.RegAsc} class="sorting-radio-colors"> 初度登録年月（古→新）
                             </div>
                           </div>
                           <div class="radio-containers-of-sort">
                             <div class="sort-major">
-                              <input type="radio" name="sortOptions" value="ExpDesc" onclick={handleSortChange}
-                                checked={sortChecked.ExpDesc} class="sorting-radio-colors"> 車検満了日まで近い順
+                              <input type="radio" name="sortOptions" value="ExpAsc" onclick={handleSortChange}
+                                checked={sortChecked.ExpAsc} class="sorting-radio-colors"> 有効期間の満了する日（近→遠）
                             </div>
                             <div class="sort-major">
-                              <input type="radio" name="sortOptions" value="ExpAsc" onclick={handleSortChange}
-                                checked={sortChecked.ExpAsc} class="sorting-radio-colors">車検満了日まで遠い順
+                              <input type="radio" name="sortOptions" value="ExpDesc" onclick={handleSortChange}
+                                checked={sortChecked.ExpDesc} class="sorting-radio-colors">有効期間の満了する日（遠→近）
                             </div>
                           </div>
                           <div class="radio-containers-of-sort">
                             <div class="sort-major">
                               <input type="radio" name="sortOptions" value="MilDesc" onclick={handleSortChange}
-                                checked={sortChecked.MilDesc} class="sorting-radio-colors">走行距離多い順
+                                checked={sortChecked.MilDesc} class="sorting-radio-colors">走行距離（長→短）
                             </div>
                             <div class="sort-major">
                               <input type="radio" name="sortOptions" value="MilAsc" onclick={handleSortChange}
-                                checked={sortChecked.MilAsc} class="sorting-radio-colors">走行距離少ない順
+                                checked={sortChecked.MilAsc} class="sorting-radio-colors">走行距離（短→長）
                             </div>
                           </div>
                         </div>
@@ -159,68 +161,68 @@
                 </div>
 
               </div>
-                <div class="Filter-Pill-container" if:true={isShowVehicleFilterPills}>
-                  絞り込み条件：
-                  <template if:true={jsonParameterForVehicleClassWithoutString.finalVehicleNameList}>
-                    <template for:each={jsonParameterForVehicleClassWithoutString.finalVehicleNameList}
-                      for:item="vehicleName">
-                      <span key={vehicleName} class="pill">
-                        <span class="pill__label">{vehicleName}</span>
-                        <button class="pill__remove" data-key='finalVehicleNameList' data-value={vehicleName}
-                          onclick={removePill}>
-                          ✖
-                        </button>
-                      </span>
-                    </template>
-                  </template>
-                  <template if:true={jsonParameterForVehicleClassWithoutString.finalVehicleTypeList}>
-                    <template for:each={jsonParameterForVehicleClassWithoutString.finalVehicleTypeList}
-                      for:item="vehicleType">
-                      <span key={vehicleType} class="pill">
-                        <span class="pill__label">{vehicleType}</span>
-                        <button class="pill__remove" data-key='finalVehicleTypeList' data-value={vehicleType}
-                          onclick={removePill}>
-                          ✖
-                        </button>
-                      </span>
-                    </template>
-                  </template>
-                  <template if:true={jsonParameterForVehicleClassWithoutString.Milage}>
-                    <span class="pill">
-                      <span class="pill__label" if:false={isMilageAbove}>{milageMin} - {milageMax}km</span>
-                      <span class="pill__label" if:true={isMilageAbove}>>{milageMax}km</span>
-                      <button class="pill__remove" data-key='Milage' onclick={removePill}>
+              <div class="Filter-Pill-container" if:true={isShowVehicleFilterPills}>
+                絞り込み条件：
+                <template if:true={jsonParameterForVehicleClassWithoutString.finalVehicleNameList}>
+                  <template for:each={jsonParameterForVehicleClassWithoutString.finalVehicleNameList}
+                    for:item="vehicleName">
+                    <span key={vehicleName} class="pill">
+                      <span class="pill__label">{vehicleName}</span>
+                      <button class="pill__remove" data-key='finalVehicleNameList' data-value={vehicleName}
+                        onclick={removePill}>
                         ✖
                       </button>
                     </span>
                   </template>
-                  <template if:true={jsonParameterForVehicleClassWithoutString.RegDiff}>
-                    <span class="pill">
-                      <span class="pill__label" if:false={isRegDiffAbove}>{regMin} - {regMax}年</span>
-                      <span class="pill__label" if:true={isRegDiffAbove}>>{regMax}年</span>
-                      <button class="pill__remove" data-key='RegDiff' onclick={removePill}>
+                </template>
+                <template if:true={jsonParameterForVehicleClassWithoutString.finalVehicleTypeList}>
+                  <template for:each={jsonParameterForVehicleClassWithoutString.finalVehicleTypeList}
+                    for:item="vehicleType">
+                    <span key={vehicleType} class="pill">
+                      <span class="pill__label">{vehicleType}</span>
+                      <button class="pill__remove" data-key='finalVehicleTypeList' data-value={vehicleType}
+                        onclick={removePill}>
                         ✖
                       </button>
                     </span>
                   </template>
-                  <template if:true={jsonParameterForVehicleClassWithoutString.ExpDiff}>
-                    <span class="pill">
-                      <span class="pill__label" if:false={isExpDiffAbove}>{expMin} - {expMax}ヶ月</span>
-                      <span class="pill__label" if:true={isExpDiffAbove}>>{expMax}ヶ月</span>
-                      <button class="pill__remove" data-key='ExpDiff' onclick={removePill}>
-                        ✖
-                      </button>
-                    </span>
-                  </template>
-                  <template if:true={jsonParameterForVehicleClassWithoutString.Delete}>
-                    <span class="pill">
-                      <span class="pill__label">削除済み</span>
-                      <button class="pill__remove" data-key='Delete' onclick={removePill}>
-                        ✖
-                      </button>
-                    </span>
-                  </template>
-                </div>
+                </template>
+                <template if:true={jsonParameterForVehicleClassWithoutString.Milage}>
+                  <span class="pill">
+                    <span class="pill__label" if:false={isMilageAbove}>{milageMin} - {milageMax}km</span>
+                    <span class="pill__label" if:true={isMilageAbove}>>{milageMax}km</span>
+                    <button class="pill__remove" data-key='Milage' onclick={removePill}>
+                      ✖
+                    </button>
+                  </span>
+                </template>
+                <template if:true={jsonParameterForVehicleClassWithoutString.RegDiff}>
+                  <span class="pill">
+                    <span class="pill__label" if:false={isRegDiffAbove}>{regMin} - {regMax}年</span>
+                    <span class="pill__label" if:true={isRegDiffAbove}>>{regMax}年</span>
+                    <button class="pill__remove" data-key='RegDiff' onclick={removePill}>
+                      ✖
+                    </button>
+                  </span>
+                </template>
+                <template if:true={jsonParameterForVehicleClassWithoutString.ExpDiff}>
+                  <span class="pill">
+                    <span class="pill__label" if:false={isExpDiffAbove}>{expMin} - {expMax}ヶ月</span>
+                    <span class="pill__label" if:true={isExpDiffAbove}>>{expMax}ヶ月</span>
+                    <button class="pill__remove" data-key='ExpDiff' onclick={removePill}>
+                      ✖
+                    </button>
+                  </span>
+                </template>
+                <template if:true={jsonParameterForVehicleClassWithoutString.Delete}>
+                  <span class="pill">
+                    <span class="pill__label">削除済み</span>
+                    <button class="pill__remove" data-key='Delete' onclick={removePill}>
+                      ✖
+                    </button>
+                  </span>
+                </template>
+              </div>
               <template if:true={showVehicleListOrNoVehicle}>
                 <div class="Vehicle_list">
                   <div class="Vehicle_list_container">
@@ -230,7 +232,11 @@
                           <template if:true={vehicle.statusOwned}>
                             <div key={vehicle.Id} class={vehicle.className} data-id={vehicle.Id}
                               data-icon={vehicle.starIcon} onclick={handlecardClick}>
-                              <div class="notifications"></div>
+                              <div class="notifications">
+                                <template if:true={vehicle.showRecallM}>
+                                  <P class="warntextsearch notify-recall">ⓘこの車両は市場措置の対象となっています。</P>
+                                </template>
+                              </div>
                               <div class="headerno">
                                 <div class="VehNo">
                                   <template if:false={deletecheckboxoverfav}>
@@ -252,43 +258,44 @@
                                   <p class="totext">{vehicle.branchNames}</p>
                                 </div>
                               </div>
-                              <div class="details" onclick={handlecardClick} data-id={vehicle.Id} data-icon={vehicle.starIcon}>
+                              <div class="details" onclick={handlecardClick} data-id={vehicle.Id}
+                                data-icon={vehicle.starIcon}>
                                 <div class="image data" style="height: 51px">
-                                    <img src={vehicle.imageSrc} alt="No Image" class="data-image" />
-                                    <!-- {vehicle.TruckImg__c} -->
+                                  <img src={vehicle.imageSrc} alt="No Image" class="data-image" />
+                                  <!-- {vehicle.TruckImg__c} -->
                                 </div>
                                 <div class="detailsofcard">
-                                    <div class="regno data">
-                                        <p class="head">{labels2.ccp2_vl_registration_number9}</p>
-                                        <p class="Datahead">
-                                            {vehicle.Registration_Number__c}
-                                        </p>
+                                  <div class="regno data">
+                                    <p class="head">{labels2.ccp2_vl_registration_number9}</p>
+                                    <p class="Datahead">
+                                      {vehicle.Registration_Number__c}
+                                    </p>
+                                  </div>
+                                  <div class="maker data">
+                                    <p class="head">{labels2.ccp2_vl_vehicle_type6}</p>
+                                    <p class="Datahead">{vehicle.Vehicle_Name__c}</p>
+                                  </div>
+                                  <div class="vehicle data">
+                                    <p class="head">{labels2.ccp2_vl_vehicle_type6}</p>
+                                    <p class="Datahead">{vehicle.Vehicle_Type__c}</p>
+                                  </div>
+                                  <div class="regperson data">
+                                    <p class="head">{labels2.ccp2_vl_mileage6}</p>
+                                    <p class="Datahead">{vehicle.Mileage__c} km</p>
+                                  </div>
+                                  <div class="year data">
+                                    <p class="head">{labels2.ccp2_vl_expiration_date6}</p>
+                                    <p class="Datahead">{vehicle.expDate}</p>
+                                  </div>
+                                  <template if:false={pinnedFilter}>
+                                    <div class="nextdate data">
+                                      <p class="head">{labels2.ccp2_vl_next_maintenance_date9}</p>
+                                      <p class="Datahead">NA</p>
                                     </div>
-                                    <div class="maker data">
-                                        <p class="head">{labels2.ccp2_vl_vehicle_type6}</p>
-                                        <p class="Datahead">{vehicle.Vehicle_Name__c}</p>
-                                    </div>
-                                    <div class="vehicle data">
-                                        <p class="head">{labels2.ccp2_vl_vehicle_type6}</p>
-                                        <p class="Datahead">{vehicle.Vehicle_Type__c}</p>
-                                    </div>
-                                    <div class="regperson data">
-                                        <p class="head">{labels2.ccp2_vl_mileage6}</p>
-                                        <p class="Datahead">{vehicle.Mileage__c} km</p>
-                                    </div>
-                                    <div class="year data">
-                                        <p class="head">{labels2.ccp2_vl_expiration_date6}</p>
-                                        <p class="Datahead">{vehicle.expDate}</p>
-                                    </div>
-                                    <template if:false={pinnedFilter}>
-                                        <div class="nextdate data">
-                                            <p class="head">{labels2.ccp2_vl_next_maintenance_date9}</p>
-                                            <p class="Datahead">NA</p>
-                                        </div>
-                                    </template>
-                                    <div class="addition data"></div>
+                                  </template>
+                                  <div class="addition data"></div>
                                 </div>
-                            </div>
+                              </div>
                             </div>
                           </template>
                           <template if:true={vehicle.statusDeleted}>
@@ -326,7 +333,7 @@
                                 data-icon={vehicle.starIcon}>
                                 <div class="image data deleted-image-vehicle-container" style="height: 51px">
                                   <div class="vehicle-deleted-text-image"><strong
-                                      style="font-size: large;">{labels2.ccp2_vl_deleted7}</strong>
+                                      style="font-size: medium;">{labels2.ccp2_vl_deleted7}</strong>
                                   </div>
                                   <img src={vehicle.imageSrc} alt="No Image" class="data-image carasoul-images" />
                                   <!-- {vehicle.TruckImg__c} -->
@@ -368,6 +375,12 @@
                           </template>
                         </template>
                       </template>
+                      <template if:true={emptydataofvehicles}>
+                        <div class="container-empty">
+                        <img src={emptylistofvehicleImage} alt="empty list of vehicles"  style="scale: 0.9;">
+                        <p>一致するものが見つかりませんでした</p>
+                        </div>
+                        </template>
                       <template if:true={vehicleData.error}>
                         <p>error</p>
                       </template>
@@ -404,7 +417,8 @@
                       </div>
                       <div class="print">
                         <div class="btn" onclick={showDownloadModal}>
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
                             <path
                               d="M14 11V14H2V11H0V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V11H14ZM13 7L11.59 5.59L9 8.17V0H7V8.17L4.41 5.59L3 7L8 12L13 7Z"
                               class="printtruck" />
@@ -414,7 +428,8 @@
                       </div>
                       <div class="download">
                         <div class="btn" onclick={showVehicleRegistration}>
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
                               d="M13.8044 9.64993C13.9323 9.12086 14 8.56834 14 8H18.0903V11.2999H20.5448L22.9992 14.5997V18.7245H21.3629C21.3629 20.094 20.2666 21.1994 18.9085 21.1994C17.5504 21.1994 16.454 20.094 16.454 18.7245H11.5452C11.5452 20.094 10.4489 21.1994 9.09073 21.1994C7.73261 21.1994 6.63629 20.094 6.63629 18.7245H5V14.7101C5.52247 14.8656 6.07051 14.9618 6.63629 14.9907V17.0746H7.27445C7.72443 16.5714 8.36258 16.2496 9.09073 16.2496C9.81888 16.2496 10.457 16.5714 10.907 17.0746H16.454V9.64993H13.8044ZM21.7393 14.5997L20.1357 12.5373H18.0903V14.5997H21.7393ZM8.27259 18.7245C8.27259 19.1783 8.64075 19.5495 9.09073 19.5495C9.54071 19.5495 9.90888 19.1783 9.90888 18.7245C9.90888 18.2708 9.54071 17.8996 9.09073 17.8996C8.64075 17.8996 8.27259 18.2708 8.27259 18.7245ZM18.0903 18.7245C18.0903 19.1783 18.4585 19.5495 18.9085 19.5495C19.3585 19.5495 19.7266 19.1783 19.7266 18.7245C19.7266 18.2708 19.3585 17.8996 18.9085 17.8996C18.4585 17.8996 18.0903 18.2708 18.0903 18.7245Z"
                               class="downloadtruck" />
@@ -431,7 +446,8 @@
                     <div class="btngrp">
                       <div class="download">
                         <div class="btn" onclick={showVehicleRegistration}>
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
                               d="M13.8044 9.64993C13.9323 9.12086 14 8.56834 14 8H18.0903V11.2999H20.5448L22.9992 14.5997V18.7245H21.3629C21.3629 20.094 20.2666 21.1994 18.9085 21.1994C17.5504 21.1994 16.454 20.094 16.454 18.7245H11.5452C11.5452 20.094 10.4489 21.1994 9.09073 21.1994C7.73261 21.1994 6.63629 20.094 6.63629 18.7245H5V14.7101C5.52247 14.8656 6.07051 14.9618 6.63629 14.9907V17.0746H7.27445C7.72443 16.5714 8.36258 16.2496 9.09073 16.2496C9.81888 16.2496 10.457 16.5714 10.907 17.0746H16.454V9.64993H13.8044ZM21.7393 14.5997L20.1357 12.5373H18.0903V14.5997H21.7393ZM8.27259 18.7245C8.27259 19.1783 8.64075 19.5495 9.09073 19.5495C9.54071 19.5495 9.90888 19.1783 9.90888 18.7245C9.90888 18.2708 9.54071 17.8996 9.09073 17.8996C8.64075 17.8996 8.27259 18.2708 8.27259 18.7245ZM18.0903 18.7245C18.0903 19.1783 18.4585 19.5495 18.9085 19.5495C19.3585 19.5495 19.7266 19.1783 19.7266 18.7245C19.7266 18.2708 19.3585 17.8996 18.9085 17.8996C18.4585 17.8996 18.0903 18.2708 18.0903 18.7245Z"
                               class="downloadtruck" />
@@ -444,14 +460,18 @@
                       </div>
                       <div class="more-in-vehicle-filter">
                         <div class="filtersvgcontainer" onclick={showvehiclelistbottomicons}>
-                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="2" viewBox="0 0 16 4">
-                            <image xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAECAYAAACHtL/sAAAAAXNSR0IArs4c6QAAAGZJREFUKFONzNEJhDAQRdE7pIG1AyUkba0tWIGWYAnaVoaw24E2EEYGLCB/jwPvSozxG0LYgbu1ttVaT4Bel5zzDxj9ZGa3qg6+e90DF/DxE/AvpUxvoMslpTSLyOoRM1tU9fBArz+szk5LksuaDQAAAABJRU5ErkJggg==" x="0" y="0" width="16" height="4"/>
+                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16"
+                            height="2" viewBox="0 0 16 4">
+                            <image
+                              xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAECAYAAACHtL/sAAAAAXNSR0IArs4c6QAAAGZJREFUKFONzNEJhDAQRdE7pIG1AyUkba0tWIGWYAnaVoaw24E2EEYGLCB/jwPvSozxG0LYgbu1ttVaT4Bel5zzDxj9ZGa3qg6+e90DF/DxE/AvpUxvoMslpTSLyOoRM1tU9fBArz+szk5LksuaDQAAAABJRU5ErkJggg=="
+                              x="0" y="0" width="16" height="4" />
                           </svg>
                         </div>
                         <template if:true={showonclickofmorefilter}>
                           <div class="listof-selection-container" onclick={handleinsideclick}>
                             <div class="write" onclick={showdeletecheckboxes}>
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                   d="M13.8044 9.64993C13.9323 9.12086 14 8.56834 14 8H18.0903V11.2999H20.5448L22.9992 14.5997V18.7245H21.3629C21.3629 20.094 20.2666 21.1994 18.9085 21.1994C17.5504 21.1994 16.454 20.094 16.454 18.7245H11.5452C11.5452 20.094 10.4489 21.1994 9.09073 21.1994C7.73261 21.1994 6.63629 20.094 6.63629 18.7245H5V14.7101C5.52247 14.8656 6.07051 14.9618 6.63629 14.9907V17.0746H7.27445C7.72443 16.5714 8.36258 16.2496 9.09073 16.2496C9.81888 16.2496 10.457 16.5714 10.907 17.0746H16.454V9.64993H13.8044ZM21.7393 14.5997L20.1357 12.5373H18.0903V14.5997H21.7393ZM8.27259 18.7245C8.27259 19.1783 8.64075 19.5495 9.09073 19.5495C9.54071 19.5495 9.90888 19.1783 9.90888 18.7245C9.90888 18.2708 9.54071 17.8996 9.09073 17.8996C8.64075 17.8996 8.27259 18.2708 8.27259 18.7245ZM18.0903 18.7245C18.0903 19.1783 18.4585 19.5495 18.9085 19.5495C19.3585 19.5495 19.7266 19.1783 19.7266 18.7245C19.7266 18.2708 19.3585 17.8996 18.9085 17.8996C18.4585 17.8996 18.0903 18.2708 18.0903 18.7245Z"
                                   class="deletetruck delete vehicle" />
@@ -463,7 +483,8 @@
                             </div>
                             <div class="print">
                               <div class="btn" onclick={showDownloadModal}>
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
                                   <path
                                     d="M14 11V14H2V11H0V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V11H14ZM13 7L11.59 5.59L9 8.17V0H7V8.17L4.41 5.59L3 7L8 12L13 7Z"
                                     class="printtruck" />
@@ -497,68 +518,72 @@
                     </button>
                   </div>
                 </template>
-                <div class="pagination-container">
-                  <!-- This is backup code for the offset fucntionality -->
-                  <div class="pagination-offset-container">
-                    <h1 class="pagination-offset-heading">{labels2.ccp2_vl_display_per_page1}</h1>
-                    <div class="drop-down-container" onclick={togglePaginationList}>
-                      <p class="drop-down-text">{currentPagination}</p>
-                      <lightning-icon icon-name="utility:chevrondown" alternative-text="drop-down"
-                        size="xx-small"></lightning-icon>
-                      <template if:true={showListOffSet}>
-                        <div class="drop-down-list">
-                          <div class="drop-down-element" data-offset="10" onclick={clickOffSetElement}>
-                            10
-                          </div>
-                          <div class="drop-down-element" data-offset="15" onclick={clickOffSetElement}>
-                            15
-                          </div>
-                          <div class="drop-down-element" data-offset="20" onclick={clickOffSetElement}>
-                            20
-                          </div>
-                          <div class="drop-down-element" data-offset="25" onclick={clickOffSetElement}>
-                            25
-                          </div>
-                          <div class="drop-down-element" data-offset="30" onclick={clickOffSetElement}>
-                            30
-                          </div>
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                  <template if:true={hasVehicles}>
-                    <div class="big-div-page">
-                      <button class="nav-button" onclick={handlePreviousPage} disabled={isPreviousDisabled}>
-                        <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous"
+                <template if:false={stopPaginationsearch}>
+                  <div class="pagination-container">
+                    <!-- This is backup code for the offset fucntionality -->
+                    <div class="pagination-offset-container">
+                      <h1 class="pagination-offset-heading">{labels2.ccp2_vl_display_per_page1}</h1>
+                      <div class="drop-down-container" onclick={togglePaginationList}>
+                        <p class="drop-down-text">{currentPagination}</p>
+                        <lightning-icon icon-name="utility:chevrondown" alternative-text="drop-down"
                           size="xx-small"></lightning-icon>
-                      </button>
-                      <span if:true={showLeftDots} class="page-button-dots">...</span>
-
-                      <template for:each={visiblePageCount} for:item="page">
-                        <button class="page-button" data-page={page} onclick={pageCountClick} key={page}>
-                          {page}
+                        <template if:true={showListOffSet}>
+                          <div class="drop-down-list">
+                            <div class="drop-down-element" data-offset="10" onclick={clickOffSetElement}>
+                              10
+                            </div>
+                            <div class="drop-down-element" data-offset="15" onclick={clickOffSetElement}>
+                              15
+                            </div>
+                            <div class="drop-down-element" data-offset="20" onclick={clickOffSetElement}>
+                              20
+                            </div>
+                            <div class="drop-down-element" data-offset="25" onclick={clickOffSetElement}>
+                              25
+                            </div>
+                            <div class="drop-down-element" data-offset="30" onclick={clickOffSetElement}>
+                              30
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                    <template if:true={hasVehicles}>
+                      <div class="big-div-page">
+                        <button class="nav-button" onclick={handlePreviousPage} disabled={isPreviousDisabled}>
+                          <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous"
+                            size="xx-small"></lightning-icon>
                         </button>
-                      </template>
+                        <span if:true={showLeftDots} class="page-button-dots">...</span>
 
-                      <span if:true={showRightDots} class="page-button-dots">...</span>
-                      <button if:true={showRightDots} class="page-button" data-page={totalPageCount}
-                        onclick={pageCountClick}>
-                        {totalPageCount}
-                      </button>
-                      <!-- This is backup code for the offset fucntionality -->
-                      <!-- <template for:each={visiblePageNumbers} for:item="pageNum">
-                            <button key={pageNum} data-id={pageNum} onclick={handlePageChange}
-                                    class="page-button">
-                                {pageNum}
-                            </button>
-                        </template> -->
-                      <button class="nav-button" onclick={handleNextPage} disabled={isNextDisabled}>
-                        <lightning-icon icon-name="utility:chevronright" alternative-text="Next"
-                          size="xx-small"></lightning-icon>
-                      </button>
-                    </div>
-                  </template>
-                </div>
+                        <template for:each={visiblePageCount} for:item="page">
+                          <button class="page-button" data-page={page} onclick={pageCountClick} key={page}>
+                            {page}
+                          </button>
+                        </template>
+
+                        <span if:true={showRightDots} class="page-button-dots">...</span>
+                        <button if:true={showRightDots} class="page-button" data-page={totalPageCount}
+                          onclick={pageCountClick}>
+                          {totalPageCount}
+                        </button>
+                        <!-- This is backup code for the offset fucntionality -->
+                        <!-- <template for:each={visiblePageNumbers} for:item="pageNum">
+                              <button key={pageNum} data-id={pageNum} onclick={handlePageChange}
+                                      class="page-button">
+                                  {pageNum}
+                              </button>
+                          </template> -->
+                        <button class="nav-button" onclick={handleNextPage} disabled={isNextDisabled}>
+                          <lightning-icon icon-name="utility:chevronright" alternative-text="Next"
+                            size="xx-small"></lightning-icon>
+                        </button>
+                      </div>
+                    </template>
+                  </div>
+                </template>
+                <template if:true={stopPaginationsearch}>
+                </template>
               </div>
             </div>
           </template>
@@ -690,9 +715,11 @@
                         <span class="full-range" data-id="Slider1"></span>
                         <span class={rangeClass1} lwc:dom="manual" data-id="Slider1"></span>
                         <input name="rangeOne" data-id="Slider1" type="range" value={rangeOneValueSlider1} min="0"
-                          max="100" step={sliderConfigs.Slider1.step} oninput={handleRangeChange} disabled={isRangeDisabled1}>
+                          max="100" step={sliderConfigs.Slider1.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled1}>
                         <input name="rangeTwo" data-id="Slider1" type="range" value={rangeTwoValueSlider1} min="0"
-                          max="100" step={sliderConfigs.Slider1.step} oninput={handleRangeChange} disabled={isRangeDisabled1}>
+                          max="100" step={sliderConfigs.Slider1.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled1}>
                       </div>
                     </div>
                     <div class="checkbox-flg-filter-range margin-up">
@@ -711,9 +738,11 @@
                         <span class="full-range" data-id="Slider3"></span>
                         <span class={rangeClass3} lwc:dom="manual" data-id="Slider3"></span>
                         <input name="rangeOne" data-id="Slider3" type="range" value={rangeOneValueSlider3} min="0"
-                          max="100" step={sliderConfigs.Slider3.step} oninput={handleRangeChange} disabled={isRangeDisabled3}>
+                          max="100" step={sliderConfigs.Slider3.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled3}>
                         <input name="rangeTwo" data-id="Slider3" type="range" value={rangeTwoValueSlider3} min="0"
-                          max="100" step={sliderConfigs.Slider3.step} oninput={handleRangeChange} disabled={isRangeDisabled3}>
+                          max="100" step={sliderConfigs.Slider3.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled3}>
                       </div>
                     </div>
                     <div class="checkbox-flg-filter-range margin-up">
@@ -732,9 +761,11 @@
                         <span class="full-range" data-id="Slider2"></span>
                         <span class={rangeClass2} lwc:dom="manual" data-id="Slider2"></span>
                         <input name="rangeOne" data-id="Slider2" type="range" value={rangeOneValueSlider2} min="0"
-                          max="100" step={sliderConfigs.Slider2.step} oninput={handleRangeChange} disabled={isRangeDisabled2}>
+                          max="100" step={sliderConfigs.Slider2.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled2}>
                         <input name="rangeTwo" data-id="Slider2" type="range" value={rangeTwoValueSlider2} min="0"
-                          max="100" step={sliderConfigs.Slider2.step} oninput={handleRangeChange} disabled={isRangeDisabled2}>
+                          max="100" step={sliderConfigs.Slider2.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled2}>
                       </div>
                     </div>
                     <div class="checkbox-flg-filter-range margin-up">
