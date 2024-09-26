@@ -1,3 +1,4 @@
+/* eslint-disable @lwc/lwc/no-async-operation */
 import { LightningElement, track, wire } from "lwc";
 import getVehicleData from "@salesforce/apex/CCP2_userData.userRegisteredVehicleListtest";
 import getAllVehicleForDownload from "@salesforce/apex/ccp2_download_recall_controller.vehicleListforDownload";
@@ -392,15 +393,8 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     const { data, error } = result;
     if (data) {
       console.log("lists data", data);
-      console.log(
-        "vehicel wire is running",
-        this.currentPagination,
-        " ",
-        this.currentPage,
-        " ",
-        this.filterSuggestionsToSend
-      );
-      console.log("datadata status", this.finalsortingValue);
+      console.log("lists data parameter", this.jsonParameterForVehicleClass);
+
       this.totalPageCount = data[0]?.totalPage;
       this.updateVisiblePages();
       this.vehicleData = data.map((item) => {
@@ -1630,8 +1624,15 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       }
     } else if (key === "Delete") {
       this.deletedFlag = false;
-      delete this.finalFilterJsonForClass.Delete;
-      delete this.finalFilterJson.Delete;
+      // eslint-disable-next-line no-unused-vars
+      const { Delete: deleteClass, ...restClass } =
+        this.finalFilterJsonForClass;
+      this.finalFilterJsonForClass = restClass;
+
+      // delete this.finalFilterJson.Delete;
+      // eslint-disable-next-line no-unused-vars
+      const { Delete: deleteMain, ...restMain } = this.finalFilterJson;
+      this.finalFilterJson = restMain;
     } else {
       this.finalFilterJsonForClass[key] = this.finalFilterJsonForClass[
         key
@@ -1728,6 +1729,9 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     }
 
     this.finalFilterJsonForClass = { ...this.finalFilterJsonForClass };
+
+    this.updatePageButtons();
+    this.updateVisiblePages();
     console.log(JSON.stringify(this.finalFilterJsonForClass));
   }
   //range filter
@@ -2758,6 +2762,11 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     this.branchDataToSendBack = this.branchOptions
       .filter((elm) => elm.selected === true && elm.branchId !== "全て")
       .map((elm) => elm.branchId);
+
+    this.finalFilterJson = {
+      ...this.finalFilterJson,
+      brnIds: this.branchDataToSendBack
+    };
 
     this.finalFilterJsonForClass = {
       ...this.finalFilterJsonForClass,
