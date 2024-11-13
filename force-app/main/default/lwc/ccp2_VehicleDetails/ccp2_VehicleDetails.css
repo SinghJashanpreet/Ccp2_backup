@@ -16,12 +16,23 @@
 .back-icon {
   --sds-c-icon-color-foreground-default: #262626;
   color: #262626;
+  cursor: pointer;
 }
 
 .back-icon:hover {
   --sds-c-icon-color-foreground-default: #e10202;
   color: #e10202;
-  cursor: default;
+}
+.fav-main:hover .back-icon{
+  --sds-c-icon-color-foreground-default: #e10202;
+  color: #e10202;
+}
+.backnew{
+  fill: #0A0A0A;
+}
+.fav-main:hover .backnew{
+  fill: #e10202;
+  color: #e10202;
 }
 
 .upload-image {
@@ -70,12 +81,25 @@
   background-color: rgba(255, 255, 255, 1);
   margin: 8px 24px 24px 0;
 }
-
+ 
+.content1_left_row2_element{
+  display: flex;
+  gap: 20px;
+}
+ 
+.content1_left_row2_element-item{
+  display: flex;
+  gap:8px;
+}
+.content1_left_row2_element-item > p:first-of-type{
+  color: #7B7B7B;
+}
+ 
 .content1_left_row2_1 {
   display: flex;
-  margin: 16px 24px 0 24px;
-  flex-direction: row;
-
+  margin: 0px 24px 16px 24px;
+  gap: 16px;
+  flex-direction: column;
   justify-content: space-between;
   border-radius: 8px;
 }
@@ -85,14 +109,24 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  margin: 20px 24px 10px 24px;
+  padding-bottom: 4px;
+}
+
+.content1_left_row2_2_deleted {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   margin: 20px 24px 16px 24px;
+  padding: 18px;
 }
 
 .content1_left_row3 {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 16px;
+  gap: 22px;
 }
 
 .content1_left_left_row3 {
@@ -160,18 +194,19 @@
 
 .content2_container {
   background-color: white;
-
+  align-items: center;
   display: flex;
   border-radius: 10px;
   flex-direction: column;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
 }
 
 .content1_left_row1_left {
   align-items: center;
   display: flex;
   height: 100%;
-  width: 60%;
+  gap: 8px;
 }
 
 .vehicle_container {
@@ -186,9 +221,19 @@
   width: calc(100% - 20px);
   border-radius: 10px;
   height: 100%;
-  min-height: 417px;
+  min-height: 301px;
   padding: 12px 20px 15px 20px;
   border: 1px solid #d9d9d9;
+}
+
+.Lease-main {
+  width: calc(100% - 20px);
+  border-radius: 10px;
+  height: 100%;
+  padding: 30px 20px 30px 20px;
+  border: 1px solid #d9d9d9;
+  display: flex;
+  gap: 30px;
 }
 
 .no-padding {
@@ -212,15 +257,18 @@
 
 .vehicle_child1 {
   background-color: white;
+  padding: 25px;
+}
+
+.vehicle_child2 {
   display: flex;
   justify-content: space-between;
-  padding: 25px;
 }
 
 .vehicle_child1_container {
   display: flex;
   width: 50%;
-  gap: 20px;
+  gap: 24px;
 }
 
 .vehicle_child1_list {
@@ -233,13 +281,13 @@
 
 .opacity {
   opacity: 56%;
+  width: 120px;
 }
 
 .recMain {
   display: flex;
   width: calc(100% - 20px);
   height: 100%;
-  max-height: 600px;
   min-height: 280px;
   margin: 0 0 0 20px;
   overflow-y: scroll;
@@ -307,7 +355,6 @@
 }
 
 .RegNoData {
-  margin-left: 16px;
   font-size: 28px;
   font-family: "Noto Sans JP", sans-serif;
   font-weight: 700;
@@ -321,6 +368,11 @@
 
 .recdata {
   margin: 4px 3px 3px 3px;
+}
+
+.recdatadeleted {
+  margin: 4px 3px 3px 3px;
+  color: #7B7B7B;
 }
 
 .recimg {
@@ -351,6 +403,15 @@
 }
 
 .recbar {
+  display: flex;
+  flex-direction: row;
+  gap: 1px;
+  height: 10%;
+  width: 100%;
+  margin-left: 14px;
+}
+
+.recbar-deleted {
   display: flex;
   flex-direction: row;
   gap: 1px;
@@ -419,8 +480,14 @@
 
 .b {
   padding-left: 8px;
-  padding-right: 32px;
   color: #262626;
+}
+
+.b-recover {
+  padding-left: 8px;
+  margin-right: 32px;
+  color: #262626;
+  cursor: pointer;
 }
 
 .bottom-icons {
@@ -457,6 +524,8 @@
 .modal-header-branch {
   display: flex;
   justify-content: space-between;
+  padding: 10px 0px;
+  border-bottom: 1px solid #d9d9d9;
 }
 
 .close-button {
@@ -488,6 +557,18 @@
   background-color: white;
   border-radius: 10px;
   padding: 3rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: max-content;
+  height: max-content;
+  max-height: 90%;
+  overflow: auto;
+}
+.modal-window-picture {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 10px;
+  padding: 1rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: max-content;
   height: max-content;
@@ -697,7 +778,7 @@
   position: relative;
 }
 
-.image-display-top img {
+.image-display-top-img {
   border-radius: 10px;
   height: 100%;
   width: 100%;
@@ -705,6 +786,57 @@
   max-width: 100%;
   object-fit: contain;
 }
+.image-display-top-img-empty {
+  border-radius: 10px;
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+
+.image-display-top-icon {
+  display: none;
+}
+
+.image-display-top:hover .image-display-top-img {
+  backdrop-filter: brightness(0.6);
+  filter: brightness(0.6);
+}
+.image-display-top:hover .image-display-top-img-empty {
+  backdrop-filter: brightness(0.6);
+  filter: brightness(0.6);
+}
+
+
+.image-display-top:hover .image-display-top-icon {
+  display: block;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+}
+
+.image-display-top:hover .image-dot {
+  background-color: white;
+}
+.image-display-top:hover .image-dot.active {
+  background-color: #e10202;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+.image-display-top:hover .pagination-button[disabled] .pagination-icon {
+  fill: white;
+  --slds-c-icon-color-foreground-default: white;
+  color: white;
+}
+
+
 
 .image-dot {
   display: inline-block;
@@ -784,9 +916,8 @@
 }
 
 .branch-card {
-  padding: 1rem;
-  border-radius: 10px;
-  background-color: #f4f4f4;
+  padding: 1rem 0rem;
+  border-radius: 6px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: 1fr;
@@ -801,21 +932,20 @@
 .branch-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .modal-window-branch {
   display: flex;
   flex-direction: column;
   background-color: white;
-  border-radius: 10px;
-  padding: 1rem 2rem;
+  border-radius: 6px;
+  padding: 1rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: max-content;
   height: max-content;
   max-height: 90%;
   overflow: auto;
-  gap: 1rem;
+  gap: 0.6rem;
 }
 
 .siebelcode {
@@ -843,15 +973,15 @@
   border-bottom: 1px solid #d9d9d9;
 }
 
-tbody tr:last-child {
+tbody tr:nth-child(5) {
   border-bottom: 0;
 }
 
-tbody tr:last-child td:first-child {
+tbody tr:nth-child(5) td:first-child {
   border-bottom-left-radius: 10px;
 }
 
-tbody tr:last-child td:last-child {
+tbody tr:nth-child(5) td:last-child {
   border-bottom-right-radius: 10px;
 }
 
@@ -876,6 +1006,7 @@ tbody tr:last-child td:last-child {
 
 .vehicle_container2 thead {
   background-color: #f4f4f4;
+  text-wrap: nowrap;
 }
 
 .mm-main-container th:first-child,
@@ -908,20 +1039,6 @@ tbody tr:last-child td:last-child {
   border-top-right-radius: 10px;
 }
 
-.mm-filter-dropdown {
-  position: absolute;
-  top: 42px;
-  box-shadow: 0px 0px 10px 0px #00000026;
-  padding: 16px;
-  border-radius: 10px;
-  background-color: white;
-  text-wrap: nowrap;
-  display: flex;
-  flex-direction: column;
-  gap: 15.4px;
-  width: 216px;
-  font-size: 16px;
-}
 
 .mm-filter-dropdown1 {
   position: absolute;
@@ -978,6 +1095,7 @@ tbody tr:last-child td:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
   padding-right: 51px;
+  cursor: default;
 }
 
 .grey-row {
@@ -1085,6 +1203,17 @@ tbody tr:last-child td:last-child {
   overflow: auto;
 }
 
+.modal-window-small-delete {
+  background-color: rgba(251, 251, 251, 1);
+  border-radius: 8px;
+  padding: 1rem 1rem 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 90%;
+  max-height: 98%;
+  overflow: auto;
+}
+
+
 .warning {
   width: 100%;
   height: 64%;
@@ -1095,6 +1224,8 @@ tbody tr:last-child td:last-child {
   flex-direction: column;
 }
 
+
+
 .buttons-small {
   height: 36%;
   display: flex;
@@ -1102,6 +1233,13 @@ tbody tr:last-child td:last-child {
   justify-content: center;
   gap: 28px;
   padding-top: 10px;
+}
+.buttons-small-edit {
+  height: 36%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
 }
 
 .btn-download {
@@ -1140,6 +1278,12 @@ tbody tr:last-child td:last-child {
   background-color: #ea0202;
 }
 
+.searchbutton-download-disabled {
+  background-color: #bbbbbb;
+  color: white;
+  cursor: not-allowed;
+}
+
 .searchbutton-download:hover {
   background-color: white;
   border: 1px solid #e10202;
@@ -1164,6 +1308,20 @@ tbody tr:last-child td:last-child {
   justify-content: center;
 }
 
+.modal-window-loader-delete {
+  background-color: rgba(251, 251, 251, 1);
+  border-radius: 8px;
+  padding: 3.5rem 5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .Download-name {
   border: 1px solid #D9D9D9;
   border-radius: 8px;
@@ -1176,6 +1334,14 @@ tbody tr:last-child td:last-child {
   display: flex;
   flex-direction: column;
   gap: 3px;
+}
+
+.Delete-name-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0rem 2rem;
 }
 
 .Heading-download {
@@ -1217,12 +1383,12 @@ tbody tr:last-child td:last-child {
 
 .deletevehicle:hover .deletetruck {
   cursor: pointer;
-  fill: red;
+  fill: #e10202;
 }
 
 .deletevehicle:hover .b.deletetext {
   cursor: pointer;
-  color: red;
+  color: #e10202;
 }
 
 .editvehicle {
@@ -1255,7 +1421,191 @@ tbody tr:last-child td:last-child {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 367px;
+  height: 291px;
+  gap: 24px;
+}
+
+.empty-container-lease {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 291px;
+  gap: 24px;
+}
+
+/* delete vehicle css */
+.modal-delete-header {
+  display: flex;
+  width: 100%;
+  padding: 10px 0px;
+  justify-content: space-between;
+  border-bottom: 1px solid #d9d9d9;
+  margin-bottom: 15px;
+}
+
+.icondelete {
+  background: var(--dropdown-icon) no-repeat;
+  background-size: 20px;
+  background-position: 330px 50%;
+}
+
+.Delete-vehicle-warning {
+  width: 400px;
+}
+
+.closeicondeletemain {
+  --slds-c-icon-color-foreground-default: #262626;
+  cursor: pointer;
+}
+
+.icondelete-disabled {
+  background: var(--dropdown-icon-disabled) no-repeat;
+  background-size: 20px;
+  background-position: 180px 50%;
+}
+
+.Delete-vehicle-picklists {
+  margin: 1rem 0rem 1.5rem 0rem;
+  padding: 1rem;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  width: calc(100% - 40px);
+}
+
+.list-item {
+  padding: 10px;
+  cursor: pointer;
+  /* margin-left: 15%; */
+}
+
+.list-item:hover {
+  background-color: #f0f0f0;
+}
+
+.Inputsdelete::placeholder {
+  color: #BBBBBB;
+}
+
+.Inputsdescrption::placeholder {
+  color: #BBBBBB;
+}
+
+.Inputsdelete:hover {
+  cursor: pointer;
+}
+
+.Inputsdelete {
+  padding: 10px;
+  border: #D9D9D9 solid 1px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  width: 360px;
+  height: 48px;
+  position: relative;
+}
+
+.Inputsdescrption {
+  padding: 10px;
+  border: #D9D9D9 solid 1px;
+  border-radius: 10px;
+  width: 360px;
+  height: 64px;
+}
+
+/* .icon {
+  padding-left: auto;
+  background: var(--dropdown-icon) no-repeat;
+  background-size: 20px;
+  background-position: 250px 50%;
+} */
+.listsdelete {
+  position: absolute;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  z-index: 5;
+  border-radius: 10px;
+  width: 360px;
+  margin-top: 0.6%;
+  padding: 8px 0px;
+}
+
+.Delete-records {
+  display: flex;
+  gap: 12px;
+  padding: 0.5rem;
+  align-items: center;
+}
+
+.warning-text {
+  color: #E10202;
+  padding: 5px 5px 5px 34px;
+}
+
+.Delete-vehicle-footer {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  padding: 1rem 0rem 0.5rem 0rem;
+}
+
+.btn-delete {
+  height: 2rem;
+  width: 8rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cancelbutton-delete {
+  background-color: #f4f4f4;
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cancelbutton-delete:hover {
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 0 0px rgba(0, 0, 0, 0);
+}
+
+.buttontxt-delete {
+  color: #0A0A0A;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.buttontxt2-delete {
+  color: white;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.searchbutton-delete {
+  background-color: #ea0202;
+  color: white;
+  border: none;
+}
+
+.searchbutton-delete:hover {
+  background-color: white;
+  border: 1px solid #e10202;
+  cursor: pointer;
+  color: #E10202;
+}
+
+.searchbutton-delete:hover .buttontxt2-delete {
+  cursor: pointer;
+  color: #E10202;
+}
+
+.searchbutton-delete-disabled {
+  background-color: #BBBBBB;
+  cursor: not-allowed;
+}
+
+.searchbutton-delete-disabled .buttontxt2-delete {
+  color: white;
 }
 
 
@@ -1296,4 +1646,430 @@ tbody tr:last-child td:last-child {
     max-width: 150px !important;
     padding-right: 30px !important;
   }
+}
+
+@media (max-width: 1170px) {
+  .center-content {
+    margin-top: -80.5vh;
+  }
+
+  .main {
+    width: calc(100vw - 14px);
+  }
+
+  .bottom {
+    width: calc(100vw - 15px);
+  }
+}
+
+@media (max-width: 1000px) {
+  .center-content {
+    margin-top: -80.5vh;
+  }
+
+  .main {
+    width: calc(100vw - 10px);
+  }
+
+  .bottom {
+    width: calc(100vw - 10px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .center-content {
+    margin-top: -79vh;
+  }
+
+  .main {
+    width: calc(100vw - 13px);
+  }
+
+  .bottom {
+    width: calc(100vw - 15px);
+  }
+
+  .form_container2 {
+    width: max-content;
+  }
+
+  .listsdelete {
+    width: 150px;
+  }
+}
+
+@media (max-width: 864px) {
+  .center-content {
+    margin-top: -76vh;
+    width: 89.5%;
+    margin-right: 7px;
+  }
+
+  .main {
+    width: calc(100vw - 10px);
+  }
+
+  .bottom {
+    width: calc(100vw - 11px);
+  }
+
+  .form_container2 {
+    width: max-content;
+  }
+
+  .listsdelete {
+    width: 120px;
+  }
+
+  .icondelete-disabled {
+    background-position: 90px 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  .center-content {
+    margin-top: -38.5vh;
+  }
+
+  .main {
+    width: calc(100vw - 10px);
+  }
+
+  .bottom {
+    width: calc(100vw - 10px);
+  }
+
+  .form_container2 {
+    width: max-content;
+  }
+}
+
+@media (max-width: 640px) {
+  .center-content {
+    margin-top: -37vh;
+  }
+}
+
+/* for deleted vehicle detail */
+.content1_left_row2-deleted {
+  border-radius: 8px;
+  background-color: #f4f4f4;
+  margin: 8px 24px 24px 0;
+}
+
+.vehicle_child1_list_deleted {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-weight: 400;
+  white-space: nowrap;
+  color: #7B7B7B;
+}
+
+.deleted-image-vehicle-container {
+  width: 100%;
+  display: grid;
+  position: relative;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.vehicle-deleted-text-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.carasoul-images {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  position: absolute;
+}
+
+.notify-recall {
+  margin-right: 20px;
+  font-weight: 400;
+  font-size: 14px;
+  color: #E10202;
+}
+
+.tdClass {}
+
+/* recover vehicle */
+.RecoverButton {
+  display: flex;
+  align-items: center;
+}
+
+.deletestatus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border-radius: 5px;
+  margin-right: 25px;
+  margin-top: 11px;
+  padding: 6px 10px;
+}
+
+/* lease */
+.left-div {
+  width: 20%;
+  font-size: 16px;
+  border-right: 1px solid #d9d9d9;
+  color: #7B7B7B;
+}
+
+.border-right-black {
+  background-color: black;
+  width: 4px;
+  border-radius: 20px 0px 0px 20px;
+}
+
+.left-main-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.text-right-black {
+  color: black;
+  font-weight: 700;
+}
+
+.Vehicle-information-div {
+  display: flex;
+  width: 100%;
+  min-height: 240px;
+}
+
+.Vehicle-information-div-lease {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  gap: 32px;
+}
+
+.Info-div-lease {
+  display: flex;
+  gap: 10px;
+}
+
+.Info-div-lease-left {
+  color: #7b7b7b;
+  width: 40%;
+}
+
+.right-div {
+  width: 100%;
+}
+
+.lease-document {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.gotodoc {
+  margin: 0rem 2rem;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.recbar button:hover {
+  color: #e10202;
+}
+
+.Info-div-lease-right,
+.gotodoc {
+  font-weight: 450;
+  color: #262626;
+}
+
+.recover-hover {
+  fill: #262626;
+}
+
+.RecoverButton:hover .recover-hover {
+  fill: #e10202;
+}
+
+.RecoverButton:hover .recover-hover2 {
+  color: #e10202;
+}
+
+.hoverdtfsa {
+  fill: #262626;
+}
+
+.gotodoc:hover .hoverdtfsa {
+  fill: #e10202;
+}
+
+.gotodoc:hover .txtdtfsa {
+  color: #e10202;
+}
+
+/* image add */
+.LineofDetails {
+  margin: 16px 0;
+}
+
+/* edit branches */
+.dropdown-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  width: max-content;
+}
+
+.dropdown-input-container .dropdown-input-container-text {
+  cursor: default;
+  border: 1px solid #d9d9d9;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  min-width: 283px;
+}
+
+.mm-drop-down-icon1 {
+  position: absolute;
+  right: 5px;
+}
+
+.mm-filter-dropdown::-webkit-scrollbar,
+.mm-filter-dropdown1::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.mm-filter-dropdown::-webkit-scrollbar-track,
+.mm-filter-dropdown1::-webkit-scrollbar-track {
+  background: #F4F4F4;
+  border-radius: 10px;
+}
+
+.mm-filter-dropdown::-webkit-scrollbar-thumb,
+.mm-filter-dropdown1::-webkit-scrollbar-thumb {
+  background: #BBBBBB;
+  border-radius: 12px;
+}
+.dropdown-container {
+  position: absolute;
+  top: 46px;
+  box-shadow: 0px 0px 10px 0px #00000026;
+  border-radius: 10px;
+  padding: 16px 8px 8px 16px;
+  background-color: white;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.mm-filter-dropdown::-webkit-scrollbar-thumb:hover,
+.mm-filter-dropdown1::-webkit-scrollbar-thumb:hover {
+  background: #828282;
+}
+
+.mm-filter-dropdown::-webkit-scrollbar:horizontal,
+.mm-filter-dropdown1::-webkit-scrollbar:horizontal {
+  height: 8px;
+  /* Set the height for horizontal scrollbar */
+}
+
+.mm-filter-dropdown::-webkit-scrollbar-track:horizontal,
+.mm-filter-dropdown1::-webkit-scrollbar-track:horizontal {
+  background: #F4F4F4;
+}
+
+.mm-filter-dropdown::-webkit-scrollbar-thumb:horizontal,
+.mm-filter-dropdown1::-webkit-scrollbar-thumb:horizontal {
+  background: #BBBBBB;
+  border-radius: 12px;
+}
+
+.mm-filter-dropdown::-webkit-scrollbar-thumb:horizontal:hover,
+.mm-filter-dropdown1::-webkit-scrollbar-thumb:horizontal:hover {
+  background: #828282;
+}
+.mm-filter-dropdown,
+.mm-filter-dropdown1 {
+    max-height: 208px;
+    background-color: white;
+    overflow: auto;
+    text-wrap: nowrap;
+    display: flex;
+    flex-direction: column;
+    gap: 15.4px;
+    font-size: 16px;
+    padding-bottom: 8px;
+}
+
+.mm-filter-dropdown-rows,
+.mm-filter-dropdown-rows1 {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.mm-filter-dropdown-rows input,
+.mm-filter-dropdown-rows1 input {
+    accent-color: #e10202;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+.mm-filter-dropdown-rows p,
+.mm-filter-dropdown-rows1 p {
+    font-weight: 400;
+}
+.next-btn1 {
+  display: flex;
+  width: 128px;
+  height: 32px;
+  padding: 12px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  background: var(--red-button-alers, #E10202);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
+}
+.next-btn1:hover {
+  background-color: white;
+  border: 1px solid #E10202;
+  color: #e10202;
+}
+
+.next-btn1:disabled {
+  color: white;
+  background-color: #BBBBBB;
+  cursor: not-allowed;
+}
+
+.next-btn1:disabled:hover {
+  border: none;
 }

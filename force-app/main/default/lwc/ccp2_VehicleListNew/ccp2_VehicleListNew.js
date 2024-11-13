@@ -8,6 +8,7 @@ import branchOptionsApi from "@salesforce/apex/ccp2_download_recall_controller.g
 import seachVehicleDataApi from "@salesforce/apex/CCP2_VehicleDetailController.vehicleRegistrationNo";
 import listBySearchVehicle from "@salesforce/apex/CCP2_VehicleDetailController.getVehicleOnSearch";
 import CCP2_Resources from "@salesforce/resourceUrl/CCP2_Resources";
+import Languagei18n from "@salesforce/apex/CCP2_userData.userLanguage";
 
 import { refreshApex } from "@salesforce/apex";
 
@@ -43,13 +44,16 @@ const TruckSampleImage =
   Vehicle_StaticResource + "/CCP2_Resources/Vehicle/TruckSample.png";
 const NoVehicleIcon =
   Vehicle_StaticResource + "/CCP2_Resources/Vehicle/NoVehicles.png";
-  const EmptyRecallDataIcon = CCP2_Resources + "/CCP2_Resources/Vehicle/Empty-recall.png";
+const EmptyRecallDataIcon =
+  CCP2_Resources + "/CCP2_Resources/Vehicle/Empty-recall.png";
 
 // delete icon
 const dropdownImg =
   Vehicle_StaticResource + "/CCP2_Resources/Common/arrow_under.png";
 
 export default class Ccp2_VehicleListNew extends LightningElement {
+  @track Languagei18n = "";
+  @track isLanguageChangeDone = true;
   backgroundImagePC = BACKGROUND_IMAGE_PC;
   filtericon = Filter;
   DelVehIcon = Deleteveh;
@@ -61,7 +65,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   noVehicleIcon = NoVehicleIcon;
   emptylistofvehicleImage = EmptyRecallDataIcon;
 
-  @track emptydataofvehicles = true;
+  @track emptydataofvehicles = false;
   @track modalStyle = "";
   @track searchDivClass = "search";
   @track searchInputClass = "search-box";
@@ -126,6 +130,8 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   @track vehicleTypeValue = "";
   finalVehicleTypeList = [];
   @track deletedFlag = false;
+  @track truckOnnectFlag = false;
+  @track recallflag = false;
   @track showSortingModal = false;
   @track sortChecked = {
     RegDesc: false,
@@ -185,9 +191,11 @@ export default class Ccp2_VehicleListNew extends LightningElement {
 
   vehicleBrachCount = 0;
   vehicleAccountCount = 0;
+  @track ownedVehicleCount = 0;
 
   //TO STOP PAGINATION
   @track stopPaginationsearch = false;
+  @track forcestopPagination = false;
 
   // delete variablesss
   @track currentlyOwnedVehiclesOnPage = [];
@@ -243,6 +251,10 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   finalFilterJson = {};
   @track finalFilterJsonForClass = {};
 
+  //truckonnet URL
+  truckonnetURL = "https://qa.truckonnect.jp";
+  
+
   get jsonParameterForVehicleClass() {
     return JSON.stringify(this.finalFilterJsonForClass);
   }
@@ -294,13 +306,17 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       this.jsonParameterForVehicleClassWithoutString.finalVehicleNameList ||
       this.jsonParameterForVehicleClassWithoutString.finalVehicleTypeList ||
       this.jsonParameterForVehicleClassWithoutString.Delete ||
+      this.jsonParameterForVehicleClassWithoutString.Recall ||
+      this.jsonParameterForVehicleClassWithoutString.TruckKonnect ||
       this.jsonParameterForVehicleClassWithoutString.Milage ||
       this.jsonParameterForVehicleClassWithoutString.ExpDiff ||
       this.jsonParameterForVehicleClassWithoutString.RegDiff
     );
   }
 
-  
+  get showVehicleRecoverButton() {
+    return this.ownedVehicleCount <= 0;
+  }
 
   showToast(title, message, variant) {
     const event = new ShowToastEvent({
@@ -312,6 +328,11 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   }
 
   renderedCallback() {
+    if (this.isLanguageChangeDone) {
+      console.log("Working 1");
+      this.loadLanguage();
+      this.isLanguageChangeDone = false;
+    }
     this.updatePageButtons();
     this.updateCheckboxStates();
     if (!this.outsideClickHandlerAdded) {
@@ -403,16 +424,22 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     this.vehicleListApiData = result;
     const { data, error } = result;
     if (data) {
-
-      if(this.vehicleData.length === 0){
+      console.log("full vehicle wire data without objectify:- ", data);
+      if (this.vehicleData.length === 0) {
         this.emptydataofvehicles = true;
-      }else{
+        this.stopPaginationsearch = true;
+      } else {
         this.emptydataofvehicles = false;
+        this.stopPaginationsearch = false;
       }
-      console.log("lists data", data);
-      console.log("lists data parameter", this.jsonParameterForVehicleClass);
 
       this.totalPageCount = data[0]?.totalPage;
+      console.log("data[0]?.VehicleCountBranch", data[0]?.VehicleCountBranch);
+      this.vehicleBrachCount =
+        data[0]?.VehicleCountBranch === undefined
+          ? 0
+          : data[0]?.VehicleCountBranch;
+      this.ownedVehicleCount = data[0]?.totalVehicleActiveCount || 0;
       this.updateVisiblePages();
       this.vehicleData = data.map((item) => {
         const { vehicle, branches, imageUrl } = item;
@@ -430,6 +457,10 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         let expDate = vehicle?.Vehicle_Expiration_Date__c
           ? this.formatJapaneseDate(vehicle.Vehicle_Expiration_Date__c)
           : "-";
+
+        let Mileage = vehicle?.Mileage__c
+          ? this.formatMileage(vehicle.Mileage__c)
+          : "-";
         let showRecallM = false;
         if (vehicle?.CCP2_Recall_Status__c === "Not Completed") {
           showRecallM = true;
@@ -441,6 +472,9 @@ export default class Ccp2_VehicleListNew extends LightningElement {
             : "utility:favorite_alt" || "utility:favorite_alt";
         let imageSrc = imageUrl.length === 0 ? this.truckSampleIcon : imageUrl;
         let deletestatusvehicle = vehicle.Status__c;
+        let truckConnect =
+          vehicle.Truck_Connect__c === 0 ? "" : vehicle.Truck_Connect__c;
+
         return {
           ...vehicle,
           statusDeleted: deletestatusvehicle === "Deleted",
@@ -451,15 +485,19 @@ export default class Ccp2_VehicleListNew extends LightningElement {
           branchNames,
           imageSrc,
           showRecallM,
-          expDate // Store the concatenated branch names
+          expDate, // Store the concatenated branch names
+          truckConnect,
+          Mileage
         };
       });
-      if(data.length === 0){
+      if (data.length === 0) {
         this.emptydataofvehicles = true;
-      }else{
+        this.stopPaginationsearch = true;
+      } else {
         this.emptydataofvehicles = false;
+        this.stopPaginationsearch = false;
       }
-      // console.log("this.vehicleData in wire", JSON.stringify(this.vehicleData));
+      console.log("this.vehicleData in wire", JSON.stringify(this.vehicleData));
       this.showSpinner = false;
       this.currentlyOwnedVehiclesOnPage = data
         .filter((item) => item.vehicle.Status__c === "CurrentlyOwned")
@@ -471,6 +509,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
           };
         });
       this.updateButtonVisibility();
+      this.updateVehicleClasses();
       // console.log("redata", data);
     } else if (error) {
       console.error(
@@ -495,7 +534,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       console.log("total vehicle count: - ", data);
       // this.totalPageCount = data.totalPages;
       this.vehicleAccountCount = data.totalVehicleAccountCount;
-      this.vehicleBrachCount = data.totalVehicleUserCount;
+      // this.vehicleBrachCount = data.totalVehicleUserCount;
 
       this.updateVisiblePages();
     } else if (err) {
@@ -521,7 +560,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       this.finalFilterJsonForClass = this.finalFilterJson;
 
       this.branchOptions = [
-        { branchId: "全て", branchName: "全て", selected: false },
+        { branchId: "すべて", branchName: "すべて", selected: false },
         ...data
       ];
     } else if (err) {
@@ -551,7 +590,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
             console.log("No Registration Number found for element: ", elm);
           }
         });
-      }
+      } 
 
       this.searchVehicleRegDoorData = temData;
       console.log(
@@ -688,13 +727,15 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   }
   connectedCallback() {
     // this.initializePageSelectionState();
-    this.loadI18nextLibrary()
-      .then(() => {
-        this.loadLabels(); // Now you can safely load the labels after i18next is loaded
-      })
-      .catch((error) => {
-        console.error("Error loading i18next library: ", error);
-      });
+    const urlParams = new URLSearchParams(window.location.search).get('vehicleId');
+    console.log("urlParams",urlParams);
+    if(urlParams){
+      console.log("urlParams2",urlParams);
+      this.showVehicleList = false;
+      this.showVehicleDetails = true;
+      this.vehicleId = urlParams;
+    }
+
     this.rangeValues.Slider1 = {
       lower: this.rangeOneValueSlider1,
       upper: this.rangeTwoValueSlider1
@@ -792,6 +833,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         const userLocale = this.getLocale(); // Method to determine user locale (e.g., 'en', 'jp')
 
         // Initialize i18next with the fetched labels
+        // eslint-disable-next-line no-undef
         i18next
           .init({
             lng: userLocale,
@@ -802,9 +844,8 @@ export default class Ccp2_VehicleListNew extends LightningElement {
             }
           })
           .then(() => {
+            // eslint-disable-next-line no-undef
             this.labels2 = i18next.store.data[userLocale].translation;
-            console.log("Delete Detail User Locale: ", userLocale);
-            console.log("Delete Detail User Labels: ", this.labels2);
           });
       })
       .catch((error) => {
@@ -812,8 +853,14 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       });
   }
   getLocale() {
-    const region = Intl.DateTimeFormat().resolvedOptions().locale;
-    return region === "ja" ? "jp" : "en";
+    console.log("Lang 2", this.Languagei18n);
+    if (this.Languagei18n === "en_US") {
+      console.log("working1");
+      return "en";
+    } else {
+      console.log("working2");
+      return "jp";
+    }
   }
 
   handlecardClick(event) {
@@ -847,10 +894,20 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   }
 
   handleBack() {
+    const prevUrl = document.referrer;
+    const newUrl = '/s/vehiclemanagement';
+
+    window.history.replaceState({}, document.title, newUrl);
+    if(prevUrl.includes('vehiclemanagement')){
+      window.history.back();
+    }
+
     this.currentPagination = Number(this.currentPagination) + 1;
     setTimeout(() => {
       this.currentPagination = Number(this.currentPagination) - 1;
     }, 0);
+
+    refreshApex(this.vehicleListApiData);
     this.currentPage = 1;
     this.showVehicleList = true;
     this.showVehicleDetails = false;
@@ -921,10 +978,10 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       this.isPreviousDisabled = this.currentPage === 1;
       this.isNextDisabled = this.currentPage === this.totalPageCount;
       this.updatePageButtons();
-      this.updateCheckboxStates();
-      this.updateVehicleClasses();
-      this.updateButtonVisibility();
     }
+    this.updateCheckboxStates();
+    this.updateVehicleClasses();
+    this.updateButtonVisibility();
   }
   handleNextPage() {
     if (this.totalPageCount > this.currentPage) {
@@ -934,10 +991,10 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       this.isPreviousDisabled = this.currentPage === 1;
       this.isNextDisabled = this.currentPage === this.totalPageCount;
       this.updatePageButtons();
-      this.updateCheckboxStates();
-      this.updateVehicleClasses();
-      this.updateButtonVisibility();
     }
+    this.updateCheckboxStates();
+    this.updateVehicleClasses();
+    this.updateButtonVisibility();
   }
 
   updateVisiblePages() {
@@ -1003,8 +1060,10 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   }
 
   handleSuggestionInputChange(event) {
+    this.handlevalchange(event);
     if (event.target.value === "") {
       this.currentPagination = Number(this.currentPagination) + 1;
+      this.updateButtonVisibility();
       // eslint-disable-next-line @lwc/lwc/no-async-operation
       setTimeout(() => {
         this.currentPagination = Number(this.currentPagination) - 1;
@@ -1018,7 +1077,8 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       this.searchDivClass = "search";
       this.searchInputClass = "search-box";
       this.showVehicleListOrNoVehicle = true;
-      this.stopPaginationsearch = false;
+      // this.stopPaginationsearch = false;
+      this.forcestopPagination = false;
     }
 
     this.showFilteredSuggestions =
@@ -1066,9 +1126,6 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   }
 
   handleKeyDown(event) {
-    // Log the event value
-    console.log("KeyDown event fired, key:", event.key);
-
     if (event.key === "Enter") {
       this.searchDivClass = "search";
       this.searchInputClass = "search-box";
@@ -1076,73 +1133,39 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       this.showSearchError = false;
       // Log the value from the input
       let str = event.target?.value;
-      console.log("Enter pressed Value: ", str);
-
-      // Check the length of the entered value
-      console.log("Entered Value Length: ", str.length);
-      if (str.length < 4) {
-        this.searchDivClass = "invalid-input search";
-        this.searchInputClass = "invalid-input2 search-box";
-        this.errorSearch = true;
-        this.showSearchError = true;
-        console.log("Input length is less than 4, showing error toast");
-        return;
-      }
+      console.log("Enter pressed Value: ", str, str.length);
 
       // Check if the input field is empty
-      console.log("Checking if input is empty");
-      if (event.target?.value === "") {
+      if (event.target?.value.trim() !== "") {
+        if (str.length < 4 || !/^[0-9]*$/.test(str)) {
+          this.searchDivClass = "invalid-input search";
+          this.searchInputClass = "invalid-input2 search-box";
+          this.errorSearch = true;
+          this.showSearchError = true;
+          console.log("Input length is less than 4, showing error toast");
+          return;
+        }
+        this.stopPaginationsearch = true;
+        this.forcestopPagination = true;
+      } else {
         console.log("Input is empty, returning");
         return;
       }
 
-      // Check if filteredSearchVehicleRegDoorData is defined
-      console.log("Checking if filteredSearchVehicleRegDoorData is defined");
-      if (this.filteredSearchVehicleRegDoorData) {
-        console.log(
-          "filteredSearchVehicleRegDoorData exists with length:",
-          this.filteredSearchVehicleRegDoorData.length
-        );
-
-        // Proceed if there's data in the filtered search results
-        if (this.filteredSearchVehicleRegDoorData.length > 0) {
-          this.filterSuggestionsToSend = event.target?.value;
-          this.showSpinner = true;
-          this.stopPaginationsearch = true;
-
-          // Log and list the first filtered vehicle
-          let last4dig = this.filteredSearchVehicleRegDoorData[0]?.slice(-4);
-
-          console.log("Filtered data found, listing first vehicle:", last4dig);
-          console.log(typeof last4dig);
-          this.listBySearchVehicle(last4dig);
-
-          console.log(
-            "Available search list: ",
-            JSON.stringify(this.filteredSearchVehicleRegDoorData)
-          );
-
-          // Hide the suggestion dropdown
-          this.showFilteredSuggestions = false;
-        } else {
-          // No filtered data found, log and show no vehicles
-          console.log("No data found in filteredSearchVehicleRegDoorData");
-          this.showVehicleListOrNoVehicle = false;
-          this.showFilteredSuggestions = false;
-        }
-      } else {
-        // Log if filteredSearchVehicleRegDoorData is undefined
-        console.error("filteredSearchVehicleRegDoorData is undefined or null");
-        this.showVehicleListOrNoVehicle = false;
-        this.showFilteredSuggestions = false;
+      if (this.filterSuggestionsToSend !== event.target?.value) {
+        this.showSpinner = true;
       }
+      this.filterSuggestionsToSend = event.target?.value;
+      this.currentPage = 1;
+      // Hide the suggestion dropdown
+      this.showFilteredSuggestions = false;
     }
   }
 
-  handleSuggestionSelect(event) {
+  handleSuggestionSelect() {
     this.showSpinner = true;
     // let last4dig = event.target.textContent.slice(-4);
-    this.listBySearchVehicle(event.target.textContent);
+    // this.listBySearchVehicle(event.target.textContent);
     this.showFilteredSuggestions = false;
   }
 
@@ -1291,23 +1314,24 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     }
 
     const headers = [
-      "車両番号",
+      "お客様管理名",
       "登録番号",
       "車台番号",
       "交付年月日",
       "車名",
       "自動車の種別",
-      "車体形状",
+      "車体の形状",
       "車両重量",
-      "初度登録年月日",
-      "有効期間の満了日",
+      "初度登録年月",
+      "有効期間の満了する日",
       "走行距離",
       "燃料の種類",
       "自家用・事業用の別",
       "用途",
       "型式",
-      "ドアナンバー",
-      "所属"
+      //"ドアナンバー",
+      "所属",
+      '削除済み車両'
     ];
 
     const csvRows = this.allVehiclesData.map((record) => {
@@ -1334,8 +1358,9 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         vehicle.Private_Business_use__c || "",
         vehicle.Use__c || "",
         vehicle.fullModel__c || "",
-        vehicle.Door_Number__c || "",
-        branches
+        //vehicle.Door_Number__c || "",
+        branches,
+        vehicle.Status__c === 'CurrentlyOwned' ? ' ' : '削除済み' || ''
       ];
     });
 
@@ -1345,6 +1370,10 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     });
     const BOM = "\uFEFF";
     csvContent = BOM + csvContent;
+
+    if (this.DownloadName.endsWith(".csv")) {
+      this.DownloadName = this.DownloadName.slice(0, -4);
+    }
 
     const csvBase64 = btoa(unescape(encodeURIComponent(csvContent)));
     const link = document.createElement("a");
@@ -1359,7 +1388,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   }
   //filter Modal
   openFilterModal() {
-    if (this.pinnedFilter == false) {
+    if (this.pinnedFilter === false) {
       window.scrollTo(0, 0);
       this.showFilterModal = true;
       document.body.style.overflow = "hidden";
@@ -1595,17 +1624,35 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     }
   };
 
-  @track selectedOptionsPills = ["new", "few", "view"];
-
   // Handle checkbox change
   handleCheckboxChangeForPills(event) {
     const value = event.target.value;
-    this.deletedFlag = event.target.checked;
-    if (event.target.checked) {
-      this.finalFilterJson = { ...this.finalFilterJson, [value]: "true" };
+    if (value === "Delete") {
+      this.deletedFlag = event.target.checked;
+      if (event.target.checked) {
+        this.finalFilterJson = { ...this.finalFilterJson, [value]: "true" };
+      } else {
+        // eslint-disable-next-line no-unused-vars
+        const { Delete, ...rest } = this.finalFilterJson;
+        this.finalFilterJson = rest;
+      }
+    }else if(value === "Recall"){
+      this.recallflag = event.target.checked;
+      if (event.target.checked) {
+        this.finalFilterJson = { ...this.finalFilterJson, [value]: "true" };
+      } else {
+        const { Recall, ...rest } = this.finalFilterJson;
+        this.finalFilterJson = rest;
+      }
     } else {
-      const { Delete, ...rest } = this.finalFilterJson;
-      this.finalFilterJson = rest;
+      this.truckOnnectFlag = event.target.checked;
+      if (event.target.checked) {
+        this.finalFilterJson = { ...this.finalFilterJson, [value]: "true" };
+      } else {
+        // eslint-disable-next-line no-unused-vars
+        const { TruckKonnect, ...rest } = this.finalFilterJson;
+        this.finalFilterJson = rest;
+      }
     }
   }
 
@@ -1621,7 +1668,6 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     if (key === "Milage" || key === "RegDiff" || key === "ExpDiff") {
       delete this.finalFilterJsonForClass[key];
       delete this.finalFilterJson[key];
-      console.log("its in removepill", this.finalFilterJsonForClass);
       switch (key) {
         case "Milage": {
           this.rangeOneValueSlider1 = 0;
@@ -1633,6 +1679,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
           this.slider1check = false;
           this.isRangeDisabled1 = false;
           this.rangeClass1 = "incl-range";
+          break;
         }
         // eslint-disable-next-line no-fallthrough
         case "RegDiff": {
@@ -1646,6 +1693,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
 
           this.isRangeDisabled3 = false;
           this.rangeClass3 = "incl-range";
+          break;
         }
         // eslint-disable-next-line no-fallthrough
         case "ExpDiff": {
@@ -1658,6 +1706,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
           this.slider2check = false;
           this.isRangeDisabled2 = false;
           this.rangeClass2 = "incl-range";
+          break;
         }
         // eslint-disable-next-line no-fallthrough
         default: {
@@ -1675,9 +1724,23 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       // eslint-disable-next-line no-unused-vars
       const { Delete: deleteMain2, ...restMain } = this.finalFilterJson;
       this.finalFilterJson = restMain;
-
-      // delete this.finalFilterJson.Delete;
+    } else if (key === "Recall") {
+      this.recallflag = false;
       // eslint-disable-next-line no-unused-vars
+      const { Recall: recallMain, ...restClass } = this.finalFilterJsonForClass;
+      this.finalFilterJsonForClass = restClass;
+      // eslint-disable-next-line no-unused-vars
+      const { Recall: recallMain2, ...restMain } = this.finalFilterJson;
+      this.finalFilterJson = restMain;
+    }
+     else if (key === "TruckKonnect") {
+      this.truckOnnectFlag = false;
+      // eslint-disable-next-line no-unused-vars
+      const { TruckKonnect: Main, ...restClass } = this.finalFilterJsonForClass;
+      this.finalFilterJsonForClass = restClass;
+      // eslint-disable-next-line no-unused-vars
+      const { TruckKonnect: Main2, ...restMain } = this.finalFilterJson;
+      this.finalFilterJson = restMain;
     } else {
       this.finalFilterJsonForClass[key] = this.finalFilterJsonForClass[
         key
@@ -1841,12 +1904,6 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       this.updateFloatingValues(id);
     }
 
-    console.log(
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      Number(Math.ceil(this.rangeValues[id].lower * multiplier).toFixed(0)),
-      Number(Math.ceil(this.rangeValues[id].upper * multiplier).toFixed(0))
-    );
-
     if (id === "Slider1") {
       this.finalFilterJson = {
         ...this.finalFilterJson,
@@ -1892,13 +1949,13 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   }
 
   updateFloatingValues(id) {
-    let suffix = 'km';
+    let suffix = "km";
     if (id === "Slider1") {
-      suffix = 'km';
+      suffix = "km";
     } else if (id === "Slider2") {
-      suffix = '年';
+      suffix = "ヶ月";
     } else {
-      suffix = 'ヶ月';
+      suffix = "年";
     }
     const outputOne = this.template.querySelector(
       `.output.outputOne[data-id="${id}"]`
@@ -1910,27 +1967,57 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     if (outputOne && outputTwo) {
       const multiplier = this.sliderConfigs[id].multiplier;
 
-      outputOne.textContent = Math.ceil(
-        this.rangeValues[id].lower * multiplier
-      ).toFixed(0) + suffix;
-      outputTwo.textContent = Math.ceil(
-        this.rangeValues[id].upper * multiplier
-      ).toFixed(0) + suffix;
+      outputOne.textContent =
+        this.formatCurrency(
+          Math.ceil(this.rangeValues[id].lower * multiplier).toFixed(0)
+        ) +
+        " " +
+        suffix;
+      outputTwo.textContent =
+        this.formatCurrency(
+          Math.ceil(this.rangeValues[id].upper * multiplier).toFixed(0)
+        ) +
+        " " +
+        suffix;
 
       outputOne.style.left = `${this.calculateLeft_left(this[`rangeOneValue${id}`])}%`;
       outputTwo.style.left = `${this.calculateLeft(this[`rangeTwoValue${id}`])}%`;
     }
   }
 
+  formatCurrency(value) {
+    return new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 0
+    }).format(value);
+  }
+
   calculateLeft(percentage) {
-    return 0.973 * percentage - 48.3;
+    return 0.9677 * percentage - 48.2735;
   }
 
   calculateLeft_left(percentage) {
-    return 0.973 * percentage - 36.3;
+    return 0.963 * percentage - 19.5;
   }
 
   //  filter wire
+  loadLanguage() {
+    Languagei18n() // Assuming getLanguageI18n is the apex method that fetches the language.
+      .then((data) => {
+        this.Languagei18n = data;
+        console.log("lang Method", data, this.Languagei18n);
+        return this.loadI18nextLibrary(); // Return the promise for chaining
+      })
+      .then(() => {
+        return this.loadLabels(); // Load labels after i18next is ready
+      })
+      .then(() => {
+        console.log("Upload Label: ", this.isLanguageChangeDone); // Check language change status
+      })
+      .catch((error) => {
+        console.error("Error loading language or labels: ", error);
+      });
+  }
+
   @wire(getPicklistValues, {
     recordTypeId: "012000000000000AAA",
     fieldApiName: VEHICLE_TYPE
@@ -2019,6 +2106,8 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     delete this.finalFilterJson.finalVehicleNameList;
     delete this.finalFilterJson.finalVehicleTypeList;
     delete this.finalFilterJson.Delete;
+    delete this.finalFilterJson.Recall;
+    delete this.finalFilterJson.TruckKonnect;
     delete this.finalFilterJson.RegDiff;
     delete this.finalFilterJson.ExpDiff;
     delete this.finalFilterJson.Milage;
@@ -2027,6 +2116,8 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     this.vehicleTypeValue = "";
     this.finalVehicleTypeList = [];
     this.deletedFlag = false;
+    this.truckOnnectFlag = false;
+    this.recallflag = false;
     this.slider1check = false;
     this.slider2check = false;
     this.slider3check = false;
@@ -2143,17 +2234,32 @@ export default class Ccp2_VehicleListNew extends LightningElement {
 
   // delete vehicle
   showdeletecheckboxes() {
+    let ongoingTransactions =
+      JSON.parse(sessionStorage.getItem("ongoingTransaction")) || {};
+
+    ongoingTransactions.vehicleListDeleteTxn = true;
+
+    sessionStorage.setItem(
+      "ongoingTransaction",
+      JSON.stringify(ongoingTransactions)
+    );
+
     this.deletecheckboxoverfav = true;
+    this.MainTemplateofbuttons = false;
     this.deletebuttonsall = true;
   }
+
   handlebackfromdelete() {
+    sessionStorage.removeItem("ongoingTransaction");
+    this.showDeselectAllButton = false;
     this.deleteselectedVehicleIds = [];
     this.selectedVehicleStates = {};
+    this.selectedVehiclesByPage.clear();
     this.deletecheckboxoverfav = false;
     this.selectedall = false;
     this.deletebuttonsall = false;
+    this.MainTemplateofbuttons = true;
     this.showSelectAllButton = true;
-    this.showDeselectAllButton = false;
     this.updateVehicleClasses();
   }
 
@@ -2299,6 +2405,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       ).statusDeleted;
     });
   }
+
   updateVehicleClasses() {
     this.vehicleData = this.vehicleData.map((vehicle) => {
       const isSelected = this.deleteselectedVehicleIds.includes(vehicle.Id);
@@ -2553,8 +2660,8 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   }
 
   handledeletedescription(event) {
+    this.handlevalchange(event);
     this.deletedescription = event.target.value;
-
     if (this.deletedescription && this.deletedescription.trim() !== "") {
       this.allselectedDeleted = true;
     } else {
@@ -2638,6 +2745,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       return;
     }
     let hasOwnedVehicle = false;
+    let hasDeletedVehicle = false;
     for (let i = 0; i < this.statusArray.length; i++) {
       const status = this.statusArray[i].status;
       console.log(`Vehicle status at index ${i}:`, status);
@@ -2646,6 +2754,9 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         hasOwnedVehicle = true;
         break;
       }
+      if (status && status.trim() === "Deleted") {
+        hasDeletedVehicle = true;
+      }
     }
 
     if (hasOwnedVehicle) {
@@ -2653,7 +2764,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     } else {
       this.isdeleteModalOpen = false;
       this.selectedall = false;
-      this.showModalAndRefresh();
+      this.isSaveddelete = false;
       this.pageData = [];
       this.SelectedStatus = "保有中";
       this.isComplete = false;
@@ -2665,28 +2776,55 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       this.deleteselectedVehicleIds = [];
       this.selectedVehicleStates = {};
       this.deletebuttonsall = false;
+      this.MainTemplateofbuttons = true;
+      this.selectedVehiclesByPage.clear();
       this.deletecheckboxoverfav = false;
+      this.showSelectAllButton = true;
+      this.showDeselectAllButton = false;
+      this.updateButtonVisibility();
+      if (hasDeletedVehicle) {
+        this.showModalAndRefresh();
+      }
       refreshApex(this.vehicleListApiData);
     }
   }
 
   handlecompleteyes() {
-    this.showModalAndRefresh();
+    // this.showModalAndRefresh();
+    sessionStorage.removeItem("ongoingTransaction");
+    this.selectedVehicleStates = {};
+    this.deleteselectedVehicleIds = [];
     this.SelectedStatus = "保有中";
+    this.selectedVehiclesByPage.clear();
     this.pageData = [];
+    this.isSaveddelete = false;
     this.isComplete = false;
+    this.showSelectAllButton = true;
+    this.showDeselectAllButton = false;
     this.selectedReason = "";
     this.deletedescription = "";
     this.vehicledeletedescription = false;
     this.vehgoesdeletion = false;
-    this.deleteselectedVehicleIds = [];
     this.selectedall = false;
-    this.selectedVehicleStates = {};
     this.isdeleteModalOpen = false;
     this.completeconfirmModal = false;
     this.deletebuttonsall = false;
+    this.MainTemplateofbuttons = true;
     this.deletecheckboxoverfav = false;
+    let hasDeletedVehicle = false;
+    for (let i = 0; i < this.statusArray.length; i++) {
+      const status = this.statusArray[i].status;
+      console.log(`Vehicle status at index ${i}:`, status);
+      if (status && status.trim() === "Deleted") {
+        hasDeletedVehicle = true;
+      }
+    }
+    if (hasDeletedVehicle) {
+      this.showModalAndRefresh();
+    }
     refreshApex(this.vehicleListApiData);
+    this.updateButtonVisibility();
+    this.updateVehicleClasses();
   }
 
   handlecompleteno() {
@@ -2773,6 +2911,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   /*branch selection drop down*/
   toggleBrachSelection(event) {
     event.stopPropagation();
+    this.showSortingModal = false;
     this.showBranchSelection = !this.showBranchSelection;
   }
 
@@ -2786,7 +2925,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     this.selectedVehicleStates = {};
     this.selectedVehiclesByPage.clear();
     this.updateButtonVisibility();
-    if (branchId === "全て") {
+    if (branchId === "すべて") {
       this.branchOptions = this.branchOptions.map((branch) => {
         return { ...branch, selected: isChecked };
       });
@@ -2802,12 +2941,12 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       console.log("in else 1");
 
       const allBranchesSelected = this.branchOptions
-        .filter((branch) => branch.branchId !== "全て")
+        .filter((branch) => branch.branchId !== "すべて")
         .every((branch) => branch.selected);
       console.log("in else 2");
 
       this.branchOptions = this.branchOptions.map((branch) => {
-        if (branch.branchId === "全て") {
+        if (branch.branchId === "すべて") {
           branch.selected = allBranchesSelected;
         }
         return branch;
@@ -2816,7 +2955,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     }
     console.log("at end");
     this.branchDataToSendBack = this.branchOptions
-      .filter((elm) => elm.selected === true && elm.branchId !== "全て")
+      .filter((elm) => elm.selected === true && elm.branchId !== "すべて")
       .map((elm) => elm.branchId);
 
     this.finalFilterJson = {
@@ -2863,6 +3002,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   //sorting
   tooglesortmodal(event) {
     event.stopPropagation();
+    this.showBranchSelection = false;
     this.showSortingModal = !this.showSortingModal;
   }
   handleSortChange(event) {
@@ -2884,13 +3024,48 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     this.template.querySelectorAll('input[type="radio"]').forEach((radio) => {
       radio.checked = false;
     });
+    this.updateButtonVisibility();
     this.showSortingModal = false;
   }
   FinalSorttoSend() {
     this.finalsortingValue = this.sortSelectedValue;
+    this.updateButtonVisibility();
     this.showSortingModal = false;
   }
   showvehiclelistbottomicons() {
     this.showonclickofmorefilter = !this.showonclickofmorefilter;
+  }
+
+  // truckonnect link open
+  redirectTruckonnet(event) {
+    event.stopPropagation();
+    window.open(this.truckonnetURL, "_blank");
+  }
+  //recover
+  @track Recoverbuttonsall = false;
+  @track MainTemplateofbuttons = true;
+
+  openRecoverDelete() {
+    let ongoingTransactions =
+      JSON.parse(sessionStorage.getItem("ongoingTransaction")) || {};
+
+    ongoingTransactions.vehicleListRecoverTxn = true;
+
+    sessionStorage.setItem(
+      "ongoingTransaction",
+      JSON.stringify(ongoingTransactions)
+    );
+
+    this.MainTemplateofbuttons = false;
+    this.Recoverbuttonsall = true;
+  }
+  CloseRecoverDelete() {
+    sessionStorage.removeItem("ongoingTransaction");
+    this.Recoverbuttonsall = false;
+    this.MainTemplateofbuttons = true;
+  }
+
+  formatMileage(mileage) {
+    return mileage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 }

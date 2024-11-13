@@ -1,0 +1,698 @@
+<template>
+  <div class="main">
+    <div class="half top">
+      <img src={backgroundImagePC} class="main_image" alt="background_Image" />
+    </div>
+    <div class="half bottom">
+      <div class="center-content">
+        <div class="main-container">
+          <div class="header-FAQ">
+            <p>よくあるご質問</p>
+          </div>
+          <div class="search-input">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="25"
+              height="25"
+              viewBox="0 0 25 25"
+              fill="none"
+            >
+              <path
+                d="M16.2559 14.755H15.4659L15.1859 14.485C16.1659 13.345 16.7559 11.865 16.7559 10.255C16.7559 6.665 13.8459 3.755 10.2559 3.755C6.66586 3.755 3.75586 6.665 3.75586 10.255C3.75586 13.845 6.66586 16.755 10.2559 16.755C11.8659 16.755 13.3459 16.165 14.4859 15.185L14.7559 15.465V16.255L19.7559 21.245L21.2459 19.755L16.2559 14.755ZM10.2559 14.755C7.76586 14.755 5.75586 12.745 5.75586 10.255C5.75586 7.76501 7.76586 5.755 10.2559 5.755C12.7459 5.755 14.7559 7.76501 14.7559 10.255C14.7559 12.745 12.7459 14.755 10.2559 14.755Z"
+                fill="black"
+              />
+            </svg>
+            <input
+              type="text"
+              class="input-search"
+              placeholder="よくあるご質問内を検索する 。（例：新規車両の管理、整備の予約など）"
+            />
+          </div>
+          <div class="div-container">
+            <div class="left-div">
+              <div class="left-main-head" onclick={handleIntroClick}>
+                <p class={introSelectedLabel}>はじめに</p>
+                <div class={introSelectedClass}></div>
+              </div>
+              <div class="left-main-head" onclick={handleCustomerInfoClick}>
+                <p class={customerInfoSelectedLabel}>お客様情報</p>
+                <div class={customerInfoSelectedClass}></div>
+              </div>
+              <div class="left-main-head" onclick={handleVehicleClick}>
+                <p class={vehicleSelectedLabel}>車両管理</p>
+                <div class={vehicleSelectedClass}></div>
+              </div>
+              <div class="left-main-head" onclick={handleEInvoiceClick}>
+                <p class={eInvoiceSelectedLabel}>
+                  部整月次請求書<br />（電子版）
+                </p>
+                <div class={EInvoiceSelectedClass}></div>
+              </div>
+              <div class="left-main-head" onclick={handleFinanceClick}>
+                <p class={financeSelectedLabel}>リース・ローン</p>
+                <div class={FinanceSelectedClass}></div>
+              </div>
+              <div class="left-main-head" onclick={handleOtherClick}>
+                <p class={otherSelectedLabel}>その他</p>
+                <div class={OtherSelectedClass}></div>
+              </div>
+            </div>
+            <div class="right-div">
+              <div
+                class="demo-only demo-only_viewport"
+                style="height: 100%; position: relative"
+                if:true={showRightContentLoader}
+              >
+                <div role="status" class="slds-spinner slds-spinner_small">
+                  <span class="slds-assistive-text">Loading</span>
+                  <div class="slds-spinner__dot-a"></div>
+                  <div class="slds-spinner__dot-b"></div>
+                </div>
+              </div>
+              <div class="right-content" if:false={showRightContentLoader}>
+                <template if:true={showListPage}>
+                  <div class="right-content-header">
+                    <div class="top-heading-img">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="33"
+                        height="33"
+                        viewBox="0 0 33 33"
+                        fill="none"
+                        style="margin: 0 8px"
+                        if:true={isVehicleSelected}
+                      >
+                        <path
+                          d="M27.1673 11.2169H23.1673V7.06744C23.1673 6.51516 22.7196 6.06744 22.1673 6.06744H4.50065C3.03398 6.06744 1.83398 7.22606 1.83398 8.64216V21.8031C1.83398 22.3554 2.2817 22.8031 2.83398 22.8031H4.50065C4.50065 24.9401 6.28732 26.6651 8.50065 26.6651C10.714 26.6651 12.5007 24.9401 12.5007 22.8031H20.5007C20.5007 24.9401 22.2873 26.6651 24.5007 26.6651C26.714 26.6651 28.5006 24.9401 28.5006 22.8031H31.1673V16.3663L27.1673 11.2169ZM26.5007 13.1479L29.114 16.3663H23.1673V13.1479H26.5007ZM8.50065 24.0904C7.76732 24.0904 7.16732 23.5111 7.16732 22.8031C7.16732 22.095 7.76732 21.5157 8.50065 21.5157C9.23398 21.5157 9.83398 22.095 9.83398 22.8031C9.83398 23.5111 9.23398 24.0904 8.50065 24.0904ZM11.4607 20.2284C10.7273 19.4431 9.68732 18.941 8.50065 18.941C7.31398 18.941 6.27398 19.4431 5.54065 20.2284H4.50065V8.64216H20.5007V20.2284H11.4607ZM24.5007 24.0904C23.7673 24.0904 23.1673 23.5111 23.1673 22.8031C23.1673 22.095 23.7673 21.5157 24.5007 21.5157C25.234 21.5157 25.834 22.095 25.834 22.8031C25.834 23.5111 25.234 24.0904 24.5007 24.0904Z"
+                          fill="#E10202"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        style="margin: 0 8px"
+                        if:true={isEInvoice}
+                      >
+                        <path
+                          d="M29 23C29 25.209 27.209 27 25 27C22.791 27 21 25.209 21 23V17H28C28.552 17 29 17.448 29 18V23Z"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M21 23V6C21 5.448 20.552 5 20 5H4C3.448 5 3 5.448 3 6V23C3 25.209 4.791 27 7 27H25C22.791 27 21 25.209 21 23Z"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M16.4051 9.09822C16.6528 9.26409 16.8209 9.51658 16.8724 9.80012L16.4051 9.09822ZM16.4051 9.09822C16.1574 8.93234 15.8505 8.86665 15.5518 8.91561M16.4051 9.09822L15.5518 8.91561M15.5518 8.91561C15.2531 8.96457 14.9871 9.12416 14.8124 9.35927L15.5518 8.91561ZM11.1044 14.7049V14.6121L11.0439 14.5418L7.51605 10.4434C7.45208 10.3555 7.40695 10.2575 7.38254 10.1547C7.35751 10.0492 7.35461 9.94035 7.37396 9.83398C7.39331 9.72759 7.43465 9.6252 7.49623 9.53272C7.55782 9.44021 7.63859 9.35928 7.73447 9.29506C7.83038 9.23082 7.93933 9.18474 8.05519 9.15994C8.17107 9.13514 8.29108 9.13224 8.40822 9.15144C8.52536 9.17064 8.63679 9.21147 8.73621 9.27113C8.83561 9.33077 8.92079 9.40789 8.98741 9.49752L8.99437 9.50689L9.00218 9.51557L11.8143 12.6423L11.9999 12.8486L12.1858 12.6426L14.998 9.52677L15.0059 9.51794L15.013 9.5084C15.1476 9.32727 15.3552 9.20117 15.5922 9.16232C15.8293 9.12345 16.0719 9.17597 16.266 9.30593L16.4046 9.09888L16.266 9.30594C16.4596 9.43563 16.5875 9.63038 16.6265 9.84486C16.6649 10.0563 16.6149 10.2748 16.4845 10.4542L12.9568 14.5416L12.896 14.6119V14.7049V14.7484V14.9984H13.146H15.5981C15.8398 14.9984 16.0691 15.0897 16.2362 15.2483C16.4029 15.4065 16.494 15.6183 16.494 15.8361C16.494 16.054 16.4029 16.2657 16.2362 16.424C16.0691 16.5826 15.8398 16.6739 15.5981 16.6739H13.146H12.896V16.9239V18.2925V18.5425H13.146H15.5981C15.8398 18.5425 16.0691 18.6338 16.2362 18.7924C16.4029 18.9507 16.494 19.1624 16.494 19.3802C16.494 19.5981 16.4029 19.8098 16.2362 19.9681C16.0691 20.1267 15.8398 20.218 15.5981 20.218H13.146H12.896V20.468V22.0234C12.896 22.2413 12.805 22.453 12.6383 22.6112C12.4712 22.7699 12.2419 22.8611 12.0002 22.8611C11.7585 22.8611 11.5292 22.7699 11.3621 22.6112C11.1954 22.453 11.1044 22.2413 11.1044 22.0234V20.468V20.218H10.8544H8.4023C8.16063 20.218 7.93131 20.1267 7.76419 19.9681C7.59751 19.8098 7.50646 19.5981 7.50646 19.3802C7.50646 19.1624 7.59751 18.9507 7.76419 18.7924C7.93131 18.6338 8.16063 18.5425 8.4023 18.5425H10.8544H11.1044V18.2925V16.9239V16.6739H10.8544H8.4023C8.16063 16.6739 7.93131 16.5826 7.76419 16.424C7.59751 16.2657 7.50646 16.054 7.50646 15.8361C7.50646 15.6183 7.59751 15.4065 7.76419 15.2483C7.93131 15.0897 8.16063 14.9984 8.4023 14.9984H10.8544H11.1044V14.7484V14.7049Z"
+                          fill="#E10202"
+                          stroke="#E10202"
+                          stroke-width="0.5"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="33"
+                        height="33"
+                        viewBox="0 0 33 33"
+                        fill="none"
+                        style="margin: 0 8px"
+                        if:true={isFinanceSelected}
+                      >
+                        <path
+                          d="M29.5 23.5298C29.5 25.7388 27.709 27.5298 25.5 27.5298C23.291 27.5298 21.5 25.7388 21.5 23.5298V17.5298H28.5C29.052 17.5298 29.5 17.9778 29.5 18.5298V23.5298Z"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M12.5 10.5298H17.5"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M12.5 14.5298H17.5"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M7.5 18.5298H17.5"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M7.5 22.5298H17.5"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M21.5 23.5298V6.52979C21.5 5.97779 21.052 5.52979 20.5 5.52979H4.5C3.948 5.52979 3.5 5.97779 3.5 6.52979V23.5298C3.5 25.7388 5.291 27.5298 7.5 27.5298H25.5C23.291 27.5298 21.5 25.7388 21.5 23.5298Z"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="33"
+                        height="33"
+                        viewBox="0 0 33 33"
+                        fill="none"
+                        style="margin: 0 8px"
+                        if:true={isCustomerInfoSelected}
+                      >
+                        <path
+                          d="M16.4993 3.19647C9.13935 3.19647 3.16602 9.16981 3.16602 16.5298C3.16602 23.8898 9.13935 29.8631 16.4993 29.8631C23.8594 29.8631 29.8327 23.8898 29.8327 16.5298C29.8327 9.16981 23.8594 3.19647 16.4993 3.19647ZM9.92602 24.9031C10.4993 23.7031 13.9927 22.5298 16.4993 22.5298C19.006 22.5298 22.5127 23.7031 23.0727 24.9031C21.2593 26.3431 18.9793 27.1965 16.4993 27.1965C14.0193 27.1965 11.7393 26.3431 9.92602 24.9031ZM24.9794 22.9698C23.0727 20.6498 18.446 19.8631 16.4993 19.8631C14.5527 19.8631 9.92602 20.6498 8.01935 22.9698C6.65935 21.1831 5.83268 18.9565 5.83268 16.5298C5.83268 10.6498 10.6193 5.86314 16.4993 5.86314C22.3793 5.86314 27.166 10.6498 27.166 16.5298C27.166 18.9565 26.3393 21.1831 24.9794 22.9698ZM16.4993 8.52981C13.9127 8.52981 11.8327 10.6098 11.8327 13.1965C11.8327 15.7831 13.9127 17.8631 16.4993 17.8631C19.086 17.8631 21.166 15.7831 21.166 13.1965C21.166 10.6098 19.086 8.52981 16.4993 8.52981ZM16.4993 15.1965C15.3927 15.1965 14.4993 14.3031 14.4993 13.1965C14.4993 12.0898 15.3927 11.1965 16.4993 11.1965C17.606 11.1965 18.4993 12.0898 18.4993 13.1965C18.4993 14.3031 17.606 15.1965 16.4993 15.1965Z"
+                          fill="#E10202"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="33"
+                        height="33"
+                        viewBox="0 0 33 33"
+                        fill="none"
+                        style="margin: 0 8px"
+                        if:true={isOtherSelected}
+                      >
+                        <g clip-path="url(#clip0_24672_78632)">
+                          <path
+                            d="M15.166 24.5298H17.8327V21.8631H15.166V24.5298ZM16.4993 3.19647C9.13935 3.19647 3.16602 9.16981 3.16602 16.5298C3.16602 23.8898 9.13935 29.8631 16.4993 29.8631C23.8594 29.8631 29.8327 23.8898 29.8327 16.5298C29.8327 9.16981 23.8594 3.19647 16.4993 3.19647ZM16.4993 27.1965C10.6193 27.1965 5.83268 22.4098 5.83268 16.5298C5.83268 10.6498 10.6193 5.86314 16.4993 5.86314C22.3793 5.86314 27.166 10.6498 27.166 16.5298C27.166 22.4098 22.3793 27.1965 16.4993 27.1965ZM16.4993 8.52981C13.5527 8.52981 11.166 10.9165 11.166 13.8631H13.8327C13.8327 12.3965 15.0327 11.1965 16.4993 11.1965C17.966 11.1965 19.166 12.3965 19.166 13.8631C19.166 16.5298 15.166 16.1965 15.166 20.5298H17.8327C17.8327 17.5298 21.8327 17.1965 21.8327 13.8631C21.8327 10.9165 19.446 8.52981 16.4993 8.52981Z"
+                            fill="#E10202"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_24672_78632">
+                            <rect
+                              width="32"
+                              height="32"
+                              fill="white"
+                              transform="translate(0.5 0.529785)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                      <p if:true={isIntroSelected}>お問い合わせの多い質問</p>
+                      <p if:true={isVehicleSelected}>
+                        車両管理に関するよくある質問
+                      </p>
+                      <p if:true={isCustomerInfoSelected}>
+                        Customerに関するよくある質問
+                      </p>
+                      <p if:true={isFinanceSelected}>
+                        DTFSAに関するよくある質問
+                      </p>
+                      <p if:true={isEInvoice}>Einvoiceに関するよくある質問</p>
+                      <p if:true={isOtherSelected}>Otherするよくある質問</p>
+                    </div>
+                    <hr class="right-content-line" />
+                    <p
+                      class="right-content-header-description"
+                      if:true={isIntroSelected}
+                    >
+                      よくある質問（FAQ）へようこそ！ここでは、よくお問い合わせいただく内容についてまとめております。お探しに情報が見つからない場合に、お気軽にお問い合わせください。
+                    </p>
+                    <p
+                      class="right-content-header-description"
+                      if:true={isVehicleSelected}
+                    >
+                      ここでは、車両管理に関してよくお問い合わせいただく内容についてまとめております。お探しに情報が見つからない場合に、お気軽にお問い合わせください。
+                    </p>
+                    <p
+                      class="right-content-header-description"
+                      if:true={isOtherSelected}
+                    >
+                      ここでは、その他に関してよくお問い合わせいただく内容についてまとめております。お探しに情報が見つからない場合に、お気軽にお問い合わせください。
+                    </p>
+                    <p
+                      class="right-content-header-description"
+                      if:true={isCustomerInfoSelected}
+                    >
+                      ここでは、お客様情報に関してよくお問い合わせいただく内容についてまとめております。お探しに情報が見つからない場合に、お気軽にお問い合わせください。
+                    </p>
+                    <p
+                      class="right-content-header-description"
+                      if:true={isFinanceSelected}
+                    >
+                      ここでは、リース・ローンに関してよくお問い合わせいただく内容についてまとめております。お探しに情報が見つからない場合に、お気軽にお問い合わせください。
+                    </p>
+                    <p
+                      class="right-content-header-description"
+                      if:true={isEInvoice}
+                    >
+                      ここでは、部整月次請求書（電子版）に関してよくお問い合わせいただく内容についてまとめております。お探しに情報が見つからない場合に、お気軽にお問い合わせください。
+                    </p>
+                  </div>
+                  <div class="right-content-main">
+                    <div
+                      class="right-content-category"
+                      for:each={faqListData}
+                      for:item="elm"
+                      key={elm.Id}
+                    >
+                      <div
+                        class="category-faq"
+                        data-id={elm.Id}
+                        onclick={handleShowDetailPage}
+                      >
+                        <span class="category-faq-item1" data-id={elm.Id}>
+                          <template if:true={isIntroSelected}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="33"
+                              height="33"
+                              viewBox="0 0 33 33"
+                              fill="none"
+                              style="margin-right: 16px"
+                              data-id={elm.Id}
+                            >
+                              <path
+                                d="M29.5 23.5298C29.5 25.7388 27.709 27.5298 25.5 27.5298C23.291 27.5298 21.5 25.7388 21.5 23.5298V17.5298H28.5C29.052 17.5298 29.5 17.9778 29.5 18.5298V23.5298Z"
+                                stroke="#E10202"
+                                stroke-width="2.5"
+                                stroke-miterlimit="10"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M12.5 10.5298H17.5"
+                                stroke="#E10202"
+                                stroke-width="2.5"
+                                stroke-miterlimit="10"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M12.5 14.5298H17.5"
+                                stroke="#E10202"
+                                stroke-width="2.5"
+                                stroke-miterlimit="10"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M7.5 18.5298H17.5"
+                                stroke="#E10202"
+                                stroke-width="2.5"
+                                stroke-miterlimit="10"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M7.5 22.5298H17.5"
+                                stroke="#E10202"
+                                stroke-width="2.5"
+                                stroke-miterlimit="10"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                              <path
+                                d="M21.5 23.5298V6.52979C21.5 5.97779 21.052 5.52979 20.5 5.52979H4.5C3.948 5.52979 3.5 5.97779 3.5 6.52979V23.5298C3.5 25.7388 5.291 27.5298 7.5 27.5298H25.5C23.291 27.5298 21.5 25.7388 21.5 23.5298Z"
+                                stroke="#E10202"
+                                stroke-width="2.5"
+                                stroke-miterlimit="10"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                          </template>
+                          <p data-id={elm.Id}>{elm.Title}</p>
+                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="25"
+                          height="25"
+                          viewBox="0 0 25 25"
+                          fill="none"
+                          data-id={elm.Id}
+                        >
+                          <g clip-path="url(#clip0_24591_78494)">
+                            <path
+                              d="M10.4998 6.52979L9.08984 7.93979L13.6698 12.5298L9.08984 17.1198L10.4998 18.5298L16.4998 12.5298L10.4998 6.52979Z"
+                              fill="#E10202"
+                            />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_24591_78494">
+                              <rect
+                                width="24"
+                                height="24"
+                                fill="white"
+                                transform="translate(0.5 0.529785)"
+                              />
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                      <hr class="line-category-faq" />
+                    </div>
+                  </div>
+                </template>
+                <template if:true={showDetailPage}>
+                  <div class="right-content-header">
+                    <div
+                      style="
+                        display: flex;
+                        gap: 8px;
+                        margin-bottom: 50px;
+                        cursor: pointer;
+                        font-size: 16px;
+                        font-weight: 700;
+                        align-items: center;
+                      "
+                      onclick={handleshowListPage}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="24"
+                        viewBox="0 0 25 24"
+                        fill="none"
+                      >
+                        <g clip-path="url(#clip0_24799_78679)">
+                          <g filter="url(#filter0_d_24799_78679)">
+                            <path
+                              d="M14.9777 18L16.5 16.59L11.5553 12L16.5 7.41L14.9777 6L8.5 12L14.9777 18Z"
+                              fill="#7B7B7B"
+                            />
+                          </g>
+                        </g>
+                        <defs>
+                          <filter
+                            id="filter0_d_24799_78679"
+                            x="-11.5"
+                            y="-14"
+                            width="48"
+                            height="52"
+                            filterUnits="userSpaceOnUse"
+                            color-interpolation-filters="sRGB"
+                          >
+                            <feFlood
+                              flood-opacity="0"
+                              result="BackgroundImageFix"
+                            />
+                            <feColorMatrix
+                              in="SourceAlpha"
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                              result="hardAlpha"
+                            />
+                            <feOffset />
+                            <feGaussianBlur stdDeviation="10" />
+                            <feComposite in2="hardAlpha" operator="out" />
+                            <feColorMatrix
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in2="BackgroundImageFix"
+                              result="effect1_dropShadow_24799_78679"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in="SourceGraphic"
+                              in2="effect1_dropShadow_24799_78679"
+                              result="shape"
+                            />
+                          </filter>
+                          <clipPath id="clip0_24799_78679">
+                            <rect
+                              width="24"
+                              height="24"
+                              fill="white"
+                              transform="translate(0.5)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                      <p>戻る</p>
+                    </div>
+                    <div class="top-heading-img">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="33"
+                        height="33"
+                        viewBox="0 0 33 33"
+                        fill="none"
+                        style="margin: 0 8px"
+                        if:true={isVehicleSelected}
+                      >
+                        <path
+                          d="M27.1673 11.2169H23.1673V7.06744C23.1673 6.51516 22.7196 6.06744 22.1673 6.06744H4.50065C3.03398 6.06744 1.83398 7.22606 1.83398 8.64216V21.8031C1.83398 22.3554 2.2817 22.8031 2.83398 22.8031H4.50065C4.50065 24.9401 6.28732 26.6651 8.50065 26.6651C10.714 26.6651 12.5007 24.9401 12.5007 22.8031H20.5007C20.5007 24.9401 22.2873 26.6651 24.5007 26.6651C26.714 26.6651 28.5006 24.9401 28.5006 22.8031H31.1673V16.3663L27.1673 11.2169ZM26.5007 13.1479L29.114 16.3663H23.1673V13.1479H26.5007ZM8.50065 24.0904C7.76732 24.0904 7.16732 23.5111 7.16732 22.8031C7.16732 22.095 7.76732 21.5157 8.50065 21.5157C9.23398 21.5157 9.83398 22.095 9.83398 22.8031C9.83398 23.5111 9.23398 24.0904 8.50065 24.0904ZM11.4607 20.2284C10.7273 19.4431 9.68732 18.941 8.50065 18.941C7.31398 18.941 6.27398 19.4431 5.54065 20.2284H4.50065V8.64216H20.5007V20.2284H11.4607ZM24.5007 24.0904C23.7673 24.0904 23.1673 23.5111 23.1673 22.8031C23.1673 22.095 23.7673 21.5157 24.5007 21.5157C25.234 21.5157 25.834 22.095 25.834 22.8031C25.834 23.5111 25.234 24.0904 24.5007 24.0904Z"
+                          fill="#E10202"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        style="margin: 0 8px"
+                        if:true={isEInvoice}
+                      >
+                        <path
+                          d="M29 23C29 25.209 27.209 27 25 27C22.791 27 21 25.209 21 23V17H28C28.552 17 29 17.448 29 18V23Z"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M21 23V6C21 5.448 20.552 5 20 5H4C3.448 5 3 5.448 3 6V23C3 25.209 4.791 27 7 27H25C22.791 27 21 25.209 21 23Z"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M16.4051 9.09822C16.6528 9.26409 16.8209 9.51658 16.8724 9.80012L16.4051 9.09822ZM16.4051 9.09822C16.1574 8.93234 15.8505 8.86665 15.5518 8.91561M16.4051 9.09822L15.5518 8.91561M15.5518 8.91561C15.2531 8.96457 14.9871 9.12416 14.8124 9.35927L15.5518 8.91561ZM11.1044 14.7049V14.6121L11.0439 14.5418L7.51605 10.4434C7.45208 10.3555 7.40695 10.2575 7.38254 10.1547C7.35751 10.0492 7.35461 9.94035 7.37396 9.83398C7.39331 9.72759 7.43465 9.6252 7.49623 9.53272C7.55782 9.44021 7.63859 9.35928 7.73447 9.29506C7.83038 9.23082 7.93933 9.18474 8.05519 9.15994C8.17107 9.13514 8.29108 9.13224 8.40822 9.15144C8.52536 9.17064 8.63679 9.21147 8.73621 9.27113C8.83561 9.33077 8.92079 9.40789 8.98741 9.49752L8.99437 9.50689L9.00218 9.51557L11.8143 12.6423L11.9999 12.8486L12.1858 12.6426L14.998 9.52677L15.0059 9.51794L15.013 9.5084C15.1476 9.32727 15.3552 9.20117 15.5922 9.16232C15.8293 9.12345 16.0719 9.17597 16.266 9.30593L16.4046 9.09888L16.266 9.30594C16.4596 9.43563 16.5875 9.63038 16.6265 9.84486C16.6649 10.0563 16.6149 10.2748 16.4845 10.4542L12.9568 14.5416L12.896 14.6119V14.7049V14.7484V14.9984H13.146H15.5981C15.8398 14.9984 16.0691 15.0897 16.2362 15.2483C16.4029 15.4065 16.494 15.6183 16.494 15.8361C16.494 16.054 16.4029 16.2657 16.2362 16.424C16.0691 16.5826 15.8398 16.6739 15.5981 16.6739H13.146H12.896V16.9239V18.2925V18.5425H13.146H15.5981C15.8398 18.5425 16.0691 18.6338 16.2362 18.7924C16.4029 18.9507 16.494 19.1624 16.494 19.3802C16.494 19.5981 16.4029 19.8098 16.2362 19.9681C16.0691 20.1267 15.8398 20.218 15.5981 20.218H13.146H12.896V20.468V22.0234C12.896 22.2413 12.805 22.453 12.6383 22.6112C12.4712 22.7699 12.2419 22.8611 12.0002 22.8611C11.7585 22.8611 11.5292 22.7699 11.3621 22.6112C11.1954 22.453 11.1044 22.2413 11.1044 22.0234V20.468V20.218H10.8544H8.4023C8.16063 20.218 7.93131 20.1267 7.76419 19.9681C7.59751 19.8098 7.50646 19.5981 7.50646 19.3802C7.50646 19.1624 7.59751 18.9507 7.76419 18.7924C7.93131 18.6338 8.16063 18.5425 8.4023 18.5425H10.8544H11.1044V18.2925V16.9239V16.6739H10.8544H8.4023C8.16063 16.6739 7.93131 16.5826 7.76419 16.424C7.59751 16.2657 7.50646 16.054 7.50646 15.8361C7.50646 15.6183 7.59751 15.4065 7.76419 15.2483C7.93131 15.0897 8.16063 14.9984 8.4023 14.9984H10.8544H11.1044V14.7484V14.7049Z"
+                          fill="#E10202"
+                          stroke="#E10202"
+                          stroke-width="0.5"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="33"
+                        height="33"
+                        viewBox="0 0 33 33"
+                        fill="none"
+                        style="margin: 0 8px"
+                        if:true={isFinanceSelected}
+                      >
+                        <path
+                          d="M29.5 23.5298C29.5 25.7388 27.709 27.5298 25.5 27.5298C23.291 27.5298 21.5 25.7388 21.5 23.5298V17.5298H28.5C29.052 17.5298 29.5 17.9778 29.5 18.5298V23.5298Z"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M12.5 10.5298H17.5"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M12.5 14.5298H17.5"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M7.5 18.5298H17.5"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M7.5 22.5298H17.5"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M21.5 23.5298V6.52979C21.5 5.97779 21.052 5.52979 20.5 5.52979H4.5C3.948 5.52979 3.5 5.97779 3.5 6.52979V23.5298C3.5 25.7388 5.291 27.5298 7.5 27.5298H25.5C23.291 27.5298 21.5 25.7388 21.5 23.5298Z"
+                          stroke="#E10202"
+                          stroke-width="2.5"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="33"
+                        height="33"
+                        viewBox="0 0 33 33"
+                        fill="none"
+                        style="margin: 0 8px"
+                        if:true={isCustomerInfoSelected}
+                      >
+                        <path
+                          d="M16.4993 3.19647C9.13935 3.19647 3.16602 9.16981 3.16602 16.5298C3.16602 23.8898 9.13935 29.8631 16.4993 29.8631C23.8594 29.8631 29.8327 23.8898 29.8327 16.5298C29.8327 9.16981 23.8594 3.19647 16.4993 3.19647ZM9.92602 24.9031C10.4993 23.7031 13.9927 22.5298 16.4993 22.5298C19.006 22.5298 22.5127 23.7031 23.0727 24.9031C21.2593 26.3431 18.9793 27.1965 16.4993 27.1965C14.0193 27.1965 11.7393 26.3431 9.92602 24.9031ZM24.9794 22.9698C23.0727 20.6498 18.446 19.8631 16.4993 19.8631C14.5527 19.8631 9.92602 20.6498 8.01935 22.9698C6.65935 21.1831 5.83268 18.9565 5.83268 16.5298C5.83268 10.6498 10.6193 5.86314 16.4993 5.86314C22.3793 5.86314 27.166 10.6498 27.166 16.5298C27.166 18.9565 26.3393 21.1831 24.9794 22.9698ZM16.4993 8.52981C13.9127 8.52981 11.8327 10.6098 11.8327 13.1965C11.8327 15.7831 13.9127 17.8631 16.4993 17.8631C19.086 17.8631 21.166 15.7831 21.166 13.1965C21.166 10.6098 19.086 8.52981 16.4993 8.52981ZM16.4993 15.1965C15.3927 15.1965 14.4993 14.3031 14.4993 13.1965C14.4993 12.0898 15.3927 11.1965 16.4993 11.1965C17.606 11.1965 18.4993 12.0898 18.4993 13.1965C18.4993 14.3031 17.606 15.1965 16.4993 15.1965Z"
+                          fill="#E10202"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="33"
+                        height="33"
+                        viewBox="0 0 33 33"
+                        fill="none"
+                        style="margin: 0 8px"
+                        if:true={isOtherSelected}
+                      >
+                        <g clip-path="url(#clip0_24672_78632)">
+                          <path
+                            d="M15.166 24.5298H17.8327V21.8631H15.166V24.5298ZM16.4993 3.19647C9.13935 3.19647 3.16602 9.16981 3.16602 16.5298C3.16602 23.8898 9.13935 29.8631 16.4993 29.8631C23.8594 29.8631 29.8327 23.8898 29.8327 16.5298C29.8327 9.16981 23.8594 3.19647 16.4993 3.19647ZM16.4993 27.1965C10.6193 27.1965 5.83268 22.4098 5.83268 16.5298C5.83268 10.6498 10.6193 5.86314 16.4993 5.86314C22.3793 5.86314 27.166 10.6498 27.166 16.5298C27.166 22.4098 22.3793 27.1965 16.4993 27.1965ZM16.4993 8.52981C13.5527 8.52981 11.166 10.9165 11.166 13.8631H13.8327C13.8327 12.3965 15.0327 11.1965 16.4993 11.1965C17.966 11.1965 19.166 12.3965 19.166 13.8631C19.166 16.5298 15.166 16.1965 15.166 20.5298H17.8327C17.8327 17.5298 21.8327 17.1965 21.8327 13.8631C21.8327 10.9165 19.446 8.52981 16.4993 8.52981Z"
+                            fill="#E10202"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_24672_786321">
+                            <rect
+                              width="32"
+                              height="32"
+                              fill="white"
+                              transform="translate(0.5 0.529785)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                      <p>{faqDetailsData.Title}</p>
+                    </div>
+                    <hr class="right-content-line" />
+                  </div>
+                  <div class="right-content-main">
+                    <lightning-formatted-rich-text value={faqDetailsData.Description__c}></lightning-formatted-rich-text>
+                  </div>
+                  <hr class="line-category-faq" style="margin: 20px 0" />
+
+                  <div class="content-main-detail-footer">
+                    <p>この情報で問題は解決しましたか？</p>
+                    <div class="detail-footer-vote">
+                      <div class="detail-footer-vote-item">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="25"
+                          height="25"
+                          viewBox="0 0 25 25"
+                          fill="none"
+                        >
+                          <path
+                            d="M9.5 22.0532H18.5C19.33 22.0532 20.04 21.5532 20.34 20.8332L23.36 13.7832C23.45 13.5532 23.5 13.3132 23.5 13.0532V11.0532C23.5 9.95322 22.6 9.05322 21.5 9.05322H15.19L16.14 4.48322L16.17 4.16322C16.17 3.75322 16 3.37322 15.73 3.10322L14.67 2.05322L8.08 8.64322C7.72 9.00322 7.5 9.50322 7.5 10.0532V20.0532C7.5 21.1532 8.4 22.0532 9.5 22.0532ZM9.5 10.0532L13.84 5.71322L12.5 11.0532H21.5V13.0532L18.5 20.0532H9.5V10.0532ZM1.5 10.0532H5.5V22.0532H1.5V10.0532Z"
+                            fill="#262626"
+                          />
+                        </svg>
+                        <p>2</p>
+                      </div>
+                      <div class="detail-footer-vote-item">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="25"
+                          height="25"
+                          viewBox="0 0 25 25"
+                          fill="none"
+                        >
+                          <path
+                            d="M15.5 2.05322H6.5C5.67 2.05322 4.96 2.55322 4.66 3.27322L1.64 10.3232C1.55 10.5532 1.5 10.7932 1.5 11.0532V13.0532C1.5 14.1532 2.4 15.0532 3.5 15.0532H9.81L8.86 19.6232L8.83 19.9432C8.83 20.3532 9 20.7332 9.27 21.0032L10.33 22.0532L16.92 15.4632C17.28 15.1032 17.5 14.6032 17.5 14.0532V4.05322C17.5 2.95322 16.6 2.05322 15.5 2.05322ZM15.5 14.0532L11.16 18.3932L12.5 13.0532H3.5V11.0532L6.5 4.05322H15.5V14.0532ZM19.5 2.05322H23.5V14.0532H19.5V2.05322Z"
+                            fill="#262626"
+                          />
+                        </svg>
+                        <p>3</p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <div class="right-content-footer">
+                  <div class="right-content-footer-item1">
+                    <div class="top-heading-img">
+                      <p>さらにサポートが必要ですか？</p>
+                    </div>
+                    <hr class="right-content-line" />
+                    <p
+                      class="right-content-header-description"
+                      style="padding: 28px 0 28px 0"
+                    >
+                      ご質問やご不明点がございましたら、下記のお問い合わせフォームへのリンクからお気軽にお問い合わせください。
+                    </p>
+                  </div>
+                  <a
+                    href="https://dm595--ccpdev2.sandbox.my.site.com/s/enquiry"
+                  >
+                    <div class="right-content-footer-item2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="25"
+                        viewBox="0 0 25 25"
+                        fill="none"
+                      >
+                        <g clip-path="url(#clip0_24591_77049)">
+                          <path
+                            d="M20.5 4.55713H4.5C3.4 4.55713 2.51 5.45713 2.51 6.55713L2.5 18.5571C2.5 19.6571 3.4 20.5571 4.5 20.5571H20.5C21.6 20.5571 22.5 19.6571 22.5 18.5571V6.55713C22.5 5.45713 21.6 4.55713 20.5 4.55713ZM20.5 18.5571H4.5V8.55713L12.5 13.5571L20.5 8.55713V18.5571ZM12.5 11.5571L4.5 6.55713H20.5L12.5 11.5571Z"
+                            fill="#E10202"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_24591_77049">
+                            <rect
+                              width="24"
+                              height="24"
+                              fill="white"
+                              transform="translate(0.5 0.557129)"
+                            />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                      <p>お問い合わせフォームへ</p>
+                    </div>
+                  </a>
+                </div>
+              </div>            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

@@ -27,7 +27,9 @@ import VEHICLE_TYPE_FIELD from "@salesforce/schema/ccp2_Registered_Vehicle__c.Ve
 import USE_FIELD from "@salesforce/schema/ccp2_Registered_Vehicle__c.Use__c";
 import FUEL_TYPE_FIELD from "@salesforce/schema/ccp2_Registered_Vehicle__c.Fuel_Type__c";
 import PRIVATE_BUSINESS_FIELD from "@salesforce/schema/ccp2_Registered_Vehicle__c.Private_Business_use__c";
+import labelsVehicle from '@salesforce/resourceUrl/ccp2_labels';
 import i18nextStaticResource from '@salesforce/resourceUrl/i18next';
+import Languagei18n from "@salesforce/apex/CCP2_userData.userLanguage";
 
 const BACKGROUND_IMAGE_PC =
   Vehicle_StaticResource + "/CCP2_Resources/Common/Main_Background.webp";
@@ -39,60 +41,9 @@ const TRUCKPIC =
 const arrowicon =
   Vehicle_StaticResource + "/CCP2_Resources/Common/arrow_under.png";
 
-  import mi_label1_en from '@salesforce/label/c.mi_label1_en';
-import mi_label2_en from '@salesforce/label/c.mi_label2_en';
-import mi_label3_en from '@salesforce/label/c.mi_label3_en';
-import mi_label4_en from '@salesforce/label/c.mi_label4_en';
-import mi_label5_en from '@salesforce/label/c.mi_label5_en';
-import mi_label6_en from '@salesforce/label/c.mi_label6_en';
-import mi_label7_en from '@salesforce/label/c.mi_label7_en';
-import mi_label8_en from '@salesforce/label/c.mi_label8_en';
-import mi_label9_en from '@salesforce/label/c.mi_label9_en';
-import mi_label10_en from '@salesforce/label/c.mi_label10_en';
-import mi_label11_en from '@salesforce/label/c.mi_label11_en';
-import mi_label12_en from '@salesforce/label/c.mi_label12_en';
-import mi_label13_en from '@salesforce/label/c.mi_label13_en';
-import mi_label14_en from '@salesforce/label/c.mi_label14_en';
-import mi_label15_en from '@salesforce/label/c.mi_label15_en';
-import mi_label16_en from '@salesforce/label/c.mi_label16_en';
-import mi_label17_en from '@salesforce/label/c.mi_label17_en';
-import mi_label18_en from '@salesforce/label/c.mi_label18_en';
-import mi_label19_en from '@salesforce/label/c.mi_label19_en';
-import mi_label20_en from '@salesforce/label/c.mi_label20_en';
-import mi_label21_en from '@salesforce/label/c.mi_label21_en';
-import mi_label22_en from '@salesforce/label/c.mi_label22_en';
-import mi_label23_en from '@salesforce/label/c.mi_label23_en';
-import mi_label24_en from '@salesforce/label/c.mi_label24_en';
-import mi_label25_en from '@salesforce/label/c.mi_label25_en';
-
-// Import Japanese labels
-import mi_label1_jp from '@salesforce/label/c.mi_label1_jp';
-import mi_label2_jp from '@salesforce/label/c.mi_label2_jp';
-import mi_label3_jp from '@salesforce/label/c.mi_label3_jp';
-import mi_label4_jp from '@salesforce/label/c.mi_label4_jp';
-import mi_label5_jp from '@salesforce/label/c.mi_label5_jp';
-import mi_label6_jp from '@salesforce/label/c.mi_label6_jp';
-import mi_label7_jp from '@salesforce/label/c.mi_label7_jp';
-import mi_label8_jp from '@salesforce/label/c.mi_label8_jp';
-import mi_label9_jp from '@salesforce/label/c.mi_label9_jp';
-import mi_label10_jp from '@salesforce/label/c.mi_label10_jp';
-import mi_label11_jp from '@salesforce/label/c.mi_label11_jp';
-import mi_label12_jp from '@salesforce/label/c.mi_label12_jp';
-import mi_label13_jp from '@salesforce/label/c.mi_label13_jp';
-import mi_label14_jp from '@salesforce/label/c.mi_label14_jp';
-import mi_label15_jp from '@salesforce/label/c.mi_label15_jp';
-import mi_label16_jp from '@salesforce/label/c.mi_label16_jp';
-import mi_label17_jp from '@salesforce/label/c.mi_label17_jp';
-import mi_label18_jp from '@salesforce/label/c.mi_label18_jp';
-import mi_label19_jp from '@salesforce/label/c.mi_label19_jp';
-import mi_label20_jp from '@salesforce/label/c.mi_label20_jp';
-import mi_label21_jp from '@salesforce/label/c.mi_label21_jp';
-import mi_label22_jp from '@salesforce/label/c.mi_label22_jp';
-import mi_label23_jp from '@salesforce/label/c.mi_label23_jp';
-import mi_label24_jp from '@salesforce/label/c.mi_label24_jp';
-import mi_label25_jp from '@salesforce/label/c.mi_label25_jp';
-
 export default class Ccp2backgroundTemplate extends LightningElement {
+  @track Languagei18n = 'jp';
+  @track isLanguageChangeDone = true;
   backgroundImagePC = BACKGROUND_IMAGE_PC;
   backgroundImageStyle = `background-image: url(${BACKGROUND_IMAGE_PC});`;
   dashpic = DASH;
@@ -100,8 +51,8 @@ export default class Ccp2backgroundTemplate extends LightningElement {
   truckpic = TRUCKPIC;
   _resourcesLoaded = false;
   @track finalCompletionButtonCss = "button-save-100";
-  @track uploadText1 = "アップロード";
-  @track uploadText2 = "アップロード";
+  @track uploadText1 = this.getLocale2() == 'en_US' ? 'Upload' : 'アップロード';
+  @track uploadText2 = this.getLocale2() == 'en_US' ? 'Upload' : 'アップロード';
   @track uploadDivCss1 = "input-field-img no-scrollbar";
   @track uploadDivCss2 = "input-field-img no-scrollbar";
   @track formBodyCss = "form-body";
@@ -233,69 +184,7 @@ export default class Ccp2backgroundTemplate extends LightningElement {
 // Import English labels
 
 
-    @track labelsEn = {
-        label1: mi_label1_en,
-        label2: mi_label2_en,
-        label3: mi_label3_en,
-        label4: mi_label4_en,
-        label5: mi_label5_en,
-        label6: mi_label6_en,
-        label7: mi_label7_en,
-        label8: mi_label8_en,
-        label9: mi_label9_en,
-        label10: mi_label10_en,
-        label11: mi_label11_en,
-        label12: mi_label12_en,
-        label13: mi_label13_en,
-        label14: mi_label14_en,
-        label15: mi_label15_en,
-        label16: mi_label16_en,
-        label17: mi_label17_en,
-        label18: mi_label18_en,
-        label19: mi_label19_en,
-        label20: mi_label20_en,
-        label21: mi_label21_en,
-        label22: mi_label22_en,
-        label23: mi_label23_en,
-        label24: mi_label24_en,
-        label25: mi_label25_en};
-
-    @track labelsJp = {
-        label1: mi_label1_jp,
-        label2: mi_label2_jp,
-        label3: mi_label3_jp,
-        label4: mi_label4_jp,
-        label5: mi_label5_jp,
-        label6: mi_label6_jp,
-        label7: mi_label7_jp,
-        label8: mi_label8_jp,
-        label9: mi_label9_jp,
-        label10: mi_label10_jp,
-        label11: mi_label11_jp,
-        label12: mi_label12_jp,
-        label13: mi_label13_jp,
-        label14: mi_label14_jp,
-        label15: mi_label15_jp,
-        label16: mi_label16_jp,
-        label17: mi_label17_jp,
-        label18: mi_label18_jp,
-        label19: mi_label19_jp,
-        label20: mi_label20_jp,
-        label21: mi_label21_jp,
-        label22: mi_label22_jp,
-        label23: mi_label23_jp,
-        label24: mi_label24_jp,
-        label25: mi_label25_jp
-    };
-
-
   connectedCallback() {
-    this.loadI18nextLibrary().then(() => {
-      this.loadLabels();
-  }).catch((error) => {
-      console.error("Error loading i18next library: ", error);
-  });
-
     this.updatePagination();
     this.template.host.style.setProperty(
       "--upload-icon",
@@ -322,7 +211,13 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     this.updateFormData();
   }
 
-  renderedCallback() {
+   renderedCallback() {
+    if (this.isLanguageChangeDone) {
+      console.log("Working 1");
+     this.loadLanguage();
+    // if (this.labels2) this.uploadText1 = this.getLocale == 'en_US' ? 'Upload' : 'アップロード';
+    // if (this.labels2) this.uploadText2 = this.getLocale == 'en_US' ? 'Upload' : 'アップロード';
+    }
     if (!this.outsideClickHandlerAdded) {
       document.addEventListener("click", this.handleOutsideClick2.bind(this));
       document.addEventListener("click", this.handleOutsideClick3.bind(this));
@@ -350,8 +245,6 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     document.removeEventListener("click", this.handleOutsideClick8.bind(this));
   }
 
-  @track labels = {};
-
   loadI18nextLibrary() {
     return new Promise((resolve, reject) => {
         if (!window.i18next) {
@@ -370,43 +263,82 @@ export default class Ccp2backgroundTemplate extends LightningElement {
     });
   }
 
-  loadLabels() {
-// Assuming label_chunk_custom is already available
-const userLocale = 'jp'; // Method to determine user locale (e.g., 'en', 'jp')
-
-// Define the label resources directly
-const labelResources = userLocale === 'jp' ? this.labelsJp : this.labelsEn;
-
-// Initialize i18next with the provided labels
-i18next.init({
-    lng: userLocale,
-    resources: {
-        [userLocale]: {
-            translation: labelResources
-        }
-    }
-}).then(() => {
-    this.labels = i18next.store.data[userLocale].translation;
-    console.log("User Locale: ", userLocale);
-    console.log("User Labels: ", JSON.stringify(this.labels));
-}).catch((error) => {
-    console.error("Error initializing i18next: ", error);
-});
+labels2 = {};
+loadLabels() {
+    fetch(`${labelsVehicle}/labelsVehicle.json`)
+    .then(response => response.json())
+    .then(data => {
+        const userLocale = this.getLocale(); // Method to determine user locale (e.g., 'en', 'jp')
+        
+        // Initialize i18next with the fetched labels
+        i18next.init({
+            lng: userLocale,
+            resources: {
+                [userLocale]: {
+                    translation: data[userLocale]
+                }
+            }
+        }).then(() => {
+            this.labels2 = i18next.store.data[userLocale].translation;
+            console.log("Delete Detail User Locale: ", userLocale);
+            console.log("Delete Detail User Labels: ", this.labels2);
+        });
+      })
+      .catch((error) => {
+        console.error("Error loading labels: ", error);
+      });
 }
-  
-  
-    getLocale() {
-      const region = Intl.DateTimeFormat().resolvedOptions().locale;
-      return region === "ja" ? "jp" : "en";
+  getLocale() {
+    console.log("working1");
+    this.isLanguageChangeDone = false;
+    console.log("Lang 2", this.Languagei18n);
+    if (this.Languagei18n === 'en_US'){
+      return "en";
     }
+    else{
+      console.log("working2");
+      return "jp";
+    }
+  }
+  getLocale2() {
+    console.log("working1");
+    console.log("Lang 2", this.Languagei18n);
+    if (this.Languagei18n === 'en_US'){
+      return "en";
+    }
+    else{
+      console.log("working2");
+      return "jp";
+    }
+  }
 
   /*All api call methods*/
+  loadLanguage() {
+    Languagei18n() // Assuming getLanguageI18n is the apex method that fetches the language.
+        .then((data) => {
+            this.Languagei18n = data;
+            console.log("lang Method", data, this.Languagei18n);
+            return this.loadI18nextLibrary(); // Return the promise for chaining
+        })
+        .then(() => {
+            return this.loadLabels(); // Load labels after i18next is ready
+        })
+        .then(() => {
+            console.log("Upload Label: ", this.isLanguageChangeDone); // Check language change status
+            console.log("upload Label Value: ", this.Languagei18n);
+        })
+        .catch((error) => {
+            console.error("Error loading language or labels: ", error);
+        });
+}
+
   @wire(getfields, { chassisNumbers: "$vehicleInfo" })
   fun({ data, error }) {
     if (data) {
       console.log('this is the data we have to see for the account id : - ' , JSON.stringify(data))
       this.currentVehicles = data.VehicleInfo;
       this.updateFormData(); // Update form data when data is received
+      console.log("testestetetststetet",JSON.stringify(this.currentVehicles));
     } else if (error) {
       console.error("getfields from vehicleinfo", error);
     }
@@ -440,7 +372,7 @@ i18next.init({
         let loginNumberPart3 = loginNum[2];
         let loginNumberPart4 = loginNum[3];
 
-        let fullModel = result[0]?.vehicle?.fullModel__c || "";
+        let fullModel = result[0]?.vehicle?.notificationModel__c || "";
         let modelNum = fullModel.split("-");
         let model1 = modelNum[0];
         let model2 = modelNum[1];
@@ -529,14 +461,14 @@ i18next.init({
             this.uploadIconToggle1 = false;
           } else {
             this.uploadDivCss1 = "input-field-img no-scrollbar";
-            this.uploadText1 = "アップロード";
+            this.uploadText1 = this.getLocale() == 'en_US' ? 'Upload' : 'アップロード';
             this.uploadIconToggle1 = true;
           }
         } else {
           this.firstUplaodedCertificateName = "";
           this.countOfUplaodedCertificate = 0;
           this.uploadDivCss1 = "input-field-img no-scrollbar";
-          this.uploadText1 = "アップロード";
+          this.uploadText1 = this.getLocale() == 'en_US' ? 'Upload' : 'アップロード';
           this.uploadIconToggle1 = true;
         }
 
@@ -558,14 +490,14 @@ i18next.init({
             this.uploadIconToggle2 = false;
           } else {
             this.uploadDivCss2 = "input-field-img no-scrollbar";
-            this.uploadText2 = "アップロード";
+            this.uploadText2 = this.getLocale() == 'en_US' ? 'Upload' : 'アップロード';
             this.uploadIconToggle2 = true;
           }
         } else {
           this.firstUploadedImageName = "";
           this.countOfUploadedImage = 0;
           this.uploadDivCss2 = "input-field-img no-scrollbar";
-          this.uploadText2 = "アップロード";
+          this.uploadText2 = this.getLocale() == 'en_US' ? 'Upload' : 'アップロード';
           this.uploadIconToggle2 = true;
         }
 
@@ -1227,8 +1159,8 @@ i18next.init({
       let partAfter = carPlatformNoWithoutHyphen.substring(5); // rest of the characters
       partAfter = partAfter.padStart(7, "0");
 
-      const fullmodel = currentVehicle.fullModel__c
-        ? currentVehicle.fullModel__c.split("-")
+      const fullmodel = currentVehicle.notificationModel__c
+        ? currentVehicle.notificationModel__c.split("-")
         : ["", ""];
       const m1 = fullmodel[0]; // "part1"
       const m2 = fullmodel[1]; // "part2"
@@ -1246,7 +1178,7 @@ i18next.init({
         dateOfIssuance: "",
         initialRegistrationDate:
           currentVehicle.initialRegistrationDate__c || "",
-        expirationDate: currentVehicle.expiringDateofEffectivePeriod__c || "",
+        expirationDate: currentVehicle.vehicleInspectionExpiryDate__c || "",
         affiliation: [],
         fuelType: "",
         use: "",
@@ -1511,6 +1443,7 @@ i18next.init({
     this.formLoader = true;
     window.scrollTo(0, 0);
 
+    sessionStorage.removeItem("ongoingTransaction");
     this.finalSave(event);
   }
 
@@ -1780,9 +1713,58 @@ i18next.init({
   handleSaveToServer(jsonInput, jsonStrings) {
     console.log("register vehicle class data send", jsonInput, jsonStrings);
     // Make sure bigdata is not empty before calling the server
+    let parsedInput;
+    let vehicleId = ''; 
+    try {
+        parsedInput = JSON.parse(jsonInput);
+        console.log("Parsed Input:", parsedInput);
+    } catch (error) {
+        console.error("Failed to parse jsonInput:", error);
+        return;
+    }
+
+    // Ensure parsedInput is an array and has at least one element
+    if (Array.isArray(parsedInput) && parsedInput.length > 0) {
+        const vehicleData = parsedInput[0];
+        console.log("Vehicle Data:", vehicleData);
+
+        // Check if carPlatformNoPart1 and carPlatformNoPart2 exist in vehicleData
+        if (vehicleData && vehicleData.carPlatformNoPart1 && vehicleData.carPlatformNoPart2) {
+            // Combine carPlatformNoPart1 and carPlatformNoPart2
+            const fullCarPlatformNo = `${vehicleData.carPlatformNoPart1}-${vehicleData.carPlatformNoPart2}`;
+            console.log("Full Car Platform Number:", fullCarPlatformNo);
+
+            if (this.currentVehicles && this.currentVehicles.length > 0) {
+                const matchingVehicle = this.currentVehicles.find(vehicle =>
+                    vehicle.carPlatformNo__c === fullCarPlatformNo
+                );
+
+                if (matchingVehicle) {
+                    console.log("Vehicle being saved, Id:", matchingVehicle.Id);
+                    vehicleId = matchingVehicle.Id;
+                } else {
+                    console.log("No matching vehicle found for the car platform number:", fullCarPlatformNo);
+                }
+            } else {
+                console.log("No vehicles found in currentVehicles.");
+            }
+        } else {
+            console.log("carPlatformNoPart1 or carPlatformNoPart2 is missing in vehicleData.");
+        }
+    } else {
+        console.log("Parsed jsonInput is either not an array or is empty.");
+    }
+
+    // Log updated parsedInput for debugging
+    console.log("Updated Parsed Input:", parsedInput);
+
+    // Log the saved vehicle ID for debugging
+    console.log("Saved Vehicle ID: of selectedddddd", vehicleId);
+
     registervehicle({
       jsonInput: jsonInput,
-      contentVersionIdsJson: jsonStrings
+      contentVersionIdsJson: jsonStrings,
+      vehicleInfoId: vehicleId
     })
       .then((result) => {
         //just go to next page
@@ -1810,9 +1792,10 @@ i18next.init({
         this.countOfUploadedImage = 0;
         this.firstUplaodedCertificateName = "";
         this.firstUploadedImageName = "";
-
-        this.uploadText1 = "アップロード";
-        this.uploadText2 = "アップロード";
+        console.log("Upload Text Normal:", this.getLocale() == 'en_US' ? 'Upload' : 'アップロード');
+        console.log("Upload Text String:", toString(this.getLocale() == 'en_US' ? 'Upload' : 'アップロード'));
+        this.uploadText1 = this.getLocale() == 'en_US' ? 'Upload' : 'アップロード';
+        this.uploadText2 = this.getLocale() == 'en_US' ? 'Upload' : 'アップロード';
         this.uploadDivCss1 = "input-field-img no-scrollbar";
         this.uploadDivCss2 = "input-field-img no-scrollbar";
         this.uploadIconToggle1 = true;
@@ -1881,7 +1864,7 @@ i18next.init({
       this.uploadIconToggle2 = false;
     } else {
       this.uploadDivCss2 = "input-field-img no-scrollbar";
-      this.uploadText2 = "アップロード";
+      this.uploadText2 = this.getLocale() == 'en_US' ? 'Upload' : 'アップロード';
       this.uploadIconToggle2 = true;
     }
   }
@@ -1924,7 +1907,7 @@ i18next.init({
       this.uploadIconToggle1 = false;
     } else {
       this.uploadDivCss1 = "input-field-img no-scrollbar";
-      this.uploadText1 = "アップロード";
+      this.uploadText1 = this.getLocale() == 'en_US' ? 'Upload' : 'アップロード';
       this.uploadIconToggle1 = true;
     }
   }
@@ -2021,6 +2004,7 @@ i18next.init({
   }
 
   handleClick() {
+    sessionStorage.removeItem("ongoingTransaction");
     window.location.reload();
   }
 

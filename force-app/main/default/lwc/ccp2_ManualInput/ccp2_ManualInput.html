@@ -4,7 +4,7 @@
 
                     <div class={formBodyCss}>
                         <div class="mainHeading" onclick={newfun}>
-                            <p>{labels.label24}</p>
+                            <p>{labels2.ccp2_mi_manual_vehicle_registration1}</p>
                         </div>
                         <div class="form-container">
 
@@ -13,7 +13,7 @@
                             </div>
                             <div class="section-header">
                                 <div class="mainheading2">
-                                    <p>{labels.label25}</p>
+                                    <p>{labels2.ccp2_mi_enter_vehicle_information1}</p>
                                 </div>
                                 <div class="header">
                                     <button class="nav-button" onclick={handlePrevious} title="Previous"
@@ -47,19 +47,19 @@
                                         <div class="form-group-wr">
                                             <label for="vehicleNumber">
                                                 <div class="addMain">
-                                                    {labels.label1}
+                                                    {labels2.ccp2_mi_vehicle_number1}
                                                 </div>
                                             </label>
                                             <input type="text" id="vehicleNumber" class="input-cursor input-field"
-                                                placeholder="10桁以内で入力してください" value={formdata.vehicleNumber}
+                                                placeholder={labels2.ccp2_mi_enter_up_to_10_digits1} value={formdata.vehicleNumber}
                                                 name="vehicleNumber" oninput={handlevalchange} onchange={handleInputChange} maxlength="10">
                                         </div>
 
                                         <div class="form-group-ChassisNumber">
                                             <label for="vehicleNumber">
                                                 <div class="addMain">
-                                                    {labels.label3}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_chassis_number1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
                                             <input type="text" class="input-cursor input-field-modal chassis-color"
@@ -80,8 +80,8 @@
                                         <div class="form-group">
                                             <label for="loginNum">
                                                 <div class={errorLoginParent}>
-                                                    {labels.label5}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_registration_number1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
 
@@ -109,13 +109,13 @@
                                         <div class="form-group-wr">
                                             <label for="dateOfIssuance">
                                                 <div class="addMain">
-                                                    {labels.label7}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_delivery_date1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
                                             <div class="input-cursor input-field" style="position: relative;">
                                                 <lightning-input type="date" class="inputlight inputissue"
-                                                    placeholder="日付を選択してください" name="dateOfIssuance"
+                                                    placeholder={labels2.ccp2_mi_select_date1} name="dateOfIssuance"
                                                     value={formdata.dateOfIssuance}
                                                     onchange={handleInputChange}></lightning-input>
                                             </div>
@@ -124,13 +124,13 @@
                                         <div class="form-group-wr">
                                             <label for="initialRegistrationDate">
                                                 <div class="addMain">
-                                                    {labels.label9}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_first_registration_date1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
                                             <div class="input-cursor input-field" style="position: relative;">
                                                 <lightning-input type="date" class="inputlight inputreg"
-                                                    placeholder="日付を選択してください" name="initialRegistrationDate"
+                                                    placeholder={labels2.ccp2_mi_select_date1} name="initialRegistrationDate"
                                                     value={formdata.initialRegistrationDate}
                                                     onchange={handleInputChange}></lightning-input>
                                             </div>
@@ -138,14 +138,14 @@
                                         <div class="form-group-wr">
                                             <label for="expirationDate">
                                                 <div class="addMain">
-                                                    {labels.label11}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_expiry_date1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
 
                                             <div class="input-cursor input-field" style="position: relative;">
                                                 <lightning-input type="date" class="inputlight inputexp"
-                                                    placeholder="日付を選択してください" name="expirationDate"
+                                                    placeholder={labels2.ccp2_mi_select_date1} name="expirationDate"
                                                     value={formdata.expirationDate}
                                                     onchange={handleInputChange}></lightning-input>
                                             </div>
@@ -155,8 +155,8 @@
 
                                             <label for="WorkLocation">
                                                 <div class="addMain">
-                                                    {labels.label13}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_vehicle_name1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
 
@@ -164,7 +164,7 @@
 
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handleCarNameChange} autocomplete="off"
-                                                        class="InputsCarName Inputs1 icon2 " placeholder="選択してください"
+                                                        class="InputsCarName Inputs1 icon2 " placeholder={labels2.ccp2_mi_select_vehicle_name1}
                                                         value={selectedPicklistCarName} name="carName" readonly>
                                                     <template if:true={showlistCarName}>
                                                         <div class="listCarName lists2 no-scroll" name="carName"
@@ -185,8 +185,8 @@
                                         <div class="form-group-wr">
                                             <label for="branch">
                                                 <div class="addMain">
-                                                    {labels.label15}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_vehicle_type1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
                                             <div class="Combox-input-wr">
@@ -194,7 +194,7 @@
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handletypeOfVehicleChange}
                                                         autocomplete="off" class="Inputstypeofvehicle Inputs1 icon2"
-                                                        placeholder="選択してください" value={selectedPicklisttypeOfVehicle}
+                                                        placeholder={labels2.ccp2_mi_select_vehicle_name1} value={selectedPicklisttypeOfVehicle}
                                                         name="typeOfVehicle" readonly>
                                                     <template if:true={showlisttypeOfVehicle}>
                                                         <div class="listtypeofvehicle lists2 no-scroll"
@@ -215,7 +215,7 @@
                                         <div class="form-group-wr">
                                             <label for="Type of Car">
                                                 <div class="addMain">
-                                                    {labels.label17}
+                                                    {labels2.ccp2_mi_door_number1}
 
                                                 </div>
 
@@ -225,7 +225,7 @@
                                             <div class="Combox-input-wr">
                                                 <div>
                                                     <input type="text" id="DoorNum" class={errorDoorDiv}
-                                                        placeholder="選択してください" value={formdata.doorNumber}
+                                                        placeholder={labels2.ccp2_mi_select2} value={formdata.doorNumber}
                                                         name="doorNumber" onchange={handleInputChange} oninput={handlevalchange} maxlength="10">
                                                     <p style="color: red; margin-top: 3px;margin-left: 2%;" class={errorDoorCss}>{errorDoor}</p>
                                                 </div>
@@ -234,15 +234,15 @@
                                         <div class="form-group-wr">
                                             <label for="CarName">
                                                 <div class="addMain">
-                                                    {labels.label19}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_fuel_type1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
                                             <div class="Combox-input-wr">
 
                                                 <div class="dropdownfuel">
                                                     <input type="text" onclick={handlefuelTypeChange} autocomplete="off"
-                                                        class="InputsfuelType Inputs1 icon2" placeholder="選択してください"
+                                                        class="InputsfuelType Inputs1 icon2" placeholder={labels2.ccp2_mi_select_vehicle_name1}
                                                         value={selectedPicklistfuelType} name="fuelType" readonly>
                                                     <template if:true={showlistfuelType}>
                                                         <div class="listfueltype lists2 no-scroll" name="fuelType"
@@ -265,8 +265,8 @@
                                         <div class="form-group form-margin">
                                             <label for="VehicleInspectionImage">
                                                 <div class="addMain">
-                                                    {labels.label2}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_vehicle_inspection_image1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
 
                                             </label>
@@ -282,7 +282,7 @@
                                         <div class="form-group-wr form-margin">
                                             <label for="VehicleImage">
                                                 <div class="addMain">
-                                                    {labels.label4}
+                                                    {labels2.ccp2_mi_vehicle_image1}
                                                 </div>
 
                                             </label>
@@ -298,8 +298,8 @@
                                         <div class="form-group-ChassisNumber form-margin">
                                             <label for="Model">
                                                 <div class={errorModelParent}>
-                                                    {labels.label6}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_model1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
                                             <div class="model-div-container">
@@ -326,8 +326,8 @@
                                         <div class="form-group form-margin">
                                             <label for="PrivateBusiness">
                                                 <div class="addMain">
-                                                    {labels.label8}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_private_or_commercial1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
 
@@ -337,7 +337,7 @@
                                                     <input type="text" onclick={handleprivateOrBusinessUseChange}
                                                         autocomplete="off"
                                                         class="Inputsprivateorbussiness Inputs1 icon2"
-                                                        placeholder="選択してください"
+                                                        placeholder={labels2.ccp2_mi_select_vehicle_name1}
                                                         value={selectedPicklistprivateOrBusinessUse}
                                                         name="privateOrBusinessUse" readonly>
                                                     <template if:true={showlistprivateOrBusinessUse}>
@@ -363,8 +363,8 @@
                                         <div class="form-group form-margin">
                                             <label for="BodyShape">
                                                 <div class="addMain">
-                                                    {labels.label10}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_vehicle_body_shape1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
                                             <div class="Combox-input-wr">
@@ -372,7 +372,7 @@
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handlebodyShapeChange}
                                                         autocomplete="off" class="Inputsbodyshape Inputs1 icon2"
-                                                        placeholder="選択してください" value={selectedPicklistbodyShape}
+                                                        placeholder={labels2.ccp2_mi_select_vehicle_name1} value={selectedPicklistbodyShape}
                                                         name="bodyShape" readonly>
                                                     <template if:true={showlistbodyShape}>
                                                         <div class="listbodyshape lists2 no-scroll" name="bodyShape"
@@ -394,8 +394,8 @@
                                         <div class="form-group form-margin">
                                             <label for="Use">
                                                 <div class="addMain">
-                                                    {labels.label12}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_usage1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
 
                                             </label>
@@ -405,7 +405,7 @@
                                                 <div class="dropdown">
                                                     <input type="text" onclick={handleuseChange}
                                                         class="Inputsuse Inputs1 icon2 " autocomplete="off"
-                                                        placeholder="選択してください" value={selectedPicklistuse} name="use"
+                                                        placeholder={labels2.ccp2_mi_select_vehicle_name1} value={selectedPicklistuse} name="use"
                                                         readonly>
                                                     <template if:true={showlistuse}>
                                                         <div class="listuse lists2 no-scroll" name="use"
@@ -427,13 +427,13 @@
                                         <div class="form-group-wr form-margin">
                                             <label for="mileage">
                                                 <div class={errorMileageParent}>
-                                                    {labels.label14}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_mileage1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
                                             <div>
                                                 <input type="text" id="Mileage" class={errorMileageDiv}
-                                                    placeholder="選択してください" value={formdata.mileage} name="mileage"
+                                                    placeholder={labels2.ccp2_mi_select_vehicle_name1} value={formdata.mileage} name="mileage"
                                                     onchange={handleInputChange} oninput={handleInputCheck} maxlength="6">
                                                 <p style="color: red;  margin-top: 3px; margin-left: 4%;" class={errorMileageCss}>{errorMileage}</p>
                                             </div>
@@ -444,13 +444,13 @@
                                         <div class="form-group-wr second-last-second-section">
                                             <label for="Weight">
                                                 <div class={errorCurbParent}>
-                                                    {labels.label16}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_vehicle_weight1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
                                             <div>
                                                 <input type="text" id="Weight" class={errorCurbDiv}
-                                                    placeholder="選択してください" value={formdata.curbWeight} name="curbWeight"
+                                                    placeholder={labels2.ccp2_mi_select_vehicle_name1} value={formdata.curbWeight} name="curbWeight"
                                                     onchange={handleInputChange} oninput={handleInputCheck} maxlength="4">
 
                                                 <p style="color: red;  margin-top: 3px; margin-left: 4%;" class={errorCurbCss}>{errorCurb}</p>
@@ -461,14 +461,14 @@
                                         <div class="form-group-branch">
                                             <label for="branches" class="branches-16">
                                                 <div class="addMain branch branch-branch">
-                                                    {labels.label18}
-                                                    <span class="reqtxt">{labels.label23}</span>
+                                                    {labels2.ccp2_mi_affiliation1}
+                                                    <span class="reqtxt">{labels2.ccp2_mi_required1}</span>
                                                 </div>
                                             </label>
                                             <div class="dataDrop">
                                                 <input type="text" onclick={handlevehChange} readonly
                                                     class="Inputs12 icon"
-                                                    placeholder="選択する">
+                                                    placeholder={labels2.ccp2_mi_select1}>
                                                         <template if:true={showlist}>
                                                             <div class="lists" onclick={handleInsideClick}>
                                                                 <template for:each={branches} for:item="veh">
@@ -496,7 +496,7 @@
                                                         </template>
                                                     </template>
                                                     <template if:false={hasVehicles2}>
-                                                        <p class="empty1">選択された</p>
+                                                        <p class="empty1">{labels2.ccp2_mi_selected1}</p>
                                                     </template>
                                                 </div>
                                             </div>
@@ -507,7 +507,7 @@
                             <div class="form-footer">
                                 <div class="button cancel-btn">
                                     <div class="btn" onclick={showexit}>
-                                        <P class="toedit">中止</P>
+                                        <P class="toedit">{labels2.ccp2_mi_cancel1}</P>
                                         <!-- cancel -->
                                     </div>
                                 </div>
@@ -515,13 +515,13 @@
                                 <div style="display: flex; justify-content:right; align-items:center; gap:25px" >
                                     <button style="border-radius: 10px;"
                                         class={finalCompletionButtonCss} name="completion-button"
-                                        onclick={handleSaveData} disabled={disableSaveButton}>{labels.label21}</button>
+                                        onclick={handleSaveData} disabled={disableSaveButton}>{labels2.ccp2_mi_complete1}</button>
 
 
                                     <template if:false={isLastPage}>
 
                                         <button class="searchbuttonnew" name="next-button" disabled={disableSaveButton}
-                                            onclick={handleSaveData}>{labels.label22}</button>
+                                            onclick={handleSaveData}>{labels2.ccp2_mi_save_and_continue1}</button>
 
                                     </template>
                                 </div>
@@ -532,13 +532,13 @@
                 <template if:true={showRegisteredVehicles}>
                     <div class="container2">
                         <div class="mainHeading">
-                            <h1>車両手動登録</h1>
+                            <h1>{labels2.ccp2_mi_manual_vehicle_registration1}</h1>
                         </div>
                         <div class="content2">
-                            <p>車両が登録されました。</p>
+                            <p>{labels2.ccp2_mi_vehicle_registered3}</p>
                         </div>
                         <div class="footer2">
-                            <button class="searchbutton btn searchbuttonfinal" onclick={handleClick}>車両一覧へ</button>
+                            <button class="searchbutton btn searchbuttonfinal" onclick={handleClick}>{labels2.ccp2_mi_go_to_vehicle_list3}</button>
                         </div>
                     </div>
                 </template>
@@ -552,13 +552,13 @@
                 <div class="heads">
 
                     <template if:true={missingChassisNumbers.length}>
-                        <h3 class="headmeow gaps">下記の車両の情報がまだ入力されていません。</h3>
+                        <h3 class="headmeow gaps">{labels2.ccp2_mi_vehicle_information_not_entered2}</h3>
                             <template for:each={missingChassisNumbers} for:item="chassis">
                                 <div class="superfun" key={chassis}><span class="bullet-point">•</span>{chassis}</div>
                             </template>
                     </template>
                     <template if:true={commonChassisNumbers.length}>
-                        <h3 class="headmeow">下記の車両だけ登録しますか？</h3>
+                        <h3 class="headmeow">{labels2.ccp2_mi_register_only_these_vehicles2}</h3>
 
                         <template for:each={commonChassisNumbers} for:item="chassis">
                             <div class="superfun" key={chassis}><span class="bullet-point">•</span>{chassis}</div>
@@ -568,10 +568,10 @@
                 </div>
                 <div class="buttons-small">
                     <div class="cancelbutton btn" onclick={closesure}>
-                        <p class="buttontxt">いいえ</p>
+                        <p class="buttontxt">{labels2.ccp2_mi_no2}</p>
                     </div>
                     <div class="searchbutton btn searchbuttonfinal2" onclick={handleShowRegisteredVehiclesFinalScreem}>
-                        <p class="buttontxt2 searchbuttontxt2">はい</p>
+                        <p class="buttontxt2 searchbuttontxt2">{labels2.ccp2_mi_yes2}</p>
                     </div>
                 </div>
             </div>
@@ -599,15 +599,14 @@
             <div class="modal-background-exit">
                 <div
                     style=" color: #262626; height: 54px; width: 328px; font-weight: 400; line-height: 27px; font-size: 18px; display: flex; justify-content: center; align-items: center; margin: 6% auto auto;">
-                    未アップロードの車両が残っています、
-                    車両登録を終了しますか？</div>
+                    {labels2.ccp2_mi_unsaved_vehicles_exit_registration1}</div>
                 <div class="heads heads-exit">
 
                     <!-- <center> -->
                         <h1 class="exittest">終了しますか？</h1>
                     <!-- </center> -->
                     <template if:true={missingChassisNumbers.length}>
-                        <h3 class="headmeow gaps">下記の車両の情報がまだ入力されていません。</h3>
+                        <h3 class="headmeow gaps">{labels2.ccp2_mi_vehicle_information_not_entered2}</h3>
                         <ul>
                             <template for:each={missingChassisNumbers} for:item="chassis">
                                 <li class="superfun" key={chassis}>{chassis}</li>
@@ -615,7 +614,7 @@
                         </ul>
                     </template>
                     <template if:true={commonChassisNumbers.length}>
-                        <h3 class="headmeow">下記の車両だけ登録しますか？</h3>
+                        <h3 class="headmeow">{labels2.ccp2_mi_register_only_these_vehicles2}</h3>
                         <ul>
                             <template for:each={commonChassisNumbers} for:item="chassis">
                                 <li class="superfun" key={chassis}>{chassis}</li>
@@ -625,10 +624,10 @@
                 </div>
                 <div class="buttons-small">
                     <div class="cancelbutton btn" onclick={Closeexit}>
-                        <p class="buttontxt">いいえ</p>
+                        <p class="buttontxt">{labels2.ccp2_mi_no1}</p>
                     </div>
                     <div class="searchbutton btn searchbutton-btn" onclick={handleClick}>
-                        <p class="buttontxt2 buttontxt333">はい</p>
+                        <p class="buttontxt2 buttontxt333">{labels2.ccp2_mi_yes1}</p>
                     </div>
                 </div>
             </div>

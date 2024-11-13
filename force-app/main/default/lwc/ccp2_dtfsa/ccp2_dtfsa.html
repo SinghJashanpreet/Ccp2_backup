@@ -1,0 +1,344 @@
+<template>
+  <div class="main">
+    <div class="half top">
+      <img src={backgroundImagePC} class="main_image" alt="background_Image" />
+    </div>
+    <div class="half bottom">
+      <div class="center-content">
+        <div class="main-partition">
+          <div class="left-div">
+            <div class="left-header">
+              <p class="left-header-top">リース・ローンのご契約に関する書類</p>
+              <p class="left-header-bottom">
+                ダイムラー・トラック・ファイナンシャルサービスをご契約のお客様
+              </p>
+            </div>
+            <p
+              style="
+                font-size: 18px;
+                font-weight: 700;
+                border-bottom: 1px solid #00000014;
+                width: 100%;
+                padding-bottom: 10px;
+              "
+            >
+              書類検索
+            </p>
+            <div class="left-main">
+              <div class="left-main-row">
+                <div class="left-field-names">
+                  <p>書類名</p>
+                </div>
+                <div class="left-field-val">
+                  <div class="dropdown-container">
+                    <!-- Dropdown Toggle -->
+                    <div class={branchNameclass} onclick={toggleDropdown}>
+                      <div class="dropdown-button icon">
+                        <template if:true={areanyselected}>
+                          <template if:true={areAllSelected}>
+                            <p class="selected-placeholder-val">すべて</p>
+                          </template>
+                          <template if:false={areAllSelected}>
+                            <p class="selected-placeholder-val">
+                              {selectedCount}件選択中
+                            </p>
+                          </template>
+                        </template>
+                        <template if:false={areanyselected}>
+                          <p class="placeholder-not-sel">
+                            書類名を選択してください、複数選択可能です
+                          </p>
+                        </template>
+                      </div>
+                    </div>
+                    <template if:true={branchNameError}>
+                      <p class="error-text">書類名を選択してください</p>
+                    </template>
+
+                    <!-- Dropdown Content -->
+                    <template if:true={isDropdownOpen}>
+                      <div class="dropdown-content" onclick={handleInsideClick}>
+                        <!-- Left section for selecting document type -->
+                        <div class="dropdown-left">
+                          <div class={accountButtonContainerClass}>
+                            <div
+                              class={accountButtonClass}
+                              onclick={handleAccountSelect}
+                            >
+                              経理処理に関する書類
+                            </div>
+                          </div>
+                          <div class={vehicleButtonContainerClass}>
+                            <div
+                              class={vehicleButtonClass}
+                              onclick={handleVehicleSelect}
+                            >
+                              車両管理に関する書類
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Right section for checkboxes based on selection -->
+                        <div class="dropdown-right">
+                          <template if:true={isAccountSelected}>
+                            <div style="margin-bottom: 10px">
+                              <input
+                                type="checkbox"
+                                id="allAccount"
+                                value="all"
+                                checked={isAllAccountsChecked}
+                                onclick={handleSelectAllAccounts}
+                              />
+                              <label class="account-label">すべて</label>
+                            </div>
+                            <template
+                              for:each={accountCheckboxes}
+                              for:item="item"
+                            >
+                              <div key={item.label} style="margin-bottom: 10px">
+                                <input
+                                  type="checkbox"
+                                  id={item.label}
+                                  name="account"
+                                  value={item.label}
+                                  checked={item.isChecked}
+                                  onclick={handleCheckboxChange}
+                                />
+                                <label class="account-label"
+                                  >{item.label}</label
+                                >
+                                <p class="account-description">
+                                  {item.description}
+                                </p>
+                              </div>
+                            </template>
+                          </template>
+
+                          <template if:true={isVehicleSelected}>
+                            <div style="margin-bottom: 10px">
+                              <input
+                                type="checkbox"
+                                id="allVehicle"
+                                value="all"
+                                checked={isAllVehiclesChecked}
+                                onclick={handleSelectAllVehicles}
+                              />
+                              <label class="account-label">すべて</label>
+                            </div>
+                            <template
+                              for:each={vehicleCheckboxes}
+                              for:item="item"
+                            >
+                              <div key={item.label} style="margin-bottom: 10px">
+                                <input
+                                  type="checkbox"
+                                  id={item.label}
+                                  name="vehicle"
+                                  value={item.label}
+                                  checked={item.isChecked}
+                                  onclick={handleCheckboxChange}
+                                />
+                                <label class="account-label"
+                                  >{item.label}</label
+                                >
+                                <p class="account-description">
+                                  {item.description}
+                                </p>
+                              </div>
+                            </template>
+                          </template>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </div>
+              <div class="left-main-row">
+                <div class="left-field-names">
+                  <p>登録番号</p>
+                </div>
+                <div class="left-field-val">
+                  <input
+                    type="text"
+                    name=""
+                    class="input-box"
+                    placeholder="車両の登録番号を入力してください　例：品川100う2738"
+                    value={registrationNum}
+                    onchange={handleRegistrationInput}
+                  />
+                  <p class="below-input">*一部入力でも検索可能です</p>
+                </div>
+              </div>
+              <div class="left-main-row">
+                <div class="left-field-names">
+                  <p>契約番号</p>
+                </div>
+                <div class="left-field-val">
+                  <input
+                    type="text"
+                    name=""
+                    class="input-box"
+                    placeholder="車両の契約番号を入力してください　例：FFMN000000-00-00-00"
+                    value={contractNum}
+                    onchange={handleContractInput}
+                  />
+                  <p class="below-input">*一部入力でも検索可能です</p>
+                </div>
+              </div>
+              <div class="left-main-row">
+                <div class="left-field-names">
+                  <p>作成年月</p>
+                </div>
+                <div class="left-field-val">
+                  <div class="month-year-picker-container">
+                    <!-- Start Date Dropdown -->
+                    <div class="dropdown-wrapper-date">
+                      <div
+                        class="dropdown-header-date icon2"
+                        onclick={toggleStartDropdown}
+                      >
+                        <span>{startDateLabel}</span>
+                      </div>
+                      <div
+                        if:true={isStartDropdownOpen}
+                        class="dropdown-list-date"
+                        onclick={handleInsideClick}
+                      >
+                        <template
+                          for:each={startMonthOptions}
+                          for:item="option"
+                        >
+                          <div
+                            key={option.value}
+                            data-value={option.value}
+                            class={option.cssClass}
+                            onclick={handleStartDateSelect}
+                          >
+                            {option.label}
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+
+                    <p>から</p>
+                    <!-- End Date Dropdown -->
+                    <div class="dropdown-wrapper-date">
+                      <div
+                        class="dropdown-header-date icon2"
+                        onclick={toggleEndDropdown}
+                      >
+                        <span>{endDateLabel}</span>
+                      </div>
+                      <template if:true={isEndDropdownOpen}>
+                        <div
+                          class="dropdown-list-date"
+                          onclick={handleInsideClick}
+                        >
+                          <template
+                            for:each={endMonthOptions}
+                            for:item="option"
+                          >
+                            <div
+                              key={option.value}
+                              data-value={option.value}
+                              class={option.cssClass}
+                              onclick={handleEndDateSelect}
+                            >
+                              {option.label}
+                            </div>
+                          </template>
+                        </div>
+                      </template>
+                    </div>
+                    <p>まで</p>
+                  </div>
+                  <p class="below-input">
+                    *当月を含む直近4か月間に作成された書類がダウンロードの対象となります
+                  </p>
+                </div>
+              </div>
+              <div class="left-main-row">
+                <p
+                  style="
+                    color: #000;
+                    font-weight: 400;
+                    line-height: 150%;
+                    letter-spacing: 0.36px;
+                    font-size: 16px;
+                  "
+                >
+                  *検索結果の表示まで時間がかかる場合は、登録番号や契約番号を入力して絞り込んだ上でもう一度検索してください。
+                </p>
+              </div>
+              <div class="footer-search-reset">
+                <div class="reset-button" onclick={handleReset}>
+                  <!-- <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    width="22" height="25" viewBox="0 0 24 25" class="input-filter-list-items">
+                                    <image
+                                        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAZCAYAAAArK+5dAAAAAXNSR0IArs4c6QAAAfNJREFUSEvNVVFu2kAQnbEE33CDreQd+TM5QcMN0hOU3ICcgHCC9gakJwg9QegJwif2rlXfIHwb7U41aC1ZYGMnKlH8h5l5b97um2eECz94YXz4PARKqdFwOFyWZXlfFEXRV3kvBQI+GAyeEfGKmdfGmMl/I6iDCygzP3rvfzvnNn2UdCogoicAuG2aWMj2+/3iHFErgVJKSWOSJMp7/wwAKpCsEHHMzF+Dop33fpbn+a+mIRoJtNZXiPjinJtKY52EmTfGmOvw7gEAvguw935irV0fkzQSENHfMPEiyzIBgQC4YuapMWZTARGR/D8HgKIsy+uiKHZ1khMCrfUUEZfSkGXZlz5u0VqLw2689/fW2p9dBIdiZr4zxjz2ISAiMcFTk4VPFBDRKwCMyrIcH8ttIwtL+MrMO2PM+KwCImIpyLKs08J1oLa+j1dQu7BG2zUdU3UHiPgnTdObriM62O4tmUNELwAgOXVijJMjChcmezDy3j9YaxfnnBTH8TyKIhlK9mByHBtti3awXdjQRpIQgnNEnEmdc+5bnuerXpssRXEcz6Io+hEainBkd/Jba71ERBliFPKodWfOWlHiQRKzCrbKupUl5VIl6OrR0VtBvTAQ3aZpeoiBJEmmALDebredX7Y3LVOf2HiXgvcAVz0XV/APo2otKbuBn60AAAAASUVORK5CYII="
+                                        x="0" y="0" width="24" height="25" />
+                                    </svg> -->
+                  <svg
+                    width="24"
+                    height="25"
+                    viewBox="0 0 24 25"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11 21.4822C8.98333 21.2322 7.3125 20.3531 5.9875 18.8447C4.6625 17.3364 4 15.5656 4 13.5322C4 12.4322 4.21667 11.3781 4.65 10.3697C5.08333 9.36139 5.7 8.48223 6.5 7.73223L7.925 9.15723C7.29167 9.72389 6.8125 10.3822 6.4875 11.1322C6.1625 11.8822 6 12.6822 6 13.5322C6 14.9989 6.46667 16.2947 7.4 17.4197C8.33333 18.5447 9.53333 19.2322 11 19.4822V21.4822ZM13 21.4822V19.4822C14.45 19.2156 15.6458 18.5239 16.5875 17.4072C17.5292 16.2906 18 14.9989 18 13.5322C18 11.8656 17.4167 10.4489 16.25 9.28223C15.0833 8.11556 13.6667 7.53223 12 7.53223H11.925L13.025 8.63223L11.625 10.0322L8.125 6.53223L11.625 3.03223L13.025 4.43223L11.925 5.53223H12C14.2333 5.53223 16.125 6.30723 17.675 7.85723C19.225 9.40723 20 11.2989 20 13.5322C20 15.5489 19.3375 17.3114 18.0125 18.8197C16.6875 20.3281 15.0167 21.2156 13 21.4822Z"
+                      fill="#262626"
+                    />
+                  </svg>
+
+                  <p class="reset-label" onclick={handleReset}>リセット</p>
+                </div>
+                <button class="search-button" onclick={handleSearchclick}>
+                  検索
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="right-div">
+            <div class="right-top">
+              <div class="right-bottom-header">
+                <p>通知</p>
+              </div>
+            </div>
+            <div class="right-bottom">
+              <div class="right-bottom-header">
+                <p>基本情報</p>
+              </div>
+              <div class="right-main-row">
+                <div class="right-field-names">
+                  <p>会社名</p>
+                </div>
+                <div class="right-field-val">
+                  <p>{userDetailData.accountname}</p>
+                </div>
+              </div>
+
+              <div class="right-main-row">
+                <div class="right-field-names">
+                  <p>お客様番号</p>
+                </div>
+                <div class="right-field-val">
+                  <p>{userDetailData.siebelAccountCode}</p>
+                </div>
+              </div>
+
+              <div class="right-main-row">
+                <div class="right-field-names">
+                  <p>氏名</p>
+                </div>
+                <div class="right-field-val">
+                  <p>{userDetailData.lastName} {userDetailData.firstName}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

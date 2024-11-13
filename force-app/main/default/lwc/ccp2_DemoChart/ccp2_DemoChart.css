@@ -1,0 +1,153 @@
+.main-continer {
+    margin-top: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 80px;
+    align-items: center;
+}
+
+.timeline-container {
+    position: relative;
+    width: 50%;
+    height: 29px;
+    border-bottom: 4px solid #e10202;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 50px;
+}
+
+.timeline-item {
+    position: relative;
+    text-align: center;
+}
+
+.month {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    /* Month below the timeline */
+    width: 100%;
+}
+
+.service-marker {
+    position: absolute;
+    top: -18px;
+    /* Arrow pointing to the line */
+    width: 100%;
+}
+
+.marked .arrow {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tooltip {
+    position: absolute;
+    /* Change position to absolute */
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    /* Prevent line breaks in tooltip */
+    z-index: 1000;
+    /* Ensure tooltip appears above other elements */
+}
+
+.visible {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* Table css */
+.table-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.maintenancetable {
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.maintenancetable tr {
+    height: 50px;
+}
+
+.maintenancetable th,
+.maintenancetable td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.maintenancetable th {
+    background-color: #f2f2f2;
+}
+
+.maintenancetable tr:hover {
+    background-color: #f1f1f1;
+}
+
+.maintenancetable {
+    border-collapse: collapse;
+    /* Ensures borders are collapsed into a single border */
+    width: 100%;
+    /* Optional: Set table width */
+}
+
+.maintenancetable thead th:nth-child(1) {
+    border-top-left-radius: 10px;
+    padding-left: 20px;
+}
+
+.maintenancetable thead th:last-child {
+    border-top-right-radius: 10px;
+}
+
+.maintenancetable tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.maintenancetable tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+.maintenancetable tr:last-child {
+    border-bottom: 0;
+}
+
+.maintenancetable tr td:first-child {
+    padding-left: 20px;
+}
+
+.maintenancetable th,
+.maintenancetable td {
+    border: none;
+    /* Remove all borders */
+    padding: 8px;
+    /* Optional: Add padding for better spacing */
+}
+
+.maintenancetable th {
+    background-color: #f2f2f2;
+    /* Optional: Set a background color for header */
+}
+
+/* Add horizontal lines */
+.maintenancetable tr {
+    border-bottom: 1px solid #d9d9d9;
+    /* Change color as needed */
+}

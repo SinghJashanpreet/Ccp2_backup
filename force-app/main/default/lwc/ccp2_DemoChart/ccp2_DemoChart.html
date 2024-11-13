@@ -1,0 +1,88 @@
+<template>
+  <div class="main-continer">
+    <div class="timeline-container">
+      <template for:each={months} for:item="month">
+        <div key={month.name} class="timeline-item" data-month={month.name}>
+          <div class={month.className}>
+            <div
+              class="arrow"
+              if:true={month.hasService}
+              onmouseover={handleMouseOver}
+              onmouseout={handleMouseOut}
+            >
+              <svg
+                width="30"
+                height="39"
+                viewBox="0 0 80 91"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="40"
+                  cy="40"
+                  r="39"
+                  fill="#FEEEED"
+                  stroke="#E10202"
+                  stroke-width="2"
+                />
+                <path
+                  d="M40.5 91L49.5933 78.25H31.4067L40.5 91Z"
+                  fill="#E10202"
+                />
+                <path
+                  d="M53.8182 32.7413H48.6364V25.584H24.4545C22.5545 25.584 21 27.1944 21 29.1626V48.8452H24.4545C24.4545 51.8155 26.7691 54.2132 29.6364 54.2132C32.5036 54.2132 34.8182 51.8155 34.8182 48.8452H45.1818C45.1818 51.8155 47.4964 54.2132 50.3636 54.2132C53.2309 54.2132 55.5455 51.8155 55.5455 48.8452H59V39.8986L53.8182 32.7413ZM29.6364 50.6345C28.6864 50.6345 27.9091 49.8293 27.9091 48.8452C27.9091 47.8611 28.6864 47.0559 29.6364 47.0559C30.5864 47.0559 31.3636 47.8611 31.3636 48.8452C31.3636 49.8293 30.5864 50.6345 29.6364 50.6345ZM50.3636 50.6345C49.4136 50.6345 48.6364 49.8293 48.6364 48.8452C48.6364 47.8611 49.4136 47.0559 50.3636 47.0559C51.3136 47.0559 52.0909 47.8611 52.0909 48.8452C52.0909 49.8293 51.3136 50.6345 50.3636 50.6345Z"
+                  fill="#E10202"
+                />
+              </svg>
+            </div>
+          </div>
+          <div class="month">{month.name}</div>
+        </div>
+      </template>
+      <div class={tooltipClass}>
+        <span>¥{hoveredServiceDate}</span>
+      </div>
+    </div>
+
+    <div
+      style="
+        border: 1px solid #d9d9d9;
+        width: 95%;
+        height: max-content;
+        border-radius: 10px;
+        margin-bottom: 30px;
+      "
+    >
+      <table class="maintenancetable">
+        <thead>
+          <tr>
+            <!-- <th>Row ID</th>-->
+            <th>Inspection Product</th>
+            <th>Odometer Reading</th>
+            <!-- <th>Total Bill Amount</th> -->
+            <th>Service Date/Time</th>
+            <th>Delivery Date/Time</th>
+            <!-- <th>Created Date</th>
+                    <th>Key</th>
+                    <th>Service Number</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <template for:each={maintanceHistoryData} for:item="record">
+            <tr key={record.ROW_ID}>
+              <!-- <td>{record.ROW_ID}</td>-->
+              <td>{record.x_ins_product__c}</td>
+              <td>{record.odomtr_rdng__c}</td>
+              <!-- <td>{record.x_bill_amount_total__c}</td> -->
+              <td>{record.srv_dt__c}</td>
+              <td>{record.x_delivery_date_time__c}</td>
+              <!--  <td>{record.X_JC_CREATED}</td>
+                        <td>{record.X_KEY}</td>
+                        <td>{record.X_SR_NUM}</td> -->
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
