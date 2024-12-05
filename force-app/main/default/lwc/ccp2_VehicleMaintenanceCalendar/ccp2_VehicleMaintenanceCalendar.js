@@ -227,10 +227,10 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         let width = "";
         if (this.showMonthlyCalendar) {
           let maintenance = elm.maintenance.map((b) => {
-            if (b?.Schedule_Date__c === a.normalDate) {
+            if (b?.maintenanceRecord?.Schedule_Date__c === a.normalDate) {
               isMaintenanceAvailable = true;
-              let startDateObj = new Date(b.Schedule_Date__c);
-              let endDateObj = new Date(b.Schedule_EndDate__c);
+              let startDateObj = new Date(b?.maintenanceRecord.Schedule_Date__c);
+              let endDateObj = new Date(b?.maintenanceRecord.Schedule_EndDate__c);
               let uiEndDateEventStartDateDiff =
                 (new Date(this.currentDates[19].normalDate) - startDateObj) /
                   (1000 * 60 * 60 * 24) +
@@ -257,7 +257,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
                 this.pendingVehicleDatesId = vehicle.Id;
                 console.log("this.pendingDates", this.pendingDates);
               }
-              serviceType = b?.Service_Type__c || "";
+              serviceType = b?.maintenanceRecord?.Service_Type__c || "";
               cssClass = "grey-box";
             }
             return b;
@@ -281,6 +281,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           : "utility:favorite_alt"
       };
     });
+  }
+
+
+  isScheduleAvailable(maintanceData, date){
+    maintanceData.map((elm)=>{
+      return elm;
+    })
   }
 
   formatJapaneseDate(isoDate) {
