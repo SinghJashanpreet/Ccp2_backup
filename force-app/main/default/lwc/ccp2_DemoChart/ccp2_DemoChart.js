@@ -213,4 +213,33 @@ export default class VehicleServiceTimeline extends LightningElement {
     this.tooltipClass = "tooltip hidden"; // Hide tooltip on mouse out
     // this.hoveredServiceDate = ''
   }
+
+//   navigationPoc(event){
+//    window.focus();
+//    setTimeout(() => {
+//     window.focus();
+//     console.log('2focuesdwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww');
+
+//    }, 3000);
+//    this.newFun();
+
+
+// const elm = this.template.querySelector('nnnn');
+// elm.click();
+
+//   }
+
+  navigationPoc(){
+    console.log('hi!!');
+    const newW = window.open('https://www.w3schools.com', '_blank', 'noopener,noreferrer,width=800,height=600,resizable=yes,scrollbars=yes');
+
+    if(newW){
+      // eslint-disable-next-line @lwc/lwc/no-async-operation
+      newW.blur();
+      setTimeout(newW.focus, 0);
+    }else{
+      // eslint-disable-next-line no-alert
+      alert('Please allow popups for this website')
+    }
+  }
 }

@@ -36,8 +36,10 @@
         <members>ccp2_MaintenanceHistory</members>
         <members>ccp2_ManualInput</members>
         <members>ccp2_VehicleImageUpload</members>
+        <members>ccp2_Einvoice</members>
+        <members>ccp2_VehicleMaintenanceCalendar</members>
         -->
-        <members>ccp2_createHistoryMaintain</members>
+        <members>ccp2_Home</members>
         <name>LightningComponentBundle</name>
     </types> 
     <version>59.0</version>

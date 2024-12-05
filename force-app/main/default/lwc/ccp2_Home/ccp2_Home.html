@@ -1,0 +1,154 @@
+<template>
+
+    <template if:true={isGuestuser}>
+        <c-ccp2_-landing-page></c-ccp2_-landing-page>
+    </template>
+
+    <template if:false={isGuestuser}>
+        <div class="main">
+                <!-- <img src={backgroundImagePC} class="main_image" alt="background_Image" /> -->
+                <div class="carousel">
+                    <div class="head-over-image">
+                        <p>三菱ふそうサービスを</p>
+                        <p>カスタマーポータルへ</p>
+                    </div>
+                    <div
+                        class="carousel-container"
+                        style={carouselStyle}
+                        >
+                        <template for:each={images} for:item="image" for:index="index">
+                            <div key={image.id} class="carousel-item">
+                                <img src={image.src} alt="carousel image" />
+                                <div class="gradient-overlay"></div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="carousel-indicators">
+                        <template for:each={images} for:item="image" for:index="index">
+                            <span
+                                key={image.id}
+                                class={image.indicatorClass}
+                                data-index={index}
+                                onclick={handleIndicatorClick}
+                            ></span>
+                        </template>
+                    </div>
+                </div>
+                <div class="main-cards">
+                    <div class="card-container">
+                        <div class="card">
+                            <img src={DTFSACARD} />
+                            <div class="displaybeforehover">
+                                <div>
+                                    <p class="card-heading">リース・ローン</p>
+                                </div>
+                                <div>
+                                    <template if:true={hasDTFSA}>
+                                        <div class="notify">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                <path d="M8.34167 17.3001C8.34167 18.2167 9.08333 18.9584 10 18.9584C10.9167 18.9584 11.6583 18.2167 11.6583 17.3001H8.34167ZM10 4.79175C12.3 4.79175 14.1667 6.65841 14.1667 8.95842V14.7917H5.83333V8.95842C5.83333 6.65841 7.7 4.79175 10 4.79175ZM10 1.04175C9.30833 1.04175 8.75 1.60008 8.75 2.29175V3.26675C6.13333 3.83342 4.16667 6.16675 4.16667 8.95842V13.9584L2.5 15.6251V16.4584H17.5V15.6251L15.8333 13.9584V8.95842C15.8333 6.16675 13.8667 3.83342 11.25 3.26675V2.29175C11.25 1.60008 10.6917 1.04175 10 1.04175ZM9.16667 6.45842H10.8333V9.79175H9.16667V6.45842ZM9.16667 11.4584H10.8333V13.1251H9.16667V11.4584Z" fill="#E10202"/>
+                                            </svg>
+                                            お知らせ
+                                        </div>
+                                        <div class="below-info">
+                                            <p>新しい書類が発行済み</p>
+                                            <p>2024/6/15</p>
+                                        </div>
+                                    </template>
+                                    <template if:false={hasDTFSA}>
+                                        <div>
+                                            三菱ふそうのリース書類、契約書類をこちらへ参照してください
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="displayonhover">
+                                <button class="search-button" onclick={handleClickDtfsa}>リース・ローン</button>
+                                <p>三菱ふそうのリース書類、契約書類をこちらへ参照してください</p>
+                            </div>
+                        </div>                    
+                        <div class="card">
+                            <img src={VEHICLECARD} />
+                            <div class="displaybeforehover">
+                                <p class="card-heading">車両管理</p>
+                                <div class="below-info">
+        
+                                </div>
+                            </div>
+                            
+                            <div class="displayonhover">
+                                <button class="search-button">車両管理</button>
+                                <p>車検予約・法令点検のご予約状況の確認、保有車情報のご登録・ご確認はこちらへ</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-container">
+                        <div class="card">
+                            <img style="border-radius: 10px;" src={SALESCARD} />
+                        
+                            <div class="displaybeforehover">
+                                <div>
+                                    <p class="card-heading">三菱ふそう_ショップ</p>
+                                </div>
+                                <div class="below-info">
+                                    <p>24時間、365日、三菱ふそうの純正製品の購入はこちらへ</p>
+                                </div>
+                            </div>
+                            <div class="displayonhover">
+                                <button class="search-button">三菱ふそう_ショップ</button>
+                                <p>24時間、365日、三菱ふそうの純正製品の購入はこちらへ</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img src={FINANCECARD} />
+                            <div class="displaybeforehover">
+                                <div>
+                                    <p class="card-heading">部整月次請求書</p>
+                                </div>
+                                <div>
+                                    <template if:true={hasEinvoice}>
+                                        <div class="notify">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                <path d="M8.34167 17.3001C8.34167 18.2167 9.08333 18.9584 10 18.9584C10.9167 18.9584 11.6583 18.2167 11.6583 17.3001H8.34167ZM10 4.79175C12.3 4.79175 14.1667 6.65841 14.1667 8.95842V14.7917H5.83333V8.95842C5.83333 6.65841 7.7 4.79175 10 4.79175ZM10 1.04175C9.30833 1.04175 8.75 1.60008 8.75 2.29175V3.26675C6.13333 3.83342 4.16667 6.16675 4.16667 8.95842V13.9584L2.5 15.6251V16.4584H17.5V15.6251L15.8333 13.9584V8.95842C15.8333 6.16675 13.8667 3.83342 11.25 3.26675V2.29175C11.25 1.60008 10.6917 1.04175 10 1.04175ZM9.16667 6.45842H10.8333V9.79175H9.16667V6.45842ZM9.16667 11.4584H10.8333V13.1251H9.16667V11.4584Z" fill="#E10202"/>
+                                            </svg>
+                                            お知らせ
+                                        </div>
+                                        <div class="below-info">
+                                            <p>今月の請求書が発行済み</p>
+                                            <p>2024/6/20</p>
+                                        </div>
+                                    </template>
+                                    <template if:false={hasEinvoice}>
+                                        <div class="no-invoice">
+                                            毎月の電子版請求書がこちらで発行します
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="displayonhover">
+                              <button class="search-button">部整月次請求書</button>
+                              <p>毎月の電子版請求書がこちらで発行します</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <template if:true={errorModal}>
+                    <div class="modal-background-last">
+                        <div class="modal-window-small">
+                            <div class="warning-modal">
+                                <p class="warntxt">「お客様は部整月次請求書（電子版）の利用 <br>
+                                    登録をしておりません。お手数ですが、登録 <br>
+                                    をご希望の場合は御社の管理者に連絡して登
+                                </p>
+                                   <p class="warntxt more">録してもらってください。</p>
+                            </div>
+                            <div class="buttons-all">
+                                <button class="search-button" onclick={onclickOkay}>okay</button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+        </div>
+    </template>
+
+</template>
