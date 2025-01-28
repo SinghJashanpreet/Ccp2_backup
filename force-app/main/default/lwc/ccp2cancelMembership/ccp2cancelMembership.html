@@ -1,0 +1,316 @@
+<template>
+  <template if:true={showWithdraw}>
+    <div class="half-bottom2">
+      <div class="half bottom2">
+        <div class="withdraw-div">
+          <button class="withdraw-btn-side" onclick={navigateToHome}>
+            {labels2.ccp2_cm_back_to_top}
+          </button>
+          <button class="withdraw-btn" onclick={handlewithdraw}>
+            {labels2.ccp2_cm_cancel_membership}
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:false={showWithdraw}>
+    <div class="half-bottom2">
+      <div class="half bottom2">
+        <div class="withdraw-div-gen">
+          <button class="withdraw-btn-side" onclick={navigateToHome}>
+            {labels2.ccp2_cm_back_to_top}
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={showServiceModal}>
+    <section
+      role="dialog"
+      tabindex="-1"
+      class="slds-modal slds-fade-in-open custom-modal"
+    >
+      <div class="slds-modal__container custom-modal-container">
+        <div class="content-modal2">
+          <div class="modal-h1">
+            <p>{labels2.ccp2_cm_confirm_leave}</p>
+            <p>{labels2.ccp2_cm_confirm_leave2}</p>
+          </div>
+          <ul>
+            <li>{labels2.ccp2_cm_basic_service}</li>
+            <li>{labels2.ccp2_cm_monthly_invoice}</li>
+            <li>{labels2.ccp2_cm_financial_service}</li>
+            <li>{labels2.ccp2_cm_vehicle_inspection}</li>
+            <li>{labels2.ccp2_cm_vehicle_management}</li>
+            <li>{labels2.ccp2_cm_cost_management}</li>
+          </ul>
+          <div class="btn-modal">
+            <button class="btn-no" onclick={handleNomodal2}>
+              {labels2.ccp_up_no23}
+            </button>
+            <button class="btn-yes" onclick={handleYesmodal2}>
+              {labels2.ccp_up_yes23}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open custom-backdrop"></div>
+  </template>
+
+  <div>
+    <template if:true={showConformpage}>
+      <div class="main">
+        <div class="half top">
+          <img src={backgroundImagePC} class="imghead" alt="" />
+          <div></div>
+        </div>
+        <div class="half bottom">
+          <div class="center-content">
+            <template if:true={showstep1}>
+              <div class="main-content">
+                <div class="form">
+                  <div class="heading-form">
+                    {labels2.ccp2_cm_leave_request}
+                  </div>
+                  <img src={truckpic1} />
+                  <div class="heading-over-info small-heading">
+                    {labels2.ccp2_cm_leave_request_submit}
+                  </div>
+                  <div class="card">
+                    <div class="heading-radio">
+                      <div class="heading-line">
+                        <div class="main-head large-heading">
+                          <h1>{labels2.ccp2_cm_leave_reason}</h1>
+                        </div>
+                        <hr class="hrclass2" />
+                        <div></div>
+                      </div>
+                    </div>
+
+                    <div class="radio-btns small-heading">
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="reason"
+                          value="使用頻度が低い"
+                          onchange={handleReasonChange}
+                          class="selected"
+                        />
+                        {labels2.ccp2_cm_low_usage}
+                      </label>
+
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="reason"
+                          value="操作性が悪い"
+                          onchange={handleReasonChange}
+                          class="selected"
+                        />
+                        {labels2.ccp2_cm_poor_usability}
+                      </label>
+
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="reason"
+                          value="データ精度に不満がある"
+                          onchange={handleReasonChange}
+                          class="selected"
+                        />
+                        {labels2.ccp2_cm_data_accuracy}
+                      </label>
+
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="reason"
+                          value="会員向けの特典・サービスが少ない"
+                          onchange={handleReasonChange}
+                          class="selected"
+                        />
+                        {labels2.ccp2_cm_few_benefits}
+                      </label>
+
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="reason"
+                          value="他によい商品を見つけた"
+                          onchange={handleReasonChange}
+                          class="selected"
+                        />
+                        {labels2.ccp2_cm_found_better_product}
+                      </label>
+
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="reason"
+                          value="廃業の為"
+                          onchange={handleReasonChange}
+                          class="selected"
+                        />
+                        {labels2.ccp2_cm_closing_business}
+                      </label>
+
+                      <label>
+                        <input
+                          type="checkbox"
+                          name="reason"
+                          value="その他"
+                          onchange={handleReasonChange}
+                          class="selected"
+                        />
+                        {labels2.ccp2_cm_other_reason}
+                      </label>
+
+                      <div>
+                        <input
+                          type="text"
+                          value={otherReason}
+                          class="other-input"
+                          size="50"
+                          maxlength="100"
+                          oninput={handlevalchange}
+                          onchange={handleOtherReasonChange}
+                          placeholder={labels2.ccp2_cm_reason_input}
+                          disabled={isInputDisabled}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="check-btn">
+                    <div class="heading-line">
+                      <div class="main-head2 large-heading">
+                        <h1>{labels2.ccp2_cm_account_data_management}</h1>
+                      </div>
+                      <hr class="hrclass2" />
+                    </div>
+                    <div class="checkbox-div">
+                      <label class="small-heading">
+                        <input
+                          type="checkbox"
+                          name="deletedata"
+                          value="アカウントのデータを永久に削除する"
+                          class={getRadioClasscheck}
+                          oninput={handleCheckbox}
+                          onchange={handleCheckbox}
+                        />
+                        {labels2.ccp2_cm_delete_permanently}
+                      </label>
+                      <div class="month">
+                        <label
+                          ><h1 style="color: red">
+                            <strong>
+                              {labels2.ccp2_cm_data_delete_warning}
+                            </strong>
+                          </h1></label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="step2-btns">
+                  <button class="prev-btn" onclick={handleCancel}>
+                    {labels2.ccp2_cm_cancel}
+                  </button>
+
+                  <button onclick={handlestep1} class="next-button">
+                    {labels2.ccp2_cm_next}
+                  </button>
+                </div>
+              </div>
+            </template>
+
+            <template if:true={showstep2}>
+              <div class="main-content">
+                <div class="form">
+                  <div class="heading-form">{labels2.ccp2_cm_page2_title}</div>
+                  <img src={truckpic2} />
+                  <div class="form2-cont">
+                    <div class="heading-over-info small-heading">
+                      {labels2.ccp2_cm_page2_confirm}
+                    </div>
+
+                    <div class="step2-input">
+                      <div class="head-input">
+                        {labels2.ccp2_cm_page2_reason}
+                      </div>
+                      <hr class="hrclass2" />
+                      <ul>
+                        <template
+                          for:each={selectedReasonMessages}
+                          for:item="reason"
+                        >
+                          <li key={reason} class="reason-font">
+                            {labels2.ccp2_cm_page2_reason_business_closure}
+                          </li>
+                        </template>
+                      </ul>
+                    </div>
+
+                    <div class="step2-input">
+                      <div class="head-input">
+                        {labels2.ccp2_cm_page2_account_info}
+                      </div>
+                      <hr class="hrclass2" />
+                      <div class="data-input">
+                        {labels2.ccp2_cm_page2_unselected}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="step2-btns">
+                    <button class="prev-btn" onclick={handlePrevstep2}>
+                      {labels2.ccp_up_line9}
+                    </button>
+                    <button class="next-button" onclick={handlestep2}>
+                      {labels2.ccp2_cm_next}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <template if:true={showstep3}>
+              <div class="main-content">
+                <div class="form">
+                  <div class="heading-form">
+                    {labels2.ccp2_cm_leave_request}
+                  </div>
+                  <img src={truckpic3} />
+
+                  <div class="step3-div">
+                    <div>
+                      <h1>{labels2.ccp2_cm_page3_line1}</h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+  <template if:true={showCancelModal}>
+    <div class="modal-background-last">
+      <div class="modal-window-small">
+        <div class="warning">
+          <p class="warntxt">{labels2.ccp_up_unsavedChangesPrompt23}</p>
+          <p class="warntxt more">{labels2.ccp_up_unsavedChangesPrompt233}</p>
+        </div>
+        <div class="buttons-small">
+          <div class="cancelbutton btn21" onclick={handleCancelNo}>
+            <p class="buttontxt">{labels2.ccp_up_no23}</p>
+          </div>
+          <div class="searchbutton btn21" onclick={handleCancelYes}>
+            <p class="buttontxt2">{labels2.ccp_up_yes23}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+</template>

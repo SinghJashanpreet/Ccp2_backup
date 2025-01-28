@@ -1,0 +1,69 @@
+<template>
+        <div class="modal-background">
+                <div class="modal-window" style="width: 718px;">
+                    <div class="main">
+                        <div class="header">
+                            <div class="close">
+                                <lightning-icon icon-name="utility:close" alternative-text="close" size="x-small" onclick={onClose} class="closeIcon"></lightning-icon>
+                            </div>
+                        </div>
+                        <div class="cards">
+                            <div class="cardInput" onclick={openVehicleRegistration}>
+                                <div class="headings">
+                                    <p class="txt bold">
+                                        {labels2.ccp2_vmo_electronic_certificate_reading7}
+                                    </p>
+                                    <p style="align-self: flex-end; font-size: 18px; padding-right:13px;">（PC版）</p>
+                                </div>
+                                <div class="Picture">
+                                    <img src={ElecRegImg} alt="Electronic registration Image" />
+                                </div>
+                                <div class="info">
+                                    <p class="information">
+                                        {labels2.ccp2_vmo_vehicle_inspection_certificate_app7}
+                                    </p>
+                                    <p class="information2">
+                                        {labels2.ccp2_vmo_electronic_vehicle_certificate7}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="cardInput" onclick={openVehicleRegistration}>
+                                <div class="headings">
+                                    <p class="txt bold">
+                                        {labels2.ccp2_vmo_electronic_certificate_reading7}
+                                    </p>
+                                    <p style="align-self: flex-end; font-size: 18px; padding-right:13px;">（スマホ版）</p>
+                                </div>
+                                <div class="Picture">
+                                    <img src={CSVRegImg} alt="Bulk registration Image" />
+                                </div>
+                                <div class="info">
+                                    <p class="information">
+                                        {labels2.ccp2_vmo_smartphone_certificate_app7}
+                                    </p>
+                                    <p class="information2">
+                                        {labels2.ccp2_vmo_vehicle_data_import7}
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- <div class="cardInput" onclick={openManualModal}>
+                                <div class="headings">
+                                    <p class="txt bold">
+                                        {labels2.ccp2_vmo_manual_registration2}
+                                    </p>
+                                </div>
+                                <div class="Picture">
+                                    <img src={ManualRegImg} alt="manual registration Image" />
+                                </div>
+                                <div class="info">
+                                    <p class="information">
+                                       
+                                        {labels2.ccp2_vmo_register_vehicle_information_manually2}
+                                    </p>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+        </div>
+</template>

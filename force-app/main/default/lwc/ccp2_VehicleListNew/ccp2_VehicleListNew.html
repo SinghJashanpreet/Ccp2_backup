@@ -1,0 +1,1697 @@
+<template>
+  <div class="main">
+    <div class="half top">
+      <img src={backgroundImagePC} class="main_image" alt="background_Image" />
+    </div>
+    <div class="half bottom">
+      <div class="center-content">
+        <template if:true={showSpinner}>
+          <lightning-spinner style="border-radius: 8px" alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+        <div class="main-vehicle-list">
+          <template if:true={showVehicleList}>
+            <div class="mainveh">
+              <div class="Header">
+                <div class="VehCount">
+                  <p>
+                    {labels2.ccp2_vl_vehicle_list_all_vehicles1_part1}{vehicleAccountCount}{labels2.ccp2_vl_vehicle_list_all_vehicles1_part2}
+                  </p>
+                  <p style="width: max-content">
+                    {labels2.ccp2_vl_target_vehicles1_part1}{ownedVehicleCount}{labels2.ccp2_vl_target_vehicles1_part2}
+                  </p>
+                </div>
+                <div class="right">
+                  <div class={searchDivClass} for="search-box">
+                    <lightning-icon icon-name="utility:search" alternative-text="search" size="xx-small"
+                      class="srch-icn" style="color: #0a0a0a" for="search-box"></lightning-icon>
+                    <input id="search-box" type="text" class={searchInputClass}
+                      placeholder={labels2.ccp2_vl_enter_registration_or_door_number1} value={filterSuggestions}
+                      autocomplete="off" oninput={handleSuggestionInputChange} onkeydown={handleKeyDown}
+                      maxlength="4" />
+                    <template if:true={errorSearch}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="svg-hover" onclick={handlecloseclick}>
+                        <path
+                          d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                          fill="#E10202" />
+                      </svg>
+                    </template>
+
+                    <!-- <template if:true={showFilteredSuggestions}>
+                      <ul class="suggestion-list">
+                        <template for:each={filteredSearchVehicleRegDoorData} for:item="suggestion">
+                          <li key={suggestion} class="suggestion-item" onclick={handleSuggestionSelect}>
+                            {suggestion}
+                          </li>
+                        </template>
+                      </ul>
+                    </template> -->
+                  </div>
+                  <template if:false={pinnedFilter}>
+                    <div class="search-info">
+                      <p class="info-search">{labels2.ccp2_vl_example_for_input1}</p>
+                      <template if:true={showSearchError}>
+                        <P class="warntextsearch">ⓘ {labels2.ccp2_vl_enter_last_4_digits_completely9}</P>
+                      </template>
+                    </div>
+                  </template>
+                  <div class="filter" onclick={toggleBrachSelection}>
+                    <svg width="17" height="21" viewBox="0 0 20 21" fill="none" class="mm-drop-down-icon2"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0_14998_62367)">
+                        <g filter="url(#filter0_d_14998_62367)">
+                          <path
+                            d="M17.5 7.3877L15.7375 5.48486L10 11.6657L4.2625 5.48486L2.5 7.3877L10 15.4849L17.5 7.3877Z"
+                            fill="#262626" />
+                        </g>
+                      </g>
+                      <defs>
+                        <filter id="filter0_d_14998_623677" x="-17.5" y="-14.5151" width="55" height="50"
+                          filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                          <feColorMatrix in="SourceAlpha" type="matrix"
+                            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                          <feOffset />
+                          <feGaussianBlur stdDeviation="10" />
+                          <feComposite in2="hardAlpha" operator="out" />
+                          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" />
+                          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_14998_62367" />
+                          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_14998_62367"
+                            result="shape" />
+                        </filter>
+                        <clipPath id="clip0_14998_623677">
+                          <rect width="20" height="20" fill="white" transform="translate(0 0.484863)" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    <p class="ftextNew">{labels2.ccp2_vl_change_affiliation1}</p>
+                    <div class="branch-selection-container" if:true={showBranchSelection} onclick={handleinsideclick}>
+                      <div class="mm-filter-dropdown">
+                        <template for:each={branchOptions} for:item="elm">
+                          <div class="mm-filter-dropdown-rows" key={elm.branchId}>
+                            <input type="checkbox" name={elm.branchId} checked={elm.selected}
+                              onchange={handleBranchSelect} style="cursor: pointer;" />
+                            <p>{elm.branchName}</p>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+
+                  <template if:false={pinnedFilter}>
+                    <div class="filter" onclick={openFilterModal}>
+                      <img src={filtericon} alt="filter vehicle" class="imgs1new" />
+                      <p class="ftextNew">{labels2.ccp2_vl_detailed_search1}</p>
+                    </div>
+                  </template>
+                  <div class="sort-buttons">
+                    <div class="sorting-vehicle-button" onclick={tooglesortmodal}>
+                      <img src={SortIcon} alt="sort vehicle" class="imgs1new" />
+                      <p class="ftextNew">{labels2.ccp2_vl_sort1}</p>
+                    </div>
+                    <template if:true={showSortingModal}>
+                      <div class="sorting-selection-container" onclick={handleinsideclick}>
+                        <div class="sorting-radio-container">
+                          <div class="radio-containers-of-sort">
+                            <div class="sort-major">
+                              <input type="radio" name={labels2.ccp2_vl_initial_registration_date_asc} value="RegAsc"
+                                onclick={handleSortChange} checked={sortChecked.RegAsc}
+                                class="sorting-radio-colors">{labels2.ccp2_vl_FirstRegistrationDateNewToOld_11}
+                            </div>
+                            <div class="sort-major">
+                              <input type="radio" name={labels2.ccp2_vl_initial_registration_date_desc} value="RegDesc"
+                                onclick={handleSortChange} checked={sortChecked.RegDesc} class="sorting-radio-colors">
+                              {labels2.ccp2_vl_FirstRegistrationDateOldToNew_11}
+                            </div>
+                          </div>
+                          <div class="radio-containers-of-sort">
+                            <div class="sort-major">
+                              <input type="radio" name={labels2.ccp2_vl_expiration_date_asc} value="ExpAsc"
+                                onclick={handleSortChange} checked={sortChecked.ExpAsc} class="sorting-radio-colors">
+                              {labels2.ccp2_vl_ExpirationDateNearToFar_11}
+                            </div>
+                            <div class="sort-major">
+                              <input type="radio" name={labels2.ccp2_vl_expiration_date_desc} value="ExpDesc"
+                                onclick={handleSortChange} checked={sortChecked.ExpDesc}
+                                class="sorting-radio-colors">{labels2.ccp2_vl_ExpirationDateFarToNear_11}
+                            </div>
+                          </div>
+                          <div class="radio-containers-of-sort">
+                            <div class="sort-major">
+                              <input type="radio" name={labels2.ccp2_vl_mileage_asc} value="MilAsc"
+                                onclick={handleSortChange} checked={sortChecked.MilAsc}
+                                class="sorting-radio-colors">{labels2.ccp2_vl_MileageLongToShort_11}
+                            </div>
+                            <div class="sort-major">
+                              <input type="radio" name="走行距離↓" value="MilDesc" onclick={handleSortChange}
+                                checked={sortChecked.MilDesc}
+                                class="sorting-radio-colors">{labels2.ccp2_vl_MileageShortToLong_11}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="buttons-sorting">
+                          <div class="filter-reset-button" onclick={resetSortofvehicles}>
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                              width="18" height="25" viewBox="0 0 24 25" class="input-filter-list-items">
+                              <image
+                                xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAZCAYAAAArK+5dAAAAAXNSR0IArs4c6QAAAfNJREFUSEvNVVFu2kAQnbEE33CDreQd+TM5QcMN0hOU3ICcgHCC9gakJwg9QegJwif2rlXfIHwb7U41aC1ZYGMnKlH8h5l5b97um2eECz94YXz4PARKqdFwOFyWZXlfFEXRV3kvBQI+GAyeEfGKmdfGmMl/I6iDCygzP3rvfzvnNn2UdCogoicAuG2aWMj2+/3iHFErgVJKSWOSJMp7/wwAKpCsEHHMzF+Dop33fpbn+a+mIRoJtNZXiPjinJtKY52EmTfGmOvw7gEAvguw935irV0fkzQSENHfMPEiyzIBgQC4YuapMWZTARGR/D8HgKIsy+uiKHZ1khMCrfUUEZfSkGXZlz5u0VqLw2689/fW2p9dBIdiZr4zxjz2ISAiMcFTk4VPFBDRKwCMyrIcH8ttIwtL+MrMO2PM+KwCImIpyLKs08J1oLa+j1dQu7BG2zUdU3UHiPgnTdObriM62O4tmUNELwAgOXVijJMjChcmezDy3j9YaxfnnBTH8TyKIhlK9mByHBtti3awXdjQRpIQgnNEnEmdc+5bnuerXpssRXEcz6Io+hEainBkd/Jba71ERBliFPKodWfOWlHiQRKzCrbKupUl5VIl6OrR0VtBvTAQ3aZpeoiBJEmmALDebredX7Y3LVOf2HiXgvcAVz0XV/APo2otKbuBn60AAAAASUVORK5CYII="
+                                x="0" y="0" width="24" height="25" />
+                            </svg>
+                            <p class="filter-reset-label">{labels2.ccp2_vl_reset7}</p>
+                          </div>
+                          <div class="searchbutton-download btn-sorting-veh-Main" onclick={FinalSorttoSend}>
+                            <p class="buttontxt2">{labels2.ccp2_vl_save6}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+
+              </div>
+              <div class="FilterPillWindow">
+                <div class="Filter-Pill-container" if:true={isShowVehicleFilterPills}>
+                  <div class="textfilterpills">{labels2.ccp2_vl_FilterConditions_12}</div>
+                  <div class="pill-content">
+                    <template if:true={jsonParameterForVehicleClassWithoutString.finalVehicleNameList}>
+                      <template for:each={jsonParameterForVehicleClassWithoutString.finalVehicleNameList}
+                        for:item="vehicleName">
+                        <span key={vehicleName} class="pill">
+                          <span class="pill__label">{vehicleName}</span>
+                          <button class="pill__remove" data-key='finalVehicleNameList' data-value={vehicleName}
+                            onclick={removePill}>
+                            ✖
+                          </button>
+                        </span>
+                      </template>
+                    </template>
+                    <template if:true={jsonParameterForVehicleClassWithoutString.finalVehicleTypeList}>
+                      <template for:each={jsonParameterForVehicleClassWithoutString.finalVehicleTypeList}
+                        for:item="vehicleType">
+                        <span key={vehicleType} class="pill">
+                          <span class="pill__label">{vehicleType}</span>
+                          <button class="pill__remove" data-key='finalVehicleTypeList' data-value={vehicleType}
+                            onclick={removePill}>
+                            ✖
+                          </button>
+                        </span>
+                      </template>
+                    </template>
+                    <template if:true={jsonParameterForVehicleClassWithoutString.Milage}>
+                      <span class="pill">
+                        <span style="white-space: pre;">{labels2.ccp2_vl_new_mileage} </span>
+                        <span class="pill__label" if:false={isMilageAbove}>{milageMin} - {milageMax}km</span>
+                        <span class="pill__label" if:true={isMilageAbove}>>{milageMax}km</span>
+                        <button class="pill__remove" data-key='Milage' onclick={removePill}>
+                          ✖
+                        </button>
+                      </span>
+                    </template>
+                    <template if:true={jsonParameterForVehicleClassWithoutString.RegDiff}>
+                      <span class="pill">
+                        <span style="white-space: pre;">{labels2.ccp2_vl_new_elapsed_time} </span>
+                        <span class="pill__label" if:false={isRegDiffAbove}>{regMin} -
+                          {regMax}{labels2.ccp2_vl_Year_11}</span>
+                        <span class="pill__label" if:true={isRegDiffAbove}>{regMax}{labels2.ccp2_vl_Year_12}</span>
+                        <button class="pill__remove" data-key='RegDiff' onclick={removePill}>
+                          ✖
+                        </button>
+                      </span>
+                    </template>
+                    <template if:true={jsonParameterForVehicleClassWithoutString.ExpDiff}>
+                      <span class="pill">
+                        <span style="white-space: pre;">{labels2.ccp2_vl_new_remaining_period} </span>
+                        <span class="pill__label" if:false={isExpDiffAbove}>{expMin} -
+                          {expMax}{labels2.ccp2_vl_Month_11}</span>
+                        <span class="pill__label" if:true={isExpDiffAbove}>>{expMax}{labels2.ccp2_vl_Month_11}</span>
+                        <button class="pill__remove" data-key='ExpDiff' onclick={removePill}>
+                          ✖
+                        </button>
+                      </span>
+                    </template>
+                    <template if:true={jsonParameterForVehicleClassWithoutString.Recall}>
+                      <span class="pill">
+                        <span class="pill__label">{labels2.ccp2_vl_new_market_action_target}</span>
+                        <button class="pill__remove" data-key='Recall' onclick={removePill}>
+                          ✖
+                        </button>
+                      </span>
+                    </template>
+                    <template if:true={jsonParameterForVehicleClassWithoutString.Lease}>
+                      <span class="pill">
+                        <span class="pill__label">{labels2.ccp2_vl_with_lease}</span>
+                        <button class="pill__remove" data-key='Lease' onclick={removePill}>
+                          ✖
+                        </button>
+                      </span>
+                    </template>
+                    <template if:true={jsonParameterForVehicleClassWithoutString.TruckKonnect}>
+                      <span class="pill">
+                        <span class="pill__label">{labels2.ccp2_vl_with_truckonnect_contract7}</span>
+                        <button class="pill__remove" data-key='TruckKonnect' onclick={removePill}>
+                          ✖
+                        </button>
+                      </span>
+                    </template>
+                    <template if:true={jsonParameterForVehicleClassWithoutString.VehicleInspExpNotf}>
+                      <span class="pill">
+                        <span class="pill__label">{labels2.ccp2_vl_vehicle_inspection_expiration_notification}</span>
+                        <button class="pill__remove" data-key='VehicleInspExpNotf' onclick={removePill}>
+                          ✖
+                        </button>
+                      </span>
+                    </template>
+                    <template if:true={jsonParameterForVehicleClassWithoutString.Delete}>
+                      <span class="pill">
+                        <span class="pill__label">{labels2.ccp2_vl_Deleted_11}</span>
+                        <button class="pill__remove" data-key='Delete' onclick={removePill}>
+                          ✖
+                        </button>
+                      </span>
+                    </template>
+                    <template if:true={finalsortname}>
+                      <span class="pill">
+                        <span class="pill__label">{finalsortname}</span>
+                        <button class="pill__remove" data-key='Delete' onclick={resetSortofvehicles}>
+                          ✖
+                        </button>
+                      </span>
+                    </template>
+                  </div>
+                </div>
+              </div>
+              <template if:true={showVehicleListOrNoVehicle}>
+                <div class="Vehicle_list">
+                  <div class="Vehicle_list_container">
+                    <div class="container-list">
+                      <template if:true={vehicleData}>
+                        <template for:each={vehicleData} for:item="vehicle">
+                          <template if:true={vehicle.statusOwned}>
+                            <div key={vehicle.Id} class={vehicle.className} data-id={vehicle.Id}
+                              data-icon={vehicle.starIcon} onclick={handlecardClick}>
+                              <div class="notifications">
+                                <template if:true={vehicle.showRecallM}>
+                                  <P class="warntextsearch notify-recall">{labels2.ccp2_vl_MarketMeasuresNotice_11}</P>
+                                </template>
+                                <template if:true={vehicle.showRecallM}>
+                                  <P class="warntextsearch notify-recall">{labels2.ccp2_vl_MarketMeasuresNotice_11}</P>
+                                </template>
+                              </div>
+                              <div class="headerno">
+                                <div class="VehNo">
+                                  <template if:false={deletecheckboxoverfav}>
+                                    <lightning-icon icon-name={vehicle.starIcon} title="お気に入りマーク"
+                                      style="--sds-c-icon-color-foreground-default: #262626;" class="back-icon"
+                                      alternative-text="Star" size="x-small" onclick={toggleStar}></lightning-icon>
+                                  </template>
+                                  <template if:true={deletecheckboxoverfav}>
+                                    <input type="checkbox" name="delete" data-id={vehicle.Id} class="check-color"
+                                      onclick={handleCheckboxChange} />
+                                  </template>
+                                  <template if:true={vehicle.Door_Number__c}>
+                                    <h2 class="vehnotext">{vehicle.Door_Number__c}</h2>
+                                  </template>
+                                  <template if:false={vehicle.Door_Number__c}>
+                                    <h2 class="vehnotext">{vehicle.Registration_Number__c}</h2>
+                                  </template>
+                                </div>
+                                <div class="branches">
+                                  <p class="totext">{vehicle.branchNames}</p>
+                                </div>
+                              </div>
+                              <div class="details" onclick={handlecardClick} data-id={vehicle.Id}
+                                data-icon={vehicle.starIcon}>
+                                <div class="image data" style="height: 51px">
+                                  <img src={vehicle.imageSrc} alt="No Image" class="data-image" />
+                                  <!-- {vehicle.TruckImg__c} -->
+                                </div>
+                                <div class="detailsofcard">
+                                  <div class="regno data">
+                                    <p class="head">{labels2.ccp2_vl_registration_number9}</p>
+                                    <p class="Datahead">
+                                      {vehicle.Registration_Number__c}
+                                    </p>
+                                  </div>
+                                  <div class="maker data">
+                                    <p class="head">{labels2.ccp2_vl_vehicle_name6}</p>
+                                    <p class="Datahead">{vehicle.Vehicle_Name__c}</p>
+                                  </div>
+                                  <div class="vehicle data">
+                                    <p class="head">{labels2.ccp2_vl_vehicle_type6}</p>
+                                    <p class="Datahead">{vehicle.Vehicle_Type__c}</p>
+                                  </div>
+                                  <div class="regperson data">
+                                    <p class="head">{labels2.ccp2_vl_mileage6}</p>
+                                    <p class="Datahead">{vehicle.Mileage} km</p>
+                                  </div>
+                                  <div class="year data">
+                                    <p class="head">{labels2.ccp2_vl_expiration_date6}</p>
+                                    <p class="Datahead">{vehicle.expDate}</p>
+                                  </div>
+                                  <template if:false={pinnedFilter}>
+                                    <div class="nextdate data">
+                                      <p class="head">{labels2.ccp2_vl_next_maintenance_date9}</p>
+                                      <p class="Datahead">NA</p>
+                                    </div>
+                                  </template>
+                                  <div class="addition data">
+                                    <div class="truckonnect">
+                                      <template if:true={vehicle.truckConnect}>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                          xmlns:xlink="http://www.w3.org/1999/xlink" width="95" height="10"
+                                          viewBox="0 0 114 10" style="align-self: center; margin-bottom: 6px;"
+                                          onclick={redirectTruckonnet}>
+                                          <image
+                                            xlink:href="data:image/png;base64,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"
+                                            x="0" y="0" width="114" height="10" />
+                                        </svg>
+                                      </template>
+                                      <template if:false={vehicle.truckConnect}>
+
+                                      </template>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </template>
+                          <template if:true={vehicle.statusDeleted}>
+                            <div key={vehicle.Id} class={vehicle.className} data-id={vehicle.Id}
+                              data-icon={vehicle.starIcon} onclick={handlecardClick}>
+                              <div class="notifications"></div>
+                              <div class="headerno">
+                                <div class="VehNo">
+                                  <template if:false={deletecheckboxoverfav}>
+                                    <lightning-icon icon-name={vehicle.starIcon} title="お気に入りマーク"
+                                      style="--sds-c-icon-color-foreground-default: #262626;" class="back-icon"
+                                      alternative-text="Star" size="x-small" onclick={toggleStar}></lightning-icon>
+                                  </template>
+                                  <template if:true={deletecheckboxoverfav}>
+                                    <template if:true={vehicle.statusDeleted}>
+                                      <lightning-icon icon-name={vehicle.starIcon} title="お気に入りマーク"
+                                        style="--sds-c-icon-color-foreground-default: #262626;" class="back-icon"
+                                        alternative-text="Star" size="x-small" onclick={toggleStar}></lightning-icon>
+                                    </template>
+                                    <template if:false={vehicle.statusDeleted}>
+                                      <input type="checkbox" name="delete" data-id={vehicle.Id} class="check-color"
+                                        onclick={handleCheckboxChange} />
+                                    </template>
+                                  </template>
+                                  <template if:true={vehicle.Door_Number__c}>
+                                    <h2 class="vehnotext">{vehicle.Door_Number__c}</h2>
+                                  </template>
+                                  <template if:false={vehicle.Door_Number__c}>
+                                    <h2 class="vehnotext">{vehicle.Registration_Number__c}</h2>
+                                  </template>
+                                </div>
+                                <div class="branches-deleted">
+                                  <p class="totext">{vehicle.branchNames}</p>
+                                </div>
+                              </div>
+                              <div class="details-deleted" onclick={handlecardClick} data-id={vehicle.Id}
+                                data-icon={vehicle.starIcon}>
+                                <div class="image data deleted-image-vehicle-container" style="height: 51px">
+                                  <div class="vehicle-deleted-text-image"><strong
+                                      class="deleted-img-text">{labels2.ccp2_vl_deleted7}</strong>
+                                  </div>
+                                  <img src={vehicle.imageSrc} alt="No Image" class="data-image carasoul-images" />
+                                  <!-- {vehicle.TruckImg__c} -->
+                                </div>
+                                <div class="deleted-colorright">
+                                  <div class="regno-deleted data">
+                                    <p class="head deleted">{labels2.ccp2_vl_registration_number9}</p>
+                                    <p class="Datahead-deleted">
+                                      {vehicle.Registration_Number__c}
+                                    </p>
+                                  </div>
+                                  <div class="maker-deleted data">
+                                    <p class="head deleted">{labels2.ccp2_vl_vehicle_name6}</p>
+                                    <p class="Datahead-deleted">{vehicle.Vehicle_Name__c}</p>
+                                  </div>
+                                  <div class="vehicle-deleted data">
+                                    <p class="head deleted">{labels2.ccp2_vl_vehicle_type6}</p>
+                                    <p class="Datahead-deleted">{vehicle.Vehicle_Type__c}</p>
+                                  </div>
+                                  <div class="regperson-deleted data">
+                                    <p class="head deleted">{labels2.ccp2_vl_mileage6}</p>
+                                    <p class="Datahead-deleted">{vehicle.Mileage} km</p>
+                                  </div>
+                                  <div class="year-deleted data">
+                                    <p class="head deleted">{labels2.ccp2_vl_expiration_date6}</p>
+                                    <p class="Datahead-deleted">{vehicle.expDate}</p>
+                                  </div>
+                                  <template if:false={pinnedFilter}>
+                                    <div class="nextdate-deleted data">
+                                      <p class="head deleted">{labels2.ccp2_vl_next_maintenance_date9}</p>
+                                      <p class="Datahead-deleted">NA</p>
+                                    </div>
+                                  </template>
+                                  <div class="addition-deleted data">
+                                    <template if:true={vehicle.truckConnect}>
+                                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="114" height="10" viewBox="0 0 114 10" style="align-self:center">
+                                        <image
+                                          xlink:href="data:image/png;base64,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"
+                                          x="0" y="0" width="114" height="10" />
+                                      </svg>
+                                    </template>
+                                    <template if:false={vehicle.truckConnect}>
+
+                                    </template>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                          </template>
+                        </template>
+                      </template>
+                      <template if:true={emptydataofvehicles}>
+                        <div class="container-empty">
+                          <img src={emptylistofvehicleImage} alt="empty list of vehicles" style="scale: 0.9;">
+                          <p>{labels2.ccp2_vl_NoMatchesFound_11}</p>
+                        </div>
+                      </template>
+                      <template if:true={vehicleData.error}>
+                        <p>error</p>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template if:false={showVehicleListOrNoVehicle}>
+                <div class="Vehicle_list">
+                  <div class="Vehicle_list_container">
+                    <div class="container-list">
+                      <div class="no-vehicle-container">
+                        <img src={noVehicleIcon} />
+                        {labels2.ccp2_vl_NothingFound_11}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <div class="buttons">
+                <template if:true={MainTemplateofbuttons}>
+                  <template if:false={pinnedFilter}>
+                    <div class="btngrp">
+
+                      <template if:false={emptydataofvehicles}>
+                        <!-- <div class="write" onclick={showdeletecheckboxes} if:false={showVehicleRecoverButton}>
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M13.8044 9.64993C13.9323 9.12086 14 8.56834 14 8H18.0903V11.2999H20.5448L22.9992 14.5997V18.7245H21.3629C21.3629 20.094 20.2666 21.1994 18.9085 21.1994C17.5504 21.1994 16.454 20.094 16.454 18.7245H11.5452C11.5452 20.094 10.4489 21.1994 9.09073 21.1994C7.73261 21.1994 6.63629 20.094 6.63629 18.7245H5V14.7101C5.52247 14.8656 6.07051 14.9618 6.63629 14.9907V17.0746H7.27445C7.72443 16.5714 8.36258 16.2496 9.09073 16.2496C9.81888 16.2496 10.457 16.5714 10.907 17.0746H16.454V9.64993H13.8044ZM21.7393 14.5997L20.1357 12.5373H18.0903V14.5997H21.7393ZM8.27259 18.7245C8.27259 19.1783 8.64075 19.5495 9.09073 19.5495C9.54071 19.5495 9.90888 19.1783 9.90888 18.7245C9.90888 18.2708 9.54071 17.8996 9.09073 17.8996C8.64075 17.8996 8.27259 18.2708 8.27259 18.7245ZM18.0903 18.7245C18.0903 19.1783 18.4585 19.5495 18.9085 19.5495C19.3585 19.5495 19.7266 19.1783 19.7266 18.7245C19.7266 18.2708 19.3585 17.8996 18.9085 17.8996C18.4585 17.8996 18.0903 18.2708 18.0903 18.7245Z"
+                              class="deletetruck delete vehicle" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M7 14C10.3137 14 13 11.3137 13 8C13 4.68629 10.3137 2 7 2C3.68629 2 1 4.68629 1 8C1 11.3137 3.68629 14 7 14ZM9.12229 4.46445L10.5365 5.87867L8.41518 7.99999L10.5365 10.1213L9.12229 11.5355L7.00097 9.4142L4.87965 11.5355L3.46543 10.1213L5.58675 7.99999L3.46543 5.87867L4.87965 4.46445L7.00097 6.58577L9.12229 4.46445Z"
+                              class="deletetruck delete vehicle" />
+                          </svg>
+                          <p class="ftext" style="font-weight: 0px">{labels2.ccp2_vl_delete_vehicle1}</p>
+                        </div>
+                        <div class="write" onclick={openRecoverDelete} if:true={showVehicleRecoverButton}>
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M6.25 14C4.7375 13.8103 3.48438 13.1432 2.49063 11.9986C1.49687 10.8541 1 9.51039 1 7.96748C1 7.13279 1.1625 6.33288 1.4875 5.56775C1.8125 4.80262 2.275 4.1355 2.875 3.5664L3.94375 4.6477C3.46875 5.07769 3.10938 5.57724 2.86563 6.14634C2.62188 6.71545 2.5 7.32249 2.5 7.96748C2.5 9.0804 2.85 10.0637 3.55 10.9173C4.25 11.771 5.15 12.2927 6.25 12.4824V14ZM7.75 14V12.4824C8.8375 12.28 9.73438 11.7552 10.4406 10.9079C11.1469 10.0605 11.5 9.0804 11.5 7.96748C11.5 6.7028 11.0625 5.62782 10.1875 4.74255C9.3125 3.85727 8.25 3.41463 7 3.41463H6.94375L7.76875 4.24932L6.71875 5.31165L4.09375 2.65583L6.71875 0L7.76875 1.06233L6.94375 1.89702H7C8.675 1.89702 10.0938 2.48509 11.2563 3.66125C12.4188 4.8374 13 6.27281 13 7.96748C13 9.49774 12.5031 10.8351 11.5094 11.9797C10.5156 13.1242 9.2625 13.7977 7.75 14Z"
+                              fill="#262626" class="deletetruck" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M13.8044 9.64993C13.9323 9.12086 14 8.56834 14 8H18.0903V11.2999H20.5448L22.9992 14.5997V18.7245H21.3629C21.3629 20.094 20.2666 21.1994 18.9085 21.1994C17.5504 21.1994 16.454 20.094 16.454 18.7245H11.5452C11.5452 20.094 10.4489 21.1994 9.09073 21.1994C7.73261 21.1994 6.63629 20.094 6.63629 18.7245H5V14.7101C5.52247 14.8656 6.07051 14.9618 6.63629 14.9907V17.0746H7.27445C7.72443 16.5714 8.36258 16.2496 9.09073 16.2496C9.81888 16.2496 10.457 16.5714 10.907 17.0746H16.454V9.64993H13.8044ZM21.7393 14.5997L20.1357 12.5373H18.0903V14.5997H21.7393ZM8.27259 18.7245C8.27259 19.1783 8.64075 19.5495 9.09073 19.5495C9.54071 19.5495 9.90888 19.1783 9.90888 18.7245C9.90888 18.2708 9.54071 17.8996 9.09073 17.8996C8.64075 17.8996 8.27259 18.2708 8.27259 18.7245ZM18.0903 18.7245C18.0903 19.1783 18.4585 19.5495 18.9085 19.5495C19.3585 19.5495 19.7266 19.1783 19.7266 18.7245C19.7266 18.2708 19.3585 17.8996 18.9085 17.8996C18.4585 17.8996 18.0903 18.2708 18.0903 18.7245Z"
+                              fill="#262626" class="deletetruck" />
+                          </svg>
+                          <p class="ftext" style="font-weight: 0px">{labels2.ccp2_vl_new_back_to_vehicle_list}</p>
+                        </div> -->
+                      </template>
+                      <template if:true={emptydataofvehicles}>
+                        <!-- <div class="write">
+                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24"
+                            height="24" viewBox="0 0 24 24">
+                            <image
+                              xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAnVJREFUSEu1VO2N2kAQnVkBQv4TOghUkLsOoIKUcKGCcD+QkI3EnmQvSPwIVBA6yHUAqeDoIKQD8sdC4mOO5+xaxnBAiG4l/7B2dt6bN2+G6Z0Pv3N+OgBotVoVz/O+MnOdiPCRiMyJaGyMmdxCJgXodDpVpdSUmaunEonIYrfbNQaDweJfgFIA3/d/2eRgXCEiB4SESyK6A0gcx/ej0Qj/V50EwPf9L8z8nYjmxWKxAYD1ej3Fnf1f2n+APBlj9FXZif72IAiCF8fQyaC1TirQWi9y8s2iKAKJq44DEBed1/pUb6Ioutp9RwBEtIAsYG4rqFp50uYDIAiClBTitttt7ZQBHAD0hi3T5GCOh3gEuTIgSZ/W6/XIVv0J8p4F8H1fM3MPno/juFEulyuwLBKgJ6vVaul5HiyMJjezM+HengXQWsM1aHTVDlbFzQN6ApsiOSqMoqiW7a4D2Csws4Tm/X7/0cWkzcrJcMohB71xAZkKxkopEHnY7Xbjfr+fSHjkBjsTLSKCtlgVP5VSs0KhMNJaHw1YXiIQ3Ww2L5DWGDM/abd2u303HA4x0RdPRqLH7XabEFBKfUbjjTG1kwDWgpMoipqXEDIAR6Gw81kAERnvVeoxc8Xq+pzP8j8ATm84aikiFeuoAwyAY3e5mOzlmxX4vj9j5g92PzVLpdLc2nixn4Pf2ST7JfnR2vteKQWb/4CdEWeMqb+5U7rdbl1EpiLyLCJ/lFIP+SGzixKO+yYiEzs7dWZuhGGYzMXZpdXtdrWI9JxdwSjfAzukYJ3cMfNTGIbpOr+4FbNr+5yjtNaY9KVbkkeTfMmOt95frODWxO7dK1uXhCgnnc20AAAAAElFTkSuQmCC"
+                              x="0" y="0" width="24" height="24" />
+                          </svg>
+                          <p class="ftext-disable" style="font-weight: 0px">{labels2.ccp2_vl_delete_vehicle1}</p>
+                        </div> -->
+                      </template>
+
+                      <div class="print">
+
+                        <template if:false={emptydataofvehicles}>
+                          <div class="btn" onclick={showDownloadModal}>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                d="M14 11V14H2V11H0V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V11H14ZM13 7L11.59 5.59L9 8.17V0H7V8.17L4.41 5.59L3 7L8 12L13 7Z"
+                                class="printtruck" />
+                            </svg>
+                            <p class="ftext" style="font-weight: 0px">{labels2.ccp2_vl_download1}</p>
+                          </div>
+                        </template>
+                        <template if:true={emptydataofvehicles}>
+                          <div class="btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                              width="24" height="24" viewBox="0 0 24 24">
+                              <image
+                                xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAOtJREFUSEvtlMENgzAMRfM36AjtBmxUVuiBixMJECQXlmg36gjdoN3ArVErUQgkINFL8Qkp9n+x8w3UyoGV9dWfAbTWLCO11kZ3Hp0owhsg6NhVRkREiXPu6nuDLMuSpmnas7GYfGQiygEUSqnUWnvpdqC1PiqlzsxcOOfKRQBjTMHM+bs4FcH+N4Cyrmu5hDeCNu1BvkRC4pIcBEiSDxIjHg3oQ2LFvYApK0onUuSb+VjdYERLvD71G/k9wBhzZ+ZdcK39CbfXvhy6R4MOiCgFIN7fz4EAeAA4VVX12ZW2PMqmc0D93A0QnN4TjZR9GZbN8sEAAAAASUVORK5CYII="
+                                x="0" y="0" width="24" height="24" />
+                            </svg>
+                            <p class="ftext-disable" style="font-weight: 0px">{labels2.ccp2_vl_download1}</p>
+                          </div>
+                        </template>
+
+                      </div>
+                      <div class="download">
+                        <div class="btn" onclick={showVehicleRegistration}>
+
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M13.8044 9.64993C13.9323 9.12086 14 8.56834 14 8H18.0903V11.2999H20.5448L22.9992 14.5997V18.7245H21.3629C21.3629 20.094 20.2666 21.1994 18.9085 21.1994C17.5504 21.1994 16.454 20.094 16.454 18.7245H11.5452C11.5452 20.094 10.4489 21.1994 9.09073 21.1994C7.73261 21.1994 6.63629 20.094 6.63629 18.7245H5V14.7101C5.52247 14.8656 6.07051 14.9618 6.63629 14.9907V17.0746H7.27445C7.72443 16.5714 8.36258 16.2496 9.09073 16.2496C9.81888 16.2496 10.457 16.5714 10.907 17.0746H16.454V9.64993H13.8044ZM21.7393 14.5997L20.1357 12.5373H18.0903V14.5997H21.7393ZM8.27259 18.7245C8.27259 19.1783 8.64075 19.5495 9.09073 19.5495C9.54071 19.5495 9.90888 19.1783 9.90888 18.7245C9.90888 18.2708 9.54071 17.8996 9.09073 17.8996C8.64075 17.8996 8.27259 18.2708 8.27259 18.7245ZM18.0903 18.7245C18.0903 19.1783 18.4585 19.5495 18.9085 19.5495C19.3585 19.5495 19.7266 19.1783 19.7266 18.7245C19.7266 18.2708 19.3585 17.8996 18.9085 17.8996C18.4585 17.8996 18.0903 18.2708 18.0903 18.7245Z"
+                              class="downloadtruck" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M7 14C10.3137 14 13 11.3137 13 8C13 4.68629 10.3137 2 7 2C3.68629 2 1 4.68629 1 8C1 11.3137 3.68629 14 7 14ZM6 7V4H8V7H11V9H8V12H6V9H3V7H6Z"
+                              class="downloadtruck" />
+                          </svg>
+                          <p class="ftext" style="font-weight: 0px">{labels2.ccp2_vl_register_vehicle1}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                  <template if:true={pinnedFilter}>
+                    <div class="btngrp">
+                      <div class="download">
+                        <div class="btn" onclick={showVehicleRegistration}>
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M13.8044 9.64993C13.9323 9.12086 14 8.56834 14 8H18.0903V11.2999H20.5448L22.9992 14.5997V18.7245H21.3629C21.3629 20.094 20.2666 21.1994 18.9085 21.1994C17.5504 21.1994 16.454 20.094 16.454 18.7245H11.5452C11.5452 20.094 10.4489 21.1994 9.09073 21.1994C7.73261 21.1994 6.63629 20.094 6.63629 18.7245H5V14.7101C5.52247 14.8656 6.07051 14.9618 6.63629 14.9907V17.0746H7.27445C7.72443 16.5714 8.36258 16.2496 9.09073 16.2496C9.81888 16.2496 10.457 16.5714 10.907 17.0746H16.454V9.64993H13.8044ZM21.7393 14.5997L20.1357 12.5373H18.0903V14.5997H21.7393ZM8.27259 18.7245C8.27259 19.1783 8.64075 19.5495 9.09073 19.5495C9.54071 19.5495 9.90888 19.1783 9.90888 18.7245C9.90888 18.2708 9.54071 17.8996 9.09073 17.8996C8.64075 17.8996 8.27259 18.2708 8.27259 18.7245ZM18.0903 18.7245C18.0903 19.1783 18.4585 19.5495 18.9085 19.5495C19.3585 19.5495 19.7266 19.1783 19.7266 18.7245C19.7266 18.2708 19.3585 17.8996 18.9085 17.8996C18.4585 17.8996 18.0903 18.2708 18.0903 18.7245Z"
+                              class="downloadtruck" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M7 14C10.3137 14 13 11.3137 13 8C13 4.68629 10.3137 2 7 2C3.68629 2 1 4.68629 1 8C1 11.3137 3.68629 14 7 14ZM6 7V4H8V7H11V9H8V12H6V9H3V7H6Z"
+                              class="downloadtruck" />
+                          </svg>
+                          <p class="ftext" style="font-weight: 0px">{labels2.ccp2_vl_register_vehicle1}</p>
+                        </div>
+                      </div>
+                      <div class="more-in-vehicle-filter">
+                        <div class="filtersvgcontainer" onclick={showvehiclelistbottomicons}>
+                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16"
+                            height="2" viewBox="0 0 16 4">
+                            <image
+                              xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAECAYAAACHtL/sAAAAAXNSR0IArs4c6QAAAGZJREFUKFONzNEJhDAQRdE7pIG1AyUkba0tWIGWYAnaVoaw24E2EEYGLCB/jwPvSozxG0LYgbu1ttVaT4Bel5zzDxj9ZGa3qg6+e90DF/DxE/AvpUxvoMslpTSLyOoRM1tU9fBArz+szk5LksuaDQAAAABJRU5ErkJggg=="
+                              x="0" y="0" width="16" height="4" />
+                          </svg>
+                        </div>
+                        <template if:true={showonclickofmorefilter}>
+                          <div class="listof-selection-container" onclick={handleinsideclick}>
+                            <!-- <div class="write" onclick={showdeletecheckboxes}>
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                  d="M13.8044 9.64993C13.9323 9.12086 14 8.56834 14 8H18.0903V11.2999H20.5448L22.9992 14.5997V18.7245H21.3629C21.3629 20.094 20.2666 21.1994 18.9085 21.1994C17.5504 21.1994 16.454 20.094 16.454 18.7245H11.5452C11.5452 20.094 10.4489 21.1994 9.09073 21.1994C7.73261 21.1994 6.63629 20.094 6.63629 18.7245H5V14.7101C5.52247 14.8656 6.07051 14.9618 6.63629 14.9907V17.0746H7.27445C7.72443 16.5714 8.36258 16.2496 9.09073 16.2496C9.81888 16.2496 10.457 16.5714 10.907 17.0746H16.454V9.64993H13.8044ZM21.7393 14.5997L20.1357 12.5373H18.0903V14.5997H21.7393ZM8.27259 18.7245C8.27259 19.1783 8.64075 19.5495 9.09073 19.5495C9.54071 19.5495 9.90888 19.1783 9.90888 18.7245C9.90888 18.2708 9.54071 17.8996 9.09073 17.8996C8.64075 17.8996 8.27259 18.2708 8.27259 18.7245ZM18.0903 18.7245C18.0903 19.1783 18.4585 19.5495 18.9085 19.5495C19.3585 19.5495 19.7266 19.1783 19.7266 18.7245C19.7266 18.2708 19.3585 17.8996 18.9085 17.8996C18.4585 17.8996 18.0903 18.2708 18.0903 18.7245Z"
+                                  class="deletetruck delete vehicle" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                  d="M7 14C10.3137 14 13 11.3137 13 8C13 4.68629 10.3137 2 7 2C3.68629 2 1 4.68629 1 8C1 11.3137 3.68629 14 7 14ZM9.12229 4.46445L10.5365 5.87867L8.41518 7.99999L10.5365 10.1213L9.12229 11.5355L7.00097 9.4142L4.87965 11.5355L3.46543 10.1213L5.58675 7.99999L3.46543 5.87867L4.87965 4.46445L7.00097 6.58577L9.12229 4.46445Z"
+                                  class="deletetruck delete vehicle" />
+                              </svg>
+                              <p class="ftext" style="font-weight: 0px">{labels2.ccp2_vl_delete_vehicle1}</p>
+                            </div> -->
+                            <div class="print">
+                              <div class="btn" onclick={showDownloadModal}>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                                  <path
+                                    d="M14 11V14H2V11H0V14C0 15.1 0.9 16 2 16H14C15.1 16 16 15.1 16 14V11H14ZM13 7L11.59 5.59L9 8.17V0H7V8.17L4.41 5.59L3 7L8 12L13 7Z"
+                                    class="printtruck" />
+                                </svg>
+                                <p class="ftext" style="font-weight: 0px">{labels2.ccp2_vl_download1}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </template>
+                </template>
+                <template if:true={deletebuttonsall}>
+                  <div class="deletebtngrp">
+                    <button class="deletebtnscancel borderclass" onclick={handlebackfromdelete}>
+                      {labels2.ccp2_vl_cancel3}
+                    </button>
+                    <template if:true={showSelectAllButton}>
+                      <button class="deletebtnsall" onclick={handledeleteselectall}>
+                        {labels2.ccp2_vl_select_all5}
+                      </button>
+                    </template>
+                    <template if:true={showDeselectAllButton}>
+                      <button class="deletebtnsalldeselect" onclick={handledeleteDeselectall}>
+                        {labels2.ccp2_vl_delete6}
+                      </button>
+                    </template>
+                    <button class="deletebtns" onclick={handledeleteopenmodal} disabled={isDeleteDisabled}>
+                      {labels2.ccp2_vl_delete5}
+                    </button>
+                  </div>
+                </template>
+                <template if:true={Recoverbuttonsall}>
+                  <div class="deletebtngrp">
+                    <button class="deletebtnscancel borderclass" onclick={CloseRecoverDelete}>
+                      {labels2.ccp2_vl_new_cancel}
+                    </button>
+                    <template if:true={showSelectAllButton}>
+                      <button class="deletebtnsall" onclick={handledeleteselectall}>
+                        {labels2.ccp2_vl_select_all5}
+                      </button>
+                    </template>
+                    <template if:true={showDeselectAllButton}>
+                      <button class="deletebtnsalldeselect" onclick={handledeleteDeselectall}>
+                        {labels2.ccp2_vl_delete6}
+                      </button>
+                    </template>
+                    <button class="deletebtns" onclick={handledeleteopenmodal} disabled={isDeleteDisabled}>
+                      {labels2.ccp2_vl_new_back_to_vehicle_list}
+                    </button>
+                  </div>
+                </template>
+                <template if:false={stopPaginationsearch}>
+                  <template if:false={forcestopPagination}>
+                    <div class="pagination-container">
+                      <!-- This is backup code for the offset fucntionality -->
+                      <div class="pagination-offset-container">
+                        <h1 class="pagination-offset-heading">{labels2.ccp2_vl_display_per_page1}</h1>
+                        <div class="drop-down-container" onclick={togglePaginationList}>
+                          <p class="drop-down-text">{currentPagination}</p>
+                          <lightning-icon icon-name="utility:chevrondown" alternative-text="drop-down"
+                            size="xx-small"></lightning-icon>
+                          <template if:true={showListOffSet}>
+                            <div class="drop-down-list">
+                              <div class="drop-down-element" data-offset="10" onclick={clickOffSetElement}>
+                                10
+                              </div>
+                              <div class="drop-down-element" data-offset="15" onclick={clickOffSetElement}>
+                                15
+                              </div>
+                              <div class="drop-down-element" data-offset="20" onclick={clickOffSetElement}>
+                                20
+                              </div>
+                              <div class="drop-down-element" data-offset="25" onclick={clickOffSetElement}>
+                                25
+                              </div>
+                              <div class="drop-down-element" data-offset="30" onclick={clickOffSetElement}>
+                                30
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+                      <template if:true={hasVehicles}>
+                        <div class="big-div-page">
+                          <button class="nav-button" onclick={handlePreviousPage} disabled={isPreviousDisabled}>
+                            <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous"
+                              size="xx-small"></lightning-icon>
+                          </button>
+                          <span if:true={showLeftDots} class="page-button-dots">...</span>
+
+                          <template for:each={visiblePageCount} for:item="page">
+                            <button class="page-button" data-page={page} onclick={pageCountClick} key={page}>
+                              {page}
+                            </button>
+                          </template>
+
+                          <span if:true={showRightDots} class="page-button-dots">...</span>
+                          <button if:true={showRightDots} class="page-button" data-page={totalPageCount}
+                            onclick={pageCountClick}>
+                            {totalPageCount}
+                          </button>
+                          <!-- This is backup code for the offset fucntionality -->
+                          <!-- <template for:each={visiblePageNumbers} for:item="pageNum">
+                                <button key={pageNum} data-id={pageNum} onclick={handlePageChange}
+                                        class="page-button">
+                                    {pageNum}
+                                </button>
+                            </template> -->
+                          <button class="nav-button" onclick={handleNextPage} disabled={isNextDisabled}>
+                            <lightning-icon icon-name="utility:chevronright" alternative-text="Next"
+                              size="xx-small"></lightning-icon>
+                          </button>
+                        </div>
+                      </template>
+                    </div>
+                  </template>
+                  <template if:true={forcestopPagination}>
+
+                  </template>
+                </template>
+                <template if:true={stopPaginationsearch}>
+                </template>
+              </div>
+            </div>
+          </template>
+          <template if:true={pinnedFilter}>
+            <div class="filter-pinned-window">
+              <div class="Header-filter-modal">
+                <div class="Filter-heading"><strong>{labels2.ccp2_vl_detailed_search1}</strong></div>
+                <div class="Filter-btns">
+                  <div class="Filter-header-button-Pin">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18"
+                      height="18" viewBox="0 0 24 24" class="input-filter-list-items" onclick={pinnedtomodal}>
+                      <image
+                        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAOVJREFUSEvtVd0NgyAQ5i7GZ7sBTZA5XKUT1G7QTtAV3MR0DM+HskH7bIw0mNhQI4JNjC/yRI7jvu9+PgC28oKV4zMngJTyyRjjgQQUER2nfLcDGNhIKbXZE9EPGZd9nIW3BzvAtiXinCdxHL8cTTb2pGmag1Lq7Rrn2QyEEDki3gHgUVVVZgdJ07QEAGO7EdF1EYBhHkXRGRH7i1rrU13XhR1ECJEhYmlsXddd2rYtpjKZzGAYzUAVf93GWjEH2wC4mIeq177vHVPbeQfwDs1eopAS9cqeexoWfzheVI/DIh38A/YBQAyEGYq04VcAAAAASUVORK5CYII="
+                        x="0" y="0" width="24" height="24" />
+                    </svg>
+                  </div>
+                  <div class="Filter-header-button-close">
+                    <lightning-icon icon-name='utility:close' alternative-text='close' size='x-small'
+                      onclick={pinnedWindowclose} class="closeIcon"></lightning-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="Filter-Name-container">
+                <div class="Filter-Picklists">
+                  <div class="Filter-Picklist-ondemand 1">
+                    <h3>{labels2.ccp2_vl_vehicle_name6}</h3>
+                    <div class="dropdown-input-container" onclick={toggleVehicleName}>
+                      <input class="dropdown-input-container-text" placeholder={labels2.ccp2_vl_PleaseSelect_11}
+                        type="text" value={vehicleNameValue} readonly></input>
+                      <svg width="17" height="21" viewBox="0 0 20 21" fill="none" class="mm-drop-down-icon1"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_14998_62367)">
+                          <g filter="url(#filter0_d_14998_62367)">
+                            <path
+                              d="M17.5 7.3877L15.7375 5.48486L10 11.6657L4.2625 5.48486L2.5 7.3877L10 15.4849L17.5 7.3877Z"
+                              fill="#262626" />
+                          </g>
+                        </g>
+                        <defs>
+                          <filter id="filter0_d_14998_623677_2" x="-17.5" y="-14.5151" width="55" height="50"
+                            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                            <feColorMatrix in="SourceAlpha" type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                            <feOffset />
+                            <feGaussianBlur stdDeviation="10" />
+                            <feComposite in2="hardAlpha" operator="out" />
+                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" />
+                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_14998_62367" />
+                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_14998_62367"
+                              result="shape" />
+                          </filter>
+                          <clipPath id="clip0_14998_623677_2">
+                            <rect width="20" height="20" fill="white" transform="translate(0 0.484863)" />
+                          </clipPath>
+                        </defs>
+                      </svg>
+
+                      <div class="dropdown-container" if:true={showVehicleNameDropdown} onclick={handleinsideclick}>
+                        <div class="mm-filter-dropdown">
+                          <template for:each={vehicleNamesPicklistValues} for:item="elm">
+                            <div class="mm-filter-dropdown-rows" key={elm.label}>
+                              <input type="checkbox" class="input-filter-list-items" name={elm.label}
+                                checked={elm.selected} onchange={handleVehicleNameSelect} />
+                              <p>{elm.label}</p>
+                            </div>
+                          </template>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="Filter-Picklist-ondemand 1">
+                    <h3>{labels2.ccp2_vl_vehicle_type6}</h3>
+                    <div class="dropdown-input-container" onclick={toggleVehicleType}>
+                      <input class="dropdown-input-container-text" placeholder={labels2.ccp2_vl_PleaseSelect_11}
+                        type="text" value={vehicleTypeValue} readonly></input>
+                      <svg width="17" height="21" viewBox="0 0 20 21" fill="none" class="mm-drop-down-icon1"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_14998_62367)">
+                          <g filter="url(#filter0_d_14998_62367)">
+                            <path
+                              d="M17.5 7.3877L15.7375 5.48486L10 11.6657L4.2625 5.48486L2.5 7.3877L10 15.4849L17.5 7.3877Z"
+                              fill="#262626" />
+                          </g>
+                        </g>
+                        <defs>
+                          <filter id="filter0_d_14998_6236771_1" x="-17.5" y="-14.5151" width="55" height="50"
+                            filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                            <feColorMatrix in="SourceAlpha" type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                            <feOffset />
+                            <feGaussianBlur stdDeviation="10" />
+                            <feComposite in2="hardAlpha" operator="out" />
+                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" />
+                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_14998_62367" />
+                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_14998_62367"
+                              result="shape" />
+                          </filter>
+                          <clipPath id="clip0_14998_6236771_1">
+                            <rect width="20" height="20" fill="white" transform="translate(0 0.484863)" />
+                          </clipPath>
+                        </defs>
+                      </svg>
+
+                      <div class="dropdown-container" if:true={showVehicleTypeDropdown} onclick={handleinsideclick2}>
+                        <div class="mm-filter-dropdown1">
+                          <template for:each={vehicleTypesPicklistValues} for:item="elm">
+                            <div class="mm-filter-dropdown-rows1" key={elm.label}>
+                              <input type="checkbox" name={elm.label} class="input-filter-list-items"
+                                checked={elm.selected} onchange={handleVehicleTypeSelect} />
+                              <p>{elm.label}</p>
+                            </div>
+                          </template>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="Filter-ranges">
+                  <h3 style="margin-bottom: 10px; margin-top: 10px;">{labels2.ccp2_vl_mileage6}</h3>
+                  <div class="range-slider-filter-container">
+                    <div class="range-slider">
+                      <div class="slider-wrapper">
+                        <span class="output outputOne" data-id="Slider1">{rangeOneValueSlider1}</span>
+                        <span class="output1 output outputTwo" data-id="Slider1">{rangeTwoValueSlider1}</span>
+                        <span class="full-range" data-id="Slider1"></span>
+                        <span class={rangeClass1} lwc:dom="manual" data-id="Slider1"></span>
+                        <input name="rangeOne" data-id="Slider1" type="range" value={rangeOneValueSlider1} min="0"
+                          max="100" step={sliderConfigs.Slider1.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled1}>
+                        <input name="rangeTwo" data-id="Slider1" type="range" value={rangeTwoValueSlider1} min="0"
+                          max="100" step={sliderConfigs.Slider1.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled1}>
+                      </div>
+                    </div>
+                    <div class="checkbox-flg-filter-range margin-up">
+                      <input type="checkbox" class="filter-checkbox-color" data-id="checkboxslider1"
+                        onchange={handleAllRangeSelected} checked={slider1check}>
+                      <p>{labels2.ccp2_vl_over_1_million_km7}</p>
+                    </div>
+                  </div>
+                  <div class="range-slider-filter-container">
+                    <h3 style="margin-bottom: 10px; margin-top: 5px;">{labels2.ccp2_vl_years_from_first_registration7}
+                    </h3>
+                    <div class="range-slider">
+                      <div class="slider-wrapper">
+                        <span class="output outputOne" data-id="Slider3">{rangeOneValueSlider3}</span>
+                        <span class="output1 output outputTwo" data-id="Slider3">{rangeTwoValueSlider3}</span>
+                        <span class="full-range" data-id="Slider3"></span>
+                        <span class={rangeClass3} lwc:dom="manual" data-id="Slider3"></span>
+                        <input name="rangeOne" data-id="Slider3" type="range" value={rangeOneValueSlider3} min="0"
+                          max="100" step={sliderConfigs.Slider3.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled3}>
+                        <input name="rangeTwo" data-id="Slider3" type="range" value={rangeTwoValueSlider3} min="0"
+                          max="100" step={sliderConfigs.Slider3.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled3}>
+                      </div>
+                    </div>
+                    <div class="checkbox-flg-filter-range margin-up">
+                      <input type="checkbox" class="filter-checkbox-color" data-id="checkboxslider3"
+                        onchange={handleAllRangeSelected} checked={slider3check}>
+                      <p>{labels2.ccp2_vl_over_15_years7}</p>
+                    </div>
+                  </div>
+                  <div class="range-slider-filter-container">
+                    <h3 style="margin-bottom: 10px; margin-top: 5px;">{labels2.ccp2_vl_months_until_inspection_expiry7}
+                    </h3>
+                    <div class="range-slider">
+                      <div class="slider-wrapper">
+                        <span class="output outputOne" data-id="Slider2">{rangeOneValueSlider2}</span>
+                        <span class="output1 output outputTwo" data-id="Slider2">{rangeTwoValueSlider2}</span>
+                        <span class="full-range" data-id="Slider2"></span>
+                        <span class={rangeClass2} lwc:dom="manual" data-id="Slider2"></span>
+                        <input name="rangeOne" data-id="Slider2" type="range" value={rangeOneValueSlider2} min="0"
+                          max="100" step={sliderConfigs.Slider2.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled2}>
+                        <input name="rangeTwo" data-id="Slider2" type="range" value={rangeTwoValueSlider2} min="0"
+                          max="100" step={sliderConfigs.Slider2.step} oninput={handleRangeChange}
+                          disabled={isRangeDisabled2}>
+                      </div>
+                    </div>
+                    <div class="checkbox-flg-filter-range margin-up">
+                      <input type="checkbox" class="filter-checkbox-color" data-id="checkboxslider2"
+                        onchange={handleAllRangeSelected} checked={slider2check}>
+                      <p>{labels2.ccp2_vl_months_until_inspection_expiry_12months7}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="Filter-Flags">
+                  <div class="Flags-set">
+                    <h3 class="heading-filter-flag"><strong>{labels2.ccp2_vl_keyword7}</strong></h3>
+                    <div class="checkbox-flg-filter">
+                      <input type="checkbox" class="filter-checkbox-color" value="Recall" checked={recallflag}
+                        onchange={handleCheckboxChangeForPills}>
+                      <p>{labels2.ccp2_vl_new_market_action_target}</p>
+                    </div>
+                    <div class="checkbox-flg-filter">
+                      <input type="checkbox" class="filter-checkbox-color" value="LeaseValue" checked={LeaseFlag}>
+                      <p>{labels2.ccp2_vl_with_lease}</p>
+                    </div>
+                    <div class="checkbox-flg-filter">
+                      <input type="checkbox" class="filter-checkbox-color" value="TruckKonnect"
+                        checked={truckOnnectFlag} onchange={handleCheckboxChangeForPills}>
+                      <p>{labels2.ccp2_vl_with_truckonnect_contract7}</p>
+                    </div>
+                    <div class="checkbox-flg-filter">
+                      <input type="checkbox" class="filter-checkbox-color" value="VehicleInspExpNotf"
+                        checked={VehicleInspExpNotfFlag} onchange={handleCheckboxChangeForPills}>
+                      <p>{labels2.ccp2_vl_vehicle_inspection_expiration_notification}</p>
+                    </div>
+                    <div class="checkbox-flg-filter">
+                      <input type="checkbox" class="filter-checkbox-color" value="Delete" checked={deletedFlag}
+                        onchange={handleCheckboxChangeForPills}>
+                      <p>車両削除済み</p>
+                    </div>
+                  </div>
+                  <div class="Flags-set">
+                    <h3 class="heading-filter-flag"><strong>{labels2.ccp2_vl_maintenance_status7}</strong></h3>
+                    <div class="filter-checkbox-new">
+                      <div class="checkbox-flg-filter">
+                        <input type="checkbox" value="Option 1" disabled>{labels2.ccp2_vl_not_scheduled7}
+                      </div>
+                      <div class="checkbox-flg-filter">
+                        <input type="checkbox" value="Option 2" disabled>{labels2.ccp2_vl_temporary_registered7}
+                      </div>
+                      <div class="checkbox-flg-filter">
+                        <input type="checkbox" value="Option 3" disabled>{labels2.ccp2_vl_estimate_not_confirmed7}
+                      </div>
+                      <div class="checkbox-flg-filter">
+                        <input type="checkbox" value="Option 4" disabled>{labels2.ccp2_vl_scheduled7}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="buttons-filter-small">
+                <div class="filter-reset-button" onclick={handleResetofFilter}>
+                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18"
+                    height="25" viewBox="0 0 24 25">
+                    <image
+                      xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAZCAYAAAArK+5dAAAAAXNSR0IArs4c6QAAAfNJREFUSEvNVVFu2kAQnbEE33CDreQd+TM5QcMN0hOU3ICcgHCC9gakJwg9QegJwif2rlXfIHwb7U41aC1ZYGMnKlH8h5l5b97um2eECz94YXz4PARKqdFwOFyWZXlfFEXRV3kvBQI+GAyeEfGKmdfGmMl/I6iDCygzP3rvfzvnNn2UdCogoicAuG2aWMj2+/3iHFErgVJKSWOSJMp7/wwAKpCsEHHMzF+Dop33fpbn+a+mIRoJtNZXiPjinJtKY52EmTfGmOvw7gEAvguw935irV0fkzQSENHfMPEiyzIBgQC4YuapMWZTARGR/D8HgKIsy+uiKHZ1khMCrfUUEZfSkGXZlz5u0VqLw2689/fW2p9dBIdiZr4zxjz2ISAiMcFTk4VPFBDRKwCMyrIcH8ttIwtL+MrMO2PM+KwCImIpyLKs08J1oLa+j1dQu7BG2zUdU3UHiPgnTdObriM62O4tmUNELwAgOXVijJMjChcmezDy3j9YaxfnnBTH8TyKIhlK9mByHBtti3awXdjQRpIQgnNEnEmdc+5bnuerXpssRXEcz6Io+hEainBkd/Jba71ERBliFPKodWfOWlHiQRKzCrbKupUl5VIl6OrR0VtBvTAQ3aZpeoiBJEmmALDebredX7Y3LVOf2HiXgvcAVz0XV/APo2otKbuBn60AAAAASUVORK5CYII="
+                      x="0" y="0" width="24" height="25" />
+                  </svg>
+                  <p class="filter-reset-label">{labels2.ccp2_vl_reset7}</p>
+                </div>
+                <div class="searchbutton-download btn-Filter-Main" onclick={handleFilterSave}>
+                  <p class="buttontxt2">{labels2.ccp2_vl_save6}</p>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+        <template if:true={showVehicleDetails}>
+          <c-ccp2-_-vehicle-details vehicle-id={vehicleId} vehicle-icons={favIconForDetailPage}
+            onback={handleBack}></c-ccp2-_-vehicle-details>
+        </template>
+        <template if:true={showVehicleModal}>
+          <c-ccp2-vehicle-modal onclosemodal={handleCloseModal} onmovemodal={handlemoveModal}></c-ccp2-vehicle-modal>
+        </template>
+      </div>
+    </div>
+  </div>
+  <template if:true={showDownload}>
+    <div class="modal-background-last">
+      <div class="modal-window-small">
+        <div class="radio-button-container">
+          <h2 style="font-size: medium;">{labels2.ccp2_vl_2_download_vehicle_list_1}</h2>
+          <div class="options">
+            <input type="radio" class="Download-radio-buttons" name="color" value="option1" onchange={FilterOption}
+              checked={FilterFlag} />
+            <p class="radio-text">{labels2.ccp2_vl_2_download_vehicle_list}</p>
+          </div>
+          <div class="options">
+            <input type="radio" name="color2" class="Download-radio-buttons" value="option2" onchange={Alloption}
+              checked={AllFlag} />
+            <p class="radio-text">{labels2.ccp2_vl_2_all_vehicles}</p>
+          </div>
+        </div>
+        <div class="buttons-small-download">
+          <div class="cancelbutton-download btn-download" onclick={closeDownload}>
+            <p class="buttontxt">{labels2.ccp2_vl_cancel3}</p>
+          </div>
+          <div class="searchbutton-download btn-download" onclick={MovetoRename}>
+            <p class="buttontxt2">{labels2.ccp2_vl_next3}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={showDownloadPath}>
+    <div class="modal-background-last">
+      <div class="modal-window-small">
+        <div class="Download-name-container">
+          <p style="font-size: medium; margin-bottom: 10px;">{labels2.ccp2_vl_2_currently_displayed_vehicles_2}</p>
+          <p class="label-download">{labels2.ccp2_vl_file_name4}</p>
+          <input type="text" value={DownloadName} onchange={handleDownloadChange}
+            placeholder={labels2.ccp2_vl_EnterName_11} class="Download-name" />
+          <p class="label-end">{labels2.ccp2_vl_2_download_csv}</p>
+        </div>
+        <div class="buttons-small-download">
+          <div class="cancelbutton-download btn-download" onclick={closePathDownload}>
+            <p class="buttontxt">{labels2.ccp2_vl_cancel3}</p>
+          </div>
+          <div class="searchbutton-download btn-download" onclick={finaldownload}>
+            <p class="buttontxt2">{labels2.ccp2_vl_download1}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={showSuccessDownload}>
+    <div class="modal-background-last">
+      <div class="modal-window-small">
+        <div class="radio-button-container">
+          <h2 style="font-size: medium;">
+            {labels2.ccp2_vl_download_done5}</h2>
+        </div>
+        <div class="buttons-small-download">
+          <div class="searchbutton-download btn-download" onclick={closefinishtimemodal}>
+            <p class="buttontxt2">{labels2.ccp2_vl_yes6}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="modal-background-last">
+      <div class="modal-window-loader">
+        <p class="warntxt">
+          {labels2.ccp2_vl_download_done5}
+        </p>
+      </div>
+    </div>
+    <div class="buttons-small-download">
+              <div class="searchbutton-download btn-download" onclick={closefinishtimemodal}>
+                <p class="buttontxt2">{labels2.ccp2_vl_yes6}</p>
+              </div>
+            </div> -->
+  </template>
+  <!-- filter modal -->
+  <template if:true={showFilterModal}>
+    <div class="modal-background-filter-last">
+      <div class="modal-window-Filter-Modal">
+        <div class="Header-filter-modal">
+          <div class="Filter-heading"><strong> {labels2.ccp2_vl_detailed_search1}</strong></div>
+          <div class="Filter-btns">
+            <!-- @future <div class="Filter-header-button-Pin">
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18"
+                viewBox="0 0 24 24" class="input-filter-list-items" onclick={pinnedModal}>
+                <image
+                  xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAOVJREFUSEvtVd0NgyAQ5i7GZ7sBTZA5XKUT1G7QTtAV3MR0DM+HskH7bIw0mNhQI4JNjC/yRI7jvu9+PgC28oKV4zMngJTyyRjjgQQUER2nfLcDGNhIKbXZE9EPGZd9nIW3BzvAtiXinCdxHL8cTTb2pGmag1Lq7Rrn2QyEEDki3gHgUVVVZgdJ07QEAGO7EdF1EYBhHkXRGRH7i1rrU13XhR1ECJEhYmlsXddd2rYtpjKZzGAYzUAVf93GWjEH2wC4mIeq177vHVPbeQfwDs1eopAS9cqeexoWfzheVI/DIh38A/YBQAyEGYq04VcAAAAASUVORK5CYII="
+                  x="0" y="0" width="24" height="24" />
+              </svg>
+            </div> -->
+            <div class="Filter-header-button-close">
+              <lightning-icon icon-name='utility:close' alternative-text='close' size='x-small'
+                onclick={closeFilterModal} class="closeIcon"></lightning-icon>
+            </div>
+          </div>
+        </div>
+        <div class="Filter-Name-container">
+          <div class="Filter-Picklists">
+            <div class="Filter-Picklist-ondemand 1">
+              <h3>{labels2.ccp2_vl_vehicle_name6}</h3>
+              <div class="dropdown-input-container" onclick={toggleVehicleName}>
+                <input class="dropdown-input-container-text" placeholder={labels2.ccp2_vl_PleaseSelect_11} type="text"
+                  value={vehicleNameValue} readonly></input>
+                <svg width="17" height="21" viewBox="0 0 20 21" fill="none" class="mm-drop-down-icon1"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_14998_62367)">
+                    <g filter="url(#filter0_d_14998_62367)">
+                      <path
+                        d="M17.5 7.3877L15.7375 5.48486L10 11.6657L4.2625 5.48486L2.5 7.3877L10 15.4849L17.5 7.3877Z"
+                        fill="#262626" />
+                    </g>
+                  </g>
+                  <defs>
+                    <filter id="filter0_d_14998_623677_21" x="-17.5" y="-14.5151" width="55" height="50"
+                      filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                        result="hardAlpha" />
+                      <feOffset />
+                      <feGaussianBlur stdDeviation="10" />
+                      <feComposite in2="hardAlpha" operator="out" />
+                      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" />
+                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_14998_62367" />
+                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_14998_62367" result="shape" />
+                    </filter>
+                    <clipPath id="clip0_14998_623677_21">
+                      <rect width="20" height="20" fill="white" transform="translate(0 0.484863)" />
+                    </clipPath>
+                  </defs>
+                </svg>
+
+                <div class="dropdown-container" if:true={showVehicleNameDropdown} onclick={handleinsideclick}>
+                  <div class="mm-filter-dropdown">
+                    <template for:each={vehicleNamesPicklistValues} for:item="elm">
+                      <div class="mm-filter-dropdown-rows" key={elm.label}>
+                        <input type="checkbox" name={elm.label} class="input-filter-list-items" checked={elm.selected}
+                          onchange={handleVehicleNameSelect} />
+                        <p>{elm.label}</p>
+                      </div>
+                    </template>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="Filter-Picklist-ondemand 1">
+              <h3>{labels2.ccp2_vl_vehicle_type6}</h3>
+              <div class="dropdown-input-container" onclick={toggleVehicleType}>
+                <input class="dropdown-input-container-text" placeholder={labels2.ccp2_vl_PleaseSelect_11} type="text"
+                  value={vehicleTypeValue} readonly></input>
+                <svg width="17" height="21" viewBox="0 0 20 21" fill="none" class="mm-drop-down-icon1"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_14998_62367)">
+                    <g filter="url(#filter0_d_14998_62367)">
+                      <path
+                        d="M17.5 7.3877L15.7375 5.48486L10 11.6657L4.2625 5.48486L2.5 7.3877L10 15.4849L17.5 7.3877Z"
+                        fill="#262626" />
+                    </g>
+                  </g>
+                  <defs>
+                    <filter id="filter0_d_14998_6236771_12" x="-17.5" y="-14.5151" width="55" height="50"
+                      filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                        result="hardAlpha" />
+                      <feOffset />
+                      <feGaussianBlur stdDeviation="10" />
+                      <feComposite in2="hardAlpha" operator="out" />
+                      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" />
+                      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_14998_62367" />
+                      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_14998_62367" result="shape" />
+                    </filter>
+                    <clipPath id="clip0_14998_6236771_12">
+                      <rect width="20" height="20" fill="white" transform="translate(0 0.484863)" />
+                    </clipPath>
+                  </defs>
+                </svg>
+
+                <div class="dropdown-container" if:true={showVehicleTypeDropdown} onclick={handleinsideclick2}>
+                  <div class="mm-filter-dropdown1">
+                    <template for:each={vehicleTypesPicklistValues} for:item="elm">
+                      <div class="mm-filter-dropdown-rows1" key={elm.label}>
+                        <input type="checkbox" name={elm.label} class="input-filter-list-items" checked={elm.selected}
+                          onchange={handleVehicleTypeSelect} />
+                        <p>{elm.label}</p>
+                      </div>
+                    </template>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="Filter-ranges">
+            <h3 style="margin-bottom: 10px; margin-top: 10px;">{labels2.ccp2_vl_mileage6}</h3>
+            <div class="range-slider-filter-container">
+              <div class="range-slider">
+                <div class="slider-wrapper">
+                  <span class="output outputOne" data-id="Slider1">{rangeOneValueSlider1}</span>
+                  <span class="output1 output outputTwo" data-id="Slider1">{rangeTwoValueSlider1}</span>
+                  <span class="full-range" data-id="Slider1"></span>
+                  <span class={rangeClass1} lwc:dom="manual" data-id="Slider1"></span>
+                  <input name="rangeOne" data-id="Slider1" type="range" value={rangeOneValueSlider1} min="0" max="100"
+                    step={sliderConfigs.Slider1.step} oninput={handleRangeChange} disabled={isRangeDisabled1}>
+                  <input name="rangeTwo" data-id="Slider1" type="range" value={rangeTwoValueSlider1} min="0" max="100"
+                    step={sliderConfigs.Slider1.step} oninput={handleRangeChange} disabled={isRangeDisabled1}>
+                </div>
+              </div>
+              <div class="checkbox-flg-filter-range margin-up">
+                <input type="checkbox" class="filter-checkbox-color" data-id="checkboxslider1"
+                  onchange={handleAllRangeSelected} checked={slider1check}>
+                <p>{labels2.ccp2_vl_over_1_million_km7}</p>
+              </div>
+            </div>
+            <div class="range-slider-filter-container">
+              <h3 style="margin-bottom: 10px; margin-top: 5px;">{labels2.ccp2_vl_years_from_first_registration7}</h3>
+              <div class="range-slider">
+                <div class="slider-wrapper">
+                  <span class="output outputOne" data-id="Slider3">{rangeOneValueSlider3}</span>
+                  <span class="output1 output outputTwo" data-id="Slider3">{rangeTwoValueSlider3}</span>
+                  <span class="full-range" data-id="Slider3"></span>
+                  <span class={rangeClass3} lwc:dom="manual" data-id="Slider3"></span>
+                  <input name="rangeOne" data-id="Slider3" type="range" value={rangeOneValueSlider3} min="0" max="100"
+                    step={sliderConfigs.Slider3.step} oninput={handleRangeChange} disabled={isRangeDisabled3}>
+                  <input name="rangeTwo" data-id="Slider3" type="range" value={rangeTwoValueSlider3} min="0" max="100"
+                    step={sliderConfigs.Slider3.step} oninput={handleRangeChange} disabled={isRangeDisabled3}>
+                </div>
+              </div>
+              <div class="checkbox-flg-filter-range margin-up">
+                <input type="checkbox" class="filter-checkbox-color" data-id="checkboxslider3"
+                  onchange={handleAllRangeSelected} checked={slider3check}>
+                <p>{labels2.ccp2_vl_over_15_years7}</p>
+              </div>
+            </div>
+            <div class="range-slider-filter-container">
+              <h3 style="margin-bottom: 10px; margin-top: 5px;">{labels2.ccp2_vl_months_until_inspection_expiry7}</h3>
+              <div class="range-slider">
+                <div class="slider-wrapper">
+                  <span class="output outputOne" data-id="Slider2">{rangeOneValueSlider2}</span>
+                  <span class="output1 output outputTwo" data-id="Slider2">{rangeTwoValueSlider2}</span>
+                  <span class="full-range" data-id="Slider2"></span>
+                  <span class={rangeClass2} lwc:dom="manual" data-id="Slider2"></span>
+                  <input name="rangeOne" data-id="Slider2" type="range" value={rangeOneValueSlider2} min="0" max="100"
+                    step={sliderConfigs.Slider2.step} oninput={handleRangeChange} disabled={isRangeDisabled2}>
+                  <input name="rangeTwo" data-id="Slider2" type="range" value={rangeTwoValueSlider2} min="0" max="100"
+                    step={sliderConfigs.Slider2.step} oninput={handleRangeChange} disabled={isRangeDisabled2}>
+                </div>
+              </div>
+              <div class="checkbox-flg-filter-range margin-up">
+                <input type="checkbox" class="filter-checkbox-color" data-id="checkboxslider2"
+                  onchange={handleAllRangeSelected} checked={slider2check}>
+                <p>{labels2.ccp2_vl_months_until_inspection_expiry_12months7}</p>
+              </div>
+            </div>
+          </div>
+          <div class="Filter-Flags">
+            <div class="Flags-set">
+              <h3 class="heading-filter-flag"><strong>{labels2.ccp2_vl_keyword7}</strong></h3>
+              <div class="checkbox-flg-filter">
+                <input type="checkbox" class="filter-checkbox-color" value="Recall" checked={recallflag}
+                  onchange={handleCheckboxChangeForPills}>
+                <p>{labels2.ccp2_vl_new_market_action_target}</p>
+              </div>
+              <div class="checkbox-flg-filter">
+                <input type="checkbox" class="filter-checkbox-color" value="Lease" checked={LeaseFlag}
+                  onchange={handleCheckboxChangeForPills}>
+                <p>{labels2.ccp2_vl_with_lease}</p>
+              </div>
+              <div class="checkbox-flg-filter">
+                <input type="checkbox" class="filter-checkbox-color" value="TruckKonnect" checked={truckOnnectFlag}
+                  onchange={handleCheckboxChangeForPills}>
+                <p>{labels2.ccp2_vl_with_truckonnect_contract7}</p>
+              </div>
+              <div class="checkbox-flg-filter">
+                <input type="checkbox" class="filter-checkbox-color" value="VehicleInspExpNotf"
+                  checked={VehicleInspExpNotfFlag} onchange={handleCheckboxChangeForPills}>
+                <p>{labels2.ccp2_vl_vehicle_inspection_expiration_notification}</p>
+              </div>
+              <div class="checkbox-flg-filter">
+                <input type="checkbox" class="filter-checkbox-color" value="Delete" checked={deletedFlag}
+                  onchange={handleCheckboxChangeForPills}>
+                <p>車両削除済み</p>
+              </div>
+            </div>
+            <div class="Flags-set">
+              <h3 class="heading-filter-flag"><strong>{labels2.ccp2_vl_maintenance_status7}</strong></h3>
+              <div class="filter-checkbox-new">
+                <div class="checkbox-flg-filter">
+                  <input type="checkbox" value="Option 1" disabled>{labels2.ccp2_vl_not_scheduled7}
+                </div>
+                <div class="checkbox-flg-filter">
+                  <input type="checkbox" value="Option 2" disabled>{labels2.ccp2_vl_temporary_registered7}
+                </div>
+                <div class="checkbox-flg-filter">
+                  <input type="checkbox" value="Option 3" disabled>{labels2.ccp2_vl_estimate_not_confirmed7}
+                </div>
+                <div class="checkbox-flg-filter">
+                  <input type="checkbox" value="Option 4" disabled>{labels2.ccp2_vl_scheduled7}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="buttons-filter-small">
+          <div class="filter-reset-button" onclick={handleResetofFilter}>
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="25"
+              viewBox="0 0 24 25" class="input-filter-list-items">
+              <image
+                xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAZCAYAAAArK+5dAAAAAXNSR0IArs4c6QAAAfNJREFUSEvNVVFu2kAQnbEE33CDreQd+TM5QcMN0hOU3ICcgHCC9gakJwg9QegJwif2rlXfIHwb7U41aC1ZYGMnKlH8h5l5b97um2eECz94YXz4PARKqdFwOFyWZXlfFEXRV3kvBQI+GAyeEfGKmdfGmMl/I6iDCygzP3rvfzvnNn2UdCogoicAuG2aWMj2+/3iHFErgVJKSWOSJMp7/wwAKpCsEHHMzF+Dop33fpbn+a+mIRoJtNZXiPjinJtKY52EmTfGmOvw7gEAvguw935irV0fkzQSENHfMPEiyzIBgQC4YuapMWZTARGR/D8HgKIsy+uiKHZ1khMCrfUUEZfSkGXZlz5u0VqLw2689/fW2p9dBIdiZr4zxjz2ISAiMcFTk4VPFBDRKwCMyrIcH8ttIwtL+MrMO2PM+KwCImIpyLKs08J1oLa+j1dQu7BG2zUdU3UHiPgnTdObriM62O4tmUNELwAgOXVijJMjChcmezDy3j9YaxfnnBTH8TyKIhlK9mByHBtti3awXdjQRpIQgnNEnEmdc+5bnuerXpssRXEcz6Io+hEainBkd/Jba71ERBliFPKodWfOWlHiQRKzCrbKupUl5VIl6OrR0VtBvTAQ3aZpeoiBJEmmALDebredX7Y3LVOf2HiXgvcAVz0XV/APo2otKbuBn60AAAAASUVORK5CYII="
+                x="0" y="0" width="24" height="25" />
+            </svg>
+            <p class="filter-reset-label">{labels2.ccp2_vl_reset7}</p>
+          </div>
+          <div class="searchbutton-download btn-Filter-Main" onclick={handleFilterSave}>
+            <p class="buttontxt2">{labels2.ccp2_vl_save6}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <!-- delete modal with ids -->
+  <template if:true={isdeleteModalOpen}>
+    <div class="custom-modal-backdrop">
+      <div class="custom-modal">
+        <div class="custom-modal-header">
+          <h2 class="delete-header">
+            {labels2.ccp2_vl_confirm_vehicle_info_select_deleted6}
+          </h2>
+          <div class="pagination-container-delete">
+            <button class="chevron-btn" onclick={prevPage} disabled={isPrevDisableddelete}>
+              <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous"
+                size="xx-small"></lightning-icon>
+            </button>
+            <span class="cuurent-page-delete">{currentPageDisplaydelete}</span>
+            <span>/</span>
+            <span class="page-button-delete">{totalVehiclesdelete}</span>
+            <button class="chevron-btn" onclick={nextPage} disabled={isNextDisableddelete}>
+
+              <lightning-icon icon-name="utility:chevronright" alternative-text="Next" size="xx-small"></lightning-icon>
+            </button>
+          </div>
+        </div>
+        <div class="custom-modal-body">
+          <template if:true={currentVehicledelete}>
+            <div class="vehicle_child1">
+              <div class="vehicle_child1_container" style="border-right: 1px solid #00000014;">
+                <div class="vehicle_child1_list opacity">
+                  <h3>{labels2.ccp2_vl_customer_management_name6}</h3>
+                  <h3>{labels2.ccp2_vl_affiliation6}</h3>
+                  <h3>{labels2.ccp2_vl_vehicle_identification_number6}</h3>
+                  <h3>{labels2.ccp2_vl_registration_number6}</h3>
+                  <h3>{labels2.ccp2_vl_vehicle_certificate_issue_date6}</h3>
+                  <h3>{labels2.ccp2_vl_first_registration_date6}</h3>
+                  <h3>{labels2.ccp2_vl_expiration_date6}</h3>
+                  <h3>{labels2.ccp2_vl_private_or_commercial6}</h3>
+                  <h3>{labels2.ccp2_vl_vehicle_name6}</h3>
+                </div>
+                <!-- <template for:each={formattedVehicles} for:item="vehicle"> -->
+                <div class="vehicle_child1_list">
+                  <h3>{currentVehicledelete.Account__r.Name}</h3>
+                  <!-- <h3>{currentVehicledelete.branches}</h3> -->
+                  <div class="branches">
+                    <template if:true={currentVehicledelete.branchReal}>
+                      <h3 title={currentVehicledelete.branchReal}>
+                        {currentVehicledelete.branches}
+                      </h3>
+                      <template if:true={currentVehicledelete.morethanOneBranch}>
+                        <h3 class="branch-All" onclick={branchopen}>
+                          +{currentVehicledelete.onScreenBranchCount} ほか
+                        </h3>
+                      </template>
+                    </template>
+                    <template if:false={currentVehicledelete.branchReal}>
+                      <p>-</p>
+                    </template>
+                  </div>
+                  <template if:true={currentVehicledelete.Chassis_number__c}>
+                    <h3>{currentVehicledelete.Chassis_number__c}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.Chassis_number__c}>
+                    <p>-</p>
+                  </template>
+                  <template if:true={currentVehicledelete.Registration_Number__c}>
+                    <h3>{currentVehicledelete.Registration_Number__c}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.Registration_Number__c}>
+                    <p>-</p>
+                  </template>
+                  <template if:true={currentVehicledelete.Delivery_Date_del}>
+                    <h3>{currentVehicledelete.Delivery_Date_del}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.Delivery_Date_del}>
+                    <p>-</p>
+                  </template>
+                  <template if:true={currentVehicledelete.First_reg_del}>
+                    <h3>{currentVehicledelete.First_reg_del}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.First_reg_del}>
+                    <p>-</p>
+                  </template>
+                  <template if:true={currentVehicledelete.Expdate_del}>
+                    <h3>{currentVehicledelete.Expdate_del}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.Expdate_del}>
+                    <p>-</p>
+                  </template>
+                  <template if:true={currentVehicledelete.Private_Business_use__c}>
+                    <h3>{currentVehicledelete.Private_Business_use__c}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.Private_Business_use__c}>
+                    <p>-</p>
+                  </template>
+                  <template if:true={currentVehicledelete.Vehicle_Name__c}>
+                    <h3>{currentVehicledelete.Vehicle_Name__c}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.Vehicle_Name__c}>
+                    <p>-</p>
+                  </template>
+                </div>
+                <!-- </template> -->
+              </div>
+            </div>
+            <div class="vehicle_child1">
+              <div class="vehicle_child1_container">
+                <div class="vehicle_child1_list opacity">
+                  <h3>{labels2.ccp2_vl_vehicle_type6}</h3>
+                  <h3>{labels2.ccp2_vl_body_shape6}</h3>
+                  <h3>{labels2.ccp2_vl_usage6}</h3>
+                  <h3>{labels2.ccp2_vl_model6}</h3>
+                  <h3>{labels2.ccp2_vl_fuel_type6}</h3>
+                  <h3>{labels2.ccp2_vl_vehicle_weight6}</h3>
+                  <h3>{labels2.ccp2_vl_mileage6}</h3>
+                  <h3>{labels2.ccp2_vl_vehicle_certificate_image6}</h3>
+                </div>
+                <div class="vehicle_child1_list">
+                  <template if:true={currentVehicledelete.Vehicle_Type__c}>
+                    <h3>{currentVehicledelete.Vehicle_Type__c}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.Vehicle_Type__c}>
+                    <p>-</p>
+                  </template>
+
+                  <template if:true={currentVehicledelete.Body_Shape__c}>
+                    <h3>{currentVehicledelete.Body_Shape__c}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.Body_Shape__c}>
+                    <p>-</p>
+                  </template>
+
+                  <template if:true={currentVehicledelete.Use__c}>
+                    <h3>{currentVehicledelete.Use__c}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.Use__c}>
+                    <p>-</p>
+                  </template>
+
+                  <template if:true={currentVehicledelete.fullModel__c}>
+                    <h3>{currentVehicledelete.fullModel__c}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.fullModel__c}>
+                    <p>-</p>
+                  </template>
+
+                  <template if:true={currentVehicledelete.Fuel_Type__c}>
+                    <h3>{currentVehicledelete.Fuel_Type__c}</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.Fuel_Type__c}>
+                    <p>-</p>
+                  </template>
+
+                  <template if:true={currentVehicledelete.vehicleWeight__c}>
+                    <h3>{currentVehicledelete.vehicleWeight__c} Kg</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.vehicleWeight__c}>
+                    <p>-</p>
+                  </template>
+
+                  <template if:true={currentVehicledelete.Mileage__c}>
+                    <h3>{currentVehicledelete.Mileage__c} Km</h3>
+                  </template>
+                  <template if:false={currentVehicledelete.Mileage__c}>
+                    <p>-</p>
+                  </template>
+
+                  <!-- <template for:each={currentVehicledelete.certificateTitleCount} for:item="certificate" for:index="certificateIndex">
+                    <p key={certificate} style="color: red; text-decoration: underline;">{certificate}</p>
+                  </template> -->
+                  <template if:true={currentVehicledelete.certificateTitleCount}>
+                    <h3 style="color: #e10202; text-decoration: underline;">{currentVehicledelete.certificateTitleCount}
+                    </h3>
+                  </template>
+                  <template if:false={currentVehicledelete.certificateTitleCount}>
+                    <p>-</p>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </template>
+
+        </div>
+        <div class="custom-modal-body-grey">
+          <div class="grey-delete-modal">
+            <!-- <p class="heading-overpicklist">保有状態</p> -->
+            <div class="Delete-vehicle-picklists">
+              <div class="Delete-vehicle-picklists-container">
+                <div class="Delete-records">
+                  <h3 style="margin-bottom: 5px">{labels2.ccp2_vl_ownership_status6}</h3>
+                  <div class="Delete-vehicle-Picklist-1">
+                    <input type="text" onclick={OpenStatusList} autocomplete="off" class="Inputsdelete icon"
+                      placeholder="Enter PlaceHolder" value={SelectedStatus} name="EnterName" readonly />
+                    <template if:true={ShowStatusList}>
+                      <div class="l1 listsdelete no-scroll" name="StatusPickList" onclick={handleInsideClick}>
+                        <template for:each={StatusOptions} for:item="poi">
+                          <div key={poi.label} class="list-item" onclick={handleStatusSelect} data-namee="enterName"
+                            data-idd={poi.label}>
+                            <p data-namee="statusList" data-idd={poi.label}>
+                              {poi.label}
+                            </p>
+                          </div>
+                        </template>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+                <div class="Delete-records">
+                  <template if:true={vehgoesdeletion}>
+                    <h3 style="margin-bottom: 5px">{labels2.ccp2_vl_DeletionReason_11}</h3>
+                    <div class="Delete-vehicle-Picklist-2">
+                      <input type="text" onclick={OpenreasonList} autocomplete="off" class="Inputsdelete icon"
+                        placeholder={labels2.ccp2_vl_PleaseSelect_11} value={selectedReason} name="EnterName"
+                        readonly />
+                      <template if:true={showreasonofdeletelist}>
+                        <div class="l2 listsdelete no-scroll" name="ReasonPickList" onclick={handleInsideClick}>
+                          <template for:each={reasonOptions} for:item="poi">
+                            <div key={poi.label} class="list-item" onclick={handleReasonSelect} data-namee="enterName"
+                              data-idd={poi.label}>
+                              <p data-namee="reasonList" data-idd={poi.label}>
+                                {poi.label}
+                              </p>
+                            </div>
+                          </template>
+                        </div>
+                      </template>
+                    </div>
+                  </template>
+                </div>
+                <div class="Delete-records">
+                  <template if:true={vehicledeletedescription}>
+                    <div class="Delete-vehicle-description">
+                      <input type="text" class="Inputsdescrption" oninput={handledeletedescription}
+                        placeholder={labels2.ccp2_vl_30CharactersMax_11} value={deletedescription} name="EnterName"
+                        maxlength="30" />
+                    </div>
+                  </template>
+                </div>
+              </div>
+              <div class="Delete-vehicle-warning">
+                <p class="warning-text">
+                  {labels2.ccp2_vl_deleted_vehicle_info_recoverable6}
+                </p>
+              </div>
+              <div class="Delete-vehicle-footer">
+                <template if:false={isComplete}>
+                  <div class="cancelbutton-delete btn-delete" onclick={canceldeleteveh}>
+                    <p class="buttontxt-delete">{labels2.ccp2_vl_cancel3}</p>
+                  </div>
+                </template>
+                <template if:true={isComplete}>
+                  <div class="cancelbutton-delete btn-delete" onclick={handleComplatedelete}>
+                    <p class="buttontxt-delete" data-id={currentVehicledelete.Id}>{labels2.ccp2_vl_Completed_12}</p>
+                  </div>
+                </template>
+
+                <template if:true={allselectedDeleted}>
+                  <div class="searchbutton-delete btn-delete" onclick={finaldeleteveh}
+                    data-id={currentVehicledelete.Id}>
+                    <p class="buttontxt2-delete">{labels2.ccp2_vl_save6}</p>
+                  </div>
+                </template>
+                <template if:false={allselectedDeleted}>
+                  <template if:false={isSaveddelete}>
+                    <div class="searchbutton-delete-disabled btn-delete">
+                      <p class="buttontxt2-delete">{labels2.ccp2_vl_save6}</p>
+                    </div>
+                  </template>
+                  <template if:true={isSaveddelete}>
+                    <div class="searchbutton-delete-disabled btn-delete">
+                      <p class="buttontxt2-delete">{labels2.ccp2_vl_Saved_11}</p>
+                    </div>
+                  </template>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </template>
+  <template if:true={openconfmodaldelete}>
+    <div class="modal-background-last-conf">
+      <div class="modal-window-small">
+        <div class="Delete-name-container">
+          <h3>{labels2.ccp2_vl_not_saved_exit6}</h3>
+          <h3>{labels2.ccp2_vl_not_saved_exit6_part2}</h3>
+        </div>
+        <div class="buttons-small">
+          <div class="cancelbutton-download btn-download" onclick={handlecanceldelete}>
+            <p class="buttontxt">{labels2.ccp2_vl_no6}</p>
+          </div>
+          <div class="searchbutton-download btn-download" onclick={handleyesnextdelete}>
+            <p class="buttontxt2">{labels2.ccp2_vl_yes6}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={showModalsmall}>
+    <div class="modal-background-last">
+      <div class="modal-window-loader">
+        <p class="warntxt">{labels2.ccp2_vl_delete10}</p>
+      </div>
+    </div>
+  </template>
+  <template if:true={BranchesModal}>
+    <div class="modal-background">
+      <div class="modal-window-branch">
+        <div class="modal-header-branch">
+          <div class="count">
+            <h1>{currentVehicledelete.totalbranchcountDel}</h1>
+            <h1 style="font-weight: bold">{labels2.ccp2_vl_affiliation6_2}</h1>
+          </div>
+          <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Close" onclick={branchClose}
+            class="close-button-branch">
+          </lightning-icon>
+        </div>
+        <div class="branch-container">
+          <template for:each={currentVehicledelete.allbranches} for:item="branch">
+            <div key={branch.Id} class="branch-card">
+              <P title={branch.Name}>
+                <strong>⋅</strong> {branch.Name}
+              </P>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={completeconfirmModal}>
+    <div class="modal-background-last-conf">
+      <div class="modal-window-small">
+        <div class="Delete-name-container">
+          <h3>{labels2.ccp2_vl_UnchangedVehicles_11}</h3>
+          <h3>{labels2.ccp2_vl_UnchangedVehicles2_11}</h3>
+        </div>
+        <div class="buttons-small">
+          <div class="cancelbutton-download btn-download" onclick={handlecompleteno}>
+            <p class="buttontxt">{labels2.ccp2_vl_no6}</p>
+          </div>
+          <div class="searchbutton-download btn-download" onclick={handlecompleteyes}>
+            <p class="buttontxt2">{labels2.ccp2_vl_yes6}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={cancelmodaldeletevehicle}>
+    <div class="modal-background-last-conf">
+      <div class="modal-window-small">
+        <div class="Delete-name-container">
+          <h3>{labels2.ccp2_vl_not_saved_exit6}</h3>
+          <h3>{labels2.ccp2_vl_not_saved_exit6_part2}</h3>
+        </div>
+        <div class="buttons-small">
+          <div class="cancelbutton-download btn-download" onclick={handlecanceldeleteno}>
+            <p class="buttontxt">{labels2.ccp2_vl_no6}</p>
+          </div>
+          <div class="searchbutton-download btn-download" onclick={handlecanceldeleteyes}>
+            <p class="buttontxt2">{labels2.ccp2_vl_yes6}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+</template>

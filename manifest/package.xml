@@ -2,11 +2,7 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>      
         <!--
-        <members>ccp2AddBranchForm</members>
         <members>ccp_UserProfile</members>
-        <members>ccp2cancelMembership </members>
-        <members>ccp_AddUser</members>
-        <members>ccp2UserManagement </members>
         <members>ccp2BranchRecordDetail</members>
         <members>ccp2DeleteBranch</members>
         <members>ccp2VehicleMaintainenceForm</members>
@@ -20,26 +16,38 @@
         <members>ccp2_branch</members>
         <members>ccp2cancelMembership</members>
         <members>ccp2UserManagement</members>
-        <members>ccp2VehicleModal</members>
         <members>ccp2DeleteBranch</members>
-        <members>ccp2_VehicleDetails</members>
-        <members>ccp2_VehicleListNew</members>
         <members>ccp2BranchRecordDetail</members>
         <members>ccp_UserProfile</members>
         <members>ccp_Home</members>
         <members>ccp2_dtfsa</members>
         <members>ccp2_NotificationsCentre</members>
         <members>ccp2VehicleMaintainenceForm</members>
-        <members>ccp2_FusoHeader</members>
         <members>ccp2_DemoChart</members>
-        <members>ccp2_FusoFooter</members>
-        <members>ccp2_MaintenanceHistory</members>
         <members>ccp2_ManualInput</members>
-        <members>ccp2_VehicleImageUpload</members>
-        <members>ccp2_Einvoice</members>
         <members>ccp2_VehicleMaintenanceCalendar</members>
-        -->
         <members>ccp2_Home</members>
+        <members>CCP2_Trial</members>
+        <name>ApexClass</name>
+        <members>ccp2_VehicleDashboard</members>
+        <members>ccp2_VehicleDetails</members>
+        <members>ccp2_FusoHeader</members>
+        <members>ccp2_VehicleListNew</members>
+        <members>ccp2_VehicleImageUpload</members>
+        <members>ccp2_Faq</members>
+        <members>ccp2_Einvoice</members>
+        <members>ccp2cancelMembership </members>
+        <members>ccp2_Enquiry</members>
+        <members>ccp_FusoFooter</members>
+        <members>ccp2_MaintenanceHistory</members>
+        <members>ccp2_LandingPage</members>
+        <members>ccp2UserManagement </members>
+        <members>ccp_AddUser</members>
+        <members>ccp2VehicleModal</members>
+        <members>ccp2AddBranchForm</members>
+        -->
+
+        <members>ccp2_createHistoryMaintain</members>
         <name>LightningComponentBundle</name>
     </types> 
     <version>59.0</version>
