@@ -356,8 +356,20 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       this.vehicleStoredData = data.vehicles.map((elm, itr) => {
         const ellipseRegNum = this.substringToProperLength(
           elm.Registration_Number__c,
-          17
+          13
         );
+        const ellipseDoorNumber = this.substringToProperLength(
+          elm?.vehicle?.Door_Number__c,
+          13
+        );
+
+        const combinedNameType =
+          elm?.vehicle?.Vehicle_Name__c + " - " + elm?.vehicle?.Vehicle_Type__c;
+        const ellipseCombinedNameType = this.substringToProperLength(
+          combinedNameType,
+          15
+        );
+
         let dates = elm?.dates.map((dateElm, index) => {
           let classForBoxes = dateElm.classForBoxes;
           if (itr === 0 && index === 0)
@@ -425,7 +437,10 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         return {
           ...elm,
           dates: dates,
-          ellipseRegNum: ellipseRegNum
+          ellipseRegNum: ellipseRegNum,
+          ellipseDoorNumber: ellipseDoorNumber,
+          combinedNameType: combinedNameType,
+          ellipseCombinedNameType: ellipseCombinedNameType
         };
       });
 
@@ -481,6 +496,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   }
 
   substringToProperLength(string, limit) {
+    if (string === undefined || string === null) return "";
     let tempString = "";
     let charCount = 0;
 
@@ -699,7 +715,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   //   console.log("h");
   // }
 
-
   handleCalendarPrevClick() {
     this.isLoading = true;
 
@@ -753,10 +768,8 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       // startDate2.setDate(nowDate.getDate()); // Ensuring a 30-day range
       this.startDate = startDate2;
 
-
       // this.startDate = nowDate;
 
-      
       this.currentPage -= 1;
       setTimeout(() => {
         this.currentPage += 1;
@@ -924,9 +937,9 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   closeMVehicleModal() {
     this.currentPage -= 1;
 
-      setTimeout(() => {
-        this.currentPage += 1;
-      }, 0);
+    setTimeout(() => {
+      this.currentPage += 1;
+    }, 0);
     this.showVehicleModal = false;
   }
   calendertooglesmall() {

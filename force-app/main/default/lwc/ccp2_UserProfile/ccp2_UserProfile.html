@@ -1,0 +1,162 @@
+<template>
+    <div class="main">
+        <div class="half top">
+            <img src={backgroundImagePC} class="main_image" alt="background_Image" />
+        </div>
+        <div class="half bottom"> 
+            <div class="center-content">
+                <div class="main-content">
+                    <div class="heading">
+                        {labels2.ccp_up_basic_info}
+                    </div>
+                    <div class="account-info">
+                        <div class="acc-left">
+                            <div class="account-text">
+                                <p class="acc-label">{labels2.ccp_up_company_name}</p>
+                                <p>{userDetailData.accountname}</p>
+                            </div>                        
+                            <div class="account-text">
+                                <p class="acc-label">{labels2.ccp_up_customer_number}</p>
+                                <p>{userDetailData.siebelAccountCode}</p>
+                            </div>                        
+                        </div>
+                        <div style="display: flex; align-items:end;">
+                            <button class="edit-button">{labels2.ccp_up_edit}</button>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="user-info">
+                            <div class="user-info-head">
+                                <p>{labels2.ccp2_up_userInfo}</p>
+                            </div>
+                            <div class="data-div">
+                                <div class="left-div" style="border-right: 1px solid #D9D9D9;">
+                                    <div class="info-rec">
+                                        <p class="info-label">{labels2.ccp_up_name}</p>
+                                        <p class="info-text">{userDetailData.lastName} {userDetailData.firstName}</p>
+                                    </div>
+                                    <div class="info-rec">
+                                        <p class="info-label">{labels2.ccp_up_name_furigana}</p>
+                                        <p class="info-text">{userDetailData.lastNameKana} {userDetailData.firstNameKana}</p>
+                                    </div>
+                                    <div class="info-rec">
+                                        <p class="info-label">{labels2.ccp_up_employee_number}</p>
+                                        <p class="info-text">{userDetailData.Employee_Code}</p>
+                                    </div>
+                                    <div class="info-rec">
+                                        <p class="info-label">{labels2.ccp_up_phone_number}</p>
+                                        <p class="info-text">{userDetailData.Phone}</p>
+                                    </div>
+                                    <div class="info-rec">
+                                        <p class="info-label">{labels2.ccp_up_email}</p>
+                                        <p class="info-text">{userDetailData.email}</p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="right-div">
+                                    <div class="info-rec">
+                                        <p class="info-label">{labels2.ccp_up_position}</p>
+                                        <p class="info-text">{userDetailData.Title}</p>
+                                    </div>
+                                    <div class="info-rec">
+                                        <p class="info-label">{labels2.ccp_up_affiliation}</p>
+                                        <div class="info-text">
+                                            <div class="data-branch2">
+                                                <template for:each={userDetailData.Branchs} for:item="branch">
+                                                    <li key={branch} style="list-style: none;" class="data">{branch}</li>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="info-rec">
+                                        <p class="info-label">{labels2.ccp_up_department}</p>
+                                        <p class="info-text">{userDetailData.Department}</p>
+                                    </div>
+                                    <div class="info-rec">
+                                        <p class="info-label">{labels2.ccp_up_mobile_number}</p>
+                                        <p class="info-text">{userDetailData.MobilePhone}</p>
+                                    </div>
+                                    <template if:false={showcanceledit}>
+                                    </template>
+                                    <template if:true={showcanceledit}>
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp_up_preferred_contact_time}</p>
+                                            <div class="info-text">
+                                                <div class="conv-times">
+                                                    <div class="time-value">
+                                                        <p>
+                                                            {labels2.ccp_up_weekdays}
+                                                        </p>
+                                                        <p>
+                                                            {startwork} {labels2.ccp_up_2_time} ~ {endwork} {labels2.ccp_up_2_time}
+                                                        </p>
+                                                    </div>
+                                                    <div class="time-value">
+                                                        <p>
+                                                            {labels2.ccp_up_weekdays}
+                                                        </p>
+                                                        <p>
+                                                            {startwork} {labels2.ccp_up_2_time} ~ {endwork} {labels2.ccp_up_2_time}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-info-head">
+                                <p>{labels2.ccp2_up_servused}</p>
+                            </div>
+                            <div class="services-data">
+                                <div style="flex-wrap: wrap; display: flex; gap:20px">
+                                    <template for:each={servicesArray} for:item="ser">
+                                        <div key={ser} class="serv-items">{ser}</div>
+                                    </template>
+                                </div>
+                                <template if:true={showcanceledit}>
+                                    <div>
+                                        <button class="stop-serv">{labels2.ccp2_up_stopServ}</button>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-info-head">
+                                <p>{labels2.ccp2_up_notifSet}</p>
+                            </div>
+                            <div class="notification">
+                                <div class="notif-head">
+                                    <p>{labels2.ccp2__up_2_inspectionNotification}</p>
+                                    <p>{isNotifOnorOff}</p>
+                                </div>
+                                <template if:true={notificationBlock}>
+                                    <div class="notif-content">
+                                        <div style="padding-bottom:8px; border-bottom: 1px solid var(--Gray-line, #D9D9D9)">{labels2.ccp2__up_2_AdvNotif}</div>
+                                        <div class="notif-dates">
+                                            <p class="acc-label">{labels2.ccp2__up_2_notifTarget}</p>
+                                            <p>{notificationMessage}</p>
+                                        </div>
+                                        <div class="notif-dates">
+                                            <p class="acc-label">{labels2.ccp2__up_notifDate}</p>
+                                            <template if:true={notificationOption}>
+                                                <p>{selectedNotifdate}</p>
+                                            </template>
+                                            <template if:false={notificationOption}>
+                                                <p>{labels2.ccp2__up_anytimeNotiftobeDisp}</p>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

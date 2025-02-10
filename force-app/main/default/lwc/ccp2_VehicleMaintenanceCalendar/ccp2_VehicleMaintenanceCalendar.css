@@ -359,7 +359,7 @@
     align-items: baseline;
     /* flex-direction: column; */
     align-self: stretch;
-    border-radius: 8px;
+    border-radius: 5px;
     background: var(--White-white, #FFF);
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
     margin-right: 8px;
@@ -430,18 +430,18 @@
 }
 
 .left-radius-top{
-    border-top-left-radius: 10px;
+    border-top-left-radius: 5px;
 }
 
 .rigth-radius-top{
-    border-top-right-radius: 10px;
+    border-top-right-radius: 5px;
 }
 .left-radius-bottom{
-    border-bottom-left-radius: 10px;
+    border-bottom-left-radius: 5px;
 }
 
 .rigth-radius-bottom{
-    border-bottom-right-radius: 10px;
+    border-bottom-right-radius: 5px;
 }
 
 
@@ -469,6 +469,7 @@
 
 .card-text-instructions {
     font-size: 12px;
+    /* width: 80%; */
     color: var(--gray-text-1-bg, #7B7B7B);
 }
 

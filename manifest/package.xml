@@ -2,7 +2,6 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>      
         <!--
-        <members>ccp_UserProfile</members>
         <members>ccp2BranchRecordDetail</members>
         <members>ccp2DeleteBranch</members>
         <members>ccp2VehicleMaintainenceForm</members>
@@ -15,7 +14,6 @@
         <members>ccp2_BasicInfo</members>
         <members>ccp2_branch</members>
         <members>ccp2cancelMembership</members>
-        <members>ccp2UserManagement</members>
         <members>ccp2DeleteBranch</members>
         <members>ccp2BranchRecordDetail</members>
         <members>ccp_UserProfile</members>
@@ -35,7 +33,6 @@
         <members>ccp2cancelMembership </members>
         <members>ccp2_Enquiry</members>
         <members>ccp_FusoFooter</members>
-        <members>ccp2_MaintenanceHistory</members>
         <members>ccp2_LandingPage</members>
         <members>ccp2UserManagement </members>
         <members>ccp_AddUser</members>
@@ -45,9 +42,12 @@
         <members>ccp2_VehicleDetails</members>
         <members>ccp2_VehicleDashboard</members>
         <members>ccp2_DemoChart</members>
+        <members>ccp2_VehicleMaintenanceCalendar</members>
+        <members>ccp2_MaintenanceHistory</members>
+        <members>ccp2_UserProfile</members>
         -->
 
-        <members>ccp2_VehicleMaintenanceCalendar</members>
+        <members>ccp2UserManagement</members>
         <name>LightningComponentBundle</name>
     </types> 
     <version>59.0</version>

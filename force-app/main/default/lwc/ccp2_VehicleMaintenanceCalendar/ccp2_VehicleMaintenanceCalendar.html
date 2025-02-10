@@ -503,11 +503,12 @@
                                           <lightning-icon icon-name={elm.favIcon} class="back-icon-new"
                                              style="margin-top: 3px;" alternative-text="Star" size="x-small"
                                              data-vehicle-id={elm.Id}></lightning-icon>
-                                          <div class="Vehicle-Text" title={elm.Registration_Number__c}>
-                                             {elm.ellipseRegNum}
-                                             <P>{elm.vehicle.Door_Number__c}</P>
-                                             <p class="card-text-instructions">{elm.vehicle.Vehicle_Name__c} -
-                                                {elm.vehicle.Vehicle_Type__c}</p>
+                                          <div class="Vehicle-Text">
+                                             <p title={elm.Registration_Number__c} style="width:max-content;">{elm.ellipseRegNum}</p>
+                                             <P title={elm.vehicle.Door_Number__c} style="width:max-content;">{elm.ellipseDoorNumber}</P>
+                                             <p class="card-text-instructions" title={elm.combinedNameType}>{elm.ellipseCombinedNameType}</p>
+                                             <!-- <p class="card-text-instructions" title={elm.combinedNameType}>{elm.vehicle.Vehicle_Name__c} -
+                                                {elm.vehicle.Vehicle_Type__c}</p> -->
                                           </div>
                                        </div>
 
@@ -524,7 +525,7 @@
                                  <div class={date.classForBoxes} for:each={elm.dates} for:item="date" key={date.date}>
                                     <div for:each={date.maintenance} style="display: flex;" for:item="maintenance"
                                        key={maintenance.Id}>
-                                       <div class={maintenance.cssClass}
+                                       <div if:false={maintenance.showNulSpace} class={maintenance.cssClass}
                                           data-id={date.date} data-vehicle-id={elm.vehicle.Id}
                                           data-reg-no={elm.Registration_Number__c} onclick={openMaintainVehicleModal}
                                           style={maintenance.width}>
