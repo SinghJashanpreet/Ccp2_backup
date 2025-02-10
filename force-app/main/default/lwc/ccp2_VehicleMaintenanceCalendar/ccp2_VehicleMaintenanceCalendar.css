@@ -152,6 +152,14 @@
     display: flex;
 }
 
+.colorF {
+    background: #F4F4F4;
+}
+
+.fullF {
+    background-color: #BBBBBB;
+}
+
 .legend-title {
     color: var(--black-txt-bg, #262626);
     font-family: "Noto Sans JP";
@@ -347,16 +355,16 @@
 
 .calendar-middle-items-left {
     display: flex;
-    height: 40px;
     padding: 8px;
-    align-items: center;
-    gap: 7px;
+    align-items: baseline;
+    /* flex-direction: column; */
     align-self: stretch;
     border-radius: 8px;
     background: var(--White-white, #FFF);
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
     margin-right: 8px;
-    cursor: pointer;
+    justify-content: space-evenly;
+    margin: 2px 8px 2px 0px;
 }
 
 .Vehicle-Text {
@@ -369,14 +377,19 @@
     cursor: pointer;
 }
 
+.back-icon-new {
+    --sds-c-icon-color-foreground-default: #262626;
+    color: #262626;
+}
+
 .calendar-top-dates {
     display: flex;
-    gap: 4px;
+    margin-right: 14px;
     background-color: white;
 }
 
 .calendar-top-dates-items {
-    min-width: 40px;
+    min-width: 22px;
     height: 70px;
     flex: 1 1 calc(100% / 20 - 4px);
     border-radius: 4px;
@@ -389,23 +402,90 @@
     align-items: center;
 }
 
+.Calender-tile {
+    min-width: 20px;
+    min-height: 90px;
+    flex: 1 1 calc(100% / 20 - 4px);
+    background-color: #ffffff;
+    position: relative;
+    border: 1px solid #d9d9d9;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 2px 0;
+}
+
+
 .Calender-tile-grey {
-    min-width: 40px;
-    height: 40px;
+    min-width: 20px;
+    min-height: 90px;
     flex: 1 1 calc(100% / 20 - 4px);
     background-color: #F4F4F4;
-    border-radius: 5px;
+    position: relative;
+    border: 1px solid #d9d9d9;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 2px 0;
+}
+
+.left-radius-top{
+    border-top-left-radius: 10px;
+}
+
+.rigth-radius-top{
+    border-top-right-radius: 10px;
+}
+.left-radius-bottom{
+    border-bottom-left-radius: 10px;
+}
+
+.rigth-radius-bottom{
+    border-bottom-right-radius: 10px;
+}
+
+
+.calendar-vehicle-items {
+    width: 100%;
+    display: flex;
+    gap: 7px;
     position: relative;
 }
 
-.Calender-tile-white {
+.memo-tile {
+    display: flex;
+    width: 30px;
+    padding: 4px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid var(--Gray-line, #D9D9D9);
+    cursor: pointer;
+
+    position: absolute;
+    right: 0;
+    top: 38px;
+}
+
+.card-text-instructions {
+    font-size: 12px;
+    color: var(--gray-text-1-bg, #7B7B7B);
+}
+
+.vehicle-bottom-items-card {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+}
+
+/* .Calender-tile-white {
     min-width: 40px;
     height: 40px;
     flex: 1 1 calc(100% / 20 - 4px);
     background-color: #FAFAFA;
     border-radius: 5px;
     position: relative;
-}
+} */
 
 .top-days {
     font-weight: 700;
@@ -429,7 +509,7 @@
     font-weight: 700;
     background-color: #FEEEED;
     width: 100%;
-    height: 88%;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -440,12 +520,13 @@
     color: #E10202;
     font-size: 14px;
 }
+
 .top-days-holiday {
     font-size: 16px;
     color: #E10202;
     font-weight: 700;
     width: 100%;
-    height: 88%;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -510,7 +591,6 @@
     max-width: 90%;
     max-height: 90%;
     overflow: auto;
-    padding: 18px 28px;
 }
 
 .Data-record {
@@ -555,8 +635,14 @@
 
 .header-calender-modal {
     display: flex;
-    justify-content: flex-end;
-    padding: 0px 0px 12px 0px;
+    justify-content: space-between;
+    padding: 12px 24px;
+    min-width: 500px;
+    align-items: center;
+}
+.divider-main-to-be{
+    margin: 0px;
+    border-color: #d9d9d9;
 }
 
 .calender-information-card {
@@ -566,19 +652,24 @@
     margin-right: 8px;
     align-items: flex-start;
 }
-.footer-cal-right{
+
+.footer-cal-right {
     display: flex;
-    gap: 6px;
+    gap: 26px;
     align-items: center;
+    font-size: 16px;
 }
-.txt-new-normal{
+
+.txt-new-normal {
     color: var(--black-txt-bg, #262626);
     font-weight: 700;
 }
-.txt-new-grey{
+
+.txt-new-grey {
     color: var(--gray-text-1-bg, #7B7B7B);
     font-weight: 700;
 }
+
 .calender-buttons-information {
     display: flex;
     align-items: center;
@@ -706,6 +797,7 @@
     height: 8px;
     border-radius: 10px 10px 0px 0px;
 }
+
 .grey-color {
     display: flex;
     justify-content: space-between;
@@ -716,7 +808,7 @@
 }
 
 .grey-strip {
-    background:#bbbbbb;
+    background: #bbbbbb;
     display: flex;
     cursor: pointer;
     height: 8px;
@@ -1063,7 +1155,7 @@
 .prev-color-cover {
     position: absolute;
     width: 4px;
-    height: calc(50% + 4px);
+    height: 30px;
     top: calc(50% - 2px);
     left: -4px;
     background-color: white;
@@ -1072,16 +1164,14 @@
 
 .green-box {
     background-color: #EAF5DA;
-    padding-left: 4px;
-    font-size: 10px;
-    position: absolute;
+    padding-left: 2px;
+    font-size: 9px;
+    position: relative;
     cursor: pointer;
     display: flex;
     text-align: center;
     align-items: center;
-    left: 6px;
-    z-index: 1;
-    height: 100%;
+    height: 43px;
     width: 36px;
     text-wrap: nowrap;
     /* justify-content: center; */
@@ -1091,26 +1181,24 @@
 
 .green-box+p {
     background-color: #7BC01B;
-    height: 100%;
-    width: 6px;
+    height: 40px;
+    width: 4px;
     border-top-left-radius: 5px;
+    position: absolute;
     border-bottom-left-radius: 5px;
-    position: relative;
-    z-index: 1;
+    left: 1px;
 }
 
 .grey-box {
     background-color: #f4f4f4;
-    padding-left: 4px;
-    font-size: 10px;
-    position: absolute;
+    padding-left: 2px;
+    font-size: 9px;
+    position: relative;
     display: flex;
     text-align: center;
     align-items: center;
     cursor: pointer;
-    left: 6px;
-    z-index: 1;
-    height: 100%;
+    height: 43px;
     width: 36px;
     text-wrap: nowrap;
     /* justify-content: center; */
@@ -1120,22 +1208,22 @@
 
 .grey-box+p {
     background-color: #bbbbbb;
-    height: 100%;
-    width: 6px;
+    height: 43px;
+    width: 4px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-    position: relative;
-    z-index: 1;
+    position: absolute;
+    left: 1px;
 }
 
 .blue-box+p {
     background-color: #8095E4;
-    height: 100%;
-    width: 6px;
+    height: 43px;
+    width: 4px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-    position: relative;
-    z-index: 1;
+    position: absolute;
+    left: 1px;
 }
 
 /* .red-box+p {
@@ -1146,29 +1234,30 @@
     border-bottom-left-radius: 5px;
     position: relative;
     z-index: 1;
-} */
+    left: 2px;
+    } */
 
 .yellow-box+p {
     background-color: #FEBD17;
-    height: 100%;
-    width: 6px;
+    height: 43px;
+    width: 4px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
-    position: relative;
-    z-index: 1;
+    position: absolute;
+    left: 1px;
 }
 
 .blue-box {
     background-color: #EAEEFA;
-    padding-left: 4px;
-    font-size: 10px;
+    padding-left: 2px;
+    font-size: 9px;
     position: absolute;
     display: flex;
     text-align: center;
     align-items: center;
     left: 6px;
     z-index: 1;
-    height: 100%;
+    height: 43px;
     width: 36px;
     text-wrap: nowrap;
     /* justify-content: center; */
@@ -1193,28 +1282,42 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 } */
- .red-box {
-     position: absolute;
-     right: 2px;
-     top: 2px;
-     z-index: 6;
- }
- .input-filter-list-items {
+.red-box {
+    position: absolute;
+    right: 2px;
+    top: 3px;
+    z-index: 6;
+}
+
+.input-filter-list-items {
     cursor: pointer;
 }
 
 .yellow-box {
     background-color: #FFF4DA;
-    padding-left: 4px;
-    font-size: 10px;
-    position: absolute;
+    padding-left: 2px;
+    font-size: 9px;
+    position: relative;
     display: flex;
     text-align: center;
     align-items: center;
     cursor: pointer;
-    left: 6px;
-    z-index: 1;
-    height: 100%;
+    height: 43px;
+    width: 36px;
+    text-wrap: nowrap;
+    /* justify-content: center; */
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.empty-box {
+    padding-left: 2px;
+    font-size: 10px;
+    position: relative;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    height: 43px;
     width: 36px;
     text-wrap: nowrap;
     /* justify-content: center; */
@@ -1262,6 +1365,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    gap: 8px;
     font-size: 14px;
     cursor: pointer;
 }
@@ -1356,8 +1460,8 @@
 }
 
 .calender-prev-button-2:disabled {
-        --slds-c-icon-color-foreground-default: #262626;
-            cursor: not-allowed;
+    --slds-c-icon-color-foreground-default: #262626;
+    cursor: not-allowed;
 }
 
 .calender-prev-button:disabled .prev-button-2 {
@@ -1370,7 +1474,8 @@
     --slds-c-icon-color-foreground-default: #BBBBBB;
 }
 
-.prev-button-2, .next-button-2 {
+.prev-button-2,
+.next-button-2 {
     --slds-c-icon-color-foreground-default: #E10202;
 }
 
@@ -1413,7 +1518,8 @@
     --slds-c-icon-color-foreground-default: #BBBBBB;
 }
 
-.prev-year-icon, .next-year-icon {
+.prev-year-icon,
+.next-year-icon {
     --slds-c-icon-color-foreground-default: #262626;
 }
 
@@ -1529,7 +1635,7 @@
     padding: 10px 0px;
 }
 
-.scrollBar{
+.scrollBar {
     max-height: 470px;
     overflow-y: auto;
     padding-right: 3px;
@@ -1593,9 +1699,17 @@
 /* pagination of drop down */
 .mm-pagination-container {
     display: flex;
-    gap: 16px;
+    gap: 4px;
     align-items: center;
+    cursor: pointer;
 }
+
+.download-font {
+    font-size: 16px;
+    font-weight: 400;
+    color: #262626;
+}
+
 
 .cuurent-page {
     background-color: #E10202 !important;
@@ -1653,27 +1767,32 @@
     justify-content: center;
     align-items: center;
 }
+
 .checkbox-flg-filter {
     display: flex;
     gap: 10px;
     margin-top: 7px;
 }
-.Dot-on-click{
- position: absolute;
- right: -8px;
- top: -1px;
+
+.Dot-on-click {
+    position: absolute;
+    right: -8px;
+    top: -1px;
 }
+
 .filter-checkbox-color {
     accent-color: #e10102;
     cursor: pointer;
 }
-.pill-content{
+
+.pill-content {
     display: flex;
     align-items: flex-start;
     text-wrap: nowrap;
     gap: 6px;
     flex-wrap: wrap;
 }
+
 .loader-img-dev {
     display: flex;
     align-items: center;
@@ -1681,6 +1800,7 @@
     width: 424px;
     height: 200px;
 }
+
 .loaderimages {
     border: 4px solid #f3f3f3;
     border-top: 4px solid #e10202;
@@ -1700,6 +1820,24 @@
     justify-content: center;
     align-items: center;
     padding-top: 10px;
+}
+
+.calendar-middle-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.calendar-middle-container::-webkit-scrollbar-track {
+    background: #F4F4F4;
+    border-radius: 10px;
+}
+
+.calendar-middle-container::-webkit-scrollbar-thumb {
+    background: #BBBBBB;
+    border-radius: 12px;
+}
+
+.calendar-middle-container::-webkit-scrollbar-thumb:hover {
+    background: #828282;
 }
 
 @keyframes spin {
@@ -1733,6 +1871,7 @@
     .main {
         margin: -16px 0 0 -21px;
     }
+
     .modal-window-Filter-Modal {
         margin: 0px -2px 169px 1227px;
         min-width: 10%;
@@ -1749,6 +1888,7 @@
     .main {
         margin: -16px 0 0 -18px;
     }
+
     .modal-window-Filter-Modal {
         margin: 0px 1px 80px 1126px;
         min-width: 10%;
@@ -1771,6 +1911,7 @@
     .main {
         margin: -16px 0 0 -17px;
     }
+
     .modal-window-Filter-Modal {
         margin: -35px 1px 0px 1068px;
         min-width: 11%;
@@ -1786,6 +1927,7 @@
     .main {
         margin: -16px 0 0 -15px;
     }
+
     .modal-window-Filter-Modal {
         margin: -19px 1px 0px 922px;
         /* margin: 32px 1px 0px 922px; */
@@ -1802,6 +1944,7 @@
     .main {
         margin: -16px 0 0 -13px;
     }
+
     .modal-window-Filter-Modal {
         margin: 38px 1px 0px 806px;
         /* margin: 93px 1px 0px 806px; */
@@ -1822,11 +1965,12 @@
         font-size: 11px
     }
 
-    .calendar-middle-items-left {
+    /* .calendar-middle-items-left {
         padding: 4px;
         gap: 3px;
         padding-right: 0;
-    }
+    } */
+
     .modal-window-Filter-Modal {
         /* margin: 94px 1px 0px 701px; */
         margin: 80px 1px 0px 701px;
@@ -1842,6 +1986,7 @@
     .main {
         width: calc(100vw - 13px);
     }
+
     .modal-window-Filter-Modal {
         margin: 76px 1px 0px 578px;
     }

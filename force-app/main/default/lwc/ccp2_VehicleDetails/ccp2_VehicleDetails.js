@@ -15,7 +15,7 @@ import getImagesAsBase64 from "@salesforce/apex/VehicleImageService.getImagesAsB
 import getMarketMeasureParamsApi from "@salesforce/apex/ccp2_download_recall_controller.recallinfoNew";
 import deleteAndRecovervehicle from "@salesforce/apex/ccp2_download_recall_controller.deleteAndRecoverVehicle";
 import vehicleBranchName from "@salesforce/apex/CCP2_VehicleDetailController.vehicleBranchName";
-import getVehicleCertificates from "@salesforce/apex/CCP2_VehicleDetailController.vehicleImageCountTitle";
+//import getVehicleCertificates from "@salesforce/apex/CCP2_VehicleDetailController.vehicleImageCountTitle";
 import updateFavVehicleApi from "@salesforce/apex/CCP2_VehicleDetailController.updateFavVehicle";
 import { getPicklistValues } from "lightning/uiObjectInfoApi";
 import DELETE_STATUS from "@salesforce/schema/ccp2_Registered_Vehicle__c.Status__c";
@@ -48,7 +48,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   @track Languagei18n = "";
   @track isLanguageChangeDone = true;
 
-  @track vehicleByIdLoader = true;
+  @track vehicleByIdLoader = false;
   @track showEmptyContiner = false;
   @track vehicleidforpictures = "";
   @track showTKwarnMessage = false;
@@ -118,7 +118,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   @track ShowSuccessDownload = false;
   @track downloadbranch = [];
   @track downloadvehicles = {};
-  @track DownloadNameValue = "日付- カスタマーポータル車両リスト.csv";
+  @track DownloadNameValue = "日付- カスタマーポータル車両リスト";
 
   @track uploadImageCss = "upload-image";
   @track uploadImagesArray = [];
@@ -233,7 +233,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   @track isDoorNumberCancel = false;
   @track isMileageCancel = false;
   @track isBranchCancel = false;
-
+  @track ShowSuccessRecover = false;
   @track nextBtnCss = "next-btn1";
 
   get isweightValid() {
@@ -527,7 +527,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
           this.showRecallMessage = false;
         }
         this.loadbranches(this.vehicleByIdData.branchInfo);
-        this.fetchVehicleCertificates();
+        //this.fetchVehicleCertificates();
       }
     } else if (error) {
       // handle error
@@ -1446,35 +1446,35 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     }
   }
 
-  fetchVehicleCertificates() {
-    getVehicleCertificates({ vehicleId: this.vehicleId })
-      .then((data) => {
-        const lengthOfTitle = data.titles ? data.titles[0].length : 0;
-        if (lengthOfTitle > 15) {
-          this.certificateTitleCount = data.titles
-            ? data.titles[0].substring(0, 15) + "...など" + data.count + "枚"
-            : "-";
-        } else {
-          this.certificateTitleCount = data.titles
-            ? data.titles[0] + "など" + data.count + "枚"
-            : "-";
-        }
-        this.vehicleByIdLoader = false;
-      })
-      .catch((error) => {
-        this.certificateTitleCount = "-";
-        console.error("Fetching from vehicle Certificate API: ", error);
-        this.vehicleByIdLoader = false;
-        let err = JSON.stringify(error);
-        ErrorLog({ lwcName: "ccp2_vehicleDetails", errorLog: err })
-          .then(() => {
-            console.log("Error logged successfully in Salesforce");
-          })
-          .catch((loggingErr) => {
-            console.error("Failed to log error in Salesforce:", loggingErr);
-          });
-      });
-  }
+  // fetchVehicleCertificates() {
+  //   getVehicleCertificates({ vehicleId: this.vehicleId })
+  //     .then((data) => {
+  //       const lengthOfTitle = data.titles ? data.titles[0].length : 0;
+  //       if (lengthOfTitle > 15) {
+  //         this.certificateTitleCount = data.titles
+  //           ? data.titles[0].substring(0, 15) + "...など" + data.count + "枚"
+  //           : "-";
+  //       } else {
+  //         this.certificateTitleCount = data.titles
+  //           ? data.titles[0] + "など" + data.count + "枚"
+  //           : "-";
+  //       }
+  //       this.vehicleByIdLoader = false;
+  //     })
+  //     .catch((error) => {
+  //       this.certificateTitleCount = "-";
+  //       console.error("Fetching from vehicle Certificate API: ", error);
+  //       this.vehicleByIdLoader = false;
+  //       let err = JSON.stringify(error);
+  //       ErrorLog({ lwcName: "ccp2_vehicleDetails", errorLog: err })
+  //         .then(() => {
+  //           console.log("Error logged successfully in Salesforce");
+  //         })
+  //         .catch((loggingErr) => {
+  //           console.error("Failed to log error in Salesforce:", loggingErr);
+  //         });
+  //     });
+  // }
 
   dothis() {
     console.log("dothis function called");
@@ -2220,13 +2220,13 @@ export default class Ccp2_VehicleDetails extends LightningElement {
 
   //downlaod feature
   openDownloadModalfunction() {
-    this.DownloadNameValue = `${this.currentDate} - カスタマーポータル車両リスト.csv`;
+    this.DownloadNameValue = `${this.currentDate} - カスタマーポータル車両リスト`;
     this.openDownloadModal = true;
     console.log("forprintdata", JSON.stringify(this.downloadvehicles));
     console.log("forprintdata2", JSON.stringify(this.downloadbranch));
   }
   closeDownloadModal() {
-    this.DownloadNameValue = `${this.currentDate} - カスタマーポータル車両リスト.csv`;
+    this.DownloadNameValue = `${this.currentDate} - カスタマーポータル車両リスト`;
     this.openDownloadModal = false;
   }
   handleDownloadChange(event) {
@@ -2242,7 +2242,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     window.scrollTo(0, 0);
   }
   closesuccessdownload() {
-    this.DownloadNameValue = `${this.currentDate} - カスタマーポータル車両リスト.csv`;
+    this.DownloadNameValue = `${this.currentDate} - カスタマーポータル車両リスト`;
     this.ShowSuccessDownload = false;
   }
   downloadCSVAll() {
@@ -2639,12 +2639,13 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
 
   closeRecoverModal() {
+    console.log("infunction");
     this.ShowSuccessRecover = false;
+    console.log("infunction last");
   }
 
   showFinishTimeModalRecover() {
     window.scrollTo(0, 0);
-    setTimeout(() => {
       this.selectedReason = "";
       this.deletedescription = "";
       this.SelectedStatus = "";
@@ -2657,7 +2658,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       this.openRecoversystem = false;
       this.opendeletesystem = false;
       // this.ShowSuccessRecover = false;
-    }, 2000);
   }
 
   //lease
@@ -2882,14 +2882,16 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       "this.vehicleByIdData.Newmileage",
       this.vehicleByIdData.Newmileage
     );
-    this.vehicleByIdData.Newmileage = this.vehicleByIdData.mileage.replace(
-      /,/g,
-      ""
-    );
-    console.log(
-      "this.vehicleByIdData.mileage",
-      this.vehicleByIdData.mileage.replace(/,/g, "")
-    );
+    if(this.vehicleByIdData.Newmileage > 0){
+      this.vehicleByIdData.Newmileage = this.vehicleByIdData.mileage.replace(
+        /,/g,
+        ""
+      );
+    }
+    // console.log(
+    //   "this.vehicleByIdData.mileage",
+    //   this.vehicleByIdData.mileage.replace(/,/g, "")
+    // );
     this.editmileage = false;
     this.nullMileage = false;
     this.nextBtnCss = "next-btn1";
@@ -2941,7 +2943,11 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     // console.log('in input')
     let input = event.target.value;
     console.log("value of input chnged by oninput", input);
-    input = input.replace(/[^0-9]/g, "");
+    // const onlyDigitsRegex = /^[0-9,]*$/;
+    // if(!onlyDigitsRegex.test(input)){
+    //   event.target.blur();
+    // }
+    // input = input.replace(/[^0-9]/g, "");
     console.log("value of input chnged by oninput1", input);
     //console.log('in input1', input)
     if (input === "") {
@@ -3057,7 +3063,10 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     }
   }
   formatNumberWithCommas(number) {
-    return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    if (number === 0) {
+      return number.toString(); 
+    }
+     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   handlemileageFocus(event) {
     event.target.value = event.target.value.replace(/,/g, ""); // Remove commas on focus

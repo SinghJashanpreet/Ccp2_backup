@@ -2,18 +2,18 @@
 import { LightningElement, track, wire } from "lwc";
 import { getPicklistValues } from "lightning/uiObjectInfoApi";
 import Vehicle_StaticResource from "@salesforce/resourceUrl/CCP2_Resources";
-//import getCalenderData from "@salesforce/apex/CCP2_CalendarController.getCalendarData";
 import vehicleModalData from "@salesforce/apex/CCP2_VehicleDetailController.vehicleDetail";
-import MAINTENANCE_TYPE from "@salesforce/schema/CCP2_Maintenance_Booking__c.Service_Type__c";
-import MAINTENANCE_FACTORY from "@salesforce/schema/CCP2_Maintenance_Booking__c.Service_Factory__c";
+
 import VEHICLE_NAME from "@salesforce/schema/ccp2_Registered_Vehicle__c.Vehicle_Name__c";
 import VEHICLE_TYPE from "@salesforce/schema/ccp2_Registered_Vehicle__c.Vehicle_Type__c";
 import branchOptionsApi from "@salesforce/apex/ccp2_download_recall_controller.getBranchSelection";
 import maintainenceModalData from "@salesforce/apex/CCP2_CalendarController.getMaintenanceByVehicleId";
 import getCalenderData from "@salesforce/apex/CCP2_CalendarController.getCalendarDataWithFilter";
+
 import labelsUser from "@salesforce/resourceUrl/ccp2_labels";
 import i18nextStaticResource from "@salesforce/resourceUrl/i18next";
 import Languagei18n from "@salesforce/apex/CCP2_userData.userLanguage";
+import ErrorLog from "@salesforce/apex/CCP2_lwc_ErrorLogs.createLwcErrorLog";
 
 const BACKGROUND_IMAGE_PC =
   Vehicle_StaticResource + "/CCP2_Resources/Common/Main_Background.webp";
@@ -36,10 +36,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   @track currentDates = [];
   @track startDate = new Date();
   @track TotalRecallCount;
+  @track totalVehicles;
 
   @track vehicleStoredData = [];
   @track vehicleAndDatesData = [];
   @track showModalload = false;
+
+  @track onoffdata = "";
 
   @track vehicleNearExpCount = 0;
   @track wiredCalVehResult;
@@ -101,7 +104,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     // Two years after
     const twoYearsAfter = new Date(today);
     twoYearsAfter.setFullYear(today.getFullYear() + 2);
-    twoYearsAfter.setDate(twoYearsAfter.getDate() - 19);
+    twoYearsAfter.setDate(twoYearsAfter.getDate() - 30);
     // Assign values to global variables
     // Current Date
     this.currentYear = today.getFullYear();
@@ -122,9 +125,8 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     this.wiredServiceTypePicklist();
     this.wiredServiceFactoryPicklist();
     this.wiredOtherPicklist();
-    this.currentDates = this.populateDatesRange(this.startDate, 20);
+    this.currentDates = this.populateDatesRange(this.startDate, 31);
     this.populateCalendar();
-    this.updatePageButtons();
   }
   disconnectedCallback() {
     document.removeEventListener("click", this.handleOutsideClickA);
@@ -137,7 +139,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   }
 
   renderedCallback() {
-    this.updatePageButtons();
+    // this.updatePageButtons();
     if (!this.outsideClickHandlerAdded1) {
       document.addEventListener("click", this.handleOutsideClickA.bind(this));
       this.outsideClickHandlerAdded1 = true;
@@ -167,7 +169,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       this.outsideClickHandlerAdded7 = true;
     }
     if (this.isLanguageChangeDone) {
-      console.log("Working 1");
       this.loadLanguage();
     }
   }
@@ -179,7 +180,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     Languagei18n() // Assuming getLanguageI18n is the apex method that fetches the language.
       .then((data) => {
         this.Languagei18n = data;
-        console.log("lang Method", data, this.Languagei18n);
         return this.loadI18nextLibrary(); // Return the promise for chaining
       })
       .then(() => {
@@ -190,6 +190,18 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       })
       .catch((error) => {
         console.error("Error loading language or labels: ", error);
+        let err = JSON.stringify(error);
+        ErrorLog({
+          lwcName: "ccp2_VehicleMaintenanceCalendar",
+          errorLog: err,
+          methodName: "Load Language"
+        })
+          .then(() => {
+            console.log("Error logged successfully in Salesforce");
+          })
+          .catch((loggingErr) => {
+            console.error("Failed to log error in Salesforce:", loggingErr);
+          });
       });
   }
   loadI18nextLibrary() {
@@ -235,6 +247,18 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       })
       .catch((error) => {
         console.error("Error loading labels: ", error);
+        let err = JSON.stringify(error);
+        ErrorLog({
+          lwcName: "ccp2_VehicleMaintenanceCalendar",
+          errorLog: err,
+          methodName: "Load Labels"
+        })
+          .then(() => {
+            console.log("Error logged successfully in Salesforce");
+          })
+          .catch((loggingErr) => {
+            console.error("Failed to log error in Salesforce:", loggingErr);
+          });
       });
   }
 
@@ -309,7 +333,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
 
   @wire(getCalenderData, {
     uiStartStr: "$startDateObj",
-    page: "$currentPage",
     jsonInput: "$jsonParameterForVehicleClass"
   })
   handledata3(result) {
@@ -324,48 +347,81 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     this.wiredCalVehResult = result;
     const { data, error } = result;
     if (data) {
-      console.log("data of getCalenderData Tem:-", data);
-      this.totalPageCount2 = data.TotalPage;
+      console.log("data of getCalenderData free:-", data);
       this.vehicleNearExpCount = data.expiringVehicleCount;
       this.vehiclesCount = data.vehicleCount;
       this.TotalRecallCount = data.vehicleRecallCount;
-      this.vehicleStoredData = data.vehicles.map((elm) => {
+      this.onoffdata = data?.CCP2_Notification_Toggle__c;
+      this.totalVehicles = data.vehicles.length;
+      this.vehicleStoredData = data.vehicles.map((elm, itr) => {
         const ellipseRegNum = this.substringToProperLength(
           elm.Registration_Number__c,
           17
         );
         let dates = elm?.dates.map((dateElm, index) => {
-          let serviceType = "";
-          let temD = new Date(this.startDate);
-          temD.setDate(temD.getDate() + 19);
-          temD = temD.toLocaleDateString("en-CA");
-          //console.log("temD", temD, dateElm?.date);
+          let classForBoxes = dateElm.classForBoxes;
+          if (itr === 0 && index === 0)
+            classForBoxes = classForBoxes + " left-radius-top";
+          else if (itr === 0 && index === 30)
+            classForBoxes = classForBoxes + " rigth-radius-top";
 
-          if (
-            (index + 1 < 20 && elm.dates[index + 1].isMultiple === true) ||
-            (dateElm?.isStart && dateElm?.isEnd) ||
-            dateElm?.date === temD
-          ) {
-            if (dateElm?.serviceType === "3か月点検") {
-              serviceType = "3か月";
-            } else if (dateElm?.serviceType === "一般整備") {
-              serviceType = "一般";
-            } else if (dateElm?.serviceType === "車検整備") {
-              serviceType = "車検";
-            } else if (dateElm?.serviceType === "6か月点検") {
-              serviceType = "6か月";
-            } else if (dateElm?.serviceType === "12か月点検") {
-              serviceType = "12か月";
-            } else if (dateElm?.serviceType === "24か月点検") {
-              serviceType = "24か月";
-            }
-          } else if (dateElm?.isStart) {
-            serviceType = dateElm?.serviceType;
-          }
+          if (itr === data?.vehicles?.length - 1 && index === 0)
+            classForBoxes = classForBoxes + " left-radius-bottom";
+          else if (itr === data?.vehicles?.length - 1 && index === 30)
+            classForBoxes = classForBoxes + " rigth-radius-bottom";
 
-          return { ...dateElm, serviceType: serviceType };
+          // else if (itr === data?.vehicles?.length - 1 && index === 30)
+
+          let updatedMaintenance =
+            dateElm?.maintenance && dateElm?.maintenance.length > 0
+              ? dateElm?.maintenance.map((maintainenceItem, i) => {
+                  let serviceType = "";
+                  if (index === 0) {
+                    if (dateElm?.isEnd[i])
+                      serviceType = this.getTrimmedServiceType(
+                        dateElm?.serviceType[i]
+                      );
+                    else serviceType = dateElm?.serviceType[i];
+                  }
+
+                  if (
+                    dateElm?.isStart[i] &&
+                    (index > 28 || (dateElm?.isStart[i] && dateElm?.isEnd[i]))
+                  ) {
+                    serviceType = this.getTrimmedServiceType(
+                      dateElm?.serviceType[i]
+                    );
+                  } else if (dateElm?.isStart[i]) {
+                    serviceType = dateElm?.serviceType[i];
+                  }
+
+                  let width = dateElm?.width[i];
+                  if (index === 30 && dateElm?.isEnd[i] === false)
+                    width = width + "min-width: calc(100%);";
+
+                  if (index === 0) {
+                    width = width + "z-index: 3;";
+                  }
+
+                  return {
+                    ...maintainenceItem,
+                    isStart: dateElm?.isStart[i],
+                    isEnd: dateElm?.isEnd[i],
+                    cssClass: dateElm?.cssClass[i],
+                    width: width,
+                    serviceType: serviceType
+                  };
+                })
+              : [];
+          return {
+            ...dateElm,
+            classForBoxes: classForBoxes,
+            maintenance: updatedMaintenance
+          };
           // return dateElm;
         });
+
+        dates = this.getSortedCalendarData([...dates]);
         return {
           ...elm,
           dates: dates,
@@ -375,13 +431,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
 
       console.log(
         "data of getCalenderData after modification:-",
-        this.vehicleStoredData
+        JSON.stringify(this.vehicleStoredData)
       );
       //   this.combineVehicleMaintainaceData();
       this.yearPicklistArray = this.generateYearMonthArray();
 
       // this.showCalendarLoader = false;
-      this.updateVisiblePages();
+      //this.updateVisiblePages();
       this.isLoading = false;
     } else if (error) {
       this.isLoading = false;
@@ -394,7 +450,34 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         this.startDateObj,
         error
       );
+      let err = JSON.stringify(error);
+      ErrorLog({
+        lwcName: "ccp2_VehicleMaintenanceCalendar",
+        errorLog: err,
+        methodName: "handleData3"
+      })
+        .then(() => {
+          console.log("Error logged successfully in Salesforce");
+        })
+        .catch((loggingErr) => {
+          console.error("Failed to log error in Salesforce:", loggingErr);
+        });
     }
+  }
+
+  getTrimmedServiceType(serviceType) {
+    if (serviceType === "3か月点検") {
+      return "点3";
+    } else if (serviceType === "一般整備") {
+      return "一般";
+    } else if (serviceType === "車検整備") {
+      return "車検";
+    } else if (serviceType === "6か月点検") {
+      return "点6";
+    } else if (serviceType === "12か月点検") {
+      return "点12";
+    }
+    return "点24";
   }
 
   substringToProperLength(string, limit) {
@@ -434,8 +517,20 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           date.setDate(date.getDate() + i);
           let classForBoxes =
             date.getDay() === 0 || date.getDay() === 6
-              ? "Calender-tile-grey"
-              : "Calender-tile-white";
+              ? "Calender-tile"
+              : "Calender-tile-grey";
+          // let borderround = "";
+          // if (this.vehicleIndex === 1 && i === 0) {
+          //   borderround = "border-radius: 8px 0px 0px 0px;";
+          // } else if (this.vehicleIndex === 1 && i === 30) {
+          //     borderround = "border-radius: 0px 0px 0px 8px;";
+          // } else if (this.vehicleIndex === this.totalVehicles && i === 0) {
+          //     borderround = "border-radius: 0px 8px 0px 0px;";
+          // } else if (this.vehicleIndex === this.totalVehicles && i === 30) {
+          //     borderround = "border-radius: 0px 0px 8px 0px;";
+          // } else {
+          //     borderround = "border-radius: 0px;";
+          // }
           let topLogoCss =
             date.toDateString() === new Date().toDateString()
               ? "active-top-logos"
@@ -450,11 +545,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
                 : "top-days";
 
           dates.push({
+            index: i,
             date: date.getDate(),
             japaneaseDate: this.formatJapaneseDate(date),
             normalDate: date?.toLocaleDateString("en-CA"),
             day: this.getDaysJapanese(date.getDay()),
             classForBoxes: classForBoxes,
+            // borderRound: borderround,
             topDatesCss: topDatesCss,
             topLogoCss: topLogoCss,
             dateObj: new Date(date)
@@ -492,7 +589,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   }
   get currentEndDate() {
     if (this.showMonthlyCalendar && !this.showCalendarLoader)
-      return this.currentDates[19].japaneaseDate;
+      return this.currentDates[30].japaneaseDate;
 
     return this.currentDates[11].japaneaseDate;
   }
@@ -545,41 +642,129 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   @track isNormalMonthPrevDisabled = false;
   @track isNormalMonthNextDisabled = false;
 
+  // handleCalendarPrevClick() {
+  //   this.isLoading = true;
+  //   let temStDate = new Date(this.startDate);
+  //   temStDate.setHours(0, 0, 0, 0);
+  //   console.log("a",temStDate);
+  //   let temEndDate = new Date(temStDate);
+  //   temEndDate.setHours(0, 0, 0, 0);
+  //   console.log("b",temEndDate);
+  //   temEndDate.setDate(temEndDate.getDate() + 29);
+  //   console.log("c",temEndDate);
+  //   let nowDate = new Date();
+  //   nowDate.setHours(0, 0, 0, 0);
+  //   console.log("d",nowDate);
+  //   this.isNormalMonthNextDisabled = false;
+  //   nowDate.setFullYear(nowDate.getFullYear() - 2);
+
+  //   let temStDateNext = new Date(temStDate);
+  //   temStDateNext.setDate(temStDateNext.getDate() - 29);
+  //   temStDateNext.setHours(0, 0, 0, 0);
+  //   console.log("Dates Prev: ", "nowDate", nowDate, "temStDateNext: ", temStDateNext, "temStDate: ", temStDate, "temEndDate: ", temEndDate);
+  //   console.log("e");
+
+  //   if (
+  //     this.showMonthlyCalendar === true &&
+  //     nowDate <= temStDate &&
+  //     nowDate <= temEndDate
+  //   ) {
+  //     //console.log("this.endate2", this.endDate);
+  //     this.startDate.setDate(this.startDate.getDate() - 29);
+  //     this.currentPage -= 1;
+  //     console.log("f",this.startDate);
+  //     setTimeout(() => {
+  //       this.currentPage += 1;
+  //     }, 0);
+
+  //     this.currentDates = this.populateDatesRange(this.startDate, 30);
+  //     console.log("main console",this.currentDates);
+  //   }
+  //   console.log(
+  //     "Prev Next: ",
+  //     this.isNormalMonthPrevDisabled,
+  //     this.isNormalMonthNextDisabled
+  //   );
+  //   if (nowDate >= temStDateNext) {
+  //     this.isNormalMonthPrevDisabled = true;
+  //     this.startDate = nowDate;
+  //     this.currentPage -= 1;
+  //     console.log("g");
+  //     setTimeout(() => {
+  //       this.currentPage += 1;
+  //     }, 0);
+  //     this.currentDates = this.populateDatesRange(nowDate, 30);
+  //     console.log("main console 2",this.currentDates);
+  //   }
+  //   console.log("h");
+  // }
+
+
   handleCalendarPrevClick() {
     this.isLoading = true;
+
     let temStDate = new Date(this.startDate);
     temStDate.setHours(0, 0, 0, 0);
+
     let temEndDate = new Date(temStDate);
+    temEndDate.setDate(temEndDate.getDate() + 30); // 30-day gap
     temEndDate.setHours(0, 0, 0, 0);
-    temEndDate.setDate(temEndDate.getDate() + 19);
+
     let nowDate = new Date();
     nowDate.setHours(0, 0, 0, 0);
-    this.isNormalMonthNextDisabled = false;
     nowDate.setFullYear(nowDate.getFullYear() - 2);
 
+    this.isNormalMonthNextDisabled = false;
+
     let temStDateNext = new Date(temStDate);
-    temStDateNext.setDate(temStDateNext.getDate() - 20);
+    temStDateNext.setDate(temStDateNext.getDate() - 31); // Adjusting to 30-day gap
     temStDateNext.setHours(0, 0, 0, 0);
 
-    if (nowDate >= temStDateNext) {
-      this.isNormalMonthPrevDisabled = true;
-    }
+    console.log("Prev Button: ", temStDate, nowDate, temEndDate, temStDateNext);
+
+    // if (nowDate >= temStDateNext) {
+    //   this.isNormalMonthPrevDisabled = true;
+    // }
 
     if (
-      this.showMonthlyCalendar === true &&
+      this.showMonthlyCalendar &&
       nowDate <= temStDate &&
       nowDate <= temEndDate
     ) {
-      //console.log("this.endate2", this.endDate);
-      this.startDate.setDate(this.startDate.getDate() - 20);
+      // Create a new Date instance instead of modifying this.startDate directly
+      let newStartDate = new Date(this.startDate);
+      newStartDate.setDate(newStartDate.getDate() - 31);
+
+      this.startDate = newStartDate;
       this.currentPage -= 1;
 
       setTimeout(() => {
         this.currentPage += 1;
       }, 0);
 
-      this.currentDates = this.populateDatesRange(this.startDate, 20);
+      this.currentDates = this.populateDatesRange(this.startDate, 31);
     }
+
+    if (nowDate >= temStDateNext) {
+      this.isNormalMonthPrevDisabled = true;
+
+      let startDate2 = new Date(nowDate);
+
+      // startDate2.setDate(nowDate.getDate()); // Ensuring a 30-day range
+      this.startDate = startDate2;
+
+
+      // this.startDate = nowDate;
+
+      
+      this.currentPage -= 1;
+      setTimeout(() => {
+        this.currentPage += 1;
+      }, 0);
+      this.currentDates = this.populateDatesRange(this.startDate, 31);
+      console.log("main console 2", this.currentDates);
+    }
+
     console.log(
       "Prev Next: ",
       this.isNormalMonthPrevDisabled,
@@ -587,40 +772,119 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     );
   }
 
+  // handleCalendarNextClick() {
+  //   this.isLoading = true;
+  //   let temStDate = new Date(this.startDate);
+  //   temStDate.setHours(0, 0, 0, 0);
+  //   let temEndDate = new Date(temStDate);
+  //   temEndDate.setHours(0, 0, 0, 0);
+  //   temEndDate.setDate(temEndDate.getDate() + 29);
+  //   let nowDate = new Date();
+  //   nowDate.setHours(0, 0, 0, 0);
+  //   this.isNormalMonthPrevDisabled = false;
+  //   nowDate.setFullYear(nowDate.getFullYear() + 2);
+
+  //   let temStDateNext = new Date(temEndDate);
+  //   temStDateNext.setDate(temStDateNext.getDate() + 30);
+  //   temStDateNext.setHours(0, 0, 0, 0);
+  //   console.log("Next Button: ", temStDate, " ", nowDate, " ", temEndDate, " ", temStDateNext);
+  //   if (
+  //     this.showMonthlyCalendar === true &&
+  //     nowDate >= temStDate &&
+  //     nowDate >= temEndDate
+  //   ) {
+  //     this.startDate.setDate(this.startDate.getDate() + 30);
+  //     // console.log("this.startDate1", this.startDate);
+  //     // console.log("this.endate1", this.endDate, this.currentPage);
+  //     this.currentPage -= 1;
+  //     console.log("Coming in intermediate", this.startDate,);
+  //     setTimeout(() => {
+  //       this.currentPage += 1;
+  //     }, 0);
+  //     this.currentDates = this.populateDatesRange(this.startDate, 30);
+  //   }
+  //   if (nowDate <= temStDateNext) {
+  //     this.isNormalMonthNextDisabled = true;
+  //     let startDate2 = new Date(nowDate);
+  //     startDate2.setDate(startDate2.getDate() - 29);
+  //     this.startDate = startDate2;
+  //     console.log("Start Date on next: ", this.startDate, nowDate);
+  //     // console.log("this.startDate1", this.startDate);
+  //     // console.log("this.endate1", this.endDate, this.currentPage);
+  //     this.currentPage -= 1;
+
+  //     setTimeout(() => {
+  //       this.currentPage += 1;
+  //     }, 0);
+  //     this.currentDates = this.populateDatesRange(this.startDate, 30);
+  //   }
+  //   console.log(
+  //     "Prev Next: ",
+  //     this.isNormalMonthPrevDisabled,
+  //     this.isNormalMonthNextDisabled
+  //   );
+  // }
   handleCalendarNextClick() {
     this.isLoading = true;
+
     let temStDate = new Date(this.startDate);
     temStDate.setHours(0, 0, 0, 0);
+
     let temEndDate = new Date(temStDate);
+    temEndDate.setDate(temEndDate.getDate() + 30);
     temEndDate.setHours(0, 0, 0, 0);
-    temEndDate.setDate(temEndDate.getDate() + 19);
+
     let nowDate = new Date();
     nowDate.setHours(0, 0, 0, 0);
-    this.isNormalMonthPrevDisabled = false;
     nowDate.setFullYear(nowDate.getFullYear() + 2);
 
+    this.isNormalMonthPrevDisabled = false;
+
     let temStDateNext = new Date(temEndDate);
-    temStDateNext.setDate(temStDateNext.getDate() + 40);
+    temStDateNext.setDate(temStDateNext.getDate() + 31);
     temStDateNext.setHours(0, 0, 0, 0);
-    console.log("Next Button: ", temStDate, " ", nowDate, " ", temEndDate);
-    if (nowDate <= temStDateNext) {
-      this.isNormalMonthNextDisabled = true;
-    }
+
+    console.log("Next Button: ", temStDate, nowDate, temEndDate, temStDateNext);
+
     if (
-      this.showMonthlyCalendar === true &&
+      this.showMonthlyCalendar &&
       nowDate >= temStDate &&
       nowDate >= temEndDate
     ) {
-      this.startDate.setDate(this.startDate.getDate() + 20);
-      console.log("this.startDate1", this.startDate);
-      // console.log("this.endate1", this.endDate, this.currentPage);
+      // Create a new Date instance to prevent modifying the original reference
+      let newStartDate = new Date(this.startDate);
+      newStartDate.setDate(newStartDate.getDate() + 31);
+
+      this.startDate = newStartDate;
+      this.currentPage -= 1;
+
+      console.log("Intermediate state:", this.startDate);
+
+      setTimeout(() => {
+        this.currentPage += 1;
+      }, 0);
+
+      this.currentDates = this.populateDatesRange(this.startDate, 31);
+    }
+
+    if (nowDate <= temStDateNext) {
+      this.isNormalMonthNextDisabled = true;
+      let startDate2 = new Date(nowDate);
+
+      startDate2.setDate(startDate2.getDate() - 30); // Ensuring a 30-day range
+      this.startDate = startDate2;
+
+      console.log("Start Date on next: ", this.startDate, nowDate);
+
       this.currentPage -= 1;
 
       setTimeout(() => {
         this.currentPage += 1;
       }, 0);
-      this.currentDates = this.populateDatesRange(this.startDate, 20);
+
+      this.currentDates = this.populateDatesRange(this.startDate, 31);
     }
+
     console.log(
       "Prev Next: ",
       this.isNormalMonthPrevDisabled,
@@ -636,15 +900,14 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       setTimeout(() => {
         this.currentPage += 1;
       }, 0);
-      this.currentDates = this.populateDatesRange(this.startDate, 20);
+      this.currentDates = this.populateDatesRange(this.startDate, 31);
     }
   }
-
   CalendertoogleMain() {
     this.showCalendarLoader = true;
     this.showMonthlyCalendar = true;
     this.startDate = new Date();
-    this.currentDates = this.populateDatesRange(this.startDate, 20);
+    this.currentDates = this.populateDatesRange(this.startDate, 31);
     this.combineVehicleMaintainaceData();
     this.showCalendarLoader = false;
   }
@@ -659,6 +922,11 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   // }
   //modal of vehicle
   closeMVehicleModal() {
+    this.currentPage -= 1;
+
+      setTimeout(() => {
+        this.currentPage += 1;
+      }, 0);
     this.showVehicleModal = false;
   }
   calendertooglesmall() {
@@ -866,15 +1134,25 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   }
   @wire(branchOptionsApi)
   branchApiFun(result) {
-    const { data, err } = result;
+    const { data, error } = result;
     if (data) {
       this.branchOptions = [
         { branchId: "すべて", branchName: "すべて", selected: false },
         ...data
       ];
 
-      this.branchOptions.map((elm)=>{
-        if(elm.selected === true && elm.branchId !== "すべて"){
+      let isAllSelected = this.branchOptions
+        .filter((elm) => elm.branchId !== "すべて")
+        .every((item) => item.selected);
+      this.branchOptions = this.branchOptions.map((elm) => {
+        if (elm.branchId === "すべて") {
+          return { ...elm, selected: isAllSelected };
+        }
+        return elm;
+      });
+
+      this.branchOptions.map((elm) => {
+        if (elm.selected === true && elm.branchId !== "すべて") {
           this.finalBranchList.push(elm.branchId);
         }
         return elm;
@@ -887,8 +1165,20 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       ).length;
       this.branchesValue = lengthOfList === 0 ? "" : lengthOfList + "件選択中";
       this.branchesValueBackup = this.branchesValue;
-    } else if (err) {
+    } else if (error) {
       console.error("branchOptionsApi error: - ", err);
+      let err = JSON.stringify(error);
+      ErrorLog({
+        lwcName: "ccp2_VehicleMaintenanceCalendar",
+        errorLog: err,
+        methodName: "branchApiFun"
+      })
+        .then(() => {
+          console.log("Error logged successfully in Salesforce");
+        })
+        .catch((loggingErr) => {
+          console.error("Failed to log error in Salesforce:", loggingErr);
+        });
     }
   }
   @wire(getPicklistValues, {
@@ -911,6 +1201,18 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       ];
     } else if (error) {
       console.error("Error fetching picklist values: ", error);
+      let err = JSON.stringify(error);
+      ErrorLog({
+        lwcName: "ccp2_VehicleMaintenanceCalendar",
+        errorLog: err,
+        methodName: "VehicleTypePicklist"
+      })
+        .then(() => {
+          console.log("Error logged successfully in Salesforce");
+        })
+        .catch((loggingErr) => {
+          console.error("Failed to log error in Salesforce:", loggingErr);
+        });
     }
   }
   get statusofpills() {
@@ -937,6 +1239,18 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       ];
     } else if (error) {
       console.error("Error fetching picklist values: ", error);
+      let err = JSON.stringify(error);
+      ErrorLog({
+        lwcName: "ccp2_VehicleMaintenanceCalendar",
+        errorLog: err,
+        methodName: "Vehicle Name Picklist"
+      })
+        .then(() => {
+          console.log("Error logged successfully in Salesforce");
+        })
+        .catch((loggingErr) => {
+          console.error("Failed to log error in Salesforce:", loggingErr);
+        });
     }
   }
   toggleVehicleType(event) {
@@ -1080,6 +1394,11 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     ];
     console.log("month label", monthLabels[month - 1]);
     return monthLabels[month - 1];
+  }
+
+  gotobasicinfo() {
+    let url = `/s/profile`;
+    window.location.href = url;
   }
 
   goToPreviousMonth() {
@@ -1283,10 +1602,19 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   }
 
   populateCalendar(year = -1, month = -1, day = -1, prev = -1) {
+    console.log("Populate Calendar me hai");
+    if (!this.year || !this.month) {
+      // const today = new Date();
+      // this.year = today.getFullYear();
+      // this.month = today.getMonth() + 1; // JS months are 0-based
+      console.log("Year:", this.year, "Month1:", this.month);
+    }
     if (year === -1) {
       const today = new Date();
       const firstDayOfMonth = new Date(this.year, this.month - 1, 1).getDay();
+      console.log("Year:2", this.year, "Month:", this.month);
       const daysInMonth = new Date(this.year, this.month, 0).getDate();
+      console.log("Days in month2:", daysInMonth);
       this.calendarDates = [];
       this.isNextMonthDisabled = false; // Reset flag for next month
       this.isPrevMonthDisabled = false; // Reset flag for prev month
@@ -1374,7 +1702,9 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       // Second case: Disable dates less than the day in the given year and month
       const currentDate = new Date(year, month - 1, day);
       const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
+      console.log("Year:33", this.year, "Month:", this.month);
       const daysInMonth = new Date(year, month, 0).getDate();
+      console.log("Days in month:3", daysInMonth);
 
       // Initialize calendarDates array
       this.calendarDates = [];
@@ -1421,7 +1751,9 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       // month = currentDate.getMonth() + 1;
       // day = currentDate.getDate();
       const firstDayOfMonth = new Date(year, month - 1, 1).getDay(); // First day of the month
+      console.log("Year:4", this.year, "Month:", this.month);
       const daysInMonth = new Date(year, month, 0).getDate(); // Total number of days in the month
+      console.log("Days in month:4", daysInMonth);
 
       // Initialize calendarDates array
       this.calendarDates = [];
@@ -1484,7 +1816,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     if (this.selectedDay) {
       const previouslySelected =
         this.template.querySelector(`.day-button.selected`);
-      if (previouslySelected) {
+      if (previouslySelected && previouslySelected.classList) {
         previouslySelected.classList.remove("selected");
       }
     }
@@ -1562,6 +1894,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         this.myMonth = this.month;
         this.myYear = this.year;
         let parsedDate = new Date(this.year, this.month - 1, this.selectedDay);
+
         console.log("Start Date is Before: ", this.startDate);
         this.startDate = parsedDate;
         console.log("Start Date is: ", this.startDate);
@@ -1573,47 +1906,68 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           "year: ",
           this.year
         );
+        const beforeDate = new Date(
+          this.beforeYear,
+          this.beforeMonth - 1,
+          this.beforeDay
+        );
+        // console.log("Dates are: ", beforeDate, this.startDate);
+        if (
+          beforeDate.getFullYear() !== this.startDate.getFullYear() ||
+          beforeDate.getMonth() !== this.startDate.getMonth() ||
+          beforeDate.getDate() !== this.startDate.getDate()
+        ) {
+          this.isNormalMonthPrevDisabled = false;
+        } else {
+          this.isNormalMonthPrevDisabled = true;
+        }
 
-        this.currentDates = this.populateDatesRange(this.startDate, 20);
+        let temStDate = new Date(this.startDate);
+        temStDate.setHours(0, 0, 0, 0);
+        let temEndDate = new Date(temStDate);
+        temEndDate.setHours(0, 0, 0, 0);
+        temEndDate.setDate(temEndDate.getDate() + 30);
+        let nowDate = new Date();
+        nowDate.setHours(0, 0, 0, 0);
+        nowDate.setFullYear(nowDate.getFullYear() + 2);
+
+        let temStDateNext = new Date(temEndDate);
+        // temStDateNext.setDate(temStDateNext.getDate() + 20);
+        temStDateNext.setHours(0, 0, 0, 0);
+        console.log(
+          "Next Button: ",
+          temStDate,
+          " ",
+          nowDate,
+          " ",
+          temEndDate,
+          " ",
+          temStDateNext
+        );
+
+        if (
+          nowDate.getFullYear() <= temStDateNext.getFullYear() &&
+          nowDate.getMonth() <= temStDateNext.getMonth() &&
+          nowDate.getDate() <= temStDateNext.getDate()
+        ) {
+          this.isNormalMonthNextDisabled = true;
+        } else {
+          this.isNormalMonthNextDisabled = false;
+        }
+        console.log("Start Date is at end: ", this.startDate);
+        let temDatesRange = this.populateDatesRange(this.startDate, 31);
+        this.currentDates = temDatesRange;
+        console.log("current Date is at end: ", [...this.currentDates]);
         const selectedDateToSend = new Date(
           this.year,
           this.month - 1,
           this.selectedDay
         );
-
         this.selectedDateToSend = this.formatDateToYYYYMMDD(selectedDateToSend);
       }
       this.isCalendarOpen = false;
     } catch (e) {
       console.log("error in confirmDate: ", e);
-    }
-  }
-
-  isDatesInRange() {
-    console.log("In isDatesInRange!:-");
-    console.log("start date in this:-", this.startDate);
-
-    let temStDate = new Date(this.startDate);
-    temStDate.setHours(0, 0, 0, 0);
-    let temEndDate = new Date(temStDate);
-    temEndDate.setHours(0, 0, 0, 0);
-    temEndDate.setDate(temEndDate.getDate() + 19);
-
-    let prevEndDate = new Date();
-    prevEndDate.setHours(0, 0, 0, 0);
-    prevEndDate.setFullYear(prevEndDate.getFullYear() - 2);
-
-    let nextEndDate = new Date();
-    nextEndDate.setHours(0, 0, 0, 0);
-    nextEndDate.setFullYear(nextEndDate.getFullYear() + 2);
-
-    // this.isNormalMonthNextDisabled = false;
-    let temStDateNext = new Date(temStDate);
-    temStDateNext.setDate(temStDateNext.getDate() - 20);
-    temStDateNext.setHours(0, 0, 0, 0);
-
-    if (nowDate >= temStDateNext) {
-      this.isNormalMonthPrevDisabled = true;
     }
   }
 
@@ -2184,10 +2538,12 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   closeMaintainVehicleModal() {
     this.showVehicleModaldouble = false;
   }
+  @track vehId;
   handleEventWithVehicleId(event) {
     const vehId = event.currentTarget.dataset.id;
     console.log("vehId", vehId);
     this.showModalload = true;
+    this.vehId = vehId;
     this.fetchVehicleModalData(vehId);
     this.showVehicleModal = true;
   }
@@ -2225,6 +2581,18 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       })
       .catch((error) => {
         console.error("Error fetching vehicle modal data: ", error);
+        let err = JSON.stringify(error);
+        ErrorLog({
+          lwcName: "ccp2_VehicleMaintenanceCalendar",
+          errorLog: err,
+          methodName: "fetchVehicleModaldata"
+        })
+          .then(() => {
+            console.log("Error logged successfully in Salesforce");
+          })
+          .catch((loggingErr) => {
+            console.error("Failed to log error in Salesforce:", loggingErr);
+          });
       });
   }
   //pagination
@@ -2236,102 +2604,102 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   @track isPreviousDisabled2 = false;
   @track isNextDisabled2 = false;
 
-  handlePreviousPage2() {
-    if (this.currentPage > 1) {
-      // refreshApex(this.wiredVehicleResult);
-      this.prevGoing = true;
-      this.currentPage -= 1;
-      this.isPreviousDisabled2 = this.currentPage === 1;
-      this.isNextDisabled2 = this.currentPage === this.totalPageCount2;
-      this.updatePageButtons();
-      this.updateVisiblePages();
-    }
-  }
-  pageCountClick2(event) {
-    // refreshApex(this.wiredVehicleResult);
-    console.log(event.target.dataset.page);
-    this.currentPage = Number(event.target.dataset.page);
-    this.updatePageButtons();
-    this.updateVisiblePages();
-  }
+  // handlePreviousPage2() {
+  //   if (this.currentPage > 1) {
+  //     // refreshApex(this.wiredVehicleResult);
+  //     this.prevGoing = true;
+  //     this.currentPage -= 1;
+  //     this.isPreviousDisabled2 = this.currentPage === 1;
+  //     this.isNextDisabled2 = this.currentPage === this.totalPageCount2;
+  //     this.updatePageButtons();
+  //     this.updateVisiblePages();
+  //   }
+  // }
+  // pageCountClick2(event) {
+  //   // refreshApex(this.wiredVehicleResult);
+  //   console.log(event.target.dataset.page);
+  //   this.currentPage = Number(event.target.dataset.page);
+  //   this.updatePageButtons();
+  //   this.updateVisiblePages();
+  // }
 
-  updatePageButtons() {
-    const buttons = this.template.querySelectorAll(".mm-page-button");
-    buttons.forEach((button) => {
-      const pageNum = Number(button.dataset.page);
-      if (pageNum === this.currentPage) {
-        button.classList.add("cuurent-page");
-      } else {
-        button.classList.remove("cuurent-page");
-      }
-    });
+  // updatePageButtons() {
+  //   const buttons = this.template.querySelectorAll(".mm-page-button");
+  //   buttons.forEach((button) => {
+  //     const pageNum = Number(button.dataset.page);
+  //     if (pageNum === this.currentPage) {
+  //       button.classList.add("cuurent-page");
+  //     } else {
+  //       button.classList.remove("cuurent-page");
+  //     }
+  //   });
 
-    this.isPreviousDisabled2 = this.currentPage === 1;
-    this.isNextDisabled2 = this.currentPage === this.totalPageCount2;
-  }
-  updateVisiblePages() {
-    let startPage, endPage;
+  //   this.isPreviousDisabled2 = this.currentPage === 1;
+  //   this.isNextDisabled2 = this.currentPage === this.totalPageCount2;
+  // }
+  // updateVisiblePages() {
+  //   let startPage, endPage;
 
-    if (this.currentPage <= 4) {
-      startPage = 1;
-      endPage = Math.min(4, this.totalPageCount2);
-    } else if (
-      this.currentPage > 4 &&
-      this.currentPage <= this.totalPageCount2 - 4
-    ) {
-      startPage = this.currentPage - 1;
-      endPage = this.currentPage + 2;
-    } else {
-      startPage = this.totalPageCount2 - 3;
-      endPage = this.totalPageCount2;
-    }
+  //   if (this.currentPage <= 4) {
+  //     startPage = 1;
+  //     endPage = Math.min(4, this.totalPageCount2);
+  //   } else if (
+  //     this.currentPage > 4 &&
+  //     this.currentPage <= this.totalPageCount2 - 4
+  //   ) {
+  //     startPage = this.currentPage - 1;
+  //     endPage = this.currentPage + 2;
+  //   } else {
+  //     startPage = this.totalPageCount2 - 3;
+  //     endPage = this.totalPageCount2;
+  //   }
 
-    this.visiblePageCount2 = [];
-    for (let i = startPage; i <= endPage; i++) {
-      this.visiblePageCount2.push(i);
-    }
+  //   this.visiblePageCount2 = [];
+  //   for (let i = startPage; i <= endPage; i++) {
+  //     this.visiblePageCount2.push(i);
+  //   }
 
-    this.visiblePageCount2.forEach((element) => {
-      this.showRightDots2 = element === this.totalPageCount2 ? false : true;
-    });
-  }
-  handleNextPage2() {
-    if (this.totalPageCount2 > this.currentPage) {
-      // refreshApex(this.wiredVehicleResult);
-      this.prevGoing = false;
-      this.currentPage += 1;
-      console.log("THIS is the current page in handle next", this.currentPage);
-      this.isPreviousDisabled2 = this.currentPage === 1;
-      this.isNextDisabled2 = this.currentPage === this.totalPageCount2;
-      this.updatePageButtons();
-      this.updateVisiblePages();
-    }
-  }
-  get refreshpages() {
-    return this.updatePageButtons();
-  }
+  //   this.visiblePageCount2.forEach((element) => {
+  //     this.showRightDots2 = element === this.totalPageCount2 ? false : true;
+  //   });
+  // }
+  // handleNextPage2() {
+  //   if (this.totalPageCount2 > this.currentPage) {
+  //     // refreshApex(this.wiredVehicleResult);
+  //     this.prevGoing = false;
+  //     this.currentPage += 1;
+  //     console.log("THIS is the current page in handle next", this.currentPage);
+  //     this.isPreviousDisabled2 = this.currentPage === 1;
+  //     this.isNextDisabled2 = this.currentPage === this.totalPageCount2;
+  //     this.updatePageButtons();
+  //     this.updateVisiblePages();
+  //   }
+  // }
+  // get refreshpages() {
+  //   return this.updatePageButtons();
+  // }
 
   //navigation of modal (vehicle modal )
   gotodetailsPage(event) {
     let vehid = event.currentTarget.dataset.id;
-    let url = `/s/vehicle-details?vehicleId=${vehid}`;
+    let url = `/s/vehiclemanagement?vehicleId=${vehid}&instance=details`;
     window.location.href = url;
   }
   gotoMaintainencePage(event) {
     let vehid = event.currentTarget.dataset.id;
-    let url = `/s/vehicle-details?vehicleId=${vehid}&instance=schedule`;
+    let url = `/s/vehiclemanagement?vehicleId=${vehid}&instance=schedule`;
     window.location.href = url;
   }
   gotoHistoryPage(event) {
     let vehid = event.currentTarget.dataset.id;
-    let url = `/s/vehicle-details?vehicleId=${vehid}&instance=history`;
+    let url = `/s/vehiclemanagement?vehicleId=${vehid}&instance=history`;
     window.location.href = url;
   }
   gotoMaintainDetail(event) {
     let vehid = event.currentTarget.dataset.id;
     let maintainId = event.currentTarget.dataset.type;
     console.log("de", maintainId);
-    let url = `/s/vehicle-details?vehicleId=${vehid}&maintenanceId=${maintainId}&instance=maintenanceDetail`;
+    let url = `/s/vehiclemanagement?vehicleId=${vehid}&maintenanceId=${maintainId}&instance=maintenanceDetail`;
     window.location.href = url;
   }
 
@@ -2380,6 +2748,18 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       })
       .catch((error) => {
         console.error("Error fetching vehicle modal data: ", error);
+        let err = JSON.stringify(error);
+        ErrorLog({
+          lwcName: "ccp2_VehicleMaintenanceCalendar",
+          errorLog: err,
+          methodName: "fetch Maintain Modal"
+        })
+          .then(() => {
+            console.log("Error logged successfully in Salesforce");
+          })
+          .catch((loggingErr) => {
+            console.error("Failed to log error in Salesforce:", loggingErr);
+          });
       });
   }
   //@future
@@ -2538,5 +2918,96 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
 
   get showEmptyUi() {
     return this.vehiclesCount === 0 && this.isLoading === false;
+  }
+  //sorted data
+  getSortedCalendarData(dates) {
+    if (!dates || dates.length === 0) return [];
+
+    // console.log("dates", dates, dates[0].maintenance);
+
+    let modifiedDates = [];
+    let prevList = [...dates[0].maintenance];
+
+    modifiedDates.push({ ...dates[0] });
+    for (let i = 1; i < dates.length; i++) {
+      let currentDate = { ...dates[i] };
+      // console.log("currentDate.date", currentDate.date);
+      let newMaintenance = Array(prevList.length).fill({
+        Id: new Date().getTime() + Math.random(),
+        showNulSpace: true,
+        CCP2_Branch__c: null,
+        Maintenance_Type__c: null,
+        Recieving_Destination__c: null,
+        Schedule_Date__c: null,
+        Schedule_EndDate__c: null,
+        Service_Factory__c: null,
+        Service_Type__c: null,
+        Status__c: null,
+        Vehicle__c: null,
+        cssClass: "empty-box"
+      });
+      // console.log('newMaintenance first', [...newMaintenance])
+      let usedIndices = new Set();
+
+      let matchedCount = 0;
+      let lastMatchedIndex = -1;
+
+      // Step 1: Try to place matched events at their previous positions
+      prevList.forEach((prevEvent, index) => {
+        let matchedEvent = currentDate.maintenance.find(
+          (event) => event.Id === prevEvent.Id
+        );
+        if (matchedEvent) {
+          newMaintenance[index] = matchedEvent;
+          usedIndices.add(currentDate.maintenance.indexOf(matchedEvent));
+          matchedCount++;
+          lastMatchedIndex = index;
+          // console.log('newMaintenance if', [...newMaintenance])
+        } else {
+          newMaintenance[index] = this.createDummyEvent();
+          // console.log('newMaintenance else', [...newMaintenance])
+        }
+      });
+
+      currentDate.maintenance.forEach((event, idx) => {
+        if (!usedIndices.has(idx)) {
+          // console.log('event', event,idx, lastMatchedIndex)
+          // console.log('newMaintenance', newMaintenance)
+          lastMatchedIndex = lastMatchedIndex + 1;
+          // while ([...newMaintenance[insertIndex]]?.Id !== null || undefined) {
+          //       insertIndex++;
+          //   }
+          newMaintenance[lastMatchedIndex] = event;
+          // console.log('newMaintenance2', newMaintenance)
+        }
+      });
+
+      // Remove trailing dummy events if not required
+      newMaintenance = newMaintenance.filter((event) => event !== null);
+
+      currentDate.maintenance = newMaintenance;
+      modifiedDates.push(currentDate);
+      prevList = [...newMaintenance];
+    }
+
+    // console.log("modifiedDates", JSON.stringify(modifiedDates));
+    return modifiedDates;
+  }
+
+  createDummyEvent() {
+    return {
+      Id: new Date().getTime() + Math.random(),
+      showNulSpace: true,
+      CCP2_Branch__c: null,
+      Maintenance_Type__c: null,
+      Recieving_Destination__c: null,
+      Schedule_Date__c: null,
+      Schedule_EndDate__c: null,
+      Service_Factory__c: null,
+      Service_Type__c: null,
+      Status__c: null,
+      Vehicle__c: null,
+      cssClass: "empty-box"
+    };
   }
 }

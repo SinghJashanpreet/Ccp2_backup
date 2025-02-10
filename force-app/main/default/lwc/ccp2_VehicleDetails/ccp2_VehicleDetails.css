@@ -1438,6 +1438,7 @@ tbody tr:nth-child(5) td:last-child {
   width: 19.6rem;
   height: 40px;
   padding-left: 17px;
+  padding-right: 36px;
 }
 
 .Download-name-container {
@@ -1731,7 +1732,14 @@ tbody tr:nth-child(5) td:last-child {
   justify-content: center;
   z-index: 130;
 }
-
+.download-suffix{
+  position: absolute;
+  right: 9px;
+  top: 9.5px;
+  color: #262626;
+  font-size: 14px;
+  pointer-events: none;
+}
 .modal-container {
   background-color: rgba(251, 251, 251, 1);
   border-radius: 8px;
