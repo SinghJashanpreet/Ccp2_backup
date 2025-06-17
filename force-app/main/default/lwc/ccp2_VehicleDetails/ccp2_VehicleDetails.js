@@ -275,6 +275,25 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     }
   ];
 
+  @track implemenRecallPicklist = [
+    {
+      label: "未実施"
+    },
+    {
+      label: "サービス 一部実施済み"
+    },
+    {
+      label: "実施済み"
+    }
+  ];
+  @track catDropdown = false;
+  @track impstatusDropdown = false;
+
+  @track recallCategoryselected = "";
+  @track recallImpstatusSelected = "";
+
+  @track deleteConfirm = false;
+
   get isweightValid() {
     return this.vehicleByIdData.vehicleWeigth !== "-";
   }
@@ -1392,6 +1411,10 @@ export default class Ccp2_VehicleDetails extends LightningElement {
         "click",
         this.handleDeleteOutsideClick2.bind(this)
       );
+      document.addEventListener(
+        "click",
+        this.handleDeleteOutsideClickLeaseInsurancePicklist.bind(this)
+      );
       this.outsideClickHandlerAdded = true;
     }
     if (!this.outsideClickHandlerAdded) {
@@ -1596,6 +1619,10 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     document.removeEventListener(
       "click",
       this.handleDeleteOutsideClick2.bind(this)
+    );
+    document.removeEventListener(
+      "click",
+      this.handleDeleteOutsideClickLeaseInsurancePicklist.bind(this)
     );
   }
   get checkstatusofvehicle() {
@@ -2122,6 +2149,19 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       !listsElement.contains(event.target)
     ) {
       this.showreasonofdeletelist = false;
+    }
+  };
+  handleDeleteOutsideClickLeaseInsurancePicklist = (event) => {
+    const dataDropElement = this.template.querySelector(".input-recall-main");
+    const listsElement = this.template.querySelector(".l3");
+
+    if (
+      dataDropElement &&
+      !dataDropElement.contains(event.target) &&
+      listsElement &&
+      !listsElement.contains(event.target)
+    ) {
+      this.showLeaseInsurancePickList = false;
     }
   };
 
@@ -3864,15 +3904,50 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
 
   @track showLeaseDeleteConfirmationModal = false;
+  @track showLeaseInsurancePickList = false;
   handleLeaseDeleteConfirmationModal(event) {
     console.log("delete is called!");
     this.showLeaseDeleteConfirmationModal =
       !this.showLeaseDeleteConfirmationModal;
   }
 
+  handleLeaseDeleteConfirmationModalYes(event) {
+    this.showLeaseDeleteConfirmationModal = false;
+  }
+
   @track showCreateLeaseModal = false;
+  @track createModeOfLeaseCreateModal = false;
   handleCreateLeaseModal(event) {
-    console.log("this.showCreateLeaseModal", this.showCreateLeaseModal);
+    event.stopPropagation();
+    const name = event.target.dataset.name;
+    if (name === 'Cancel') {
+      this.inputLeaseData = {
+        inputCompanyName: this.leasedata.CompanyName,
+        inputContractNumber: this.leasedata.ContractNumber,
+        inputContractName: this.leasedata.ContractName,
+        inputContractExpDate: this.leasedata.ContractExpirationdate,
+        inputContractYear: this.leasedata.ContractYears,
+        inputMonthlyLeaseFee: this.leasedata.MonthlyLeaseFee,
+        inputVoluntryInsurance: this.leasedata.VoluntaryInsurance,
+        inputMemo: this.leasedata.Memo
+      };
+    }else if(name === 'Create'){
+      this.inputLeaseData = {
+        inputCompanyName: "",
+        inputContractNumber: "",
+        inputContractName: "",
+        inputContractExpDate: "",
+        inputContractYear: "",
+        inputMonthlyLeaseFee: "",
+        inputVoluntryInsurance: "",
+        inputMemo: ""
+      };
+      this.createModeOfLeaseCreateModal = true;
+    }else if(name === 'Edit'){
+      this.createModeOfLeaseCreateModal = false;
+    }
+
+    console.log("this.showCreateLeaseModal", this.showCreateLeaseModal, name);
     this.showCreateLeaseModal = !this.showCreateLeaseModal;
   }
 
@@ -3895,19 +3970,52 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     );
   }
 
+  handleLeaseInsurancePicklistValueSelect(event) {
+    event.stopPropagation();
+    this.showLeaseInsurancePickList = !this.showLeaseInsurancePickList;
+    this.inputLeaseData.inputVoluntryInsurance = event.target.dataset.name;
+  }
+
   handleLeaseCreateInputChange(event) {
     console.log("event Name", event.target.name);
     const name = event.target.name;
     const value = event.target.value;
+
+    if (name === "inputVoluntryInsurance") {
+      event.stopPropagation();
+      this.showLeaseInsurancePickList = !this.showLeaseInsurancePickList;
+      return;
+    }
 
     this.inputLeaseData[name] = value;
   }
 
   handleLeaseSave(event) {
     console.log("inputLeaseData", this.inputLeaseData);
+    this.showCreateLeaseModal = false;
   }
 
   handlebackRecallCreate() {
     this.recallModal = false;
+  }
+
+  handleCategoryRecall() {
+    this.catDropdown = !this.catDropdown;
+  }
+
+  handleRecallcategSel(event) {
+    this.recallCategoryselected = event.currentTarget.dataset.value;
+    this.catDropdown = false;
+    console.log("recallCategoryselected", this.recallCategoryselected);
+  }
+
+  handleImpstatusRecall() {
+    this.impstatusDropdown = !this.impstatusDropdown;
+  }
+
+  handleRecallstatusSel(event) {
+    this.recallImpstatusSelected = event.currentTarget.dataset.value;
+    this.impstatusDropdown = false;
+    console.log("recallstatuss", this.recallImpstatusSelected, event);
   }
 }

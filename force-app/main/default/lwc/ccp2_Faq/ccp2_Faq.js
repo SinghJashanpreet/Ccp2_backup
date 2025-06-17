@@ -15,6 +15,7 @@ import ErrorLog from "@salesforce/apex/CCP2_lwc_ErrorLogs.createLwcErrorLog";
 import getUserServices from "@salesforce/apex/CCP2_userController.permissionValuesAccessControl";
 import Id from "@salesforce/user/Id";
 
+
 const BACKGROUND_IMAGE_PC =
   Vehicle_StaticResource + "/CCP2_Resources/Common/Main_Background.webp";
 
@@ -105,25 +106,25 @@ export default class Ccp2_Faq extends LightningElement {
     if (data) {
       this.allServices = data;
 
-      console.log("alll servv", JSON.stringify(this.allServices));
+      console.log("alll servv",JSON.stringify(this.allServices));
       this.allServices.forEach((serv) => {
         if (serv.apiName === "E_invoice") {
           this.hasinvoice = serv.isActive;
-        }
-        if (serv.apiName === "FUSO_CCP_External_Vehicle_management") {
+        }if(serv.apiName === "FUSO_CCP_External_Vehicle_management"){
           this.hasvehicle = serv.isActive;
-        }
-        if (serv.apiName === "FUSO_CCP_External_Financial_service") {
+        }if(serv.apiName === "FUSO_CCP_External_Financial_service"){
           this.hasdtfsa = serv.isActive;
         }
-        console.log("alll servv inv", this.hasinvoice);
-        console.log("alll servv dtfsa", this.hasdtfsa);
-        console.log("alll servv veh", this.hasvehicle);
+      console.log("alll servv inv",this.hasinvoice);
+      console.log("alll servv dtfsa",this.hasdtfsa);
+      console.log("alll servv veh",this.hasvehicle);
+
       });
     } else {
       console.error("User Services Fetching error: wire", error);
     }
   }
+
 
   // @wire(faqDetailsByRecordId, {
   //   RecordId: "$recordId"
@@ -246,8 +247,8 @@ export default class Ccp2_Faq extends LightningElement {
           lwcName: "ccp2_faq",
           errorLog: err,
           methodName: "update Count Api",
-          ViewName: "FAQ",
-          InterfaceName: "Salesforce",
+          ViewName:"FAQ",
+          InterfaceName:"Salesforce",
           EventName: "Data fetch",
           ModuleName: "FAQ"
         })
@@ -280,8 +281,8 @@ export default class Ccp2_Faq extends LightningElement {
           lwcName: "ccp2_faq",
           errorLog: err,
           methodName: "deleteVoteCountApi",
-          ViewName: "FAQ",
-          InterfaceName: "Salesforce",
+          ViewName:"FAQ",
+          InterfaceName:"Salesforce",
           EventName: "Data update",
           ModuleName: "FAQ"
         })
@@ -314,8 +315,8 @@ export default class Ccp2_Faq extends LightningElement {
           lwcName: "ccp2_faq",
           errorLog: err,
           methodName: "update Count Api",
-          ViewName: "FAQ",
-          InterfaceName: "Salesforce",
+          ViewName:"FAQ",
+          InterfaceName:"Salesforce",
           EventName: "Data update",
           ModuleName: "FAQ"
         })
@@ -348,8 +349,8 @@ export default class Ccp2_Faq extends LightningElement {
           lwcName: "ccp2_faq",
           errorLog: err,
           methodName: "deleteCountApi",
-          ViewName: "FAQ",
-          InterfaceName: "Salesforce",
+          ViewName:"FAQ",
+          InterfaceName:"Salesforce",
           EventName: "Data update",
           ModuleName: "FAQ"
         })
@@ -396,8 +397,8 @@ export default class Ccp2_Faq extends LightningElement {
           lwcName: "ccp2_faq",
           errorLog: err,
           methodName: "Load Language",
-          ViewName: "FAQ",
-          InterfaceName: "Salesforce",
+          ViewName:"FAQ",
+          InterfaceName:"Salesforce",
           EventName: "Data fetch",
           ModuleName: "FAQ"
         })
@@ -457,8 +458,8 @@ export default class Ccp2_Faq extends LightningElement {
           lwcName: "ccp2_faq",
           errorLog: err,
           methodName: "Load Labels",
-          ViewName: "FAQ",
-          InterfaceName: "Salesforce",
+          ViewName:"FAQ",
+          InterfaceName:"Salesforce",
           EventName: "Data fetch",
           ModuleName: "FAQ"
         })

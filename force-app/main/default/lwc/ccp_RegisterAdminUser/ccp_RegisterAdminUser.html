@@ -1,1087 +1,827 @@
 <template>
-  <div class="layout" style={layoutStyle} lwc:if={RedirectFlag}>
-    <div class="outer-content">
-      <div class="inner-content">
-        <div class="title">三菱ふそうカスタマーポータル利用申し込み</div>
-        <!-- ステップ画像 -->
-        <div class="progress">
-          <img src={progressContect.imgSrc} />
-        </div>
-        <!-- ステップタイトル -->
-        <div class="header">{progressContect.title}</div>
-        <!-- ➀お客様の登録 -->
-        <div class="step" lwc:if={CorporateRegistrationSection}>
-          <div class="form">
-            <div class="CCP-application-form">
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div
-                      class="header-3 corporate-registration-siebel-account-code-container"
-                    >
-                      お客様番号
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 25 25"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M11.5 17.5H13.5V11.5H11.5V17.5ZM12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5ZM11.5 9.5H13.5V7.5H11.5V9.5Z"
-                          fill="#262626"
-                        />
-                        <path
-                          d="M11.5 7.5H13.5V9.5H11.5V7.5ZM11.5 11.5H13.5V17.5H11.5V11.5Z"
-                          fill="#262626"
-                        />
-                        <path
-                          d="M12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5Z"
-                          fill="#262626"
-                        />
-                      </svg>
-                      <!-- info にホバーしたとき -->
-                      <div class="tooltip">
-                        <p>
-                          お客様番号は請求書のこちらをご覧になってください。
-                        </p>
-                        <img
-                          src={invoiceImg_siebelAccountCode}
-                          alt="請求書顧客コードサンプル画像"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="view">
-                    <div class="tag-PC-2">
-                      <div class="text-wrapper-6">必須</div>
-                    </div>
-                  </div>
+    <div class="layout" style={layoutStyle} lwc:if={RedirectFlag}>
+        <div class="outer-content">
+            <div class="inner-content">
+                <div class="title">
+                    三菱ふそうカスタマーポータル利用申し込み
                 </div>
-                <div class="input-fields">
-                  <input
-                    type="text"
-                    name="siebelAccountCode"
-                    placeholder="例：0000X12345"
-                    data-id="siebelAccountCode"
-                    onchange={handleInputChange}
-                    value={siebelAccountCode}
-                  />
-                  *10桁のコードを半角英数字で入力してください
-                  <template lwc:if={customerCodeError}>
-                    <div class="error-message">{customerCodeError}</div>
-                  </template>
+                <!-- ステップ画像 -->
+                <div class="progress">
+                    <img src={progressContect.imgSrc} />
                 </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div
-                      class="header-3 corporate-registration-siebel-account-code-container"
-                    >
-                      郵便番号
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 25 25"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M11.5 17.5H13.5V11.5H11.5V17.5ZM12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5ZM11.5 9.5H13.5V7.5H11.5V9.5Z"
-                          fill="#262626"
-                        />
-                        <path
-                          d="M11.5 7.5H13.5V9.5H11.5V7.5ZM11.5 11.5H13.5V17.5H11.5V11.5Z"
-                          fill="#262626"
-                        />
-                        <path
-                          d="M12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5Z"
-                          fill="#262626"
-                        />
-                      </svg>
-                      <!-- info にホバーしたとき -->
-                      <div class="tooltip">
-                        <p>郵便番号は請求書のこちらをご覧になってください。</p>
-                        <img
-                          src={invoiceImg_postalCode}
-                          alt="請求書郵便番号サンプル画像"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="view">
-                    <div class="tag-PC-2">
-                      <div class="text-wrapper-6">必須</div>
-                    </div>
-                  </div>
+                <!-- ステップタイトル -->
+                <div class="header">
+                    {progressContect.title}
                 </div>
-                <div class="input-fields-two">
-                  <div class="row-frame">
-                    <div class="supporting-text-3">
-                      <div class="textbox-wrapper">
-                        <div class="yamadataro-fuso-com-wrapper">
-                          <div class="yamadataro-fuso-com-2">
-                            <input
-                              type="text"
-                              name="postalCodePrefix"
-                              placeholder="123"
-                              data-id="postalCodePrefix"
-                              onchange={handleInputChange}
-                              value={postalCodePrefix}
-                            />
-                          </div>
+                <!-- ➀お客様の登録 -->
+                <div class="step" lwc:if={CorporateRegistrationSection}>
+                    <div class="form">
+                        <div class="CCP-application-form">
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3 corporate-registration-siebel-account-code-container">
+                                            お客様番号
+                                            <svg width="20" height="20" viewBox="0 0 25 25" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M11.5 17.5H13.5V11.5H11.5V17.5ZM12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5ZM11.5 9.5H13.5V7.5H11.5V9.5Z"
+                                                    fill="#262626" />
+                                                <path d="M11.5 7.5H13.5V9.5H11.5V7.5ZM11.5 11.5H13.5V17.5H11.5V11.5Z"
+                                                    fill="#262626" />
+                                                <path
+                                                    d="M12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5Z"
+                                                    fill="#262626" />
+                                            </svg>
+                                            <!-- info にホバーしたとき -->
+                                            <div class="tooltip">
+                                                <p>お客様番号は請求書のこちらをご覧になってください。</p>
+                                                <img src={invoiceImg_siebelAccountCode} alt="請求書顧客コードサンプル画像">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="view">
+                                        <div class="tag-PC-2">
+                                            <div class="text-wrapper-6">必須</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-fields">
+                                    <input type="text" name="siebelAccountCode" placeholder="例：0000X12345"
+                                        data-id="siebelAccountCode" onchange={handleInputChange}
+                                        value={siebelAccountCode} />
+                                    *10桁のコードを半角英数字で入力してください
+                                    <template lwc:if={customerCodeError}>
+                                        <div class="error-message">
+                                            {customerCodeError}
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3 corporate-registration-siebel-account-code-container">
+                                            郵便番号
+                                            <svg width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M11.5 17.5H13.5V11.5H11.5V17.5ZM12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5ZM11.5 9.5H13.5V7.5H11.5V9.5Z" fill="#262626"/>
+                                                <path d="M11.5 7.5H13.5V9.5H11.5V7.5ZM11.5 11.5H13.5V17.5H11.5V11.5Z" fill="#262626"/>
+                                                <path d="M12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5Z" fill="#262626"/>
+                                            </svg>
+                                            <!-- info にホバーしたとき -->
+                                            <div class="tooltip">
+                                                <p>郵便番号は請求書のこちらをご覧になってください。</p>
+                                                <img src={invoiceImg_postalCode} alt="請求書郵便番号サンプル画像">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="view">
+                                        <div class="tag-PC-2">
+                                            <div class="text-wrapper-6">必須</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-fields-two">
+                                    <div class="row-frame">
+                                        <div class="supporting-text-3">
+                                            <div class="textbox-wrapper">
+                                                <div class="yamadataro-fuso-com-wrapper">
+                                                    <div class="yamadataro-fuso-com-2">
+                                                        <input type="text" name="postalCodePrefix" placeholder="123"
+                                                            data-id="postalCodePrefix" onchange={handleInputChange}
+                                                            value={postalCodePrefix} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="hyphen">ー</div>
+                                            <div class="input-fields-2">
+                                                <div class="yamadataro-fuso-com-wrapper">
+                                                    <div class="yamadataro-fuso-com-2">
+                                                        <input type="text" name="postalCodeSuffix" placeholder="4567"
+                                                            data-id="postalCodeSuffix" onchange={handleInputChange}
+                                                            value={postalCodeSuffix} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        *半角数字を入力してください。
+                                    </div>
+                                    <template lwc:if={postalCodeFrontError}>
+                                        <div class="error-message">
+                                            {postalCodeFrontError}
+                                        </div>
+                                    </template>
+                                    <template lwc:if={postalCodeBackError}>
+                                        <div class="error-message">
+                                            {postalCodeBackError}
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="hyphen">ー</div>
-                      <div class="input-fields-2">
-                        <div class="yamadataro-fuso-com-wrapper">
-                          <div class="yamadataro-fuso-com-2">
-                            <input
-                              type="text"
-                              name="postalCodeSuffix"
-                              placeholder="4567"
-                              data-id="postalCodeSuffix"
-                              onchange={handleInputChange}
-                              value={postalCodeSuffix}
-                            />
-                          </div>
+                        <div class="text">
+                            <p class="p">
+                                <span class="span">*該当するお客様情報がない場合は、</span>
+                                <a href="/s/inquiry" target="_blank">こちら</a>
+                                <span class="span">からお問い合わせください。</span>
+                            </p>
                         </div>
-                      </div>
                     </div>
-                  </div>
-                  <div>*半角数字を入力してください。</div>
-                  <template lwc:if={postalCodeFrontError}>
-                    <div class="error-message">{postalCodeFrontError}</div>
-                  </template>
-                  <template lwc:if={postalCodeBackError}>
-                    <div class="error-message">{postalCodeBackError}</div>
-                  </template>
-                </div>
-              </div>
-            </div>
-            <div class="text">
-              <p class="p">
-                <span class="span">*該当するお客様情報がない場合は、</span>
-                <a href="/s/inquiry" target="_blank">こちら</a>
-                <span class="span">からお問い合わせください。</span>
-              </p>
-            </div>
-          </div>
-          <div class="frame-navigation-center">
-            <button
-              class="text-wrapper-10"
-              onclick={corporateNextClick}
-              lwc:if={corporateRegistrationButton}
-            >
-              次へ
-            </button>
-            <button class="text-wrapper-12" disabled lwc:else>次へ</button>
-          </div>
-        </div>
-        <!-- ➁ユーザの登録 ➂ユーザの登録確認 -->
-        <div class="step" lwc:if={userRegistrationOrConfirmation}>
-          <div class="form">
-            <div class="CCP-application-form">
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div class="header-3">お客様番号</div>
-                  </div>
-                </div>
-                <div class="input-fields">
-                  <div class="text-entry">
-                    <div class="ahjhgsiufhiofjoie">
-                      {corporateData.siebelAccountCode}
+                    <div class="frame-navigation-center">
+                        <button class="text-wrapper-10" onclick={corporateNextClick}
+                            lwc:if={corporateRegistrationButton}>
+                            次へ
+                        </button>
+                        <button class="text-wrapper-12" disabled lwc:else>
+                            次へ
+                        </button>
                     </div>
-                  </div>
                 </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div class="header-3">会社名</div>
-                  </div>
-                </div>
-                <div class="input-fields">
-                  <div class="text-entry">
-                    <div class="ahjhgsiufhiofjoie">
-                      {corporateData.accountName}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div class="header-3">住所</div>
-                  </div>
-                </div>
-                <div class="input-fields">
-                  <div class="text-entry">
-                    <div class="ahjhgsiufhiofjoie">
-                      {corporateData.accountAddress}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div class="header-3">氏名</div>
-                  </div>
-                </div>
-                <div class="input-fields">
-                  <div class="text-entry">
-                    <div class="ahjhgsiufhiofjoie">
-                      {contactData.lastName} {contactData.firstName}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div class="header-3">氏名（フリガナ）</div>
-                  </div>
-                  <div class="view" lwc:if={UserRegistrationSection}>
-                    <div class="tag-PC">
-                      <div class="text-wrapper-6">必須</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="input-fields-two" lwc:if={UserRegistrationSection}>
-                  <div class="two-column-support">
-                    <div class="supporting-text">
-                      <div class="text-wrapper-7">姓（フリガナ）</div>
-                    </div>
-                    <div class="supporting-text">
-                      <div class="text-wrapper-7">名（フリガナ）</div>
-                    </div>
-                  </div>
-                  <div class="div-wrapper-2">
-                    <div class="supporting-text-2">
-                      <div class="slds-form-element__control-2">
-                        <input
-                          type="text"
-                          name="lastNameKana"
-                          placeholder="フソウ"
-                          data-id="lastNameKana"
-                          onchange={handleInputChange}
-                          value={lastNameKana}
-                        />
-                        <template lwc:if={lastNameKanaError}>
-                          <div class="error-message">{lastNameKanaError}</div>
-                        </template>
-                      </div>
-                      <div class="slds-form-element__control-2">
-                        <input
-                          type="text"
-                          name="firstNameKana"
-                          placeholder="タロウ"
-                          data-id="firstNameKana"
-                          onchange={handleInputChange}
-                          value={firstNameKana}
-                        />
-                        <template lwc:if={firstNameKanaError}>
-                          <div class="error-message">{firstNameKanaError}</div>
-                        </template>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="input-fields" lwc:if={UserConfirmationSection}>
-                  <div class="text-entry">
-                    <div class="ahjhgsiufhiofjoie">
-                      {contactInputData.lastNameKana}
-                      {contactInputData.firstNameKana}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div class="header-3">役職</div>
-                  </div>
-                  <div class="view" lwc:if={UserRegistrationSection}>
-                    <div class="tag-PC-2">
-                      <div class="text-wrapper-8">任意</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="input-fields" lwc:if={UserRegistrationSection}>
-                  <input
-                    type="text"
-                    name="title"
-                    placeholder="役職を入力してください。"
-                    data-id="title"
-                    onchange={handleInputChange}
-                    value={title}
-                  />
-                  <template lwc:if={titleError}>
-                    <div class="error-message">{titleError}</div>
-                  </template>
-                </div>
-                <div class="input-fields" lwc:if={UserConfirmationSection}>
-                  <div class="text-entry">
-                    <div class="ahjhgsiufhiofjoie">
-                      {contactInputData.title}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div class="header-3">部署</div>
-                  </div>
-                  <div class="view">
-                    <div class="tag-PC-2">
-                      <div
-                        class="text-wrapper-8"
-                        lwc:if={UserRegistrationSection}
-                      >
-                        任意
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="input-fields" lwc:if={UserRegistrationSection}>
-                  <input
-                    type="text"
-                    name="department"
-                    placeholder="部署を入力してください。"
-                    data-id="department"
-                    onchange={handleInputChange}
-                    value={department}
-                  />
-                  <template lwc:if={departmentError}>
-                    <div class="error-message">{departmentError}</div>
-                  </template>
-                </div>
-                <div class="input-fields" lwc:if={UserConfirmationSection}>
-                  <div class="text-entry">
-                    <div class="ahjhgsiufhiofjoie">
-                      {contactInputData.department}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div class="header-3">メールアドレス</div>
-                  </div>
-                </div>
-                <div class="input-fields">
-                  <div class="text-entry">
-                    <div class="ahjhgsiufhiofjoie">{contactData.email}</div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div class="header-3">電話番号</div>
-                  </div>
-                  <div class="view" lwc:if={UserRegistrationSection}>
-                    <div class="tag-PC">
-                      <div
-                        class="text-wrapper-6"
-                        lwc:if={UserRegistrationSection}
-                      >
-                        必須
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="input-fields-two">
-                  <div
-                    class="two-column-support"
-                    lwc:if={UserRegistrationSection}
-                  >
-                    <div>
-                      電話番号あるいは携帯番号のいずれかをハイフンなしで<br />ご入力してください。(全角入力不可、最大11桁)
-                    </div>
-                  </div>
-                  <div class="div-wrapper-2">
-                    <div class="input-fields-3">
-                      <div class="frame-5">
-                        <div class="supporting-text-wrapper">
-                          <div class="supporting-text-3">
-                            <div class="text-wrapper-11">電話番号</div>
-                          </div>
+                <!-- ➁ユーザの登録 ➂ユーザの登録確認 -->
+                <div class="step" lwc:if={userRegistrationOrConfirmation}>
+                    <div class="form">
+                        <div class="CCP-application-form">
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">お客様番号</div>
+                                    </div>
+                                </div>
+                                <div class="input-fields">
+                                    <div class="text-entry">
+                                        <div class="ahjhgsiufhiofjoie">
+                                            {corporateData.siebelAccountCode}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">会社名</div>
+                                    </div>
+                                </div>
+                                <div class="input-fields">
+                                    <div class="text-entry">
+                                        <div class="ahjhgsiufhiofjoie">
+                                            {corporateData.accountName}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">住所</div>
+                                    </div>
+                                </div>
+                                <div class="input-fields">
+                                    <div class="text-entry">
+                                        <div class="ahjhgsiufhiofjoie">
+                                            {corporateData.accountAddress}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">氏名</div>
+                                    </div>
+                                </div>
+                                <div class="input-fields">
+                                    <div class="text-entry">
+                                        <div class="ahjhgsiufhiofjoie">
+                                            {contactData.lastName} {contactData.firstName}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">氏名（フリガナ）</div>
+                                    </div>
+                                    <div class="view" lwc:if={UserRegistrationSection}>
+                                        <div class="tag-PC">
+                                            <div class="text-wrapper-6">必須</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-fields-two" lwc:if={UserRegistrationSection}>
+                                    <div class="two-column-support">
+                                        <div class="supporting-text">
+                                            <div class="text-wrapper-7">姓（フリガナ）</div>
+                                        </div>
+                                        <div class="supporting-text">
+                                            <div class="text-wrapper-7">名（フリガナ）</div>
+                                        </div>
+                                    </div>
+                                    <div class="div-wrapper-2">
+                                        <div class="supporting-text-2">
+                                            <div class="slds-form-element__control-2">
+                                                <input type="text" name="lastNameKana" placeholder="フソウ"
+                                                    data-id="lastNameKana" onchange={handleInputChange}
+                                                    value={lastNameKana} />
+                                                <template lwc:if={lastNameKanaError}>
+                                                    <div class="error-message">
+                                                        {lastNameKanaError}
+                                                    </div>
+                                                </template>
+                                            </div>
+                                            <div class="slds-form-element__control-2">
+                                                <input type="text" name="firstNameKana" placeholder="タロウ"
+                                                    data-id="firstNameKana" onchange={handleInputChange}
+                                                    value={firstNameKana} />
+                                                <template lwc:if={firstNameKanaError}>
+                                                    <div class="error-message">
+                                                        {firstNameKanaError}
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-fields" lwc:if={UserConfirmationSection}>
+                                    <div class="text-entry">
+                                        <div class="ahjhgsiufhiofjoie">
+                                            {contactInputData.lastNameKana} {contactInputData.firstNameKana}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">役職</div>
+                                    </div>
+                                    <div class="view" lwc:if={UserRegistrationSection}>
+                                        <div class="tag-PC-2">
+                                            <div class="text-wrapper-8">任意</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-fields" lwc:if={UserRegistrationSection}>
+                                    <input type="text" name="title" placeholder="役職を入力してください。" data-id="title"
+                                        onchange={handleInputChange} value={title} />
+                                    <template lwc:if={titleError}>
+                                        <div class="error-message">{titleError}</div>
+                                    </template>
+                                </div>
+                                <div class="input-fields" lwc:if={UserConfirmationSection}>
+                                    <div class="text-entry">
+                                        <div class="ahjhgsiufhiofjoie">
+                                            {contactInputData.title}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">部署</div>
+                                    </div>
+                                    <div class="view">
+                                        <div class="tag-PC-2">
+                                            <div class="text-wrapper-8" lwc:if={UserRegistrationSection}>任意</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-fields" lwc:if={UserRegistrationSection}>
+                                    <input type="text" name="department" placeholder="部署を入力してください。" data-id="department"
+                                        onchange={handleInputChange} value={department} />
+                                    <template lwc:if={departmentError}>
+                                        <div class="error-message">{departmentError}</div>
+                                    </template>
+                                </div>
+                                <div class="input-fields" lwc:if={UserConfirmationSection}>
+                                    <div class="text-entry">
+                                        <div class="ahjhgsiufhiofjoie">
+                                            {contactInputData.department}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">メールアドレス</div>
+                                    </div>
+                                </div>
+                                <div class="input-fields">
+                                    <div class="text-entry">
+                                        <div class="ahjhgsiufhiofjoie">
+                                            {contactData.email}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">電話番号</div>
+                                    </div>
+                                    <div class="view" lwc:if={UserRegistrationSection}>
+                                        <div class="tag-PC">
+                                            <div class="text-wrapper-6" lwc:if={UserRegistrationSection}>必須</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-fields-two">
+                                    <div class="two-column-support" lwc:if={UserRegistrationSection}>
+                                        <div>
+                                            電話番号あるいは携帯番号のいずれかをハイフンなしで<br/>ご入力してください。(全角入力不可、最大11桁)
+                                        </div>
+                                    </div>
+                                    <div class="div-wrapper-2">
+                                        <div class="input-fields-3">
+                                            <div class="frame-5">
+                                                <div class="supporting-text-wrapper">
+                                                    <div class="supporting-text-3">
+                                                        <div class="text-wrapper-11">
+                                                            電話番号
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-form-element__control"
+                                                    lwc:if={UserRegistrationSection}> 
+                                                    <input type="text" name="phone" placeholder="04512345678"
+                                                        data-id="phone" oninput={handleInputChange} maxlength="11" value={phone} pattern="\d*"/>
+                                                    <template lwc:if={phoneError}>
+                                                        <div class="error-message">
+                                                            {phoneError}
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                                <div class="slds-form-element__control"
+                                                    lwc:if={UserConfirmationSection}>
+                                                    {contactInputData.phone}
+                                                </div>
+                                            </div>
+                                            <div class="frame-5">
+                                                <div class="supporting-text-wrapper">
+                                                    <div class="supporting-text-3">
+                                                        <div class="text-wrapper-11">
+                                                            携帯番号
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-form-element__control"
+                                                    lwc:if={UserRegistrationSection}>
+                                                    <input type="text" name="mobilePhone" placeholder="08012345678"
+                                                        data-id="mobilePhone" oninput={handleInputChange}
+                                                        value={mobilePhone} maxlength="11" />
+                                                    <template lwc:if={mobilePhoneError}>
+                                                        <div class="error-message">
+                                                            {mobilePhoneError}
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                                <div class="slds-form-element__control"
+                                                    lwc:if={UserConfirmationSection}>
+                                                    {contactInputData.mobilePhone}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">規約への同意</div>
+                                    </div>
+                                    <div class="view" lwc:if={UserRegistrationSection}>
+                                        <div class="tag-PC">
+                                            <div class="text-wrapper-6">必須</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-fields-two">
+                                    <div class="two-column-support" style="margin-bottom: 8px;">
+                                        <div>
+                                            <a href={termsUrls.CCP.url} target="_blank">三菱ふそうカスタマーポータル利用規約</a>
+                                        </div>
+                                    </div>
+                                    <div lwc:if={UserRegistrationSection}>
+                                        <input type="checkbox" id="terms" name="terms" data-id="terms"
+                                            onchange={handleInputChange} checked={terms} />
+                                        <label for="terms">規約に同意する</label>
+                                    </div>
+                                    <div lwc:if={UserConfirmationSection}>
+                                        <input type="checkbox" id="terms-confirm" name="terms-confirm" checked
+                                            disabled />
+                                        <label for="terms-confirm">規約に同意する</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div
-                          class="slds-form-element__control"
-                          lwc:if={UserRegistrationSection}
-                        >
-                          <input
-                            type="text"
-                            name="phone"
-                            placeholder="04512345678"
-                            data-id="phone"
-                            oninput={handleInputChange}
-                            maxlength="11"
-                            value={phone}
-                            pattern="\d*"
-                          />
-                          <template lwc:if={phoneError}>
-                            <div class="error-message">{phoneError}</div>
-                          </template>
-                        </div>
-                        <div
-                          class="slds-form-element__control"
-                          lwc:if={UserConfirmationSection}
-                        >
-                          {contactInputData.phone}
-                        </div>
-                      </div>
-                      <div class="frame-5">
-                        <div class="supporting-text-wrapper">
-                          <div class="supporting-text-3">
-                            <div class="text-wrapper-11">携帯番号</div>
-                          </div>
-                        </div>
-                        <div
-                          class="slds-form-element__control"
-                          lwc:if={UserRegistrationSection}
-                        >
-                          <input
-                            type="text"
-                            name="mobilePhone"
-                            placeholder="08012345678"
-                            data-id="mobilePhone"
-                            oninput={handleInputChange}
-                            value={mobilePhone}
-                            maxlength="11"
-                          />
-                          <template lwc:if={mobilePhoneError}>
-                            <div class="error-message">{mobilePhoneError}</div>
-                          </template>
-                        </div>
-                        <div
-                          class="slds-form-element__control"
-                          lwc:if={UserConfirmationSection}
-                        >
-                          {contactInputData.mobilePhone}
-                        </div>
-                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label">
-                  <div class="header-wrapper">
-                    <div class="header-3">規約への同意</div>
-                  </div>
-                  <div class="view" lwc:if={UserRegistrationSection}>
-                    <div class="tag-PC">
-                      <div class="text-wrapper-6">必須</div>
+                    <div class="frame-navigation" lwc:if={UserRegistrationSection}>
+                        <button class="text-wrapper-12" onclick={onPreviousButtonClick}>戻る</button>
+                        <button class="text-wrapper-10" onclick={contactNextClick}
+                            lwc:if={userRegistrationButton}>次へ</button>
+                        <button class="text-wrapper-12" disabled lwc:else>次へ</button>
                     </div>
-                  </div>
-                </div>
-                <div class="input-fields-two">
-                  <div class="two-column-support" style="margin-bottom: 8px">
-                    <div>
-                      <a href={termsUrls.CCP.url} target="_blank"
-                        >三菱ふそうカスタマーポータル利用規約</a
-                      >
+                    <div class="frame-navigation" lwc:if={UserConfirmationSection}>
+                        <button class="text-wrapper-12" onclick={onPreviousButtonClick}>戻る</button>
+                        <button class="text-wrapper-10" onclick={onConfirmContactNextButtonClick}>次へ</button>
                     </div>
-                  </div>
-                  <div lwc:if={UserRegistrationSection}>
-                    <input
-                      type="checkbox"
-                      id="terms"
-                      name="terms"
-                      data-id="terms"
-                      onchange={handleInputChange}
-                      checked={terms}
-                    />
-                    <label for="terms">規約に同意する</label>
-                  </div>
-                  <div lwc:if={UserConfirmationSection}>
-                    <input
-                      type="checkbox"
-                      id="terms-confirm"
-                      name="terms-confirm"
-                      checked
-                      disabled
-                    />
-                    <label for="terms-confirm">規約に同意する</label>
-                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="frame-navigation" lwc:if={UserRegistrationSection}>
-            <button class="text-wrapper-12" onclick={onPreviousButtonClick}>
-              戻る
-            </button>
-            <button
-              class="text-wrapper-10"
-              onclick={contactNextClick}
-              lwc:if={userRegistrationButton}
-            >
-              次へ
-            </button>
-            <button class="text-wrapper-12" disabled lwc:else>次へ</button>
-          </div>
-          <div class="frame-navigation" lwc:if={UserConfirmationSection}>
-            <button class="text-wrapper-12" onclick={onPreviousButtonClick}>
-              戻る
-            </button>
-            <button
-              class="text-wrapper-10"
-              onclick={onConfirmContactNextButtonClick}
-            >
-              次へ
-            </button>
-          </div>
-        </div>
-        <!-- ➃サービスの選択 -->
-        <div class="step" lwc:if={ServiceSelectSection}>
-          <div class="form">
-            <div class="CCP-application-form">
-              <div>
-                <h2 style="gap: 16px">
-                  <p>利用希望サービス</p>
-                  <div class="text-wrapper-6" style="font-weight: 400">
-                    必須
-                  </div>
-                  <!-- <div class="reqtxt">必須</div> -->
-                </h2>
-                <p class="description">
-                  希望されるサービスを選択してください。
-                </p>
-                <div
-                  class="service-option"
-                  lwc:if={isAuthorizedForVehicleManagement}
-                >
-                  <img
-                    src={vehicleImg}
-                    alt="Vehicle Image"
-                    class="service-image"
-                  />
-                  <div class="service-details">
-                    <span class="service-title">車両管理</span>
-                    <p class="service-text">
-                      お客様が保有する車両を登録いただくことで、車検証の情報や整備の予定を管理できるサービスです。
-                    </p>
-                  </div>
-                  <label class="checkbox-label">
-                    <span class="checkbox-line"></span>
-                    <input
-                      type="checkbox"
-                      name="service"
-                      value="vehicle"
-                      id="vehicleService"
-                      data-id="vehicleService"
-                      onchange={handleInputChange}
-                      checked={vehicleService}
-                      class="checkbox"
-                    />
-                    希望する
-                  </label>
-                </div>
+                <!-- ➃サービスの選択 -->
+                <div class="step" lwc:if={ServiceSelectSection}>
+                    <div class="form">
+                        <div class="CCP-application-form">
+                            <div>
+                                <h2 style="gap: 16px;">
+                                    <p>利用希望サービス</p>
+                                    <div class="text-wrapper-6" style="font-weight: 400;">必須</div>
+                                    <!-- <div class="reqtxt">必須</div> -->
+                                </h2>
+                                <p class="description">希望されるサービスを選択してください。</p>
+                                <div class="service-option" lwc:if={isAuthorizedForVehicleManagement}>
+                                    <img src={vehicleImg} alt="Vehicle Image" class="service-image" />
+                                    <div class="service-details">
+                                        <span class="service-title">車両管理</span>
+                                        <p class="service-text">お客様が保有する車両を登録いただくことで、車検証の情報や整備の予定を管理できるサービスです。</p>
+                                    </div>
+                                    <label class="checkbox-label">
+                                        <span class="checkbox-line"></span>
+                                        <input type="checkbox" name="service" value="vehicle" id="vehicleService"
+                                            data-id="vehicleService" onchange={handleInputChange}
+                                            checked={vehicleService} class="checkbox" />
+                                            希望する
+                                    </label>
+                                </div>
 
-                <div class="service-option" lwc:if={isAuthorizedForEinvoice}>
-                  <img
-                    src={invoiceServiceImg}
-                    alt="Invoice Image"
-                    class="service-image"
-                  />
-                  <div class="service-details">
-                    <span class="service-title">部整月次請求書（電子版）</span>
-                    <p class="service-text">
-                      三菱ふそうからの部品と整備の請求書をダウンロードできるサービスです。
-                    </p>
-                  </div>
-                  <label class="checkbox-label">
-                    <span class="checkbox-line"></span>
-                    <input
-                      type="checkbox"
-                      name="service"
-                      value="invoice"
-                      id="invoiceService"
-                      data-id="invoiceService"
-                      onchange={handleInputChange}
-                      checked={invoiceService}
-                      class="checkbox"
-                    />
-                    希望する
-                  </label>
-                </div>
+                                <div class="service-option" lwc:if={isAuthorizedForEinvoice}>
+                                    <img src={invoiceServiceImg} alt="Invoice Image" class="service-image" />
+                                    <div class="service-details">
+                                        <span class="service-title">部整月次請求書（電子版）</span>
+                                        <p class="service-text">三菱ふそうからの部品と整備の請求書をダウンロードできるサービスです。</p>
+                                    </div>
+                                    <label class="checkbox-label">
+                                        <span class="checkbox-line"></span>
+                                        <input type="checkbox" name="service" value="invoice" id="invoiceService"
+                                            data-id="invoiceService" onchange={handleInputChange}
+                                            checked={invoiceService} class="checkbox" />
+                                        希望する
+                                    </label>
+                                </div>
 
-                <p class="notice" lwc:if={isAuthorizedSiebel}>
-                  *このサービスは、FUSOリース契約をお待ちのお客様のみご利用いただけます。<br />
-                  &nbsp;
-                  FUSOリースはダイムラー・トラック・フィナンシャルサービスが提供するサービスの総称です。
-                </p>
-                <div class="service-option" lwc:if={isAuthorizedSiebel}>
-                  <img
-                    src={leaseLoanServiceImg}
-                    alt="lease-loan Image"
-                    class="service-image"
-                  />
-                  <div class="service-details">
-                    <span class="service-title">FUSOリース</span>
-                    <p class="service-text">
-                      FUSOリースのご契約に関する書類をオンラインでダウンロードできるサービスです。
-                    </p>
-                  </div>
-                  <label class="checkbox-label">
-                    <span class="checkbox-line"></span>
-                    <input
-                      type="checkbox"
-                      name="service"
-                      value="lease-loan"
-                      id="leaseLoanService"
-                      data-id="leaseLoanService"
-                      onchange={handleInputChange}
-                      checked={leaseLoanService}
-                      class="checkbox"
-                    />
-                    希望する
-                  </label>
+                                <p class="notice" lwc:if={isAuthorizedSiebel}>*このサービスは、FUSOリース契約をお待ちのお客様のみご利用いただけます。<br/> &nbsp; FUSOリースはダイムラー・トラック・フィナンシャルサービスが提供するサービスの総称です。</p>
+                                <div class="service-option" lwc:if={isAuthorizedSiebel}>
+                                    <img src={leaseLoanServiceImg} alt="lease-loan Image" class="service-image" />
+                                    <div class="service-details">
+                                        <span class="service-title">FUSOリース</span>
+                                        <p class="service-text">FUSOリースのご契約に関する書類をオンラインでダウンロードできるサービスです。</p>
+                                    </div>
+                                    <label class="checkbox-label">
+                                        <span class="checkbox-line"></span>
+                                        <input type="checkbox" name="service" value="lease-loan" id="leaseLoanService"
+                                            data-id="leaseLoanService" onchange={handleInputChange}
+                                            checked={leaseLoanService} class="checkbox" />
+                                        希望する
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="frame-navigation">
+                        <button class="text-wrapper-12" onclick={onPreviousButtonClick}>戻る</button>
+                        <button class="text-wrapper-10" onclick={onServiceSelectNextButtonClick} disabled={isAnyServiceNotSelected}>次へ</button>
+                    </div>
                 </div>
-              </div>
+                <!-- ➃サービスの登録 ➄サービスの登録確認 -->
+                <div class="step" lwc:if={serviceRegistrationOrConfirmation}>
+                    <div class="form">
+                        <div class="CCP-application-form" lwc:if={invoiceService}>
+                            <div class="service-registration-header">
+                                <span style="font-weight: 700;font-size:14px;">部整月次請求書（電子版）の利用をご希望のお客様​</span>
+                                <svg width="20" height="20" viewBox="0 0 25 25" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M11.5 17.5H13.5V11.5H11.5V17.5ZM12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5ZM11.5 9.5H13.5V7.5H11.5V9.5Z"
+                                        fill="#262626" />
+                                    <path d="M11.5 7.5H13.5V9.5H11.5V7.5ZM11.5 11.5H13.5V17.5H11.5V11.5Z"
+                                        fill="#262626" />
+                                    <path
+                                        d="M12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5Z"
+                                        fill="#262626" />
+                                </svg>
+                                <div class="tooltip">
+                                    <p>三菱ふそうからの部品と整備の請求書を<br/>ダウンロードできるサービスです。</p>
+                                </div>
+                            </div>
+                            <hr style="margin:0 10px;" />
+                            <div class="form-entries">
+                                <div class="header-and-label" style="width:35%;">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">お客様番号</div>
+                                    </div>
+                                </div>
+                                <div class="input-fields">
+                                    <div class="text-entry">
+                                        <div class="ahjhgsiufhiofjoie">
+                                            {corporateData.siebelAccountCode}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label" style="width:35%;">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">規約への同意</div>
+                                    </div>
+                                    <div class="view" lwc:if={ServiceRegistrationSection}>
+                                        <div class="tag-PC">
+                                            <div class="text-wrapper-6">必須</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-fields-two">
+                                    <div class="two-column-support" style="margin-bottom: 8px;">
+                                        <div>
+                                            <a href={termsUrls.EInvoice.url}  target="_blank">部整月次請求書（電子版）利用規約</a>
+                                        </div>
+                                    </div>
+                                    <div lwc:if={ServiceRegistrationSection}>
+                                        <input type="checkbox" id="invoiceTermsOfService" name="invoiceTermsOfService"
+                                            data-id="invoiceTermsOfService" onchange={handleInputChange}
+                                            checked={invoiceTermsOfService} />
+                                        <label for="invoiceTermsOfService">規約に同意して利用を申し込む</label>
+                                    </div>
+                                    <div lwc:if={ServicConfirmationSection}>
+                                        <input type="checkbox" id="invoiceTermsOfServiceConfirm"
+                                            name="invoiceTermsOfServiceConfirm" checked disabled />
+                                        <label for="invoiceTermsOfServiceConfirm">規約に同意して利用を申し込む</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="CCP-application-form" lwc:if={leaseLoanService}>
+                            <div class="service-registration-header">
+                                <span style="font-weight: 700;font-size:14px;">FUSOリースの利用をご希望のお客様​</span>
+                                <svg width="20" height="20" viewBox="0 0 25 25" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M11.5 17.5H13.5V11.5H11.5V17.5ZM12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5ZM11.5 9.5H13.5V7.5H11.5V9.5Z"
+                                        fill="#262626" />
+                                    <path d="M11.5 7.5H13.5V9.5H11.5V7.5ZM11.5 11.5H13.5V17.5H11.5V11.5Z"
+                                        fill="#262626" />
+                                    <path
+                                        d="M12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5Z"
+                                        fill="#262626" />
+                                </svg>
+                                <div class="tooltip">
+                                    <p>FUSOリースのご契約に関する書類を<br>オンラインでダウンロードできる<br>サービスです。</p>
+                                </div>
+                            </div>
+                            <hr style="margin:0 10px;" />
+                            <div class="form-entries">
+                                <div class="header-and-label" style="width:35%;">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">
+                                            FUSOリースご契約済み<br>車両の登録番号
+                                        </div>
+                                    </div>
+                                    <div class="view" lwc:if={ServiceRegistrationSection}>
+                                        <div class="tag-PC-2">
+                                            <div class="text-wrapper-6">必須</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-fields-two" lwc:if={ServiceRegistrationSection}>
+                                    <div class="row-frame">
+                                        <div class="supporting-text-3">
+                                            <div class="input-fields-2" style="width: 20%;margin-right: 1%;">
+                                                <div class="yamadataro-fuso-com-wrapper">
+                                                    <div class="yamadataro-fuso-com-2">
+                                                        <input type="text" name="regNumPlaceName" placeholder="品川"
+                                                            data-id="regNumPlaceName" onchange={handleInputChange}
+                                                            value={regNumPlaceName} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="input-fields-2" style="width: 10%;margin-right: 1%;">
+                                                <div class="yamadataro-fuso-com-wrapper">
+                                                    <div class="yamadataro-fuso-com-2">
+                                                        <input type="text" name="regNumClassificationNumber"
+                                                            placeholder="100" data-id="regNumClassificationNumber"
+                                                            onchange={handleInputChange}
+                                                            value={regNumClassificationNumber} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="input-fields-2" style="width: 6%;margin-right: 1%;">
+                                                <div class="yamadataro-fuso-com-wrapper">
+                                                    <div class="yamadataro-fuso-com-2">
+                                                        <input type="text" name="regNumHiragana" placeholder="あ"
+                                                            data-id="regNumHiragana" onchange={handleInputChange}
+                                                            value={regNumHiragana} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="input-fields-2" style="width: 15%;">
+                                                <div class="yamadataro-fuso-com-wrapper">
+                                                    <div class="yamadataro-fuso-com-2">
+                                                        <input type="text" name="regNumSerialNumber" placeholder="1234"
+                                                            data-id="regNumSerialNumber" onchange={handleInputChange}
+                                                            value={regNumSerialNumber} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <template lwc:if={regNumPlaceNameError}>
+                                            <div class="error-message">
+                                                {regNumPlaceNameError}
+                                            </div>
+                                        </template>
+                                        <template lwc:if={regNumClassificationNumberError}>
+                                            <div class="error-message">
+                                                {regNumClassificationNumberError}
+                                            </div>
+                                        </template>
+                                        <template lwc:if={regNumHiraganaError}>
+                                            <div class="error-message">
+                                                {regNumHiraganaError}
+                                            </div>
+                                        </template>
+                                        <template lwc:if={regNumSerialNumberError}>
+                                            <div class="error-message">
+                                                {regNumSerialNumberError}
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div>
+                                        *数字は半角で入力してください。
+                                    </div>
+                                    <div>
+                                        *2台以上ご契約されている場合は、いずれか1台をご入力ください。
+                                    </div>
+                                </div>
+                                <div class="input-fields" lwc:if={ServicConfirmationSection}>
+                                    <div class="text-entry">
+                                        <div class="ahjhgsiufhiofjoie">
+                                            {regNumPlaceName} {regNumClassificationNumber} {regNumHiragana}
+                                            {regNumSerialNumber}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                <div class="header-and-label" style="width:35%;">
+                                    <div class="header-wrapper">
+                                        <div class="header-3">規約への同意</div>
+                                    </div>
+                                    <div class="view" lwc:if={ServiceRegistrationSection}>
+                                        <div class="tag-PC">
+                                            <div class="text-wrapper-6">必須</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-fields-two">
+                                    <div class="two-column-support" style="margin-bottom: 8px;">
+                                        <div>
+                                            <a href={termsUrls.DTFSA.url} target="_blank">FUSOリース利用規約</a>
+                                        </div>
+                                    </div>
+                                    <div lwc:if={ServiceRegistrationSection}>
+                                        <input type="checkbox" id="leaseLoanTermsOfService"
+                                            name="leaseLoanTermsOfService" data-id="leaseLoanTermsOfService"
+                                            onchange={handleInputChange} checked={leaseLoanTermsOfService} />
+                                        <label for="leaseLoanTermsOfService">規約に同意して利用を申し込む</label>
+                                    </div>
+                                    <div lwc:if={ServicConfirmationSection}>
+                                        <input type="checkbox" id="leaseLoanTermsOfServiceConfirm"
+                                            name="leaseLoanTermsOfServiceConfirm" checked disabled />
+                                        <label for="leaseLoanTermsOfServiceConfirm">規約に同意して利用を申し込む</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-entries">
+                                *上記サービスは申込み後、ご利用開始までお時間をいただきます。<br/>
+                                *サービス利用開始時に、登録されたメールアドレスにご案内をお送りいたしますので、ご確認ください。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="frame-navigation" lwc:if={ServiceRegistrationSection}>
+                        <button class="text-wrapper-12" onclick={onPreviousButtonClick}>戻る</button>
+                        <button class="text-wrapper-10" onclick={onServiceRegistrationNextButtonClick}
+                            lwc:if={serviceRegistrationButton}>次へ</button>
+                        <button class="text-wrapper-12" disabled lwc:else>次へ</button>
+                    </div>
+                    <div class="frame-navigation" lwc:if={ServicConfirmationSection}>
+                        <button class="text-wrapper-12" onclick={onPreviousButtonClick}>戻る</button>
+                        <button class="text-wrapper-10" onclick={onConfirmServiceNextButtonClick} disabled={isConfirmDisabled}>申し込む</button>
+                    </div>
+                </div>
+                <!-- ➅登録完了 -->
+                <div class="step" lwc:if={CompletionSection}>
+                    <div class="form" style="padding: 100px;">
+                        <div style="text-align:center;" lwc:if={isServicesInactive}>
+                            「車両管理」へのご登録ありがとうございました。<br/>
+                            ご入力いただいたメールアドレスに登録完了メールを送信しました。
+                        </div>
+                        <div style="text-align:center;" lwc:if={isServicesActive}>
+                            ご登録ありがとうございました。<br/>
+                            ご入力いただいたメールアドレスに登録完了メールを送信しました。<br/>
+                            サービスのご利用開始まで5営業日前後お時間をいただいております。<br/>
+                            準備が整い次第改めてメールにてご連絡差し上げますので、<br/>
+                            今しばらくお待ちくださいますようお願い致します。
+                        </div>
+                    </div>
+                    <div class="frame-navigation-center">
+                        <div class="primary-btn">
+                            <div class="text-wrapper-10">
+                                <a href="/" style="color:white;">トップページへ</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="frame-navigation">
-            <button class="text-wrapper-12" onclick={onPreviousButtonClick}>
-              戻る
-            </button>
-            <button
-              class="text-wrapper-10"
-              onclick={onServiceSelectNextButtonClick}
-              disabled={isAnyServiceNotSelected}
-            >
-              次へ
-            </button>
-          </div>
         </div>
-        <!-- ➃サービスの登録 ➄サービスの登録確認 -->
-        <div class="step" lwc:if={serviceRegistrationOrConfirmation}>
-          <div class="form">
-            <div class="CCP-application-form" lwc:if={invoiceService}>
-              <div class="service-registration-header">
-                <span style="font-weight: 700; font-size: 14px"
-                  >部整月次請求書（電子版）の利用をご希望のお客様​</span
-                >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 25 25"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11.5 17.5H13.5V11.5H11.5V17.5ZM12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5ZM11.5 9.5H13.5V7.5H11.5V9.5Z"
-                    fill="#262626"
-                  />
-                  <path
-                    d="M11.5 7.5H13.5V9.5H11.5V7.5ZM11.5 11.5H13.5V17.5H11.5V11.5Z"
-                    fill="#262626"
-                  />
-                  <path
-                    d="M12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5Z"
-                    fill="#262626"
-                  />
-                </svg>
-                <div class="tooltip">
-                  <p>
-                    三菱ふそうからの部品と整備の請求書を<br />ダウンロードできるサービスです。
-                  </p>
-                </div>
-              </div>
-              <hr style="margin: 0 10px" />
-              <div class="form-entries">
-                <div class="header-and-label" style="width: 35%">
-                  <div class="header-wrapper">
-                    <div class="header-3">お客様番号</div>
-                  </div>
-                </div>
-                <div class="input-fields">
-                  <div class="text-entry">
-                    <div class="ahjhgsiufhiofjoie">
-                      {corporateData.siebelAccountCode}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label" style="width: 35%">
-                  <div class="header-wrapper">
-                    <div class="header-3">規約への同意</div>
-                  </div>
-                  <div class="view" lwc:if={ServiceRegistrationSection}>
-                    <div class="tag-PC">
-                      <div class="text-wrapper-6">必須</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="input-fields-two">
-                  <div class="two-column-support" style="margin-bottom: 8px">
-                    <div>
-                      <a href={termsUrls.EInvoice.url} target="_blank"
-                        >部整月次請求書（電子版）利用規約</a
-                      >
-                    </div>
-                  </div>
-                  <div lwc:if={ServiceRegistrationSection}>
-                    <input
-                      type="checkbox"
-                      id="invoiceTermsOfService"
-                      name="invoiceTermsOfService"
-                      data-id="invoiceTermsOfService"
-                      onchange={handleInputChange}
-                      checked={invoiceTermsOfService}
-                    />
-                    <label for="invoiceTermsOfService"
-                      >規約に同意して利用を申し込む</label
-                    >
-                  </div>
-                  <div lwc:if={ServicConfirmationSection}>
-                    <input
-                      type="checkbox"
-                      id="invoiceTermsOfServiceConfirm"
-                      name="invoiceTermsOfServiceConfirm"
-                      checked
-                      disabled
-                    />
-                    <label for="invoiceTermsOfServiceConfirm"
-                      >規約に同意して利用を申し込む</label
-                    >
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="CCP-application-form" lwc:if={leaseLoanService}>
-              <div class="service-registration-header">
-                <span style="font-weight: 700; font-size: 14px"
-                  >FUSOリースの利用をご希望のお客様​</span
-                >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 25 25"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11.5 17.5H13.5V11.5H11.5V17.5ZM12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5ZM11.5 9.5H13.5V7.5H11.5V9.5Z"
-                    fill="#262626"
-                  />
-                  <path
-                    d="M11.5 7.5H13.5V9.5H11.5V7.5ZM11.5 11.5H13.5V17.5H11.5V11.5Z"
-                    fill="#262626"
-                  />
-                  <path
-                    d="M12.5 2.5C6.98 2.5 2.5 6.98 2.5 12.5C2.5 18.02 6.98 22.5 12.5 22.5C18.02 22.5 22.5 18.02 22.5 12.5C22.5 6.98 18.02 2.5 12.5 2.5ZM12.5 20.5C8.09 20.5 4.5 16.91 4.5 12.5C4.5 8.09 8.09 4.5 12.5 4.5C16.91 4.5 20.5 8.09 20.5 12.5C20.5 16.91 16.91 20.5 12.5 20.5Z"
-                    fill="#262626"
-                  />
-                </svg>
-                <div class="tooltip">
-                  <p>
-                    FUSOリースのご契約に関する書類を<br />オンラインでダウンロードできる<br />サービスです。
-                  </p>
-                </div>
-              </div>
-              <hr style="margin: 0 10px" />
-              <div class="form-entries">
-                <div class="header-and-label" style="width: 35%">
-                  <div class="header-wrapper">
-                    <div class="header-3">
-                      FUSOリースご契約済み<br />車両の登録番号
-                    </div>
-                  </div>
-                  <div class="view" lwc:if={ServiceRegistrationSection}>
-                    <div class="tag-PC-2">
-                      <div class="text-wrapper-6">必須</div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="input-fields-two"
-                  lwc:if={ServiceRegistrationSection}
-                >
-                  <div class="row-frame">
-                    <div class="supporting-text-3">
-                      <div
-                        class="input-fields-2"
-                        style="width: 20%; margin-right: 1%"
-                      >
-                        <div class="yamadataro-fuso-com-wrapper">
-                          <div class="yamadataro-fuso-com-2">
-                            <input
-                              type="text"
-                              name="regNumPlaceName"
-                              placeholder="品川"
-                              data-id="regNumPlaceName"
-                              onchange={handleInputChange}
-                              value={regNumPlaceName}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        class="input-fields-2"
-                        style="width: 10%; margin-right: 1%"
-                      >
-                        <div class="yamadataro-fuso-com-wrapper">
-                          <div class="yamadataro-fuso-com-2">
-                            <input
-                              type="text"
-                              name="regNumClassificationNumber"
-                              placeholder="100"
-                              data-id="regNumClassificationNumber"
-                              onchange={handleInputChange}
-                              value={regNumClassificationNumber}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        class="input-fields-2"
-                        style="width: 6%; margin-right: 1%"
-                      >
-                        <div class="yamadataro-fuso-com-wrapper">
-                          <div class="yamadataro-fuso-com-2">
-                            <input
-                              type="text"
-                              name="regNumHiragana"
-                              placeholder="あ"
-                              data-id="regNumHiragana"
-                              onchange={handleInputChange}
-                              value={regNumHiragana}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="input-fields-2" style="width: 15%">
-                        <div class="yamadataro-fuso-com-wrapper">
-                          <div class="yamadataro-fuso-com-2">
-                            <input
-                              type="text"
-                              name="regNumSerialNumber"
-                              placeholder="1234"
-                              data-id="regNumSerialNumber"
-                              onchange={handleInputChange}
-                              value={regNumSerialNumber}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <template lwc:if={regNumPlaceNameError}>
-                      <div class="error-message">{regNumPlaceNameError}</div>
-                    </template>
-                    <template lwc:if={regNumClassificationNumberError}>
-                      <div class="error-message">
-                        {regNumClassificationNumberError}
-                      </div>
-                    </template>
-                    <template lwc:if={regNumHiraganaError}>
-                      <div class="error-message">{regNumHiraganaError}</div>
-                    </template>
-                    <template lwc:if={regNumSerialNumberError}>
-                      <div class="error-message">{regNumSerialNumberError}</div>
-                    </template>
-                  </div>
-                  <div>*数字は半角で入力してください。</div>
-                  <div>
-                    *2台以上ご契約されている場合は、いずれか1台をご入力ください。
-                  </div>
-                </div>
-                <div class="input-fields" lwc:if={ServicConfirmationSection}>
-                  <div class="text-entry">
-                    <div class="ahjhgsiufhiofjoie">
-                      {regNumPlaceName} {regNumClassificationNumber}
-                      {regNumHiragana} {regNumSerialNumber}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-entries">
-                <div class="header-and-label" style="width: 35%">
-                  <div class="header-wrapper">
-                    <div class="header-3">規約への同意</div>
-                  </div>
-                  <div class="view" lwc:if={ServiceRegistrationSection}>
-                    <div class="tag-PC">
-                      <div class="text-wrapper-6">必須</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="input-fields-two">
-                  <div class="two-column-support" style="margin-bottom: 8px">
-                    <div>
-                      <a href={termsUrls.DTFSA.url} target="_blank"
-                        >FUSOリース利用規約</a
-                      >
-                    </div>
-                  </div>
-                  <div lwc:if={ServiceRegistrationSection}>
-                    <input
-                      type="checkbox"
-                      id="leaseLoanTermsOfService"
-                      name="leaseLoanTermsOfService"
-                      data-id="leaseLoanTermsOfService"
-                      onchange={handleInputChange}
-                      checked={leaseLoanTermsOfService}
-                    />
-                    <label for="leaseLoanTermsOfService"
-                      >規約に同意して利用を申し込む</label
-                    >
-                  </div>
-                  <div lwc:if={ServicConfirmationSection}>
-                    <input
-                      type="checkbox"
-                      id="leaseLoanTermsOfServiceConfirm"
-                      name="leaseLoanTermsOfServiceConfirm"
-                      checked
-                      disabled
-                    />
-                    <label for="leaseLoanTermsOfServiceConfirm"
-                      >規約に同意して利用を申し込む</label
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="form-entries">
-                *上記サービスは申込み後、ご利用開始までお時間をいただきます。<br />
-                *サービス利用開始時に、登録されたメールアドレスにご案内をお送りいたしますので、ご確認ください。
-              </div>
-            </div>
-          </div>
-          <div class="frame-navigation" lwc:if={ServiceRegistrationSection}>
-            <button class="text-wrapper-12" onclick={onPreviousButtonClick}>
-              戻る
-            </button>
-            <button
-              class="text-wrapper-10"
-              onclick={onServiceRegistrationNextButtonClick}
-              lwc:if={serviceRegistrationButton}
-            >
-              次へ
-            </button>
-            <button class="text-wrapper-12" disabled lwc:else>次へ</button>
-          </div>
-          <div class="frame-navigation" lwc:if={ServicConfirmationSection}>
-            <button class="text-wrapper-12" onclick={onPreviousButtonClick}>
-              戻る
-            </button>
-            <button
-              class="text-wrapper-10"
-              onclick={onConfirmServiceNextButtonClick}
-              disabled={isConfirmDisabled}
-            >
-              申し込む
-            </button>
-          </div>
-        </div>
-        <!-- ➅登録完了 -->
-        <div class="step" lwc:if={CompletionSection}>
-          <div class="form" style="padding: 100px">
-            <div style="text-align: center" lwc:if={isServicesInactive}>
-              「車両管理」へのご登録ありがとうございました。<br />
-              ご入力いただいたメールアドレスに登録完了メールを送信しました。
-            </div>
-            <div style="text-align: center" lwc:if={isServicesActive}>
-              ご登録ありがとうございました。<br />
-              ご入力いただいたメールアドレスに登録完了メールを送信しました。<br />
-              サービスのご利用開始まで5営業日前後お時間をいただいております。<br />
-              準備が整い次第改めてメールにてご連絡差し上げますので、<br />
-              今しばらくお待ちくださいますようお願い致します。
-            </div>
-          </div>
-          <div class="frame-navigation-center">
-            <div class="primary-btn">
-              <div class="text-wrapper-10">
-                <a href="/" style="color: white">トップページへ</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- お客様なしモーダル -->
-    <div class="modal" lwc:if={showNoCorporationModal}>
-      <div class="modal-content">
-        <div class="modal-title">
-          該当するお客様情報がありません。​<br />入力した情報に誤りがないかご確認ください。
+
+
+
+
+        <!-- お客様なしモーダル -->
+        <div class="modal" lwc:if={showNoCorporationModal}>
+            <div class="modal-content">
+                <div class="modal-title">
+                    該当するお客様情報がありません。​<br/>入力した情報に誤りがないかご確認ください。
+                </div>
+                <div class="button">
+                    <button class="no-button" onclick={onPreviousCorporateButtonClick}>
+                        戻る
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="button">
-          <button class="no-button" onclick={onPreviousCorporateButtonClick}>
-            戻る
-          </button>
+        <!-- CCP利用ありモーダル -->
+        <div class="modal" lwc:if={showCcpUserModal}>
+            <div class="modal-content">
+                <div class="modal-title">
+                    ご入力いただいたお客様には既にカスタマーポータルの管理者がご登録済みです。<br/>社内の管理者の方へご確認ください。
+                </div>
+                <div class="button">
+                    <button class="no-button" onclick={closeModal}>
+                        戻る
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
+        <!-- お客様確認モーダル -->
+        <div lwc:if={showCorporationCheckModal} class="modal">
+            <div class="modal-content">
+                <div class="modal-title">
+                    お客様はこちらでお間違いない<br/>でしょうか？
+                </div>
+                <div class="company-name-and-address">
+                    <div class="section__definition-list">
+                        <dd>{corporateData.accountName}</dd>
+                    </div>
+                    <div class="section__definition-list">
+                        <dd>{corporateData.accountAddress}</dd>
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="no-button" onclick={closeModal}>いいえ</button>
+                    <button onclick={onConfirmCorporateNextButtonClick} class="yes-button">
+                        はい
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- FUSOリース利用ありモーダル -->
+        <div class="modal" lwc:if={showLeaseLoanAccountModal}>
+            <div class="modal-content">
+                <div class="modal-title">
+                    お客様の法人では既に他のアカウントでFUSOリースをご利用いただいているようです。<br/>FUSOリースは1法人1申込のルールとなりますのでご了承ください
+                </div>
+                <div class="button">
+                    <button class="no-button" onclick={closeModal}>
+                        戻る
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- サービス利用なし申込完了前確認モーダル -->
+        <div class="modal" lwc:if={showNoServiceSelectModal}>
+            <div class="modal-content">
+                <div class="modal-title">
+                    利用希望サービスが選択されておりません。<br/>このまま登録を完了してよろしいでしょうか？
+                </div>
+                <div class="buttons">
+                    <button class="no-button" onclick={closeModal}>いいえ</button>
+                    <button onclick={onConfirmServiceNextButtonClick} class="yes-button">
+                        はい
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- CCP利用ありモーダル -->
-    <div class="modal" lwc:if={showCcpUserModal}>
-      <div class="modal-content">
-        <div class="modal-title">
-          ご入力いただいたお客様には既にカスタマーポータルの管理者がご登録済みです。<br />社内の管理者の方へご確認ください。
-        </div>
-        <div class="button">
-          <button class="no-button" onclick={closeModal}>戻る</button>
-        </div>
-      </div>
-    </div>
-    <!-- お客様確認モーダル -->
-    <div lwc:if={showCorporationCheckModal} class="modal">
-      <div class="modal-content">
-        <div class="modal-title">
-          お客様はこちらでお間違いない<br />でしょうか？
-        </div>
-        <div class="company-name-and-address">
-          <div class="section__definition-list">
-            <dd>{corporateData.accountName}</dd>
-          </div>
-          <div class="section__definition-list">
-            <dd>{corporateData.accountAddress}</dd>
-          </div>
-        </div>
-        <div class="buttons">
-          <button class="no-button" onclick={closeModal}>いいえ</button>
-          <button
-            onclick={onConfirmCorporateNextButtonClick}
-            class="yes-button"
-          >
-            はい
-          </button>
-        </div>
-      </div>
-    </div>
-    <!-- FUSOリース利用ありモーダル -->
-    <div class="modal" lwc:if={showLeaseLoanAccountModal}>
-      <div class="modal-content">
-        <div class="modal-title">
-          お客様の法人では既に他のアカウントでFUSOリースをご利用いただいているようです。<br />FUSOリースは1法人1申込のルールとなりますのでご了承ください
-        </div>
-        <div class="button">
-          <button class="no-button" onclick={closeModal}>戻る</button>
-        </div>
-      </div>
-    </div>
-    <!-- サービス利用なし申込完了前確認モーダル -->
-    <div class="modal" lwc:if={showNoServiceSelectModal}>
-      <div class="modal-content">
-        <div class="modal-title">
-          利用希望サービスが選択されておりません。<br />このまま登録を完了してよろしいでしょうか？
-        </div>
-        <div class="buttons">
-          <button class="no-button" onclick={closeModal}>いいえ</button>
-          <button onclick={onConfirmServiceNextButtonClick} class="yes-button">
-            はい
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>

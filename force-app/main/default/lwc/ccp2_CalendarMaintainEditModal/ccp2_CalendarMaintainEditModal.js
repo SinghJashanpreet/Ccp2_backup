@@ -26,6 +26,7 @@ import Languagei18n from "@salesforce/apex/CCP2_guestUserLanguage.guestuserLangu
 import labelsInfo from "@salesforce/resourceUrl/ccp2_labels";
 import getExistingMaintenance from "@salesforce/apex/CCP2_Additional_Services.editExistingMaintenance";
 
+
 const arrowicon =
   Vehicle_StaticResource + "/CCP2_Resources/Common/arrow_under.png";
 const nosearch =
@@ -110,6 +111,7 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
   @track exitModal = false;
   @track showMore = false;
   @track postCode = "";
+  @track destPostcodetoKeep = "";
   @track municipality = "";
   @track perfecturess = "";
   @track street = "";
@@ -261,6 +263,7 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
     this.wiredVehicleResultDetail = result; // Store the wire result for refreshing
     const { data, error } = result;
     if (data) {
+      console.log("main dataaaa in edit",data);
       this.maintenanceDetailsApi = data;
       let imagesArray = JSON.parse(data?.images) || [];
       this.showImages = imagesArray.length > 0;
@@ -300,12 +303,12 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
           data.result[0].Implementation_Date__c === undefined
             ? "-"
             : this.formatJapaneseDate(data.result[0].Implementation_Date__c) ||
-              "-",
+            "-",
         Implementation_Date__c3:
           data.result[0].Implementation_Date__c === undefined
             ? "-"
             : this.formatJapaneseDate(data.result[0].Implementation_Date__c) ||
-              "-",
+            "-",
         Implementation_Date__c2:
           data.result[0].Implementation_Date__c === undefined
             ? null
@@ -322,17 +325,17 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
           data.result[0].Schedule_EndDate__c === undefined
             ? "-"
             : this.formatJapaneseDate(data.result[0].Schedule_EndDate__c) ||
-              "-",
+            "-",
         Schedule_EndDate__c2:
           data.result[0].Schedule_EndDate__c === undefined
             ? "-"
             : this.formatJapaneseDate(data.result[0].Schedule_EndDate__c) ||
-              "-",
+            "-",
         Schedule_EndDate__c3:
           data.result[0].Schedule_EndDate__c === undefined
             ? "-"
             : this.formatJapaneseDate(data.result[0].Schedule_EndDate__c) ||
-              "-",
+            "-",
         Schedule_Date__c3:
           data.result[0].Schedule_Date__c === undefined
             ? "-"
@@ -349,14 +352,14 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
           data.result[0].CCP2_Update_Section_1__c === undefined
             ? "-"
             : this.formatJapaneseDate2(
-                data.result[0].CCP2_Update_Section_1__c
-              ) || "-",
+              data.result[0].CCP2_Update_Section_1__c
+            ) || "-",
         LastModifiedDate2:
           data.result[0].CCP2_Update_Section_2__c === undefined
             ? "-"
             : this.formatJapaneseDate2(
-                data.result[0].CCP2_Update_Section_2__c
-              ) || "-",
+              data.result[0].CCP2_Update_Section_2__c
+            ) || "-",
         Description_Rich_Text__c:
           data.result[0].Description_Rich_Text__c || "-",
         Recieving_Destination_noSearch__c:
@@ -395,7 +398,8 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
         this.BranchSearchList = false;
         this.AccountSearchList = true;
         this.FusoSearchList = false;
-        this.postCode = accountObj.ShippingPostalCode || "";
+        this.postCode = data.PostalCode || "";
+        this.destPostcodetoKeep = data.PostalCode || "";
         this.municipality = accountObj.ShippingCity || "";
         this.perfecturess = accountObj.ShippingState || "";
         this.street = accountObj.ShippingStreet || "";
@@ -1217,12 +1221,14 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
           return {
             id: item.Id,
             name: item.Name,
+            ShippingPostalCode: item?.ShippingPostalCode ?? '',
             shippingAdd: {
               PostalCode: shippingAdd.postalCode || "",
               prefect: shippingAdd.state || "",
               municipality: shippingAdd.city || "",
               street: shippingAdd.street || ""
             },
+            Address: ((item?.ShippingPostalCode ?? '') + '\u00A0\u00A0' + (shippingAdd?.state ?? '') + '' +(shippingAdd?.city ?? '') + '' +(shippingAdd?.street ?? '')).trim(),
             hasAddress:
               shippingAdd.postalCode ||
               shippingAdd.state ||
@@ -1269,12 +1275,14 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
           return {
             id: item.Id,
             name: item.Name,
+            ShippingPostalCode: item?.ShippingPostalCode ?? '',
             shippingAdd: {
               PostalCode: shippingAdd.postalCode || "",
               prefect: shippingAdd.state || "",
               municipality: shippingAdd.city || "",
               street: shippingAdd.street || ""
-            }
+            },
+            Address: ((item?.ShippingPostalCode ?? '') + '\u00A0\u00A0' + (shippingAdd?.state ?? '') + '' +(shippingAdd?.city ?? '') + '' +(shippingAdd?.street ?? '')).trim(),
           };
         });
         console.log("showmore arrayyyyy", JSON.stringify(this.showmoreArray));
@@ -1580,28 +1588,27 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
         });
       }
 
-      console.log("inside populate");
-      if (
-        this.year >= todayYear ||
-        (this.month > todayMonth && this.year === todayYear - 1)
-      ) {
-        this.isNextYearDisabled = true;
-      } else {
-        this.isNextYearDisabled = false;
-      }
-      if (this.month === todayMonth && this.year === todayYear) {
-        this.isNextMonthDisabled = true;
-      } else {
-        this.isNextMonthDisabled = false;
-      }
+      
+    console.log('inside populate')
+    if((this.year >= todayYear) || (this.month > todayMonth && this.year === todayYear - 1)){
+      this.isNextYearDisabled = true;
+    } else{
+      this.isNextYearDisabled = false;
+    }
+    if(this.month === todayMonth && this.year === todayYear){
+      this.isNextMonthDisabled = true;
+    } else{
+      this.isNextMonthDisabled = false;
+    }
 
-      const nextMonth = new Date(this.year, this.month);
-      const prevMonth = new Date(this.year, this.month - 1);
-      this.isNextMonthDisabled = nextMonth > today;
-      this.isPrevMonthDisabled = prevMonth < today;
+    const nextMonth = new Date(this.year, this.month);
+    const prevMonth = new Date(this.year, this.month - 1);
+    this.isNextMonthDisabled = nextMonth > today;
+    this.isPrevMonthDisabled = prevMonth < today;
 
-      console.log("isnextmonth", this.isNextMonthDisabled);
-      console.log("isPrevMonth", this.isPrevMonthDisabled);
+    console.log("isnextmonth", this.isNextMonthDisabled);
+    console.log("isPrevMonth", this.isPrevMonthDisabled);
+
     }
 
     const nextMonth = new Date(this.year, this.month);
@@ -1708,6 +1715,7 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
     this.isNextYearDisabled = true;
     this.isNextMonthDisabled = true;
 
+
     // Reset the selected state of all buttons
     const selectedButtons = this.template.querySelectorAll(
       ".day-button.selected"
@@ -1768,7 +1776,7 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
       let todayMonth = today.getMonth() + 1;
       let todayYear = today.getFullYear();
 
-      if (todayYear - 1 >= this.year && todayMonth >= this.month) {
+      if (todayYear - 1 >=  this.year && todayMonth >= this.month) {
         this.isNextYearDisabled = false;
       }
     }
@@ -1800,17 +1808,18 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
       const today = new Date();
       let todayMonth = today.getMonth() + 1;
       let todayYear = today.getFullYear();
-
+  
       if (todayMonth === this.month && todayYear === this.year) {
         this.isNextYearDisabled = true;
       }
-
+  
       /* Last Modified by Singh Jashanpreet */
       if (todayYear - 1 === this.year && todayMonth < this.month) {
         this.isNextYearDisabled = true;
       }
 
-      console.log("here it is");
+      console.log('here it is')
+
     } else if (this.showPosterreal) {
       this.month++;
       const selectedButtons = this.template.querySelectorAll(
@@ -2296,7 +2305,7 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
     this.exitModal = false;
   }
 
-  @track isAlreadyHaveMaintenance = "";
+  @track isAlreadyHaveMaintenance = '';
   @track refreshToken = 1;
 
   handleclick1() {
@@ -2308,17 +2317,12 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
         this.multipleDest = true;
         console.log("inside no search");
       } else {
-        getExistingMaintenance({
-          scheduleDate: this.selectedDateToSendStart,
-          scheduleEndDate: this.selectedDateToSendEnd,
-          vehicleId: this.vehicleId,
-          serviceType: this.selectedPicklistScheduleType,
-          refreshToken: this.refreshToken,
-          Id: this.maintainenceId
-        }).then((result) => {
-          if (result) {
+        getExistingMaintenance({scheduleDate: this.selectedDateToSendStart,scheduleEndDate: this.selectedDateToSendEnd,vehicleId: this.vehicleId,serviceType: this.selectedPicklistScheduleType,refreshToken: this.refreshToken,Id: this.maintainenceId})
+
+        .then((result) => {
+          if(result){
             this.isAlreadyHaveMaintenance = result;
-          } else {
+          }else{
             console.log("else upper");
             this.updateMaintenanceHistory();
             console.log("json", this.maintenanceHistory);
@@ -2332,7 +2336,7 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
               .querySelector(".InputsScheduleTypeSearch")
               .classList.remove("error-input");
           }
-        });
+        })
         //this.FinalMainLoader = true;
         // console.log("else upper");
         // this.updateMaintenanceHistory();
@@ -2348,23 +2352,20 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
         //   .classList.remove("error-input");
       }
     } else if (this.destinationFuso) {
-      getExistingMaintenance({
-        scheduleDate: this.selectedDateToSendStart,
-        scheduleEndDate: this.selectedDateToSendEnd,
-        vehicleId: this.vehicleId,
-        serviceType: this.selectedPicklistScheduleType,
-        refreshToken: this.refreshToken,
-        Id: this.maintainenceId
-      }).then((result) => {
-        if (result) {
-          this.isAlreadyHaveMaintenance = result;
-        } else {
-          this.updateMaintenanceHistory();
-          console.log("json", this.maintenanceHistory);
-          console.log("images", this.imagesCreatedId);
-          this.finaldatapush();
-        }
-      });
+
+      getExistingMaintenance({scheduleDate: this.selectedDateToSendStart,scheduleEndDate: this.selectedDateToSendEnd,vehicleId: this.vehicleId,serviceType: this.selectedPicklistScheduleType,refreshToken: this.refreshToken,Id: this.maintainenceId})
+
+        .then((result) => {
+          if(result){
+            this.isAlreadyHaveMaintenance = result;
+          }
+          else{
+            this.updateMaintenanceHistory();
+            console.log("json", this.maintenanceHistory);
+            console.log("images", this.imagesCreatedId);
+            this.finaldatapush();
+          }
+        })
 
       // this.updateMaintenanceHistory();
       // console.log("json", this.maintenanceHistory);
@@ -2388,26 +2389,21 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
           if (this.destinationNosearch) {
             this.multipleDest = true;
           } else {
-            console.log("in if.....3....");
+        console.log("in if.....3....");
 
-            getExistingMaintenance({
-              scheduleDate: this.selectedDateToSendStart,
-              scheduleEndDate: this.selectedDateToSendEnd,
-              vehicleId: this.vehicleId,
-              serviceType: this.selectedPicklistScheduleType,
-              refreshToken: this.refreshToken,
-              Id: this.maintainenceId
-            }).then((result) => {
-              if (result) {
-                this.isAlreadyHaveMaintenance = result;
-              } else {
-                this.updateMaintenanceHistory();
-                this.finaldatapush();
-                console.log("else end 1");
-                console.log("json", this.maintenanceHistory);
-                console.log("images", this.imagesCreatedId);
-              }
-            });
+        
+        getExistingMaintenance({scheduleDate: this.selectedDateToSendStart,scheduleEndDate: this.selectedDateToSendEnd,vehicleId: this.vehicleId,serviceType: this.selectedPicklistScheduleType,refreshToken: this.refreshToken,Id: this.maintainenceId})
+        .then((result) => {
+          if(result){
+            this.isAlreadyHaveMaintenance = result;
+          }else{
+            this.updateMaintenanceHistory();
+            this.finaldatapush();
+            console.log("else end 1");
+            console.log("json", this.maintenanceHistory);
+            console.log("images", this.imagesCreatedId);
+          }
+        })
             // this.updateMaintenanceHistory();
             // this.finaldatapush();
             // console.log("else end 1");
@@ -2416,34 +2412,22 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
           }
           //this.FinalMainLoader = true;
         } else {
-          console.log("in if.....4....");
+        console.log("in if.....4....");
 
-          console.log(
-            "start date end date type",
-            this.selectedDateToSendStart,
-            this.selectedDateToSendEnd,
-            this.selectedPicklistScheduleType,
-            this.vehicleId
-          );
-          getExistingMaintenance({
-            scheduleDate: this.selectedDateToSendStart,
-            scheduleEndDate: this.selectedDateToSendEnd,
-            vehicleId: this.vehicleId,
-            serviceType: this.selectedPicklistScheduleType,
-            refreshToken: this.refreshToken,
-            Id: this.maintainenceId
-          }).then((result) => {
-            console.log("result of existing maintenance", result);
-            if (result) {
-              this.isAlreadyHaveMaintenance = result;
-            } else {
-              this.updateMaintenanceHistory();
-              this.finaldatapush();
-              console.log("else end 2");
-              console.log("json", this.maintenanceHistory);
-              console.log("images", this.imagesCreatedId);
-            }
-          });
+        console.log("start date end date type",this.selectedDateToSendStart,this.selectedDateToSendEnd,this.selectedPicklistScheduleType,this.vehicleId)
+        getExistingMaintenance({scheduleDate: this.selectedDateToSendStart,scheduleEndDate: this.selectedDateToSendEnd,vehicleId: this.vehicleId,serviceType: this.selectedPicklistScheduleType,refreshToken: this.refreshToken,Id: this.maintainenceId})
+        .then((result) => {
+          console.log("result of existing maintenance",result);
+          if(result){
+            this.isAlreadyHaveMaintenance = result;
+          }else{
+            this.updateMaintenanceHistory();
+            this.finaldatapush();
+            console.log("else end 2");
+            console.log("json", this.maintenanceHistory);
+            console.log("images", this.imagesCreatedId);
+          }
+        })
           // this.updateMaintenanceHistory();
           // this.finaldatapush();
           // console.log("else end 2");
@@ -2570,11 +2554,11 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
       this.isPrevDisabled2 = false;
     }
 
-    /* Last Modified by Singh Jashanpreet */
-    if (todayYear >= this.year2 && todayMonth > this.month2) {
-      this.isPrevYearDisabled2 = true;
-    }
-
+        /* Last Modified by Singh Jashanpreet */
+        if (todayYear >= this.year2 && todayMonth > this.month2) {
+          this.isPrevYearDisabled2 = true;
+        }
+        
     this.populateCalendar2();
   }
 
@@ -2699,10 +2683,10 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
       this.isPrevDisabled2 = true;
     }
 
-    /* Last Modified by Singh Jashanpreet */
-    if (todayYear + 1 === this.year2 && todayMonth > this.month2) {
-      this.isPrevYearDisabled2 = true;
-    }
+        /* Last Modified by Singh Jashanpreet */
+        if (todayYear + 1 === this.year2 && todayMonth > this.month2) {
+          this.isPrevYearDisabled2 = true;
+        }
   }
 
   goToNextMonth2() {
@@ -2758,10 +2742,10 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
       }
       this.populateCalendar2();
     }
-    /* Last Modified by Singh Jashanpreet */
-    if (todayYear + 1 <= this.year2 && todayMonth <= this.month2) {
-      this.isPrevYearDisabled2 = false;
-    }
+      /* Last Modified by Singh Jashanpreet */
+      if (todayYear + 1 <= this.year2 && todayMonth <= this.month2) {
+        this.isPrevYearDisabled2 = false;
+      }
     this.updatePrevButtonState();
   }
 
@@ -2808,19 +2792,17 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
     }
     this.highlightRange2();
 
-    if (
-      this.year2 <= todayYear ||
-      (this.month2 < todayMonth && this.year2 === todayYear + 1)
-    ) {
+    if((this.year2 <= todayYear) || (this.month2 < todayMonth && this.year2 === todayYear + 1)){
       this.isPrevYearDisabled2 = true;
-    } else {
+    } else{
       this.isPrevYearDisabled2 = false;
     }
-    if (this.month2 === todayMonth && this.year2 === todayYear) {
+    if(this.month2 === todayMonth && this.year2 === todayYear){
       this.isPrevDisabled2 = true;
-    } else {
+    } else{
       this.isPrevDisabled2 = false;
     }
+
   }
 
   highlightRange2() {
@@ -2990,7 +2972,7 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
   // }
 
   formatDate2(date) {
-    console.log("year month dayyy", date.year, date.month, date.day, date);
+    console.log("year month dayyy",date.year,date.month,date.day, date)
     return `${date.year}年${date.month}月${date.day}日`;
   }
 
@@ -3007,7 +2989,7 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
     ) {
       this.isPrevYearDisabled2 = true;
     } else {
-      console.log("falsing here next year else");
+    console.log('falsing here next year else')
 
       this.isPrevYearDisabled2 = false;
     }
@@ -3060,131 +3042,123 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
   prevYear2() {
     //for schedule
     // if (this.showPosterreal) {
-    this.year2--;
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button2.selected2"
-    );
-    selectedButtons.forEach((button) =>
-      button.classList.remove(
-        "selected2",
-        "in-range2",
-        "startborder2",
-        "endborder2",
-        "singleborder2"
-      )
-    );
-    // this.selectedDay2 = null;
-    // if (this.myYear2 === this.year2) {
-    //   this.selectedDay2 = this.myday2;
-    //   this.month2 = this.myMonth2;
-    // }
-    this.populateCalendar2();
+      this.year2--;
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-button2.selected2"
+      );
+      selectedButtons.forEach((button) =>
+        button.classList.remove(
+          "selected2",
+          "in-range2",
+          "startborder2",
+          "endborder2",
+          "singleborder2"
+        )
+      );
+      // this.selectedDay2 = null;
+      // if (this.myYear2 === this.year2) {
+      //   this.selectedDay2 = this.myday2;
+      //   this.month2 = this.myMonth2;
+      // }
+      this.populateCalendar2();
 
-    /* Last Modified by Singh Jashanpreet */
-    const today = new Date();
-    let todayMonth = today.getMonth() + 1;
-    let todayYear = today.getFullYear();
+      /* Last Modified by Singh Jashanpreet */
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
 
-    console.log(
-      todayYear,
-      " ",
-      this.year2,
-      " ",
-      todayMonth,
-      " ",
-      this.month2,
-      " ",
-      this.isPrevYearDisabled2
-    );
-    if (
-      todayYear >= this.year2 ||
-      (this.month2 < todayMonth && todayYear + 1 === this.year2)
-    ) {
-      //2025 -
-      this.isPrevYearDisabled2 = true;
-    }
-    if (todayYear === this.year2 && this.month2 === todayMonth) {
-      this.isPrevDisabled2 = true;
-      this.isPrevYearDisabled2 = true;
-    }
+      console.log(
+        todayYear,
+        " ",
+        this.year2,
+        " ",
+        todayMonth,
+        " ",
+        this.month2,
+        " ",
+        this.isPrevYearDisabled2
+      );
+      if (todayYear >= this.year2 || (this.month2 < todayMonth && todayYear + 1 === this.year2)) { //2025 -
+        this.isPrevYearDisabled2 = true;
+      }
+      if(todayYear === this.year2 && this.month2 === todayMonth){
+        this.isPrevDisabled2 = true;
+        this.isPrevYearDisabled2 = true;
+      }
   }
 
   prevYear() {
     //for history
-    this.isNextYearDisabled = false;
-    this.year--;
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button.selected"
-    );
-    selectedButtons.forEach((button) =>
-      button.classList.remove(
-        "selected",
-        "in-range",
-        "startborder",
-        "endborder",
-        "singleborder"
-      )
-    );
-    // this.selectedDay = null;
-    // if (this.myYear === this.year) {
-    //   this.selectedDay = this.myday;
-    //   this.month = this.myMonth;
-    // }
-    this.populateCalendar();
+      this.isNextYearDisabled = false;
+      this.year--;
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-button.selected"
+      );
+      selectedButtons.forEach((button) =>
+        button.classList.remove(
+          "selected",
+          "in-range",
+          "startborder",
+          "endborder",
+          "singleborder"
+        )
+      );
+      // this.selectedDay = null;
+      // if (this.myYear === this.year) {
+      //   this.selectedDay = this.myday;
+      //   this.month = this.myMonth;
+      // }
+      this.populateCalendar();
   }
 
   nextyear() {
     //for history
-    this.isPrevDisabled = false;
-    this.isPrevYearDisabled = false;
+      this.isPrevDisabled = false;
+      this.isPrevYearDisabled = false;
+  
+        this.year++;
+        const selectedButtons = this.template.querySelectorAll(
+          ".day-button.selected"
+        );
+        selectedButtons.forEach((button) =>
+          button.classList.remove(
+            "selected",
+            "in-range",
+            "startborder",
+            "endborder",
+            "singleborder"
+          )
+        );
+        this.selectedDay = null;
+        // if (this.myYear === this.year) {
+        //   this.selectedDay = this.myday;
+        //   this.month = this.myMonth;
+        // }
+        this.populateCalendar();
 
-    this.year++;
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button.selected"
-    );
-    selectedButtons.forEach((button) =>
-      button.classList.remove(
-        "selected",
-        "in-range",
-        "startborder",
-        "endborder",
-        "singleborder"
-      )
-    );
-    this.selectedDay = null;
-    // if (this.myYear === this.year) {
-    //   this.selectedDay = this.myday;
-    //   this.month = this.myMonth;
-    // }
-    this.populateCalendar();
+      /* Last Modified by Singh Jashanpreet */
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
 
-    /* Last Modified by Singh Jashanpreet */
-    const today = new Date();
-    let todayMonth = today.getMonth() + 1;
-    let todayYear = today.getFullYear();
-
-    console.log(
-      todayYear,
-      " ",
-      this.year,
-      " ",
-      todayMonth,
-      " ",
-      this.month,
-      " ",
-      this.isNextYearDisabled
-    );
-    if (
-      todayYear <= this.year ||
-      (this.month > todayMonth && todayYear - 1 === this.year)
-    ) {
-      //2025 -
-      this.isNextYearDisabled = true;
-    }
-    if (todayYear === this.year && this.month === todayMonth) {
-      this.isNextMonthDisabled = true;
-      this.isNextYearDisabled = true;
-    }
+      console.log(
+        todayYear,
+        " ",
+        this.year,
+        " ",
+        todayMonth,
+        " ",
+        this.month,
+        " ",
+        this.isNextYearDisabled
+      );
+      if (todayYear <= this.year || (this.month > todayMonth && todayYear - 1 === this.year)) { //2025 - 
+        this.isNextYearDisabled = true;
+      }
+      if(todayYear === this.year && this.month === todayMonth){
+        this.isNextMonthDisabled = true;
+        this.isNextYearDisabled = true;
+      }
   }
 
   getMonthLabel2(month) {
@@ -3319,7 +3293,8 @@ export default class Ccp2_CalendarMaintainEditModal extends LightningElement {
     }
   }
 
-  backfromSameinsp() {
-    this.isAlreadyHaveMaintenance = "";
+  backfromSameinsp(){
+    this.isAlreadyHaveMaintenance = '';
   }
+
 }

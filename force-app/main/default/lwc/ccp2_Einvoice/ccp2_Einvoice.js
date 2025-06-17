@@ -114,7 +114,7 @@ export default class Ccp2_Einvoice extends LightningElement {
       .then(() => {
         return this.loadLabels(); // Load labels after i18next is ready
       })
-      .then(() => {})
+      .then(() => { })
       .catch((error) => {
         console.error("Error loading language or labels: ", error);
         let err = JSON.stringify(error);
@@ -240,7 +240,7 @@ export default class Ccp2_Einvoice extends LightningElement {
   @wire(getAccount)
   loadaccount({ data, error }) {
     if (data) {
-      console.log("inv data", data);
+      console.log("inv data",data)
       this.AccountName = data[0].Name;
       this.emailNotif = data[0].eInvoiceOpted;
     } else {
@@ -342,9 +342,11 @@ export default class Ccp2_Einvoice extends LightningElement {
 
   get allfilesdownloaded() {
     return this.fileStatuses && this.fileStatuses.length > 0
-      ? this.fileStatuses.every((file) => file.isDownloaded)
+      ? this.fileStatuses.every(file => file.isDownloaded)
       : false;
   }
+
+
 
   get areanyselected() {
     return this.accountCheckboxes.some((item) => item.isChecked);
@@ -619,8 +621,8 @@ export default class Ccp2_Einvoice extends LightningElement {
           result[index].invoiceDate.substring(4, 6),
         invoiceDateTodisp: this.formatJapaneseInvoiceDate(
           result[index].invoiceDate.substring(0, 4) +
-            "" +
-            result[index].invoiceDate.substring(4, 6)
+          "" +
+          result[index].invoiceDate.substring(4, 6)
         ),
         siebelAccountCode: result[index].siebelAccountCode,
         closingDate: result[index].closingDate,
@@ -1274,7 +1276,7 @@ export default class Ccp2_Einvoice extends LightningElement {
     this.serverError = false;
   }
 
-  navigateBasicInfo() {
+  navigateBasicInfo(){
     let baseUrl = window.location.href;
     let homeUrl;
     if (baseUrl.indexOf("/s/") != -1) {
@@ -1282,4 +1284,5 @@ export default class Ccp2_Einvoice extends LightningElement {
     }
     window.location.href = homeUrl + "/s/profile";
   }
+
 }

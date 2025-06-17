@@ -133,9 +133,11 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
   @track destinationAccBranchToShowonDetail = "";
 
   @track destPostcode = "";
+  @track destPostcodetoKeep = "";
   @track destMunc = "";
   @track destPref = "";
   @track destStreet = "";
+  @track AddresstoShow = "";
 
   @track destinationNosearch = "";
   @track destinationAccountBranchtosend = null;
@@ -764,6 +766,7 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
       this.FusoFilterValue
     );
     if (data) {
+      console.log("data in main detail",data)
       this.maintenanceDetailsApi = data;
       let imagesArray = JSON.parse(data?.images) || [];
       this.imagesArrayTocompare = JSON.parse(data?.images) || [];
@@ -906,11 +909,14 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
         const destinationAccBranch = this.accountObj.Name || "";
         this.destinationAccBranchToShowonDetail =
           destinationAccBranch === "" ? "-" : destinationAccBranch;
-        this.destPostcode = this.accountObj.ShippingPostalCode || "";
+        this.destPostcode = data.PostalCode || "";
+        this.destPostcodetoKeep = data.PostalCode || "";
         this.destMunc = this.accountObj.ShippingCity || "";
         this.destPref = this.accountObj.ShippingState || "";
         this.destStreet = this.accountObj.ShippingStreet || "";
 
+        console.log("postal code in main detail",this.destPostcode)
+        
         if (this.destinationAccBranch) {
           this.divforAccountAddress = true;
         } else {
@@ -950,7 +956,7 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
         this.destinationAccBranchToShowonDetail =
           destinationAccBranch === "" ? "-" : destinationAccBranch;
       }
-      console.log("storedScheduleDate", this.storedScheduleDate);
+      console.log("storedScheduleDate",this.storedScheduleDate)
       if (this.storedScheduleDate) {
         this.startDate5 = {
           day: this.storedScheduleDate.split("-")[2],
@@ -2038,7 +2044,8 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
         this.destinationAccBranchToShowonDetail =
           this.destinationAccBranch === "" ? "-" : this.destinationAccBranch;
         this.destinationAccountBranchtosend = this.accountObj.Id || null;
-        this.destPostcode = this.accountObj.ShippingPostalCode || "";
+        // this.destPostcode = this.accountObj.ShippingPostalCode || "";
+        this.destPostcode = this.destPostcodetoKeep || "";
         this.destMunc = this.accountObj.ShippingCity || "";
         this.destPref = this.accountObj.ShippingState || "";
         this.destStreet = this.accountObj.ShippingStreet || "";
@@ -2801,23 +2808,26 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
   searchClassAccount(account) {
     getSearchAccount({ accSearch: account })
       .then((result) => {
+        console.log("result search account",result)
         this.searchaccounts = result.slice(0, 99);
         this.searchArrayaccount = result.map((item) => {
           const shippingAdd = item.ShippingAddress || {};
           return {
             id: item.Id,
             name: item.Name,
+            ShippingPostalCode: item?.ShippingPostalCode ?? '',
             shippingAdd: {
               PostalCode: shippingAdd.postalCode || "",
               prefect: shippingAdd.state || "",
               municipality: shippingAdd.city || "",
               street: shippingAdd.street || ""
             },
-            hasAddress:
-              shippingAdd.postalCode ||
-              shippingAdd.state ||
-              shippingAdd.city ||
-              shippingAdd.street
+            Address: ((item?.ShippingPostalCode ?? '') + '\u00A0\u00A0' + (shippingAdd?.state ?? '') + '' +(shippingAdd?.city ?? '') + '' +(shippingAdd?.street ?? '')).trim(),
+            // hasAddress:
+            //   shippingAdd.postalCode ||
+            //   shippingAdd.state ||
+            //   shippingAdd.city ||
+            //   shippingAdd.street
           };
         });
 
@@ -2873,9 +2883,11 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
       this.destinationAccBranch = event.target.dataset.namee;
       this.destinationAccountBranchtosend = event.target.dataset.idd;
       this.destPostcode = event.target.dataset.postal || "";
+      console.log("dest post code in acc click",this.destPostcode)
       this.destMunc = event.target.dataset.mun || "";
       this.destPref = event.target.dataset.prefect || "";
       this.destStreet = event.target.dataset.street || "";
+      this.AddresstoShow = this.destPostcode + '' + this.destMunc + this.destPref + this.destStreet;
       // this.searchKey = `${accountName} ${this.postCode} ${this.municipality} ${this.perfecturess} ${this.street}`;
       this.searchArrayaccount = [];
       this.itemClicked = true; // Set flag to true when an item is clicked
@@ -2905,6 +2917,7 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
     this.destPref = "";
     this.destMunc = "";
     this.destStreet = "";
+    this.AddresstoShow = "";
     this.destinationAccountBranchtosend = null;
     this.divforAccountAddress = false;
     this.readonlyaccount = false;
@@ -3025,12 +3038,9 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
       this.serviceFactoryOptions = this.serviceFactoryOptionsreset;
     }
 
-    console.log(
-      "this.selectedPicklistScheduleType, this.selectedDateToSendStart,this.selectedDateToSendEnd",
-      this.selectedPicklistScheduleType,
-      this.selectedDateToSendStart,
-      this.selectedDateToSendEnd
-    );
+    console.log("this.selectedPicklistScheduleType, this.selectedDateToSendStart,this.selectedDateToSendEnd",this.selectedPicklistScheduleType,this.selectedDateToSendStart,this.selectedDateToSendEnd)
+
+
   }
 
   backfromEditbottom(event) {
@@ -3626,17 +3636,14 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
     }
     let todayMonth = today.getMonth() + 1;
     let todayYear = today.getFullYear();
-    if (
-      this.year2 >= todayYear ||
-      (this.month2 > todayMonth && this.year2 === todayYear - 1)
-    ) {
+    if((this.year2 >= todayYear) || (this.month2 > todayMonth && this.year2 === todayYear - 1)){
       this.isNextYearDisabled2 = true;
-    } else {
+    } else{
       this.isNextYearDisabled2 = false;
     }
-    if (this.month2 === todayMonth && this.year2 === todayYear) {
+    if(this.month2 === todayMonth && this.year2 === todayYear){
       this.isNextMonthDisabled2 = true;
-    } else {
+    } else{
       this.isNextMonthDisabled2 = false;
     }
 
@@ -3787,7 +3794,7 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
       let todayMonth = today.getMonth() + 1;
       let todayYear = today.getFullYear();
 
-      if (todayYear - 1 >= this.year2 && todayMonth >= this.month2) {
+      if (todayYear - 1 >=  this.year2 && todayMonth >= this.month2) {
         this.isNextYearDisabled2 = false;
       }
     }
@@ -3843,11 +3850,11 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
       const today = new Date();
       let todayMonth = today.getMonth() + 1;
       let todayYear = today.getFullYear();
-
+  
       if (todayMonth === this.month2 && todayYear === this.year2) {
         this.isNextYearDisabled2 = true;
       }
-
+  
       /* Last Modified by Singh Jashanpreet */
       if (todayYear - 1 === this.year2 && todayMonth < this.month2) {
         this.isNextYearDisabled2 = true;
@@ -3939,12 +3946,14 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
           return {
             id: item.Id,
             name: item.Name,
+            ShippingPostalCode: item?.ShippingPostalCode ?? '',
             shippingAdd: {
               PostalCode: shippingAdd.postalCode || "",
               prefect: shippingAdd.state || "",
               municipality: shippingAdd.city || "",
               street: shippingAdd.street || ""
-            }
+            },
+            Address: ((item?.ShippingPostalCode ?? '') + '\u00A0\u00A0' + (shippingAdd?.state ?? '') + '' +(shippingAdd?.city ?? '') + '' +(shippingAdd?.street ?? '')).trim(),
           };
         });
         this.errorSearch = undefined;
@@ -4132,7 +4141,7 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
     }
   }
 
-  @track isAlreadyHaveMaintenance = "";
+  @track isAlreadyHaveMaintenance = '';
   @track refreshToken = 1;
 
   handlesaveedittop(event) {
@@ -4151,55 +4160,45 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
               // } else {
               //     this.maintenanceDetails.Service_Type__c = "-";
               // }
-              console.log(
-                "sch start, end, vehicle, serviceType, refreshToken:"
-              );
-              console.log(
-                "this.selectedPicklistScheduleType, this.selectedDateToSendStart,this.selectedDateToSendEnd",
-                this.selectedPicklistScheduleType,
-                this.selectedDateToSendStart,
-                this.selectedDateToSendEnd,
-                this.MaintenanceId
-              );
+              console.log("sch start, end, vehicle, serviceType, refreshToken:")
+              console.log("this.selectedPicklistScheduleType, this.selectedDateToSendStart,this.selectedDateToSendEnd",this.selectedPicklistScheduleType,this.selectedDateToSendStart,this.selectedDateToSendEnd,this.MaintenanceId)
 
-              getExistingMaintenance({
-                scheduleDate: this.selectedDateToSendStart,
-                scheduleEndDate: this.selectedDateToSendEnd,
-                vehicleId: this.vehicleId,
-                serviceType: this.selectedPicklistScheduleType,
-                refreshToken: this.refreshToken,
-                Id: this.MaintenanceId
-              }).then((result) => {
+              getExistingMaintenance({scheduleDate: this.selectedDateToSendStart,scheduleEndDate: this.selectedDateToSendEnd,vehicleId: this.vehicleId,serviceType: this.selectedPicklistScheduleType,refreshToken: this.refreshToken,Id: this.MaintenanceId})
+
+              .then((result) => {
                 console.log("data from GetExistingMaintenance : - ", result);
-
-                if (result) {
-                  this.isAlreadyHaveMaintenance = result;
+              
+              if (result) {
+                this.isAlreadyHaveMaintenance = result;
+              }else{
+                if (this.startDate5) {
+                  this.maintenanceDetails.Schedule_Date__c = this.formatDate5(
+                    this.startDate5
+                  );
                 } else {
-                  if (this.startDate5) {
-                    this.maintenanceDetails.Schedule_Date__c = this.formatDate5(
-                      this.startDate5
-                    );
-                  } else {
-                    this.maintenanceDetails.Schedule_Date__c = "-";
-                  }
-                  if (this.endDate5) {
-                    this.maintenanceDetails.Schedule_EndDate__c =
-                      this.formatDate5(this.endDate5);
-                  } else {
-                    this.maintenanceDetails.Schedule_EndDate__c = "-";
-                  }
-                  if (this.selectedDateToSend2) {
-                    this.maintenanceDetails.Implementation_Date__c =
-                      this.formatJapaneseDate(this.selectedDateToSend2);
-                  }
-                  this.updateMaintenanceData();
-                  this.iseditTopInfo = false;
-                  refreshApex(this.wiredVehicleResultDetail);
-                  setTimeout(() => {
-                    refreshApex(this.wiredVehicleResultDetail);
-                  }, 1500);
+                  this.maintenanceDetails.Schedule_Date__c = "-";
                 }
-              });
+                if (this.endDate5) {
+                  this.maintenanceDetails.Schedule_EndDate__c = this.formatDate5(
+                    this.endDate5
+                  );
+                } else {
+                  this.maintenanceDetails.Schedule_EndDate__c = "-";
+                }
+                if (this.selectedDateToSend2) {
+                  this.maintenanceDetails.Implementation_Date__c =
+                    this.formatJapaneseDate(this.selectedDateToSend2);
+                }
+                this.updateMaintenanceData();
+                this.iseditTopInfo = false;
+                refreshApex(this.wiredVehicleResultDetail);
+                setTimeout(() => {
+                  refreshApex(this.wiredVehicleResultDetail);
+                }, 1500);
+              }
+              })
+
+
 
               // if (this.selectedPicklistfactoryType) {
               //     this.maintenanceDetails.Service_Factory__c = this.selectedPicklistfactoryType;
@@ -4222,6 +4221,7 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
               //     this.maintenanceDetails.Recieving_Destination__c_full = "-";
               //     this.destinationBranchToShow = "-";
               // }
+
             } catch (error) {
               console.error("Error in updating maintenance details:", error);
               let err = JSON.stringify(error);
@@ -4262,24 +4262,13 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
               // } else {
               //     this.maintenanceDetails.Service_Type__c = "-";
               // }
-              console.log(
-                "this.selectedPicklistScheduleType, this.selectedDateToSendStart,this.selectedDateToSendEnd",
-                this.selectedPicklistScheduleType,
-                this.selectedDateToSendStart,
-                this.selectedDateToSendEnd
-              );
-              getExistingMaintenance({
-                scheduleDate: this.selectedDateToSendStart,
-                scheduleEndDate: this.selectedDateToSendEnd,
-                vehicleId: this.vehicleId,
-                serviceType: this.selectedPicklistScheduleType,
-                refreshToken: this.refreshToken,
-                Id: this.MaintenanceId
-              }).then((result) => {
+              console.log("this.selectedPicklistScheduleType, this.selectedDateToSendStart,this.selectedDateToSendEnd",this.selectedPicklistScheduleType,this.selectedDateToSendStart,this.selectedDateToSendEnd)
+              getExistingMaintenance({scheduleDate: this.selectedDateToSendStart,scheduleEndDate: this.selectedDateToSendEnd,vehicleId: this.vehicleId,serviceType: this.selectedPicklistScheduleType,refreshToken: this.refreshToken,Id: this.MaintenanceId})
+              .then((result) => {
                 console.log("data from GetExistingMaintenance : - ", result);
-                if (result) {
+                if(result){
                   this.isAlreadyHaveMaintenance = result;
-                } else {
+                }else{
                   if (this.startDate5) {
                     this.maintenanceDetails.Schedule_Date__c = this.formatDate5(
                       this.startDate5
@@ -4287,34 +4276,35 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
                   } else {
                     this.maintenanceDetails.Schedule_Date__c = "-";
                   }
-
+    
                   if (this.endDate5) {
-                    this.maintenanceDetails.Schedule_EndDate__c =
-                      this.formatDate5(this.endDate5);
+                    this.maintenanceDetails.Schedule_EndDate__c = this.formatDate5(
+                      this.endDate5
+                    );
                   } else {
                     this.maintenanceDetails.Schedule_EndDate__c = "-";
                   }
-
+    
                   if (this.selectedDateToSend2) {
                     this.maintenanceDetails.Implementation_Date__c =
                       this.formatJapaneseDate(this.selectedDateToSend2);
                   }
 
                   this.updateMaintenanceData();
-
+    
                   this.iseditTopInfo = false;
                   refreshApex(this.wiredVehicleResultDetail);
                   setTimeout(() => {
                     refreshApex(this.wiredVehicleResultDetail);
                   }, 1500);
-
+    
                   this.maintenanceDetails.Implementation_Date__c = this
                     .maintenanceDetails.Implementation_Date__c
                     ? this.maintenanceDetails.Implementation_Date__c
                     : "-";
                   window.scrollTo(0, 0);
                 }
-              });
+              })
 
               // if (this.selectedPicklistfactoryType) {
               //     this.maintenanceDetails.Service_Factory__c = this.selectedPicklistfactoryType;
@@ -4337,6 +4327,7 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
               //     this.maintenanceDetails.Recieving_Destination__c_full = "-";
               //     this.destinationBranchToShow = "-";
               // }
+
             } catch (error) {
               console.error(
                 "Error in processing dates or refreshing apex:",
@@ -5006,9 +4997,10 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
   //   return `${date.year}年${String(date.month).padStart(1)}月${String(date.day).padStart(1)}日`;
   // }
   formatDate5(date) {
-    console.log("year month dayyy", date.year, date.month, date.day, date);
+    console.log("year month dayyy",date.year,date.month,date.day, date)
     return `${date.year}年${date.month}月${date.day}日`;
   }
+  
 
   /* Schedule calendar 5*/
   @track prevButtonDisabled5 = false;
@@ -5453,82 +5445,82 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
 
   prevYear2() {
     //for history
-    this.isNextYearDisabled2 = false;
-    this.year2--;
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button.selected"
-    );
-    selectedButtons.forEach((button) =>
-      button.classList.remove(
-        "selected",
-        "in-range",
-        "startborder",
-        "endborder",
-        "singleborder"
-      )
-    );
-    // this.selectedDay2 = null;
-    // if (this.myYear2 === this.year2) {
-    //   this.selectedDay2 = this.myday2;
-    //   this.month2 = this.myMonth2;
-    // }
-    this.populateCalendar2();
+      this.isNextYearDisabled2 = false;
+      this.year2--;
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-button.selected"
+      );
+      selectedButtons.forEach((button) =>
+        button.classList.remove(
+          "selected",
+          "in-range",
+          "startborder",
+          "endborder",
+          "singleborder"
+        )
+      );
+      // this.selectedDay2 = null;
+      // if (this.myYear2 === this.year2) {
+      //   this.selectedDay2 = this.myday2;
+      //   this.month2 = this.myMonth2;
+      // }
+      this.populateCalendar2();
   }
 
   nextyear2() {
     //for history
-    // this.isPrevDisabled = false;
-    // this.isPrevYearDisabled = false;
+      // this.isPrevDisabled = false;
+      // this.isPrevYearDisabled = false;
 
-    this.year2++;
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button.selected"
-    );
-    selectedButtons.forEach((button) =>
-      button.classList.remove(
-        "selected",
-        "in-range",
-        "startborder",
-        "endborder",
-        "singleborder"
-      )
-    );
-    //this.selectedDay2 = null;
-    // if (this.myYear === this.year) {
-    //   this.selectedDay = this.myday;
-    //   this.month = this.myMonth;
-    // }
-    this.populateCalendar2();
+      this.year2++;
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-button.selected"
+      );
+      selectedButtons.forEach((button) =>
+        button.classList.remove(
+          "selected",
+          "in-range",
+          "startborder",
+          "endborder",
+          "singleborder"
+        )
+      );
+      //this.selectedDay2 = null;
+      // if (this.myYear === this.year) {
+      //   this.selectedDay = this.myday;
+      //   this.month = this.myMonth;
+      // }
+      this.populateCalendar2();
 
-    /* Last Modified by Singh Jashanpreet */
-    const today = new Date();
-    let todayMonth = today.getMonth() + 1;
-    let todayYear = today.getFullYear();
+      /* Last Modified by Singh Jashanpreet */
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
 
-    console.log(
-      todayYear,
-      " ",
-      this.year,
-      " ",
-      todayMonth,
-      " ",
-      this.month,
-      " ",
-      this.isNextYearDisabled2
-    );
-    //isNextMonthDisabled2
-    //isNextYearDisabled2
-    if (
-      todayYear <= this.year2 ||
-      (this.month2 > todayMonth && todayYear - 1 === this.year2)
-    ) {
-      //2025 -
-      this.isNextYearDisabled2 = true;
-    }
-    if (todayYear === this.year2 && this.month2 === todayMonth) {
-      this.isNextMonthDisabled2 = true;
-      this.isNextYearDisabled2 = true;
-    }
+      console.log(
+        todayYear,
+        " ",
+        this.year,
+        " ",
+        todayMonth,
+        " ",
+        this.month,
+        " ",
+        this.isNextYearDisabled2
+      );
+        //isNextMonthDisabled2
+  //isNextYearDisabled2
+      if (
+        todayYear <= this.year2 ||
+        (this.month2 > todayMonth && todayYear - 1 === this.year2)
+      ) {
+        //2025 -
+        this.isNextYearDisabled2 = true;
+      }
+      if (todayYear === this.year2 && this.month2 === todayMonth) {
+        this.isNextMonthDisabled2 = true;
+        this.isNextYearDisabled2 = true;
+      }
   }
 
   getMonthLabel5(month) {
@@ -5728,7 +5720,8 @@ export default class Ccp2MaintenanceHistory extends LightningElement {
     return this.selectedPicklistfactoryType === "ふそう";
   }
 
-  backfromSameinsp() {
-    this.isAlreadyHaveMaintenance = "";
+  backfromSameinsp(){
+    this.isAlreadyHaveMaintenance = '';
   }
+
 }

@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from "lwc";
+import { LightningElement, track, wire } from 'lwc';
 import Vehicle_StaticResource from "@salesforce/resourceUrl/CCP2_Resources";
 import getLoginURL from "@salesforce/apex/CCP_HeaderController.getLoginURL";
 import labelsUser from "@salesforce/resourceUrl/ccp2_labels";
@@ -8,10 +8,10 @@ import Languagei18n from "@salesforce/apex/CCP2_guestUserLanguage.guestuserLangu
 // import ErrorLog from "@salesforce/apex/CCP2_lwc_ErrorLogs.createLwcErrorLog";
 
 import CCP2_User_Manual_Url from "@salesforce/label/c.CCP2_User_Manual_Url";
-const landingImg =
-  Vehicle_StaticResource + "/CCP2_Resources/Common/Landing_page_Picture.webp";
+const landingImg = Vehicle_StaticResource + "/CCP2_Resources/Common/Landing_page_Picture.webp";
 
 export default class Ccp2_LandingPage extends LightningElement {
+
   landingImg = landingImg;
   loginLink;
   @track Languagei18n = "";
@@ -113,13 +113,13 @@ export default class Ccp2_LandingPage extends LightningElement {
   handleSSO() {
     window.location.href = this.loginLink;
   }
-  //  fetchToken() {
-  //   Gettoken()
-  //     .then((data) => {
-  //       console.log('received token', data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching vehicle lease data:', error);
-  //     });
-  // }
+//  fetchToken() {
+//   Gettoken()
+//     .then((data) => {
+//       console.log('received token', data);
+//     })
+//     .catch((error) => {
+//       console.error('Error fetching vehicle lease data:', error);
+//     });
+// }
 }

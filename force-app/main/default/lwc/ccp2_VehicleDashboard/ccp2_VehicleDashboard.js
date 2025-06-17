@@ -11,11 +11,13 @@ import getHolidayList from "@salesforce/apex/CCP2_CalendarController.getHolidayL
 // import Id from "@salesforce/user/Id";
 // import getUserServices from "@salesforce/apex/CCP2_userController.permissionValuesAccessControl";
 
+
 const BACKGROUND_IMAGE_PC =
   Vehicle_StaticResource + "/CCP2_Resources/Common/Main_Background.webp";
 
 const EmptyRecallDataIcon =
   Vehicle_StaticResource + "/CCP2_Resources/Vehicle/Empty-recall.png";
+
 
 export default class Ccp2_VehicleDashboard extends LightningElement {
   emptylistofvehicleImage = EmptyRecallDataIcon;
@@ -47,7 +49,7 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
     AllVehicleType: "-",
     LargeVehicles: "-",
     MediumVehicles: "-",
-    SmallVehicles: "-"
+    SmallVehicles: "-",
   };
   @track BranchCountsAll = {
     TotalBranchVehicles: "-",
@@ -67,7 +69,8 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
       .then(() => {
         return this.loadLabels(); // Load labels after i18next is ready
       })
-      .then(() => {})
+      .then(() => {
+      })
       .catch((error) => {
         console.error("Error loading language or labels: ", error);
         let err = JSON.stringify(error);
@@ -157,6 +160,8 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
     }
   }
 
+
+
   renderedCallback() {
     if (this.isLanguageChangeDone) {
       this.loadLanguage();
@@ -175,14 +180,17 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
     return this.startDate.toISOString().split("T")[0];
   }
 
+
+
   fetchHolidayData() {
     return getHolidayList()
-      .then((result) => {
-        this.holidaydata = result.map((item) => item.Holiday_Date__c);
+      .then(result => {
+        this.holidaydata = result.map(item => item.Holiday_Date__c);
+
 
         this.currentDates = this.populateDatesRange(this.startDate, 7);
       })
-      .catch((error) => {
+      .catch(error => {
         let err = JSON.stringify(error);
         ErrorLog({
           lwcName: "ccp2_VehicleMaintenanceCalendar",
@@ -193,7 +201,9 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
           EventName: "Fetching holiday data",
           ModuleName: "Vehicle dashboard"
         })
-          .then(() => {})
+          .then(() => {
+
+          })
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
@@ -246,10 +256,7 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
       }
       // this.TotalRecallCount = data.vehicleRecallCount;
       this.vehicleStoredData = data.vehicles.map((elm, itr) => {
-        const ellipseRegNum = this.substringToProperLength(
-          elm.Registration_Number__c,
-          16
-        );
+        const ellipseRegNum = this.substringToProperLength(elm.Registration_Number__c, 16);
         let dates = elm?.dates.map((d, index) => {
           let serviceType = "";
 
@@ -264,18 +271,16 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
           else if (itr === data?.vehicles?.length - 1 && index === 6)
             classForBoxes = classForBoxes + " rigth-radius-bottom";
 
+
           let todayDateString = new Date();
-          if (
-            d.isStart ||
-            d.date === todayDateString.toISOString()?.split("T")[0]
-          ) {
+          if (d.isStart || d.date === todayDateString.toISOString()?.split("T")[0]) {
             serviceType = d.serviceType;
           }
           return {
             ...d,
             serviceType: serviceType,
             classForBoxes: classForBoxes
-          };
+          }
         });
         return {
           ...elm,
@@ -284,6 +289,7 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
         };
       });
       this.showWeeklyCalendar = true;
+
 
       this.showCalendarLoader = false;
     } else if (error) {
@@ -328,7 +334,7 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
       };
       this.loadcarddata = false;
     } else if (error) {
-      console.error("Error fetching vehicle lease data:", error);
+      console.error('Error fetching vehicle lease data:', error);
       ErrorLog({
         lwcName: "ccp2_VehicleDashboard",
         errorLog: err,
@@ -360,15 +366,14 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
         expiredVehiclesArray: data.exprVehicle.map((vehicle) => ({
           ...vehicle,
           expirationDate: this.formatJapaneseDate3(vehicle.expirationDate),
-          recallCreatedDate: this.formatJapaneseDatelease(
-            vehicle.recallCreatedDate
-          )
+          recallCreatedDate: this.formatJapaneseDatelease(vehicle.recallCreatedDate)
         }))
       };
       console.log("data recall 2", this.BranchCountsAll);
       console.log("data recall 3", JSON.stringify(this.BranchCountsAll));
+
     } else if (error) {
-      console.error("Error fetching vehicle lease data:", error);
+      console.error('Error fetching vehicle lease data:', error);
       ErrorLog({
         lwcName: "ccp2_VehicleDashboard",
         errorLog: err,
@@ -389,7 +394,7 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
 
   formatJapaneseDatelease(isoDate) {
     if (isoDate === undefined) {
-      return "";
+      return '';
     }
     const date = new Date(isoDate);
     const year = date.getFullYear();
@@ -401,6 +406,7 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
   populateDatesRange(startDate, days) {
     const dates = [];
     try {
+
       for (let i = 0; i < days; i++) {
         let date = new Date(startDate);
         date.setDate(date.getDate() + i);
@@ -421,9 +427,7 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
         let formattedDate = date.toLocaleDateString("en-CA");
 
         // let isWeekend = date.getDay() === 0 || date.getDay() === 6;
-        let isHoliday =
-          this.holidaydata?.length > 0 &&
-          this.holidaydata.includes(formattedDate);
+        let isHoliday = this.holidaydata?.length > 0 && this.holidaydata.includes(formattedDate);
         let topLogoCss =
           date.toDateString() === new Date().toDateString()
             ? "active-top-logos"
@@ -433,9 +437,10 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
         let topDatesCss =
           date.toDateString() === new Date().toDateString()
             ? "active-top-days"
-            : isHoliday
+            : (isHoliday)
               ? "top-days-holiday-red"
               : "top-days";
+
 
         dates.push({
           date: date.getDate(),
@@ -448,6 +453,7 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
           dateObj: new Date(date)
         });
       }
+
     } catch (e) {
       console.error("in catch", e);
     }
@@ -497,6 +503,7 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
     }
   }
 
+
   gotoMonthlyCalender() {
     let baseUrl = window.location.href;
     let calLink;
@@ -507,7 +514,7 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
   }
 
   get vehicleCoungreater() {
-    return this.vehicleNearExpCount > 0;
+    return this.vehicleNearExpCount > 0
   }
 
   substringToProperLength(string, limit) {
@@ -567,26 +574,26 @@ export default class Ccp2_VehicleDashboard extends LightningElement {
     let eraName, eraYear;
 
     if (year > 2019 || (year === 2019 && month >= 5)) {
-      eraName = "令和";
+      eraName = '令和';
       eraYear = year - 2018;
     } else if (year > 1989 || (year === 1989 && month >= 1)) {
-      eraName = "平成";
+      eraName = '平成';
       eraYear = year - 1988;
     } else if (year > 1926 || (year === 1926 && month >= 12)) {
-      eraName = "昭和";
+      eraName = '昭和';
       eraYear = year - 1925;
     } else if (year > 1912 || (year === 1912 && month >= 7)) {
-      eraName = "大正";
+      eraName = '大正';
       eraYear = year - 1911;
     } else if (year > 1868 || (year === 1868 && month >= 1)) {
-      eraName = "明治";
+      eraName = '明治';
       eraYear = year - 1867;
     } else {
-      return "Date is before the Meiji era, which is not supported.";
+      return 'Date is before the Meiji era, which is not supported.';
     }
 
     if (eraYear === 1) {
-      eraYear = "元";
+      eraYear = '元';
     }
 
     return `${eraName}${eraYear}年${month}月${day}日`;

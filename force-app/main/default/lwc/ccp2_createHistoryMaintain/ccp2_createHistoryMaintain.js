@@ -190,6 +190,8 @@ export default class Ccp2_createHistoryMaintain extends LightningElement {
   @track isNextMonthDisabled = false;
   @track isPrevMonthDisabled = false;
 
+  @track AddresstoShow = '';
+
   get showmorelength2() {
     return this.showmoreArray2.length > 0;
   }
@@ -661,7 +663,7 @@ export default class Ccp2_createHistoryMaintain extends LightningElement {
     return this.selectedPicklistfactoryType === "ふそう/自社 以外";
   }
 
-  @track isAlreadyHaveMaintenance = "";
+  @track isAlreadyHaveMaintenance = '';
   @track refreshToken = 1;
   handleclick1() {
     if (this.destinationAccountBranch) {
@@ -669,33 +671,27 @@ export default class Ccp2_createHistoryMaintain extends LightningElement {
         this.multipleDest = true;
         console.log("inside no search");
       } else {
-        getExistingMaintenance({
-          scheduleDate: this.maintenanceHistory.Schedule_Date__c,
-          scheduleEndDate: this.maintenanceHistory.Schedule_EndDate__c,
-          vehicleId: this.maintenanceHistory.Vehicle__c,
-          serviceType: this.maintenanceHistory.Service_Type__c,
-          refreshToken: this.refreshToken
-        })
+        getExistingMaintenance({scheduleDate: this.maintenanceHistory.Schedule_Date__c,scheduleEndDate: this.maintenanceHistory.Schedule_EndDate__c,vehicleId: this.maintenanceHistory.Vehicle__c,serviceType: this.maintenanceHistory.Service_Type__c, refreshToken: this.refreshToken})
           .then((result) => {
             console.log("data from GetExistingMaintenance : - ", result);
-
-            if (result) {
-              this.isAlreadyHaveMaintenance = result;
-              console.log("result in if", this.isAlreadyHaveMaintenance);
-            } else {
-              console.log("result in else");
-              this.isStep1 = false;
-              this.isStep2 = true;
-              this.isStep3 = false;
-              this.isStep4 = false;
-              window.scrollTo(0, 0);
-              this.template
-                .querySelector(".listScheduleTypeRec")
-                .classList.remove("error-input");
-              this.template
+              
+              if (result) {
+                this.isAlreadyHaveMaintenance = result;
+                console.log("result in if",this.isAlreadyHaveMaintenance);
+              }else{
+                console.log("result in else");
+                this.isStep1 = false;
+                this.isStep2 = true;
+                this.isStep3 = false;
+                this.isStep4 = false;
+                window.scrollTo(0, 0);
+                this.template
+                  .querySelector(".listScheduleTypeRec")
+                  .classList.remove("error-input");
+                this.template
                 .querySelector(".InputsScheduleTypeSearch")
                 .classList.remove("error-input");
-            }
+              }
           })
           .catch((error) => {
             console.error("Error in GetExistingMaintenance : - ", error);
@@ -713,28 +709,19 @@ export default class Ccp2_createHistoryMaintain extends LightningElement {
         console.log("in if.........");
         window.scrollTo(0, 0);
       } else {
-        getExistingMaintenance({
-          scheduleDate: this.maintenanceHistory.Schedule_Date__c,
-          scheduleEndDate: this.maintenanceHistory.Schedule_EndDate__c,
-          vehicleId: this.maintenanceHistory.Vehicle__c,
-          serviceType: this.maintenanceHistory.Service_Type__c,
-          refreshToken: this.refreshToken
-        })
-          .then((result) => {
-            console.log("data from GetExistingMaintenance : - ", result);
-            if (result) {
-              this.isAlreadyHaveMaintenance = result;
-              console.log(
-                "result in ifff2 : - ",
-                this.isAlreadyHaveMaintenance
-              );
-            } else {
-              this.isStep1 = false;
-              this.isStep2 = true;
-              this.isStep3 = false;
-              this.isStep4 = false;
-              window.scrollTo(0, 0);
-            }
+        getExistingMaintenance({scheduleDate: this.maintenanceHistory.Schedule_Date__c,scheduleEndDate: this.maintenanceHistory.Schedule_EndDate__c,vehicleId: this.maintenanceHistory.Vehicle__c,serviceType: this.maintenanceHistory.Service_Type__c, refreshToken: this.refreshToken})
+        .then((result) => {
+          console.log("data from GetExistingMaintenance : - ", result);
+              if (result) {
+                this.isAlreadyHaveMaintenance = result;
+                console.log("result in ifff2 : - ", this.isAlreadyHaveMaintenance);
+              }else{
+                this.isStep1 = false;
+                this.isStep2 = true;
+                this.isStep3 = false;
+                this.isStep4 = false;
+                window.scrollTo(0, 0);
+              }
           })
           .catch((error) => {
             console.error("Error in GetExistingMaintenance : - ", error);
@@ -1286,12 +1273,15 @@ export default class Ccp2_createHistoryMaintain extends LightningElement {
           return {
             id: item.Id,
             name: item.Name,
+            ShippingPostalCode: item?.ShippingPostalCode ?? '',
+
             shippingAdd: {
               PostalCode: shippingAdd.postalCode || "",
               prefect: shippingAdd.state || "",
               municipality: shippingAdd.city || "",
               street: shippingAdd.street || ""
             },
+            Address: ((item?.ShippingPostalCode ?? '') + '\u00A0\u00A0' + (shippingAdd?.state ?? '') + '' +(shippingAdd?.city ?? '') + '' +(shippingAdd?.street ?? '')).trim(),
             hasAddress:
               shippingAdd.postalCode ||
               shippingAdd.state ||
@@ -1337,12 +1327,14 @@ export default class Ccp2_createHistoryMaintain extends LightningElement {
           return {
             id: item.Id,
             name: item.Name,
+            ShippingPostalCode: item?.ShippingPostalCode ?? '',
             shippingAdd: {
               PostalCode: shippingAdd.postalCode || "",
               prefect: shippingAdd.state || "",
               municipality: shippingAdd.city || "",
               street: shippingAdd.street || ""
-            }
+            },
+            Address: ((item?.ShippingPostalCode ?? '') + '\u00A0\u00A0' + (shippingAdd?.state ?? '') + '' +(shippingAdd?.city ?? '') + '' +(shippingAdd?.street ?? '')).trim(),
           };
         });
         console.log("showmore arrayyyyy", JSON.stringify(this.showmoreArray));
@@ -1392,6 +1384,9 @@ export default class Ccp2_createHistoryMaintain extends LightningElement {
       this.municipality,
       this.perfecturess
     );
+
+    this.AddresstoShow = this.postCode + '' + this.municipality + this.perfecturess + this.street;
+
     this.searchKey = `${accountName} ${this.postCode} ${this.municipality} ${this.perfecturess} ${this.street}`;
     this.searchArrayaccount = [];
     this.itemClicked = true; // Set flag to true when an item is clicked
@@ -3331,7 +3326,8 @@ export default class Ccp2_createHistoryMaintain extends LightningElement {
     // this.showMore=true;
   }
 
-  backfromSameinsp() {
-    this.isAlreadyHaveMaintenance = "";
+  backfromSameinsp(){
+    this.isAlreadyHaveMaintenance = '';
   }
+
 }

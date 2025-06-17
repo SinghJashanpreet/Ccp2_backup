@@ -832,10 +832,11 @@ export default class Ccp2_dtfsa extends LightningElement {
         let userDataCount = result[1]?.userDataCount;
 
         this.searchDtfsaDocs = this.wiredresult.rows.map((doc) => {
+
           let issueCount = 0;
 
-          for (const key in userDataCount) {
-            if (key === doc.DataId) {
+          for(const key in userDataCount){
+            if(key === doc.DataId){
               issueCount = userDataCount[key];
               break;
             }
@@ -864,7 +865,7 @@ export default class Ccp2_dtfsa extends LightningElement {
         this.showSearchPageLoader = false;
         this.updatedSelectedItemslist = [];
 
-        console.log("this.searchDtfsaDocs", this.searchDtfsaDocs);
+        console.log('this.searchDtfsaDocs',this.searchDtfsaDocs)
       })
       .catch((err) => {
         console.error("dtfsa doc errors", err);

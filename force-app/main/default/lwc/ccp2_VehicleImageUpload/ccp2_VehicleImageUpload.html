@@ -25,21 +25,12 @@
           <template if:false={isImageEmpty}>
             <div class={imageScrollerContainer}>
               <div class={uploadImageIconCss} if:false={isUplaodButtonDisabled}>
-                <button
-                  onclick={handleFileUpload}
-                  class={UploadImageButtonCss}
-                  disabled={isUplaodButtonDisabled}
-                >
+                <button onclick={handleFileUpload} class={UploadImageButtonCss} disabled={isUplaodButtonDisabled}>
                   <img src={upload} width="48px" height="39px" />
                   <h3>{labels2.ccp2_vi_uploadImage}</h3>
                 </button>
-                <input
-                  name="vehicleImage"
-                  accept=".jpg,.jpeg,.png"
-                  type="file"
-                  class="file-input"
-                  onchange={handleFilesChange}
-                />
+                <input name="vehicleImage" accept=".jpg,.jpeg,.png" type="file" class="file-input"
+                  onchange={handleFilesChange} />
               </div>
 
               <template for:each={uploadImagesArray} for:item="elm">
@@ -61,17 +52,11 @@
                               </clipPath>
                             </defs>
                           </svg> -->
-                          <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
+                          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
                             <path
                               d="M10.0013 1.6665C5.4013 1.6665 1.66797 5.39984 1.66797 9.99984C1.66797 14.5998 5.4013 18.3332 10.0013 18.3332C14.6013 18.3332 18.3346 14.5998 18.3346 9.99984C18.3346 5.39984 14.6013 1.6665 10.0013 1.6665ZM10.0013 16.6665C6.31797 16.6665 3.33464 13.6832 3.33464 9.99984C3.33464 6.3165 6.31797 3.33317 10.0013 3.33317C13.6846 3.33317 16.668 6.3165 16.668 9.99984C16.668 13.6832 13.6846 16.6665 10.0013 16.6665Z"
-                              fill="#E10202"
-                            />
+                              fill="#E10202" />
                             <circle cx="10" cy="10" r="5" fill="#E10202" />
                           </svg>
                           {labels2.ccp2_vl_fav_text}
@@ -79,11 +64,7 @@
                       </div>
                     </template>
                     <template if:false={elm.FavImage}>
-                      <div
-                        class="overlay-button-select"
-                        data-id={elm.id}
-                        onclick={handleSelectImageHover}
-                      >
+                      <div class="overlay-button-select" data-id={elm.id} onclick={handleSelectImageHover}>
                         <!-- <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none" class="icon-star">
                             <g clip-path="url(#clip0_29381_93101)">
                             <path d="M17.7297 7.60486L14.0509 6.15361L12.5997 2.47486C12.5584 2.36611 12.4534 2.29861 12.3372 2.29861C12.2209 2.29861 12.1197 2.36986 12.0747 2.47486L10.6234 6.15361L6.94469 7.60486C6.83594 7.64611 6.76844 7.75111 6.76844 7.86736C6.76844 7.98361 6.83969 8.08486 6.94844 8.12986L10.6272 9.58111L12.0784 13.2599C12.1197 13.3686 12.2247 13.4361 12.3409 13.4361C12.4572 13.4361 12.5584 13.3649 12.6034 13.2599L14.0547 9.58111L17.7334 8.12986C17.8422 8.08861 17.9134 7.98361 17.9134 7.86736C17.9134 7.75111 17.8347 7.64611 17.7297 7.60486ZM13.7284 9.10111C13.6572 9.13111 13.5972 9.18736 13.5709 9.25861L12.3372 12.3899L11.1034 9.25861C11.0892 9.22307 11.0679 9.19078 11.0408 9.1637C11.0138 9.13663 10.9815 9.11534 10.9459 9.10111L7.81844 7.86736L10.9459 6.63361C11.0172 6.60361 11.0772 6.54736 11.1034 6.47611L12.3372 3.34486L13.5709 6.47611C13.6009 6.54736 13.6572 6.60736 13.7284 6.63361L16.8559 7.86736L13.7284 9.10111ZM0.269687 14.5424L2.54969 15.4424L3.44969 17.7224C3.49094 17.8311 3.59594 17.8986 3.71219 17.8986C3.82844 17.8986 3.92969 17.8274 3.97469 17.7224L4.87469 15.4424L7.15469 14.5424C7.26344 14.5011 7.33094 14.3961 7.33094 14.2799C7.33094 14.1636 7.25969 14.0624 7.15094 14.0174L4.87094 13.1174L3.97094 10.8374C3.92969 10.7286 3.82469 10.6611 3.70844 10.6611C3.59219 10.6611 3.49094 10.7324 3.44594 10.8374L2.54594 13.1174L0.265937 14.0174C0.157187 14.0586 0.0859375 14.1636 0.0859375 14.2799C0.0859375 14.3961 0.164687 14.5011 0.269687 14.5424ZM2.86844 13.5974C2.93969 13.5674 2.99969 13.5111 3.02594 13.4399L3.70844 11.7111L4.39094 13.4399C4.42094 13.5111 4.47719 13.5711 4.54844 13.5974L6.27719 14.2799L4.54844 14.9624C4.47719 14.9924 4.41719 15.0486 4.39094 15.1199L3.71219 16.8486L3.02969 15.1199C2.99984 15.0488 2.94329 14.9922 2.87219 14.9624L1.14344 14.2799L2.86844 13.5974ZM1.80719 3.53236L2.41469 5.06986C2.45594 5.17861 2.56094 5.24611 2.67719 5.24611C2.79344 5.24611 2.89469 5.17486 2.93969 5.06986L3.54719 3.53236L5.08469 2.92486C5.19344 2.88361 5.26094 2.77861 5.26094 2.66236C5.26094 2.54611 5.18969 2.44486 5.08469 2.39986L3.54344 1.79986L2.93594 0.262363C2.84969 0.0486133 2.49719 0.0486133 2.41094 0.262363L1.80719 1.79986L0.269687 2.40736C0.164687 2.44861 0.0934375 2.54986 0.0934375 2.66611C0.0934375 2.78236 0.164687 2.88361 0.269687 2.92861L1.80719 3.53236ZM2.12594 2.27611C2.20094 2.24986 2.25719 2.18986 2.28719 2.11861L2.67719 1.13236L3.06719 2.11861C3.09344 2.18986 3.14969 2.24986 3.22094 2.27611L4.20719 2.66611L3.22094 3.05611C3.14969 3.08611 3.09344 3.14236 3.06344 3.21361L2.67344 4.19986L2.28719 3.21361C2.27223 3.1779 2.25024 3.14556 2.22254 3.1185C2.19484 3.09145 2.16199 3.07023 2.12594 3.05611L1.13969 2.66611L2.12594 2.27611Z"/>
@@ -96,39 +77,21 @@
                           </svg>
                           サムネイルとして設定 -->
 
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="icon-star"
-                        >
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                          class="icon-star">
                           <path
-                            d="M10.0013 1.66675C5.4013 1.66675 1.66797 5.40008 1.66797 10.0001C1.66797 14.6001 5.4013 18.3334 10.0013 18.3334C14.6013 18.3334 18.3346 14.6001 18.3346 10.0001C18.3346 5.40008 14.6013 1.66675 10.0013 1.66675ZM10.0013 16.6667C6.31797 16.6667 3.33464 13.6834 3.33464 10.0001C3.33464 6.31675 6.31797 3.33341 10.0013 3.33341C13.6846 3.33341 16.668 6.31675 16.668 10.0001C16.668 13.6834 13.6846 16.6667 10.0013 16.6667Z"
-                          />
+                            d="M10.0013 1.66675C5.4013 1.66675 1.66797 5.40008 1.66797 10.0001C1.66797 14.6001 5.4013 18.3334 10.0013 18.3334C14.6013 18.3334 18.3346 14.6001 18.3346 10.0001C18.3346 5.40008 14.6013 1.66675 10.0013 1.66675ZM10.0013 16.6667C6.31797 16.6667 3.33464 13.6834 3.33464 10.0001C3.33464 6.31675 6.31797 3.33341 10.0013 3.33341C13.6846 3.33341 16.668 6.31675 16.668 10.0001C16.668 13.6834 13.6846 16.6667 10.0013 16.6667Z" />
                         </svg>
                         {labels2.ccp2_vl_fav_text}
                       </div>
                     </template>
                     <img src={elm.fileURL} alt="Uploaded Image" />
                   </div>
-                  <div
-                    class="upload-image-bottom no-scroller"
-                    data-id={elm.id}
-                    data-name={elm.fileName}
-                  >
+                  <div class="upload-image-bottom no-scroller" data-id={elm.id} data-name={elm.fileName}>
                     <p class="" title={elm.fileName}>{elm.fileNameTrimmed}</p>
-                    <lightning-icon
-                      icon-name="utility:close"
-                      size="x-small"
-                      alternative-text="Delete"
-                      onclick={opencancelimagemodal}
-                      data-id={elm.id}
-                      data-name={elm.fileName}
-                      class="filtericn"
-                      style="cursor: pointer"
-                    ></lightning-icon>
+                    <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete"
+                      onclick={opencancelimagemodal} data-id={elm.id} data-name={elm.fileName} class="filtericn"
+                      style="cursor: pointer;"></lightning-icon>
                   </div>
                 </div>
               </template>
@@ -155,37 +118,21 @@
                 <img src={sample} class="sample-image" />
               </div> -->
             <div class="upload-image-sample-right">
-              <button
-                onclick={handleFileUpload}
-                class={UploadImageButtonCss}
-                disabled={isUplaodButtonDisabled}
-              >
+              <button onclick={handleFileUpload} class={UploadImageButtonCss} disabled={isUplaodButtonDisabled}>
                 <img src={upload} width="48px" height="39px" />
                 <h3>{labels2.ccp2_vi_uploadImage}</h3>
               </button>
-              <input
-                name="vehicleImage"
-                accept=".jpg,.jpeg,.png"
-                type="file"
-                class="file-input"
-                onchange={handleFilesChange}
-              />
+              <input name="vehicleImage" accept=".jpg,.jpeg,.png" type="file" class="file-input"
+                onchange={handleFilesChange} />
 
               <div class={instructionContainerCss}>
                 <div>
                   <div class="upload-instruction-heading">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="22"
-                      height="22"
-                      viewBox="0 0 22 22"
-                      fill="none"
-                      style="cursor: pointer"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none"
+                      style="cursor: pointer;">
                       <path
                         d="M10.0859 13.6668C10.0859 13.1606 10.4963 12.7502 11.0026 12.7502C11.5089 12.7502 11.9193 13.1606 11.9193 13.6668V14.6668C11.9193 15.1731 11.5089 15.5835 11.0026 15.5835C10.4963 15.5835 10.0859 15.1731 10.0859 14.6668V13.6668ZM10.0859 7.3335C10.0859 6.82723 10.4963 6.41683 11.0026 6.41683C11.5089 6.41683 11.9193 6.82723 11.9193 7.3335V11.0002C11.9193 11.5064 11.5089 11.9168 11.0026 11.9168C10.4963 11.9168 10.0859 11.5064 10.0859 11.0002V7.3335ZM10.9934 1.8335C5.93344 1.8335 1.83594 5.94016 1.83594 11.0002C1.83594 16.0602 5.93344 20.1668 10.9934 20.1668C16.0626 20.1668 20.1693 16.0602 20.1693 11.0002C20.1693 5.94016 16.0626 1.8335 10.9934 1.8335ZM11.0026 18.3335C6.95094 18.3335 3.66927 15.0518 3.66927 11.0002C3.66927 6.9485 6.95094 3.66683 11.0026 3.66683C15.0543 3.66683 18.3359 6.9485 18.3359 11.0002C18.3359 15.0518 15.0543 18.3335 11.0026 18.3335Z"
-                        fill="#E10202"
-                      />
+                        fill="#E10202" />
                     </svg>
                     <h3>{labels2.ccp2_vi_notice}</h3>
                   </div>
@@ -206,20 +153,13 @@
           <button class="upload-button cancel" onclick={handleCancelModal}>
             {labels2.ccp2_vi_cancel}
           </button>
-          <button
-            class={saveButtonCss}
-            onclick={handleSaveClick}
-            disabled={isButtonDisabled}
-          >
+          <button class={saveButtonCss} onclick={handleSaveClick} disabled={isButtonDisabled}>
             {labels2.ccp2_vi_save}
           </button>
         </div>
 
         <template if:true={saveLoader}>
-          <lightning-spinner
-            alternative-text="Loading"
-            size="medium"
-          ></lightning-spinner>
+          <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
         </template>
       </div>
     </div>
@@ -232,16 +172,10 @@
           <h3>{labels2.ccp2_vi_confirm_finish_editing}</h3>
         </div>
         <div class="buttons-small">
-          <div
-            class="cancelbutton-download btn-download"
-            onclick={CloseModalSureEdit}
-          >
+          <div class="cancelbutton-download btn-download" onclick={CloseModalSureEdit}>
             <p class="buttontxt">{labels2.ccp2_vi_no}</p>
           </div>
-          <div
-            class="searchbutton-download btn-download"
-            onclick={finalChecktoChange}
-          >
+          <div class="searchbutton-download btn-download" onclick={finalChecktoChange}>
             <p class="buttontxt2">{labels2.ccp2_vi_yes}</p>
           </div>
         </div>
@@ -255,16 +189,10 @@
           <h3>{labels2.ccp2_vi_confirm_deletion}</h3>
         </div>
         <div class="buttons-small">
-          <div
-            class="cancelbutton-download btn-download"
-            onclick={handleimageNo}
-          >
+          <div class="cancelbutton-download btn-download" onclick={handleimageNo}>
             <p class="buttontxt">{labels2.ccp2_vi_no}</p>
           </div>
-          <div
-            class="searchbutton-download btn-download"
-            onclick={handleimageYes}
-          >
+          <div class="searchbutton-download btn-download" onclick={handleimageYes}>
             <p class="buttontxt2">{labels2.ccp2_vi_yes}</p>
           </div>
         </div>

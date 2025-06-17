@@ -25,7 +25,7 @@ import labelsBranch from "@salesforce/resourceUrl/ccp2_labels";
 import CCP2_resource_Label from "@salesforce/label/c.CCP2_resource_Label";
 import INDUSTRY_FIELD from "@salesforce/schema/Account.Industry";
 import registerAdminUserRedirect from "@salesforce/apex/CCP_HeaderController.registerAdminUserRedirect";
-import fetchEInvoiceInfoByUserId from "@salesforce/apex/CCP_HomeCtrl.fetchEInvoiceInfoByUserId";
+import fetchEInvoiceInfoByUserId from '@salesforce/apex/CCP_HomeCtrl.fetchEInvoiceInfoByUserId';
 
 const FIELDS = [INDUSTRY_FIELD];
 
@@ -332,6 +332,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
         return dateB - dateA; // Sort in descending order (latest first)
       });
 
+
       console.log("nresul3", this.notificationdata);
       this.handleallcardstoshow();
     } else if (error) {
@@ -426,23 +427,23 @@ export default class Ccp2_FusoHeader extends LightningElement {
 
     // eInvoice のリンクの場合のみ処理を追加
     if (event.target.dataset.name === "eInvoice") {
-      try {
+        try {
         const result = await fetchEInvoiceInfoByUserId();
         console.log(result);
 
         if (result) {
-          // eInvoiceが有効な場合は画面遷移
-          window.location.href = this.einvoiceUrl;
+            // eInvoiceが有効な場合は画面遷移
+            window.location.href = this.einvoiceUrl;
         } else {
-          // eInvoiceが無効な場合はモーダルを表示
-          this.isShowModal1 = true;
-          console.log(this.isShowModal1);
+            // eInvoiceが無効な場合はモーダルを表示
+            this.isShowModal1 = true;
+            console.log(this.isShowModal1);
         }
-      } catch (error) {
+        } catch (error) {
         console.error("Error fetching eInvoice info:", error);
         // エラー発生時の処理（例: エラーメッセージの表示）
-      }
-      return; // 以降の処理は実行しない
+        }
+        return; // 以降の処理は実行しない
     }
 
     this.clickedHrefUrl = event.currentTarget.getAttribute("href");
@@ -454,10 +455,10 @@ export default class Ccp2_FusoHeader extends LightningElement {
       this.showTxnModal = true;
     }
   }
-
-  hideModalBox() {
+  
+  hideModalBox(){
     this.isShowModal1 = false;
-  }
+  } 
 
   txnNo() {
     this.showTxnModal = false;
@@ -681,12 +682,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
         const currentUrl = window.location.href;
         const baseUrl = currentUrl.split("/s/")[0] + "/s/";
         console.log("base url ", baseUrl);
-        if (
-          currentUrl !== baseUrl &&
-          !currentUrl.includes("/registerAdminUser") &&
-          !currentUrl.includes("/mftbcUsageTerms") &&
-          !currentUrl.includes("/inquiry")
-        ) {
+        if (currentUrl !== baseUrl && !currentUrl.includes("/registerAdminUser") && !currentUrl.includes("/mftbcUsageTerms") && !currentUrl.includes("/inquiry")) {
           console.log("Extra parameters detected in URL, reloading window...");
           window.location.href = baseUrl;
         }
@@ -752,12 +748,14 @@ export default class Ccp2_FusoHeader extends LightningElement {
             this.directBook = elm.isActive;
           } else if (elm.apiName === "E_invoice") {
             this.eInvoice = elm.isActive;
-          } else if (elm.apiName === "FUSO_CCP_External_Vehicle_management") {
+          }
+          else if (elm.apiName === "FUSO_CCP_External_Vehicle_management") {
             this.vehicleList = elm.isActive;
           }
           if (this.directBook === false && this.eInvoice === false) {
             this.scrollbuttonneed = false;
-          } else {
+          }
+          else {
             this.scrollbuttonneed = true;
           }
         });
@@ -785,6 +783,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
   }
 
   //links for href
+
 
   getAllUrl() {
     let baseUrl = window.location.href;
@@ -841,21 +840,22 @@ export default class Ccp2_FusoHeader extends LightningElement {
     if (!isAnyTrue) {
       getLogoutURL()
         .then(async (result) => {
-          console.log("heree1", result);
+          console.log('heree1', result)
           const sitePrefix = basePath.replace(/\/s$/i, "");
           const defLogoutURL = sitePrefix + "/secur/logout.jsp";
           if (result) {
             await fetch(defLogoutURL);
-            console.log("heree");
+            console.log('heree')
             window.location.replace(defLogoutURL);
           } else {
-            console.log("heree2");
+            console.log('heree2')
             window.location.replace(defLogoutURL);
           }
           // window.location.href = defLogoutURL;
           // setTimeout(() => {
           //   window.location.href = 'https://login.b2b-int.daimlertruck.com/corptbb2cstaging.onmicrosoft.com/b2c_1a_signup_signin/oauth2/v2.0/logout';
           // }, 3000);
+
         })
         .catch((error) => {
           this.errors = JSON.stringify(error);
@@ -1168,20 +1168,21 @@ export default class Ccp2_FusoHeader extends LightningElement {
         // Format Date
         const formattedDate = this.formatJapaneseDate(notification.Date);
         notification.Date = formattedDate;
-
+ 
         // Process newsDescription
         if (notification.newsDescription) {
           notification.newsDescription = this.convertRichTextToPlainText(
             notification.newsDescription
           );
-          notification["FullNewsDescription"] =
-            this.convertRichTextToPlainText(notification.newsDescription) || "";
+          notification["FullNewsDescription"] = this.convertRichTextToPlainText(
+            notification.newsDescription
+          ) || "";
           if (notification.Type !== "VehicleExp") {
             // console.log("coming inside if: ", notification.Type);
             notification.newsDescription = this.substringToProperLength(
               notification.newsDescription,
               128
-            );
+            ); 
           }
         }
         // Process Description
@@ -1225,9 +1226,9 @@ export default class Ccp2_FusoHeader extends LightningElement {
           case "VehicleExp":
             notification.a = true;
 
-            listOfData = notification.newsDescription?.split(",") || [];
+            listOfData = notification.newsDescription?.split(',') || [];
             notification.showSecondLineOfDotList = listOfData.length;
-            notification.firstDotData = listOfData.length ? listOfData[0] : "";
+            notification.firstDotData = listOfData.length ? listOfData[0] : '';
             notification.showDots = listOfData.length > 1;
 
             break;
@@ -1236,7 +1237,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
 
             listOfData = notification.vehicleNumber;
             notification.showSecondLineOfDotList = listOfData.length;
-            notification.firstDotData = listOfData.length ? listOfData : "";
+            notification.firstDotData = listOfData.length ? listOfData : '';
             notification.showDots = false;
 
             break;
@@ -1251,9 +1252,9 @@ export default class Ccp2_FusoHeader extends LightningElement {
           case "dtfsa":
             notification.d = true;
 
-            listOfData = notification.DocType?.split(",") || [];
+            listOfData = notification.DocType?.split(',') || [];
             notification.showSecondLineOfDotList = listOfData.length;
-            notification.firstDotData = listOfData.length ? listOfData[0] : "";
+            notification.firstDotData = listOfData.length ? listOfData[0] : '';
             notification.showDots = listOfData.length > 1;
 
             // if(notification.NotificationCreatedDate){
@@ -1276,7 +1277,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
             break;
           default:
             break;
-        }
+        }       
       });
       console.log("nresultfinal", this.notificationdata);
       //  console.log(
@@ -1900,9 +1901,8 @@ export default class Ccp2_FusoHeader extends LightningElement {
         (charCode >= 0xff61 && charCode <= 0xff9f) ||
         (charCode >= 0x3040 && charCode <= 0x309f) ||
         (charCode >= 0x30a0 && charCode <= 0x30ff) ||
-        (charCode >= 0x4e00 && charCode <= 0x9fff) ||
-        charCode === 12290 ||
-        charCode === 12289
+        (charCode >= 0x4e00 && charCode <= 0x9fff) || 
+        (charCode === 12290 || charCode === 12289)
       ) {
         charCount += 2;
       } else {
@@ -2004,14 +2004,15 @@ export default class Ccp2_FusoHeader extends LightningElement {
     const scrollableDiv = this.template.querySelector(".Notification-header");
     if (!scrollableDiv) return;
 
+
     const isScrollable = scrollableDiv.scrollWidth > scrollableDiv.clientWidth;
     //this.scrollbuttonneed = isScrollable;
     // Check if the scroll has reached the end (adding a small buffer for precision)
     const isAtEnd =
       Math.abs(
         scrollableDiv.scrollLeft +
-          scrollableDiv.clientWidth -
-          scrollableDiv.scrollWidth
+        scrollableDiv.clientWidth -
+        scrollableDiv.scrollWidth
       ) < 1;
 
     this.scrollend = isScrollable && isAtEnd;
@@ -2083,8 +2084,9 @@ export default class Ccp2_FusoHeader extends LightningElement {
       regNumber: "",
       url: "",
       Doctype: "",
-      DoctypeArray: [],
-      correct: 0
+      DoctypeArray:[],
+      correct:0
+
     };
     this.showMoreLoader = true;
     const targetElement = event.currentTarget;
@@ -2112,15 +2114,17 @@ export default class Ccp2_FusoHeader extends LightningElement {
       };
     }
 
-    console.log("this.moreArray.Description", this.moreArray.Description);
+    console.log("this.moreArray.Description",this.moreArray.Description);
 
     if (this.moreArray.isdtfsaLink === true) {
-      this.moreArray.Description =
-        this.moreArray.Description.split("。")[0] + "。";
-      this.moreArray.Doctype = this.moreArray.Doctype.replaceAll(",", "、");
+      this.moreArray.Description = this.moreArray.Description.split("。")[0] + "。";
+      this.moreArray.Doctype = this.moreArray.Doctype.replaceAll(
+        ",",
+        "、"
+      );
       this.moreArray.DoctypeArray = this.moreArray.Doctype.split("、");
       this.moreArray.correct = this.moreArray.correct === "1" ? true : false;
-      console.log("this.moreArray.DoctypeArray", this.moreArray.DoctypeArray);
+      console.log("this.moreArray.DoctypeArray",this.moreArray.DoctypeArray);
     }
     if (this.moreArray.isNewsLink === true) {
       console.log("url before if: ", this.moreArray.url);
@@ -2130,17 +2134,7 @@ export default class Ccp2_FusoHeader extends LightningElement {
         this.moreArray.url = `${tncCustomlabel}${this.moreArray.url}`;
       }
     }
-    console.log(
-      "all modal data - ",
-      this.moreArray.vehicleId,
-      this.moreArray.id,
-      this.moreArray.Description,
-      this.moreArray.Title,
-      this.moreArray.Date,
-      this.moreArray.Type,
-      "url is: ",
-      this.moreArray.url
-    );
+    console.log("all modal data - ", this.moreArray.vehicleId, this.moreArray.id, this.moreArray.Description, this.moreArray.Title, this.moreArray.Date, this.moreArray.Type, "url is: ", this.moreArray.url);
     this.ShowMoreInfoModal = true;
     this.showMoreLoader = false;
   }

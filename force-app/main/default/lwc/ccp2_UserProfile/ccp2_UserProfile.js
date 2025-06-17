@@ -1,11 +1,11 @@
-import { LightningElement, track, wire } from "lwc";
+import { LightningElement, track, wire } from 'lwc';
 import Vehicle_StaticResource from "@salesforce/resourceUrl/CCP2_Resources";
 import getBasicInfo from "@salesforce/apex/CCP2_userController.userBasicInfo";
 import { getRecord } from "lightning/uiRecordApi";
 import CONTACT_ID_FIELD from "@salesforce/schema/User.ContactId";
 import Id from "@salesforce/user/Id";
 import getbranchdetails from "@salesforce/apex/CCP2_userData.UnAssociatedBranch";
-import updateUser from "@salesforce/apex/CCP2_userController.updateRecords";
+import updateUser from "@salesforce/apex/CCP2_userController.updateRecords"
 import getUsers from "@salesforce/apex/CCP2_userController.adminUser";
 import oldnewadmin from "@salesforce/apex/CCP2_userController.createAdmin";
 import assignpermset from "@salesforce/apex/CCP2_userController.createAdminPermission";
@@ -13,9 +13,11 @@ import assignpermset from "@salesforce/apex/CCP2_userController.createAdminPermi
 import checkUserEmail from "@salesforce/apex/CCP_AddUserCtrl.checkUserEmail";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
+
 import branchContactAdd from "@salesforce/apex/CCP2_userController.branchContactAdd";
 import branchContactDelete from "@salesforce/apex/CCP2_userController.branchContactDelete";
 import branchdetails from "@salesforce/apex/CCP2_userData.userBranchDtl";
+
 
 import labelsBasic from "@salesforce/resourceUrl/ccp2_labels";
 import i18nextStaticResource from "@salesforce/resourceUrl/i18next";
@@ -25,6 +27,8 @@ import checkManagerUser from "@salesforce/apex/CCP_HeaderController.checkManager
 import getUserAllServicesList from "@salesforce/apex/CCP2_userController.uiPermissionList";
 import CCP2_Notification_Days_Upper_Limit from "@salesforce/label/c.CCP2_Notification_Days_Upper_Limit";
 import CCP2_Notification_Days_Lower_Limit from "@salesforce/label/c.CCP2_Notification_Days_Lower_Limit";
+
+
 
 const truck1 = Vehicle_StaticResource + "/CCP2_Resources/User/truckImg1.webp";
 const truck2 = Vehicle_StaticResource + "/CCP2_Resources/User/truckImg2.webp";
@@ -63,7 +67,7 @@ export default class Ccp2_newStruct extends LightningElement {
   @track allBranchesData = {
     firstbranch: "",
     firstbranchreal: "",
-    onscreenbranchcount: 0
+    onscreenbranchcount: 0,
   };
   @track brcount;
   @track morethanonebranch = false;
@@ -193,6 +197,7 @@ export default class Ccp2_newStruct extends LightningElement {
   @track generalUser = false;
   @track servicesArray = [];
 
+
   //notification offff
   @track notifiOff = true;
   @track lowerNotiflimit = Number(CCP2_Notification_Days_Lower_Limit);
@@ -206,19 +211,20 @@ export default class Ccp2_newStruct extends LightningElement {
   @track selectedNotifDatetoDisp = "";
   @track isNotifOnorOff = "";
   @track isNotifError = false;
-
+  
   @track showServiceModal = false;
-
+  
   @track isNotifOnorOffinv = "";
   @track isNotifOnorOffdtfsa = "";
   @track notifiOffinv = false;
   @track notifiOffdtfsa = false;
 
+
   @track services = [
-    { id: 0, label: "service A" },
-    { id: 1, label: "service B" },
-    { id: 2, label: "service C" },
-    { id: 3, label: "service D" }
+    { id: 0, label: 'service A' },
+    { id: 1, label: 'service B' },
+    { id: 2, label: 'service C' },
+    { id: 3, label: 'service D' }
   ];
 
   loadLanguage() {
@@ -230,7 +236,8 @@ export default class Ccp2_newStruct extends LightningElement {
       .then(() => {
         return this.loadLabels(); // Load labels after i18next is ready
       })
-      .then(() => {})
+      .then(() => {
+      })
       .catch((error) => {
         console.error("Error loading language or labels: ", error);
         ErrorLog({
@@ -320,32 +327,32 @@ export default class Ccp2_newStruct extends LightningElement {
     }
   }
 
-  get styleOfEinvoiceContainer() {
-    if (this.isVehicleService)
-      return "border-radius: 0px; border-top: 1px solid var(--Gray-line, #d9d9d9); padding: 16px 16px;";
-
-    return "border-radius: 0px; padding: 16px 16px;";
+  get styleOfEinvoiceContainer(){
+    if(this.isVehicleService)
+      return 'border-radius: 0px; border-top: 1px solid var(--Gray-line, #d9d9d9); padding: 16px 16px;'
+    
+     return 'border-radius: 0px; padding: 16px 16px;'
   }
-  get styleOfEinvoiceContainer2() {
-    if (this.isVehicleService)
-      return "border-radius: 0px; border-top: 1px solid var(--Gray-line, #d9d9d9);";
-
-    return "border-radius: 0px;";
+  get styleOfEinvoiceContainer2(){
+    if(this.isVehicleService)
+      return 'border-radius: 0px; border-top: 1px solid var(--Gray-line, #d9d9d9);'
+    
+     return 'border-radius: 0px;'
   }
-  get styleOfDtfsaContainer() {
-    if (this.isEinvoicePermission || this.isVehicleService)
-      return "border-radius: 0px; border-top: 1px solid var(--Gray-line, #d9d9d9);";
-
-    return "border-radius: 0px;";
+  get styleOfDtfsaContainer(){
+    if(this.isEinvoicePermission || this.isVehicleService)
+      return 'border-radius: 0px; border-top: 1px solid var(--Gray-line, #d9d9d9);'
+    
+     return 'border-radius: 0px;'
   }
-  get styleOfDtfsaContainer2() {
-    if (this.isEinvoicePermission || this.isVehicleService)
-      return "border-radius: 0px; border-top: 1px solid var(--Gray-line, #d9d9d9); padding: 16px 16px; padding-bottom: 0;";
-
-    return "border-radius: 0px; padding: 16px 16px; padding-bottom: 0;";
+  get styleOfDtfsaContainer2(){
+    if(this.isEinvoicePermission || this.isVehicleService)
+      return 'border-radius: 0px; border-top: 1px solid var(--Gray-line, #d9d9d9); padding: 16px 16px; padding-bottom: 0;'
+    
+     return 'border-radius: 0px; padding: 16px 16px; padding-bottom: 0;'
   }
 
-  get isVehicleService() {
+  get isVehicleService(){
     return this.servicesArray.includes("車両管理");
   }
 
@@ -464,12 +471,8 @@ export default class Ccp2_newStruct extends LightningElement {
             : data.AccountSiebelAccountCode,
         id: data.Id == null ? "-" : data.Id,
         email: data.Email == null ? "-" : data.Email,
-        Abbemail:
-          data.Email == null
-            ? "-"
-            : data.Email.length > 16
-              ? data.Email.substring(0, 16) + "..."
-              : data.Email,
+        Abbemail: data.Email == null ? "-" : data.Email.length > 16 ? data.Email.substring(0, 16) + "..."
+          : data.Email,
         MobilePhone: data.MobilePhone == null ? "-" : data.MobilePhone,
         Department: data.Department == null ? "-" : data.Department,
         Employee_Code: data.EmployeeCode == null ? "-" : data.EmployeeCode,
@@ -477,50 +480,19 @@ export default class Ccp2_newStruct extends LightningElement {
         Title: data.Title == null ? "-" : data.Title,
         Branchs: data.BranchNames.length > 0 ? data.BranchNames : ["-"],
         Branchs2: data.BranchNames.length > 0 ? data.BranchNames : ["-"],
-        isNotifOnorOff:
-          data.CCP2_Notification_Toggle__c == null
-            ? "オフ"
-            : data.CCP2_Notification_Toggle__c, //オン
-        eInvoiceEmail:
-          data.eInvoiceEmail == null
-            ? "オフ"
-            : data.eInvoiceEmail === true
-              ? "オン"
-              : "オフ",
-        LeaseEmail:
-          data.LeaseEmail == null
-            ? "オフ"
-            : data.LeaseEmail === true
-              ? "オン"
-              : "オフ",
-        notificationDateSelection:
-          data.CCP2_Notification_Option__c == null
-            ? ""
-            : data.CCP2_Notification_Option__c,
-        inputNumVal:
-          data.CCP2_Notify_Exp_Duration__c == null
-            ? this.lowerNotiflimit
-            : data.CCP2_Notify_Exp_Duration__c,
-        selectedNotifDate:
-          data.CCP2_Notify_Selected_Date__c == null
-            ? ""
-            : data.CCP2_Notify_Selected_Date__c
+        isNotifOnorOff: data.CCP2_Notification_Toggle__c == null ? "オフ" : data.CCP2_Notification_Toggle__c,//オン
+        eInvoiceEmail: data.eInvoiceEmail == null ? "オフ" : data.eInvoiceEmail === true ? 'オン' : 'オフ',
+        LeaseEmail: data.LeaseEmail == null ? "オフ" : data.LeaseEmail === true ? 'オン' : 'オフ',
+        notificationDateSelection: data.CCP2_Notification_Option__c == null ? "" : data.CCP2_Notification_Option__c,
+        inputNumVal: data.CCP2_Notify_Exp_Duration__c == null ? this.lowerNotiflimit : data.CCP2_Notify_Exp_Duration__c,
+        selectedNotifDate: data.CCP2_Notify_Selected_Date__c == null ? "" : data.CCP2_Notify_Selected_Date__c
       };
 
       // notifiOffdtfsa notifiOffinv
 
-      this.notifiOffinv =
-        data.eInvoiceEmail == null
-          ? true
-          : data.eInvoiceEmail === true
-            ? false
-            : true;
-      this.notifiOffdtfsa =
-        data.LeaseEmail == null
-          ? true
-          : data.LeaseEmail === true
-            ? false
-            : true;
+      this.notifiOffinv = data.eInvoiceEmail == null ? true : data.eInvoiceEmail === true ? false : true;
+      this.notifiOffdtfsa = data.LeaseEmail == null ? true : data.LeaseEmail === true ? false : true;
+
 
       if (this.userDetailData.Branchs.length > 0) {
         this.allBranchesData = {
@@ -530,21 +502,15 @@ export default class Ccp2_newStruct extends LightningElement {
         };
 
         this.morethanonebranch = this.userDetailData.Branchs.length > 1;
-        this.BranchesArray = JSON.parse(JSON.stringify(data.BranchNames));
+        this.BranchesArray = JSON.parse(JSON.stringify(data.BranchNames));;
         console.log("BranchesArray", JSON.stringify(this.BranchesArray));
         this.BranchesArray.forEach((branch) => {
           if (branch.Branch_Code__c) {
             let prefix = "";
-            if (
-              branch.Branch_Code__c !== undefined &&
-              branch.Branch_Code__c !== null
-            ) {
+            if (branch.Branch_Code__c !== undefined && branch.Branch_Code__c !== null) {
               if (branch.Branch_Code__c >= 0 && branch.Branch_Code__c <= 9) {
                 prefix = "00";
-              } else if (
-                branch.Branch_Code__c >= 10 &&
-                branch.Branch_Code__c <= 99
-              ) {
+              } else if (branch.Branch_Code__c >= 10 && branch.Branch_Code__c <= 99) {
                 prefix = "0";
               } else {
                 prefix = " ";
@@ -552,8 +518,7 @@ export default class Ccp2_newStruct extends LightningElement {
             }
             branch.Branch_Code__c = prefix + branch.Branch_Code__c;
             if (branch.Account__r && branch.Account__r.siebelAccountCode__c) {
-              branch.Account__r.siebelAccountCode__c =
-                branch.Account__r.siebelAccountCode__c || "未登録";
+              branch.Account__r.siebelAccountCode__c = branch.Account__r.siebelAccountCode__c || "未登録";
             } else {
               branch.Account__r.siebelAccountCode__c = "未登録"; // Assign default value if missing
             }
@@ -562,24 +527,13 @@ export default class Ccp2_newStruct extends LightningElement {
             this.showone = false; // or any other logic you'd like
           }
         });
+
       }
       // the time field return the milliseconds so the time need divided by 3600000
-      this.isNotifOnorOff =
-        data.CCP2_Notification_Toggle__c == null
-          ? ""
-          : data.CCP2_Notification_Toggle__c;
-      this.notificationDateSelection =
-        data.CCP2_Notification_Option__c == null
-          ? ""
-          : data.CCP2_Notification_Option__c;
-      this.selectedNotifDate =
-        data.CCP2_Notify_Selected_Date__c == null
-          ? ""
-          : data.CCP2_Notify_Selected_Date__c;
-      this.inputNumVal =
-        data.CCP2_Notify_Exp_Duration__c == null
-          ? this.lowerNotiflimit
-          : data.CCP2_Notify_Exp_Duration__c;
+      this.isNotifOnorOff = data.CCP2_Notification_Toggle__c == null ? "" : data.CCP2_Notification_Toggle__c;
+      this.notificationDateSelection = data.CCP2_Notification_Option__c == null ? "" : data.CCP2_Notification_Option__c;
+      this.selectedNotifDate = data.CCP2_Notify_Selected_Date__c == null ? "" : data.CCP2_Notify_Selected_Date__c;
+      this.inputNumVal = data.CCP2_Notify_Exp_Duration__c == null ? this.lowerNotiflimit : data.CCP2_Notify_Exp_Duration__c;
 
       if (this.selectedNotifDate == "1") {
         this.selectedNotifDatetoDisp = "毎月1日";
@@ -594,8 +548,7 @@ export default class Ccp2_newStruct extends LightningElement {
       }
 
       if (this.notificationDateSelection === "NotifySelectedDate") {
-        this.notificationDateSelectiontoDisp =
-          "特定の日に該当の車両をまとめて通知する";
+        this.notificationDateSelectiontoDisp = "特定の日に該当の車両をまとめて通知する";
       } else {
         this.notificationDateSelectiontoDisp = "各車両ごとに通知する";
       }
@@ -683,28 +636,32 @@ export default class Ccp2_newStruct extends LightningElement {
   @track isDtfsaPermission = true;
   @track isEinvoicePermission = true;
 
-  @wire(getUserAllServicesList, {
-    userId: "$userId",
-    refresh: "$refreshTokenInt"
-  })
+
+  @wire(getUserAllServicesList, { userId: '$userId', refresh: '$refreshTokenInt' })
   servicesFun({ data, error }) {
     if (data) {
       const serviceOrder = [
         "車両管理",
         "部整月次請求書（電子版）",
-        "FUSOリース"
+        "FUSOリース",
       ];
 
       this.servicesArray = serviceOrder.filter((service) =>
         data.find((item) => item === service)
       );
 
-      if (data.includes("FUSOリース")) this.isDtfsaPermission = true;
-      else this.isDtfsaPermission = false;
+      if(data.includes("FUSOリース"))
+        this.isDtfsaPermission = true;
+      else 
+        this.isDtfsaPermission = false;
 
-      if (data.includes("部整月次請求書（電子版）"))
+      if(data.includes("部整月次請求書（電子版）"))
         this.isEinvoicePermission = true;
-      else this.isEinvoicePermission = false;
+      else 
+        this.isEinvoicePermission = false;
+
+
+
     } else {
       console.error("services error", error);
     }
@@ -739,6 +696,7 @@ export default class Ccp2_newStruct extends LightningElement {
     }
   }
 
+
   @wire(branchdetails, {
     User: "$contactId",
     refresh: "$refreshTokenInt2"
@@ -757,6 +715,7 @@ export default class Ccp2_newStruct extends LightningElement {
       console.error("error in fetching branches from new", error);
     }
   }
+
 
   fetchUserInfo() {
     if (this.selectedUserId) {
@@ -819,10 +778,7 @@ export default class Ccp2_newStruct extends LightningElement {
       this.outsideClickHandlerAdded = true;
     }
     if (!this.outsideClickHandlerAdded2) {
-      document.addEventListener(
-        "click",
-        this.handleOutsideClicknotif.bind(this)
-      );
+      document.addEventListener("click", this.handleOutsideClicknotif.bind(this));
       this.outsideClickHandlerAdded2 = true;
     }
     if (!this.outsideClickHandlerAdded3) {
@@ -886,6 +842,7 @@ export default class Ccp2_newStruct extends LightningElement {
       });
   }
 
+
   get notificationBlock() {
     return this.isNotifOnorOff === "オン";
   }
@@ -894,22 +851,19 @@ export default class Ccp2_newStruct extends LightningElement {
   }
 
   get notificationOption() {
-    return (
-      this.notificationDateSelectiontoDisp ===
-      "特定の日に該当の車両をまとめて通知する"
-    );
+    return this.notificationDateSelectiontoDisp === "特定の日に該当の車両をまとめて通知する"
   }
 
   get selectedNotifdate() {
-    return `毎月${this.selectedNotifDate}日に該当の車両をまとめて通知する`;
+    return `毎月${this.selectedNotifDate}日に該当の車両をまとめて通知する`
   }
 
   get isNotifyWhenExpSelected() {
-    return this.notificationDateSelection === "NotifyWhenExp";
+    return this.notificationDateSelection === 'NotifyWhenExp';
   }
 
   get isNotifySelectedDateSelected() {
-    return this.notificationDateSelection === "NotifySelectedDate";
+    return this.notificationDateSelection === 'NotifySelectedDate';
   }
 
   handleEdit() {
@@ -971,6 +925,7 @@ export default class Ccp2_newStruct extends LightningElement {
       ? "dropdown-open dropdown-div"
       : "dropdown-close";
   }
+
 
   toggleDropdownStart(event) {
     this.dropdownStartOpen = !this.dropdownStartOpen;
@@ -1112,7 +1067,7 @@ export default class Ccp2_newStruct extends LightningElement {
           if (!onlyDigitsRegex.test(input.value)) {
             event.target.blur();
           }
-          const cleanedPhone = input.value.replace(/[^0-9]/g, "");
+          const cleanedPhone = input.value.replace(/[^0-9]/g, '');
           input.value = cleanedPhone;
           // let isOk = displayValue.length > 0 && onlyNumber.test(displayValue);
           this.InputTelephone = input.value;
@@ -1122,7 +1077,7 @@ export default class Ccp2_newStruct extends LightningElement {
           if (!onlyDigitsRegex.test(input.value)) {
             event.target.blur();
           }
-          const cleanedPhone2 = input.value.replace(/[^0-9]/g, "");
+          const cleanedPhone2 = input.value.replace(/[^0-9]/g, '');
           input.value = cleanedPhone2;
           this.InputCellPhone = input.value;
           break;
@@ -1219,7 +1174,7 @@ export default class Ccp2_newStruct extends LightningElement {
     const field = event.target.dataset.fieldd;
     this.isNotifOnorOff = event.target.dataset.valuee;
     this.formData[field] = this.isNotifOnorOff;
-    const defaultField = "通知対象"; // Replace with the actual field name
+    const defaultField = '通知対象'; // Replace with the actual field name
     if (!this.formData[defaultField]) {
       this.formData[defaultField] = this.inputNumVal;
     }
@@ -1240,9 +1195,7 @@ export default class Ccp2_newStruct extends LightningElement {
     if (this.isNotifOnorOff === "オフ") {
       for (const key in this.formData) {
         if (
-          key === "通知対象" ||
-          key === "通知日" ||
-          key === "特定の日に該当の車両をまとめて通知する"
+          key === "通知対象" || key === "通知日" || key === "特定の日に該当の車両をまとめて通知する"
         ) {
           delete this.formData[key];
         }
@@ -1257,7 +1210,7 @@ export default class Ccp2_newStruct extends LightningElement {
     const field = event.target.dataset.fieldd;
     this.isNotifOnorOff = event.target.dataset.valuee;
     this.formData[field] = this.isNotifOnorOff;
-    const defaultField = "通知対象"; // Replace with the actual field name
+    const defaultField = '通知対象'; // Replace with the actual field name
     if (!this.formData[defaultField]) {
       this.formData[defaultField] = this.inputNumVal;
     }
@@ -1277,9 +1230,7 @@ export default class Ccp2_newStruct extends LightningElement {
     if (this.isNotifOnorOff === "オフ") {
       for (const key in this.formData) {
         if (
-          key === "通知対象" ||
-          key === "通知日" ||
-          key === "特定の日に該当の車両をまとめて通知する"
+          key === "通知対象" || key === "通知日" || key === "特定の日に該当の車両をまとめて通知する"
         ) {
           delete this.formData[key];
         }
@@ -1290,63 +1241,58 @@ export default class Ccp2_newStruct extends LightningElement {
     this.notifiOff = true;
   }
 
-  handleNotificationOninv(event) {
+
+  handleNotificationOninv(event){
     const field = event.target.dataset.fieldd;
     this.isNotifOnorOffinv = event.target.dataset.valuee;
     this.formData["EmailEinvoice"] = this.isNotifOnorOffinv;
-    this.userDetailData.eInvoiceEmail = "オン";
+    this.userDetailData.eInvoiceEmail = 'オン';
     this.notifiOffinv = false;
   }
-
-  handleNotificationOffinv(event) {
+  
+  handleNotificationOffinv(event){
     const field = event.target.dataset.field;
     this.isNotifOnorOffinv = event.target.dataset.value;
     this.formData["EmailEinvoice"] = this.isNotifOnorOffinv;
-    this.userDetailData.eInvoiceEmail = "オフ";
+    this.userDetailData.eInvoiceEmail = 'オフ';
     this.notifiOffinv = true;
   }
-
-  handleNotificationOndtfsa(event) {
+  
+  
+  handleNotificationOndtfsa(event){
     this.isNotifOnorOffdtfsa = event.target.dataset.valuee;
     this.formData["EmailDtfsa"] = this.isNotifOnorOffdtfsa;
-    this.userDetailData.LeaseEmail = "オン";
+    this.userDetailData.LeaseEmail = 'オン';
     this.notifiOffdtfsa = false;
   }
-
-  handleNotificationOffdtfsa(event) {
+  
+  handleNotificationOffdtfsa(event){
     this.isNotifOnorOffdtfsa = event.target.dataset.value;
     this.formData["EmailDtfsa"] = this.isNotifOnorOffdtfsa;
-    this.userDetailData.LeaseEmail = "オフ";
+    this.userDetailData.LeaseEmail = 'オフ';
     this.notifiOffdtfsa = true;
   }
+
 
   handleNumberChange(event) {
     const field = event.target.dataset.field;
     if (event.target.value.length > 3) {
       event.target.value = this.inputNumVal;
       return;
-    }
+    };
     this.inputNumVal = event.target.value;
-    this.inputNumVal = this.inputNumVal.replace(/[^\x30-\x39]/g, "");
+    this.inputNumVal = this.inputNumVal.replace(/[^\x30-\x39]/g, '');
     if (this.inputNumVal.length > 3) {
       this.inputNumVal = this.inputNumVal.slice(0, 3);
     }
     const numericValue = parseInt(this.inputNumVal, 10);
     this.numerrorVal = "";
-    if (
-      numericValue < this.lowerNotiflimit ||
-      numericValue > this.upperNotiflimit
-    ) {
-      this.numerrorVal =
-        "*" +
-        this.lowerNotiflimit +
-        "日~" +
-        this.upperNotiflimit +
-        "日の期間内でのみ設定が可能です。";
+    if (numericValue < this.lowerNotiflimit || numericValue > this.upperNotiflimit) {
+      this.numerrorVal = "*"+this.lowerNotiflimit+"日~"+this.upperNotiflimit+"日の期間内でのみ設定が可能です。";
       return;
     }
     this.formData[field] = this.inputNumVal;
-    console.log("form data", JSON.stringify(this.formData));
+    console.log("form data",JSON.stringify(this.formData));
   }
 
   handleNotificationSelection(event) {
@@ -1355,7 +1301,9 @@ export default class Ccp2_newStruct extends LightningElement {
     this.formData[field] = this.notificationDateSelection;
     if (this.notificationDateSelection === "NotifyWhenExp") {
       for (const key in this.formData) {
-        if (key === "特定の日に該当の車両をまとめて通知する") {
+        if (
+          key === "特定の日に該当の車両をまとめて通知する"
+        ) {
           delete this.formData[key];
         }
       }
@@ -1366,7 +1314,7 @@ export default class Ccp2_newStruct extends LightningElement {
   }
 
   get notifPicklist() {
-    return this.notificationDateSelection === "NotifySelectedDate";
+    return this.notificationDateSelection === "NotifySelectedDate"
   }
 
   toggleStartDropdown(event) {
@@ -1387,7 +1335,7 @@ export default class Ccp2_newStruct extends LightningElement {
   }
 
   get placeholderNotification() {
-    return this.selectedNotifDate;
+    return this.selectedNotifDate
   }
 
   get notificationBlock() {
@@ -1399,26 +1347,23 @@ export default class Ccp2_newStruct extends LightningElement {
   }
 
   get notificationOption() {
-    return (
-      this.notificationDateSelectiontoDisp ===
-      "特定の日に該当の車両をまとめて通知する"
-    );
+    return this.notificationDateSelectiontoDisp === "特定の日に該当の車両をまとめて通知する"
   }
 
   get selectedNotifdate() {
-    return `毎月${this.selectedNotifDate}日に該当の車両をまとめて通知する`;
+    return `毎月${this.selectedNotifDate}日に該当の車両をまとめて通知する`
   }
 
   get isNotifyWhenExpSelected() {
-    return this.notificationDateSelection === "NotifyWhenExp";
+    return this.notificationDateSelection === 'NotifyWhenExp';
   }
 
   get isNotifySelectedDateSelected() {
-    return this.notificationDateSelection === "NotifySelectedDate";
+    return this.notificationDateSelection === 'NotifySelectedDate';
   }
 
   get NotificationError() {
-    return this.isNotifError;
+    return this.isNotifError
   }
 
   handleRedRadioClick(event) {
@@ -1443,10 +1388,10 @@ export default class Ccp2_newStruct extends LightningElement {
     // inputElement.dispatchEvent(changeEvent);
   }
 
+
   saveFormData() {
     let onlyNumber = /^[0-9０-９]*$/;
-    let emailPattern =
-      /^(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"[^"]*")@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}|(\[IPv6:[0-9a-fA-F:]+\]|\[[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\])$/;
+    let emailPattern = /^(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"[^"]*")@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}|(\[IPv6:[0-9a-fA-F:]+\]|\[[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\])$/;
 
     let isFormValid = true; // Flag to track overall form validity
     const fullWidthDigitsRegex = /[０-９]/;
@@ -1521,17 +1466,9 @@ export default class Ccp2_newStruct extends LightningElement {
         this.handleError();
       }
 
-      if (
-        this.inputNumVal < this.lowerNotiflimit ||
-        this.inputNumVal > this.upperNotiflimit
-      ) {
+      if (this.inputNumVal < this.lowerNotiflimit || this.inputNumVal > this.upperNotiflimit) {
         // this.numerrorVal = "*60日~120日の間しかできません。";
-        this.numerrorVal =
-          "*" +
-          this.lowerNotiflimit +
-          "日~" +
-          this.upperNotiflimit +
-          "日の期間内でのみ設定が可能です。";
+        this.numerrorVal = "*"+this.lowerNotiflimit+"日~"+this.upperNotiflimit+"日の期間内でのみ設定が可能です。";
         window.scrollTo(0, 0);
         this.contactClassRecordInput = "invalid-input";
         isFormValid = false;
@@ -1542,13 +1479,9 @@ export default class Ccp2_newStruct extends LightningElement {
         isFormValid = false;
         this.handleError();
       }
-      if (
-        this.notificationDateSelection == "NotifySelectedDate" &&
-        this.selectedNotifDate == ""
-      ) {
+      if (this.notificationDateSelection == "NotifySelectedDate" && this.selectedNotifDate == "") {
         // this.contactClassRecordRadio = "records-notif-radio invalid-input";
-        this.contactClassSelectedDate =
-          "dropdown-header-date icon2 invalid-input";
+        this.contactClassSelectedDate = "dropdown-header-date icon2 invalid-input";
         isFormValid = false;
         window.scrollTo(0, 0);
         this.handleError();
@@ -1717,6 +1650,8 @@ export default class Ccp2_newStruct extends LightningElement {
         // this.handleError();
       }
     });
+
+
   }
 
   selectbranchId;
@@ -1859,9 +1794,10 @@ export default class Ccp2_newStruct extends LightningElement {
   }
 
   updateUser(formDataArray) {
-    console.log("formDataArray for update user data : - ", formDataArray);
+    console.log('formDataArray for update user data : - ', formDataArray);
     // Return the promise from updateUser function
     return new Promise((resolve, reject) => {
+
       const BranchIdsToAdd = this.branch.map((bran) => bran.Id);
       updateUser({ uiFieldJson: formDataArray, branches: BranchIdsToAdd })
         .then((result) => {
@@ -1907,7 +1843,8 @@ export default class Ccp2_newStruct extends LightningElement {
     // const optout = window.location.href;
     let baseUrl = window.location.href;
     if (baseUrl.indexOf("/s/") !== -1) {
-      let NotificationCentreUrl = baseUrl.split("/s/")[0] + "/s/optout";
+      let NotificationCentreUrl =
+        baseUrl.split("/s/")[0] + "/s/optout";
       window.location.href = NotificationCentreUrl;
     }
   }
@@ -1925,11 +1862,8 @@ export default class Ccp2_newStruct extends LightningElement {
     this.showeditscreen = false;
     this.formData = {};
     this.isNotifOnorOff = this.userDetailData.isNotifOnorOff;
-    this.notificationDateSelection =
-      this.userDetailData.notificationDateSelection;
-    this.inputNumVal = this.userDetailData.inputNumVal
-      ? this.userDetailData.inputNumVal
-      : this.lowerNotiflimit;
+    this.notificationDateSelection = this.userDetailData.notificationDateSelection;
+    this.inputNumVal = this.userDetailData.inputNumVal ? this.userDetailData.inputNumVal : this.lowerNotiflimit;
     this.contactClassFirstName = "";
     this.contactholidayend = "";
     this.contactholidaystart = "";
@@ -1942,24 +1876,14 @@ export default class Ccp2_newStruct extends LightningElement {
     this.Lnameerror = "";
     this.contactClassFKanaName = "";
     this.Fkanaerror = "";
-    this.branch.forEach((morevehicle) => {
-      this.branchoptions.push({
-        label: morevehicle.Name,
-        value: morevehicle.Id
-      });
+    this.branch.forEach(morevehicle => {
+      this.branchoptions.push({ label: morevehicle.Name, value: morevehicle.Id });
     });
     this.branch = [];
-    this.originalbranchfromjunction.forEach((originalContact) => {
-      const isContactInList = this.branchfromjunction.some(
-        (contact) =>
-          contact.Id === originalContact.Id &&
-          contact.Name === originalContact.Name
-      );
+    this.originalbranchfromjunction.forEach(originalContact => {
+      const isContactInList = this.branchfromjunction.some(contact => contact.Id === originalContact.Id && contact.Name === originalContact.Name);
       if (!isContactInList) {
-        this.branchfromjunction.push({
-          Name: originalContact.Name,
-          Id: originalContact.Id
-        });
+        this.branchfromjunction.push({ Name: originalContact.Name, Id: originalContact.Id });
       }
     });
     this.compareAndRemoveCommonValues();
@@ -2003,6 +1927,7 @@ export default class Ccp2_newStruct extends LightningElement {
     this.branchoptions = filteredVehicles;
     // this.optcontacts = filteredContacts;
   }
+
 
   handlebranChange(event) {
     event.stopPropagation();
@@ -2150,6 +2075,7 @@ export default class Ccp2_newStruct extends LightningElement {
     sessionStorage.removeItem("ongoingTransaction");
   }
 
+
   handleagreeyes() {
     this.showagreeModal = false;
     this.showchangeAdmin = true;
@@ -2163,6 +2089,7 @@ export default class Ccp2_newStruct extends LightningElement {
     this.navigateToHome();
     // this.showBasicinfo = true;
   }
+
 
   navigateToHome() {
     let baseUrl = window.location.href;
@@ -2182,6 +2109,7 @@ export default class Ccp2_newStruct extends LightningElement {
     window.location.href = homeUrl;
   }
 
+
   handlevalchange(event) {
     const maxLength = event.target.maxLength;
     let value = event.target.value;
@@ -2190,6 +2118,7 @@ export default class Ccp2_newStruct extends LightningElement {
       event.target.blur();
     }
   }
+
 
   handleInputValidation(event) {
     this.handlevalchange(event);
@@ -2305,17 +2234,18 @@ export default class Ccp2_newStruct extends LightningElement {
     sessionStorage.removeItem("ongoingTransaction");
     window.scrollTo(0, 0);
 
-    console.log("old user id, neww user", this.contactId, this.selectedUserId);
+    console.log("old user id, neww user", this.contactId, this.selectedUserId)
 
     assignpermset({ conId: this.selectedUserId })
-      .then((result) => {})
-      .catch((error) => {
+      .then(result => {
+      }
+      ).catch(error => {
         console.error("assign perm error", error);
       });
 
     oldnewadmin({ oldAdmin: this.contactId, newAdmin: this.selectedUserId })
-      .then((result) => {})
-      .catch((error) => {
+      .then(result => { }
+      ).catch(error => {
         console.error(error);
       });
 
@@ -2341,7 +2271,9 @@ export default class Ccp2_newStruct extends LightningElement {
     return this.branchfromjunction.length === 0 && this.branch.length === 0;
   }
 
+
   get servlen() {
     return this.servicesArray.length === 0;
   }
+
 }

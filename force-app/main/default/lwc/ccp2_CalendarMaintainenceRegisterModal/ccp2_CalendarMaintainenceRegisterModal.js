@@ -1,10 +1,10 @@
-import { LightningElement, wire, track, api } from "lwc";
+import { LightningElement, wire, track, api } from 'lwc';
 import { getPicklistValues } from "lightning/uiObjectInfoApi";
 import { createRecord } from "lightning/uiRecordApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import { loadStyle } from "lightning/platformResourceLoader";
-import { refreshApex } from "@salesforce/apex";
-import homeintro from "@salesforce/resourceUrl/RichtextCss";
+import { loadStyle } from 'lightning/platformResourceLoader';
+import { refreshApex } from '@salesforce/apex';
+import homeintro from '@salesforce/resourceUrl/RichtextCss';
 import ErrorLog from "@salesforce/apex/CCP2_lwc_ErrorLogs.createLwcErrorLog";
 import getVehicleById from "@salesforce/apex/CCP2_VehicleDetailController.getVehicleById";
 import getFusolist from "@salesforce/apex/CCP2_VehicleShakenController.returnFusoDetails";
@@ -25,31 +25,22 @@ import FUSOShopLink from "@salesforce/label/c.FUSOShopLink";
 import ECScope from "@salesforce/label/c.CCP2_EC_Scope";
 import getExistingMaintenance from "@salesforce/apex/CCP2_Additional_Services.getExistingMaintenance";
 
+
 const arrowicon =
   Vehicle_StaticResource + "/CCP2_Resources/Common/arrow_under.png";
 const nosearch =
   Vehicle_StaticResource + "/CCP2_Resources/Vehicle/NoVehicles.png";
 
-const poster1 =
-  Vehicle_StaticResource + "/CCP2_Resources/Vehicle/Poster-Image-1.png";
-const poster2 =
-  Vehicle_StaticResource + "/CCP2_Resources/Vehicle/next-poster.webp";
-const component1Image =
-  Vehicle_StaticResource + "/CCP2_Resources/Vehicle/Comp1.png";
-const component2Image =
-  Vehicle_StaticResource + "/CCP2_Resources/Vehicle/Comp2.png";
-const component3Image =
-  Vehicle_StaticResource + "/CCP2_Resources/Vehicle/Comp3.png";
-const component4Image =
-  Vehicle_StaticResource + "/CCP2_Resources/Vehicle/Comp4.png";
-const component5Image =
-  Vehicle_StaticResource + "/CCP2_Resources/Vehicle/Comp5.png";
-const component6Image =
-  Vehicle_StaticResource + "/CCP2_Resources/Vehicle/Comp6.png";
-const FusoLogoBefore =
-  Vehicle_StaticResource + "/CCP2_Resources/Vehicle/logo-poster-before.png";
-const FusoLogoAfter =
-  Vehicle_StaticResource + "/CCP2_Resources/Vehicle/logo-poster-after.png";
+const poster1 = Vehicle_StaticResource + '/CCP2_Resources/Vehicle/Poster-Image-1.png';
+const poster2 = Vehicle_StaticResource + '/CCP2_Resources/Vehicle/next-poster.webp';
+const component1Image = Vehicle_StaticResource + '/CCP2_Resources/Vehicle/Comp1.png';
+const component2Image = Vehicle_StaticResource + '/CCP2_Resources/Vehicle/Comp2.png';
+const component3Image = Vehicle_StaticResource + '/CCP2_Resources/Vehicle/Comp3.png';
+const component4Image = Vehicle_StaticResource + '/CCP2_Resources/Vehicle/Comp4.png';
+const component5Image = Vehicle_StaticResource + '/CCP2_Resources/Vehicle/Comp5.png';
+const component6Image = Vehicle_StaticResource + '/CCP2_Resources/Vehicle/Comp6.png';
+const FusoLogoBefore = Vehicle_StaticResource + '/CCP2_Resources/Vehicle/logo-poster-before.png';
+const FusoLogoAfter = Vehicle_StaticResource + '/CCP2_Resources/Vehicle/logo-poster-after.png';
 
 export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningElement {
   @api vehicleId;
@@ -70,7 +61,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
   @track myMonth2;
   @track myYear2;
   @track showPosterreal = false;
-  @track selectedDateRange2 = "";
+  @track selectedDateRange2 = '';
   @track calendarDates2 = [];
   @track startDate2 = null;
   @track endDate2 = null;
@@ -126,12 +117,12 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
   @track myYear;
 
   vehicleImages = [
-    { code: "オイルフィルター", name: "602", imageUrl: component1Image },
-    { code: "エアフィルター", name: "601", imageUrl: component2Image },
-    { code: "燃料フィルター", name: "603", imageUrl: component3Image },
-    { code: "ワイパーブレード", name: "840a", imageUrl: component4Image },
-    { code: "ワイパーゴム", name: "840b", imageUrl: component5Image },
-    { code: "ベルト", name: "571", imageUrl: component6Image }
+    { code: 'オイルフィルター', name: '602', imageUrl: component1Image },
+    { code: 'エアフィルター', name: '601', imageUrl: component2Image },
+    { code: '燃料フィルター', name: '603', imageUrl: component3Image },
+    { code: 'ワイパーブレード', name: '840a', imageUrl: component4Image },
+    { code: 'ワイパーゴム', name: '840b', imageUrl: component5Image },
+    { code: 'ベルト', name: '571', imageUrl: component6Image }
   ];
 
   dropdown = arrowicon;
@@ -223,22 +214,19 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
   validity = true;
   errorMessage;
   richTextSaved = "";
-  selectMode = "end";
-  @track descValue = "";
+  selectMode = 'end';
+  @track descValue = '';
   @track characterCount = 0;
   maxCharacterLimit = 1000;
-  errorMessage = "";
+  errorMessage = '';
   @track maxLength = 1000;
 
   @track maintainType = "";
   @track isHistory = false;
 
+
   get isError() {
-    return (
-      (this.destinationNosearch && this.destinationAccountBranch) ||
-      this.searchAccountError ||
-      (this.destinationNosearch && this.searchKey)
-    );
+    return (this.destinationNosearch && this.destinationAccountBranch) || this.searchAccountError || (this.destinationNosearch && this.searchKey)
   }
 
   get searchKeyPresent() {
@@ -258,25 +246,26 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         chassisnumber: vehicle.Chassis_number__c || "-",
         siebelAccountCode: vehicle.Account__r.siebelAccountCode__c || "-",
         ModelNumber: vehicle.fullModel__c || " ",
-        ModelName: vehicle.Model_Format_Name__c || " "
+        ModelName: vehicle.Model_Format_Name__c || " ",
+
       };
       console.log("vehicledetails", JSON.stringify(this.vehicleDetails));
       console.log("type is here", this.maintainType);
     } else {
       console.log("error from class", error);
+
     }
   }
+
 
   get reqFields() {
     // console.log("all values",this.selectedPicklistScheduleType, this.selectedPicklistfactoryType, this.selectedDateToSendStart, this.selectedDateToSendEnd, this.selectedDateToSend);
     return (
       !this.selectedPicklistScheduleType ||
       !this.selectedPicklistfactoryType ||
-      (this.selectedPicklistfactoryType === "ふそう" &&
-        !this.destinationFuso) ||
-      !(this.selectedDateToSend || this.selectedDateToSendEnd) ||
-      this.isalluploadedimages ||
-      this.searchFusoError
+      (this.selectedPicklistfactoryType === "ふそう" && !this.destinationFuso) ||
+      !(this.selectedDateToSend || this.selectedDateToSendEnd)
+      || this.isalluploadedimages || this.searchFusoError
     );
   }
   get showmorelength() {
@@ -286,8 +275,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     return this.FusoKey || this.destinationFuso;
   }
   get searchlistClassFuso() {
-    return (this.searchArrayFuso && this.searchArrayFuso.length > 0) ||
-      (this.FusoKey && !this.showmylistFuso)
+    return (this.searchArrayFuso && this.searchArrayFuso.length > 0) || this.FusoKey && !this.showmylistFuso
       ? "paddedContainerSearchList"
       : "paddedContainerSearchList empty";
   }
@@ -301,14 +289,10 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     return this.selectedPicklistfactoryType === "ふそう/自社 以外";
   }
   get isDisabled() {
-    return (
-      !this.selectedPicklistfactoryType ||
-      this.selectedPicklistfactoryType === "ふそう"
-    );
+    return !this.selectedPicklistfactoryType || this.selectedPicklistfactoryType === "ふそう";
   }
   get searchlistClass() {
-    return (this.searchArrayaccount && this.searchArrayaccount.length > 0) ||
-      (this.searchKey && !this.showMyList)
+    return (this.searchArrayaccount && this.searchArrayaccount.length > 0) || this.searchKey && !this.showMyList
       ? "paddedContainerSearchList"
       : "paddedContainerSearchList empty";
   }
@@ -332,7 +316,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
       "--dropdown-icon",
       `url(${this.dropdown})`
     );
-    window.addEventListener("click", this.handleOutsideClick2.bind(this));
+    window.addEventListener('click', this.handleOutsideClick2.bind(this));
     this.populateCalendar2();
   }
 
@@ -392,7 +376,8 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
   }
 
   disconnectedCallback() {
-    window.removeEventListener("click", this.handleOutsideClick2.bind(this));
+
+    window.removeEventListener('click', this.handleOutsideClick2.bind(this));
     if (this.handleOutsideClickBound) {
       document.removeEventListener("click", this.handleOutsideClickBound);
       this.handleOutsideClickBound = null;
@@ -428,13 +413,9 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     }
   }
   handleOutsideClick2(event) {
-    const calendarPopup = this.template.querySelector(".calendar-popup2");
-    const inputField = this.template.querySelector(".custom-input2");
-    if (
-      calendarPopup &&
-      !calendarPopup.contains(event.target) &&
-      !inputField.contains(event.target)
-    ) {
+    const calendarPopup = this.template.querySelector('.calendar-popup2');
+    const inputField = this.template.querySelector('.custom-input2');
+    if (calendarPopup && !calendarPopup.contains(event.target) && !inputField.contains(event.target)) {
       this.isCalendarOpen2 = false;
     }
   }
@@ -474,9 +455,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     const searchList = this.template.querySelector(
       ".paddedContainerSearchList"
     );
-    const inputField = this.template.querySelector(
-      ".InputsScheduleTypeSearch2"
-    );
+    const inputField = this.template.querySelector(".InputsScheduleTypeSearch2");
     const isClickInside = searchList && searchList.contains(event.target);
 
     if (!isClickInside && !this.itemClicked && this.searchKey.length > 0) {
@@ -556,9 +535,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
       console.error("factory field", error);
       let err = JSON.stringify(error);
       ErrorLog({
-        lwcName: "ccp2_createHistoryMaintain",
-        errorLog: err,
-        methodName: "FactoryPicklist",
+        lwcName: "ccp2_createHistoryMaintain", errorLog: err, methodName: "FactoryPicklist",
         ViewName: "maintainence Register modal",
         InterfaceName: "Salesforce",
         EventName: "Data fetch",
@@ -572,6 +549,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         });
     }
   }
+
 
   @wire(getbranchList)
   handlebranchList({ data, error }) {
@@ -604,9 +582,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         console.error("Error loading language or labels: ", error);
         let err = JSON.stringify(error);
         ErrorLog({
-          lwcName: "ccp2_createHistoryMaintain",
-          errorLog: err,
-          methodName: "loadLanguage",
+          lwcName: "ccp2_createHistoryMaintain", errorLog: err, methodName: "loadLanguage",
           ViewName: "maintainence Register modal",
           InterfaceName: "Salesforce",
           EventName: "Data fetch",
@@ -639,33 +615,29 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
   }
   loadLabels() {
     fetch(`${labelsInfo}/infoCenter.json`)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         const userLocale = this.getLocale(); // Method to determine user locale (e.g., 'en', 'jp')
 
         // Initialize i18next with the fetched labels
-        i18next
-          .init({
-            lng: userLocale,
-            resources: {
-              [userLocale]: {
-                translation: data[userLocale]
-              }
+        i18next.init({
+          lng: userLocale,
+          resources: {
+            [userLocale]: {
+              translation: data[userLocale]
             }
-          })
-          .then(() => {
-            this.labels2 = i18next.store.data[userLocale].translation;
-            console.log("Create History Maintain Locale: ", userLocale);
-            console.log("Create History Maintain Labels: ", this.labels2);
-          });
+          }
+        }).then(() => {
+          this.labels2 = i18next.store.data[userLocale].translation;
+          console.log("Create History Maintain Locale: ", userLocale);
+          console.log("Create History Maintain Labels: ", this.labels2);
+        });
       })
       .catch((error) => {
         console.error("Error loading labels: ", error);
         let err = JSON.stringify(error);
         ErrorLog({
-          lwcName: "ccp2_createHistoryMaintain",
-          errorLog: err,
-          methodName: "Load Labels",
+          lwcName: "ccp2_createHistoryMaintain", errorLog: err, methodName: "Load Labels",
           ViewName: "maintainence Register modal",
           InterfaceName: "Salesforce",
           EventName: "Data fetch",
@@ -678,14 +650,16 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
       });
+
   }
   getLocale() {
     console.log("Lang 2", this.Languagei18n);
     this.isLanguageChangeDone = false;
-    if (this.Languagei18n === "en_US") {
+    if (this.Languagei18n === 'en_US') {
       console.log("working1");
       return "en";
-    } else {
+    }
+    else {
       console.log("working2");
       return "jp";
     }
@@ -775,6 +749,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     } else {
       this.showmoreArray = [];
     }
+
   }
 
   searchClassAccount(account) {
@@ -790,19 +765,17 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
           return {
             id: item.Id,
             name: item.Name,
+            ShippingPostalCode: item?.ShippingPostalCode ?? '',
             shippingAdd: {
               PostalCode: shippingAdd.postalCode || "",
               prefect: shippingAdd.state || "",
               municipality: shippingAdd.city || "",
               street: shippingAdd.street || ""
             },
-            hasAddress:
-              shippingAdd.postalCode ||
-              shippingAdd.state ||
-              shippingAdd.city ||
-              shippingAdd.street
-          };
-        });
+            Address: ((item?.ShippingPostalCode ?? '') + '\u00A0\u00A0' + (shippingAdd?.state ?? '') + '' +(shippingAdd?.city ?? '') + '' +(shippingAdd?.street ?? '')).trim(),
+            hasAddress: shippingAdd.postalCode || shippingAdd.state || shippingAdd.city || shippingAdd.street
+          }
+        })
         console.log("searchaccounts search length", result.slice(0, 99));
         this.errorSearch = undefined;
         console.log("inside class");
@@ -814,9 +787,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         console.error("searchClassAccount", error);
         let err = JSON.stringify(error);
         ErrorLog({
-          lwcName: "ccp2_createHistoryMaintain",
-          errorLog: err,
-          methodName: "searchClassAccount",
+          lwcName: "ccp2_createHistoryMaintain", errorLog: err, methodName: "searchClassAccount",
           ViewName: "maintainence Register modal",
           InterfaceName: "Salesforce",
           EventName: "Data fetch",
@@ -847,8 +818,8 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
               municipality: shippingAdd.city || "",
               street: shippingAdd.street || ""
             }
-          };
-        });
+          }
+        })
         console.log("showmore arrayyyyy", JSON.stringify(this.showmoreArray));
         console.log("searchaccounts search length", result.slice(0, 99));
         this.errorSearch = undefined;
@@ -864,9 +835,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         console.error("searchClassAccount", error);
         let err = JSON.stringify(error);
         ErrorLog({
-          lwcName: "ccp2_createHistoryMaintain",
-          errorLog: err,
-          methodName: "searchClassAccount2",
+          lwcName: "ccp2_createHistoryMaintain", errorLog: err, methodName: "searchClassAccount2",
           ViewName: "maintainence Register modal",
           InterfaceName: "Salesforce",
           EventName: "Data fetch",
@@ -890,12 +859,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     this.municipality = event.target.dataset.mun || "";
     this.perfecturess = event.target.dataset.prefect || "";
     this.street = event.target.dataset.street || "";
-    console.log(
-      "post mun perft",
-      this.postCode,
-      this.municipality,
-      this.perfecturess
-    );
+    console.log("post mun perft", this.postCode, this.municipality, this.perfecturess);
     this.searchKey = `${accountName} ${this.postCode} ${this.municipality} ${this.perfecturess} ${this.street}`;
     this.searchArrayaccount = [];
     this.itemClicked = true; // Set flag to true when an item is clicked
@@ -908,6 +872,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
   handlesearchCancel() {
     this.showMore = false;
   }
+
 
   updateMaintenanceHistory() {
     let receivingDestinationBranch = "";
@@ -922,11 +887,11 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     //   receivingDestination = this.destinationNosearch;
     // }
 
-    if (this.selectedPicklistfactoryType === "自社") {
+    if (this.selectedPicklistfactoryType === '自社') {
       receivingDestinationBranch = this.destinationAccountBranch;
-    } else if (this.selectedPicklistfactoryType === "ふそう/自社 以外") {
+    } else if (this.selectedPicklistfactoryType === 'ふそう/自社 以外') {
       receivingDestinationAccount = this.destinationAccountBranch;
-    } else if (this.selectedPicklistfactoryType === "ふそう") {
+    } else if (this.selectedPicklistfactoryType === 'ふそう') {
       receivingDestinationBranch = null;
       receivingDestinationAccount = null;
       this.showPoster2 = false;
@@ -969,13 +934,11 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         Fuso_Name__c: fusoName
       };
     }
-    console.log(
-      "main histiry checkkkkkk",
-      JSON.stringify(this.maintenanceHistory)
-    );
+    console.log("main histiry checkkkkkk", JSON.stringify(this.maintenanceHistory));
   }
 
   //calendar
+
 
   openCalendar(event) {
     event.stopPropagation();
@@ -1090,17 +1053,14 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     }
 
     // last modified by jashanpreet singh
-    if (
-      this.year >= todayYear ||
-      (this.month > todayMonth && this.year === todayYear - 1)
-    ) {
+    if((this.year >= todayYear) || (this.month > todayMonth && this.year === todayYear - 1)){
       this.isNextYearDisabled = true;
-    } else {
+    } else{
       this.isNextYearDisabled = false;
     }
-    if (this.month === todayMonth && this.year === todayYear) {
+    if(this.month === todayMonth && this.year === todayYear){
       this.isNextMonthDisabled = true;
-    } else {
+    } else{
       this.isNextMonthDisabled = false;
     }
 
@@ -1156,12 +1116,12 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
       // Update the formatted `selectedDate` when confirm is clicked
       console.log("beforeee imp");
       this.selectedDate = `${this.year}年${this.month}月${this.selectedDay}日`;
-      console.log("after imp");
+      console.log("after imp")
       // refreshApex(this.wiredFactoryPicklist);
       // setTimeout(() => {
       //   refreshApex(this.wiredFactoryPicklist);
       // }, 1000);
-      console.log("after imp 222");
+      console.log("after imp 222")
       this.myday = this.selectedDay;
       this.myMonth = this.month;
       this.myYear = this.year;
@@ -1175,9 +1135,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         this.selectedDay
       );
       this.selectedDateToSend = this.formatDateToYYYYMMDD(selectedDateToSend);
-      this.serviceFactoryOptions = this.serviceFactoryOptions.filter(
-        (ser) => ser.label !== "ふそう"
-      );
+      this.serviceFactoryOptions = this.serviceFactoryOptions.filter((ser) => ser.label !== "ふそう");
       if (this.selectedPicklistfactoryType === "ふそう") {
         this.selectedPicklistfactoryType = "";
         this.BranchSearchList = true;
@@ -1236,6 +1194,8 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     //       this.selectedDay = this.myday;
     //     }
 
+
+
     //     //this.selectedDate = null;
     //     const selectedButtons = this.template.querySelectorAll(
     //       ".day-button.selected"
@@ -1244,34 +1204,36 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     //     this.populateCalendar();
     //   }
     // } else {
-    this.month--;
+      this.month--;
 
-    console.log("no this is what i wnat ", this.month, this.myMonth);
-    this.selectedDay = null;
+      console.log("no this is what i wnat ", this.month, this.myMonth);
+      this.selectedDay = null;
 
-    if (this.month < 1) {
-      this.month = 12;
-      this.year--;
-    }
+      if (this.month < 1) {
+        this.month = 12;
+        this.year--;
+      }
 
-    if (this.myMonth === this.month && this.myYear === this.year) {
-      this.selectedDay = this.myday;
-    }
+      if (this.myMonth === this.month && this.myYear === this.year) {
+        this.selectedDay = this.myday;
+      }
 
-    //this.selectedDate = null;
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button.selected"
-    );
-    selectedButtons.forEach((button) => button.classList.remove("selected"));
-    this.populateCalendar();
 
-    const today = new Date();
-    let todayMonth = today.getMonth() + 1;
-    let todayYear = today.getFullYear();
 
-    if (todayYear - 1 >= this.year && todayMonth >= this.month) {
-      this.isNextYearDisabled = false;
-    }
+      //this.selectedDate = null;
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-button.selected"
+      );
+      selectedButtons.forEach((button) => button.classList.remove("selected"));
+      this.populateCalendar();
+
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
+
+      if (todayYear - 1 >=  this.year && todayMonth >= this.month) {
+        this.isNextYearDisabled = false;
+      }
 
     // }
   }
@@ -1310,25 +1272,25 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     if (todayYear - 1 === this.year && todayMonth < this.month) {
       this.isNextYearDisabled = true;
     }
-    // this.month++;
-    // const selectedButtons = this.template.querySelectorAll(
-    //   ".day-button.selected"
-    // );
-    // selectedButtons.forEach((button) => button.classList.remove("selected"));
-    // this.selectedDay = null;
-    // console.log("yes this is what i wnat 1", this.month, this.myMonth);
-    // if (this.month > 12) {
-    //   this.month = 1;
-    //   this.year++;
-    // }
-    // if (this.myMonth === this.month && this.myYear === this.year) {
-    //   console.log("yes this is what i wnat ", this.month, this.myMonth);
-    //   this.selectedDay = this.myday;
-    //   // this.selectedDate = null;
-    // }
-    // // this.selectedDay = null;
-    // //this.selectedDate = null;
-    // this.populateCalendar();
+      // this.month++;
+      // const selectedButtons = this.template.querySelectorAll(
+      //   ".day-button.selected"
+      // );
+      // selectedButtons.forEach((button) => button.classList.remove("selected"));
+      // this.selectedDay = null;
+      // console.log("yes this is what i wnat 1", this.month, this.myMonth);
+      // if (this.month > 12) {
+      //   this.month = 1;
+      //   this.year++;
+      // }
+      // if (this.myMonth === this.month && this.myYear === this.year) {
+      //   console.log("yes this is what i wnat ", this.month, this.myMonth);
+      //   this.selectedDay = this.myday;
+      //   // this.selectedDate = null;
+      // }
+      // // this.selectedDay = null;
+      // //this.selectedDate = null;
+      // this.populateCalendar();
   }
 
   // Function to get the Japanese era based on the year
@@ -1364,80 +1326,76 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     return monthLabels[month - 1];
   }
 
-  prevYear() {
+  prevYear(){
     this.isNextYearDisabled = false;
-    this.year--;
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button.selected"
-    );
-    selectedButtons.forEach((button) =>
-      button.classList.remove(
-        "selected",
-        "in-range",
-        "startborder",
-        "endborder",
-        "singleborder"
-      )
-    );
-    // this.selectedDay = null;
-    // if (this.myYear === this.year) {
-    //   this.selectedDay = this.myday;
-    //   this.month = this.myMonth;
-    // }
-    this.populateCalendar();
+      this.year--;
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-button.selected"
+      );
+      selectedButtons.forEach((button) =>
+        button.classList.remove(
+          "selected",
+          "in-range",
+          "startborder",
+          "endborder",
+          "singleborder"
+        )
+      );
+      // this.selectedDay = null;
+      // if (this.myYear === this.year) {
+      //   this.selectedDay = this.myday;
+      //   this.month = this.myMonth;
+      // }
+      this.populateCalendar();
   }
 
-  nextyear() {
+  nextyear(){
     this.isPrevDisabled = false;
-    this.isPrevYearDisabled = false;
+      this.isPrevYearDisabled = false;
+  
+        this.year++;
+        const selectedButtons = this.template.querySelectorAll(
+          ".day-button.selected"
+        );
+        selectedButtons.forEach((button) =>
+          button.classList.remove(
+            "selected",
+            "in-range",
+            "startborder",
+            "endborder",
+            "singleborder"
+          )
+        );
+        // this.selectedDay = null;
+        // if (this.myYear === this.year) {
+        //   this.selectedDay = this.myday;
+        //   this.month = this.myMonth;
+        // }
+        this.populateCalendar();
 
-    this.year++;
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button.selected"
-    );
-    selectedButtons.forEach((button) =>
-      button.classList.remove(
-        "selected",
-        "in-range",
-        "startborder",
-        "endborder",
-        "singleborder"
-      )
-    );
-    // this.selectedDay = null;
-    // if (this.myYear === this.year) {
-    //   this.selectedDay = this.myday;
-    //   this.month = this.myMonth;
-    // }
-    this.populateCalendar();
+      /* Last Modified by Singh Jashanpreet */
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
 
-    /* Last Modified by Singh Jashanpreet */
-    const today = new Date();
-    let todayMonth = today.getMonth() + 1;
-    let todayYear = today.getFullYear();
-
-    console.log(
-      todayYear,
-      " ",
-      this.year,
-      " ",
-      todayMonth,
-      " ",
-      this.month,
-      " ",
-      this.isNextYearDisabled
-    );
-    if (
-      todayYear <= this.year ||
-      (this.month > todayMonth && todayYear - 1 === this.year)
-    ) {
-      //2025 -
-      this.isNextYearDisabled = true;
-    }
-    if (todayYear === this.year && this.month === todayMonth) {
-      this.isNextMonthDisabled = true;
-      this.isNextYearDisabled = true;
-    }
+      console.log(
+        todayYear,
+        " ",
+        this.year,
+        " ",
+        todayMonth,
+        " ",
+        this.month,
+        " ",
+        this.isNextYearDisabled
+      );
+      if (todayYear <= this.year || (this.month > todayMonth && todayYear - 1 === this.year)) { //2025 - 
+        this.isNextYearDisabled = true;
+      }
+      if(todayYear === this.year && this.month === todayMonth){
+        this.isNextMonthDisabled = true;
+        this.isNextYearDisabled = true;
+      }
   }
 
   handlePickListChangefactory(event) {
@@ -1450,14 +1408,16 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
       this.destinationAccountBranchtosend = null;
       this.handleRemovesearchKey();
       this.handleRemovesearchKeyFuso();
-    } else if (selectedValue === "ふそう") {
+    }
+    else if (selectedValue === "ふそう") {
       this.AccountSearchList = false;
       this.BranchSearchList = false;
       this.FusoSearchList = true;
       this.destinationAccountBranchtosend = null;
       this.handleRemovesearchKey();
       this.handleRemovesearchKeyFuso();
-    } else {
+    }
+    else {
       this.AccountSearchList = false;
       this.BranchSearchList = true;
       this.FusoSearchList = false;
@@ -1486,7 +1446,9 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     console.log("insdei show more2");
     // this.searchAccountError = false;
     // this.showMore=true;
+
   }
+
 
   handleRichTextChange(event) {
     const richText = event.target.value;
@@ -1498,7 +1460,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     } else {
       this.richTextVal = richText;
       this.characterCount = plainText.length;
-      this.errorMessage = "";
+      this.errorMessage = '';
     }
   }
   @track disableInput = false;
@@ -1515,6 +1477,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
           message: this.labels2.ccp2_ch_max_upload_images,
           variant: "error"
         })
+
       );
       this.isalluploadedimages = false;
       this.disableInput = false;
@@ -1527,7 +1490,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
 
     const fileReadPromises = [];
     const MAX_FILE_SIZE = 10 * 1024 * 1024;
-    const validFileTypes = ["image/jpeg", "image/png", "image/jpg"];
+    const validFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -1535,8 +1498,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
       if (!validFileTypes.includes(file.type)) {
         let error = "test error";
         ErrorLog({
-          lwcName: "ccp2_createHistoryMaintain",
-          errorLog: error,
+          lwcName: "ccp2_createHistoryMaintain", errorLog: error,
           methodName: "handleFilesChange",
           ViewName: "maintainence Register modal",
           InterfaceName: "Salesforce",
@@ -1572,16 +1534,15 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         continue;
       }
 
-      const isDuplicate = this.uploadedImages.some(
-        (image) => image.name === file.name
-      );
+
+      const isDuplicate = this.uploadedImages.some(image => image.name === file.name);
       console.log("workonduplicate", JSON.stringify(isDuplicate));
       if (isDuplicate) {
         //console.log(`Duplicate file detected: ${file.name}`);
         this.dispatchEvent(
           new ShowToastEvent({
             message: `${file.name} ${this.labels2.ccp2_ch_duplicate_file_name}`,
-            variant: "error"
+            variant: 'error',
           })
         );
         this.isalluploadedimages = false;
@@ -1616,7 +1577,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
               id: file.name + i,
               src: resizedImageData,
               name: file.name,
-              halfName: file.name.substring(0, 8) + "...",
+              halfName: file.name.substring(0, 8) + '...',
               isloadingImages: true
             };
 
@@ -1657,12 +1618,11 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
       });
       deletecontentversion({ contentVersionId: recordId })
         .then(() => {
+
           this.imageList = this.imageList.filter(
             (image) => image.recordId !== recordId
           );
-          this.uploadedImages = this.uploadedImages.filter(
-            (image) => image.recordId !== recordId
-          );
+          this.uploadedImages = this.uploadedImages.filter(image => image.recordId !== recordId);
           this.imagesCreatedId = this.imagesCreatedId.filter(
             (id) => id !== recordId
           );
@@ -1678,9 +1638,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
           console.error("Error deleting image:", error);
           let err = JSON.stringify(error);
           ErrorLog({
-            lwcName: "ccp2_createHistoryMaintain",
-            errorLog: err,
-            methodName: "handleRemoveImage",
+            lwcName: "ccp2_createHistoryMaintain", errorLog: err, methodName: "handleRemoveImage",
             ViewName: "maintainence Register modal",
             InterfaceName: "Salesforce",
             EventName: "Data fetch",
@@ -1749,9 +1707,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
               );
               let err = JSON.stringify(error);
               ErrorLog({
-                lwcName: "ccp2_createHistoryMaintain",
-                errorLog: err,
-                methodName: "createContentVersionRecords",
+                lwcName: "ccp2_createHistoryMaintain", errorLog: err, methodName: "createContentVersionRecords",
                 ViewName: "maintainence Register modal",
                 InterfaceName: "Salesforce",
                 EventName: "Data update",
@@ -1761,10 +1717,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
                   console.log("Error logged successfully in Salesforce");
                 })
                 .catch((loggingErr) => {
-                  console.error(
-                    "Failed to log error in Salesforce:",
-                    loggingErr
-                  );
+                  console.error("Failed to log error in Salesforce:", loggingErr);
                 });
               this.isalluploadedimages = false;
               this.disableInput = false;
@@ -1801,9 +1754,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         console.error("Error uploading one or more images:", error);
         let err = JSON.stringify(error);
         ErrorLog({
-          lwcName: "ccp2_createHistoryMaintain",
-          errorLog: err,
-          methodName: "createContentVersionRecords",
+          lwcName: "ccp2_createHistoryMaintain", errorLog: err, methodName: "createContentVersionRecords",
           ViewName: "maintainence Register modal",
           InterfaceName: "Salesforce",
           EventName: "Data update",
@@ -1826,13 +1777,13 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
   }
 
   handleimageYes() {
-    this.showcancelimageModal = false; // Close
+    this.showcancelimageModal = false; // Close 
     this.handleRemoveImage(this.imageEvent); // Call the function
   }
   stripHTML(html) {
-    const div = document.createElement("div");
+    const div = document.createElement('div');
     div.innerHTML = html;
-    return div.textContent || div.innerText || "";
+    return div.textContent || div.innerText || '';
   }
   handleConfirmmodal() {
     this.exitModal = true;
@@ -1848,14 +1799,14 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     console.log(stateString);
     const url = `${baseUrl}&state=${stateString}${scope}`;
     console.log("urldev", url);
-    window.open(url, "_blank");
+    window.open(url, '_blank');
     // window.open(this.FusoShop, '_blank');
   }
   handleconfirmNo() {
     this.exitModal = false;
   }
 
-  @track isAlreadyHaveMaintenance = "";
+  @track isAlreadyHaveMaintenance = '';
   @track refreshToken = 1;
   handleclick1() {
     if (this.destinationAccountBranch) {
@@ -1863,18 +1814,14 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         this.multipleDest = true;
         console.log("inside no search");
       } else {
-        getExistingMaintenance({
-          scheduleDate: this.selectedDateToSendStart,
-          scheduleEndDate: this.selectedDateToSendEnd,
-          vehicleId: this.vehicleId,
-          serviceType: this.selectedPicklistScheduleType,
-          refreshToken: this.refreshToken
-        }).then((result) => {
-          if (result) {
+        getExistingMaintenance({scheduleDate: this.selectedDateToSendStart,scheduleEndDate: this.selectedDateToSendEnd,vehicleId: this.vehicleId,serviceType: this.selectedPicklistScheduleType,refreshToken: this.refreshToken})
+
+        .then((result) => {
+          if(result){
             this.isAlreadyHaveMaintenance = result;
-          } else {
+          }else{
             this.FinalMainLoader = true;
-            if (this.selectedPicklistScheduleType === "一般整備") {
+            if (this.selectedPicklistScheduleType === '一般整備') {
               this.showPoster1 = true;
             } else {
               this.showPoster2 = true;
@@ -1891,7 +1838,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
               .querySelector(".InputsScheduleTypeSearch")
               .classList.remove("error-input");
           }
-        });
+        })
         // this.FinalMainLoader = true;
         // if (this.selectedPicklistScheduleType === '一般整備') {
         //   this.showPoster1 = true;
@@ -1911,29 +1858,18 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         //   .classList.remove("error-input");
       }
     } else {
-      if (
-        (this.searchAccountError &&
-          this.searchKey &&
-          !this.destinationAccountBranch) ||
-        (!this.searchAccountError &&
-          this.searchKey &&
-          !this.destinationAccountBranch)
-      ) {
-        console.log("in if.........");
+      if ((this.searchAccountError && this.searchKey && !this.destinationAccountBranch) || (!this.searchAccountError && this.searchKey && !this.destinationAccountBranch)) {
+        console.log('in if.........');
         window.scrollTo(0, 0);
       } else {
-        getExistingMaintenance({
-          scheduleDate: this.selectedDateToSendStart,
-          scheduleEndDate: this.selectedDateToSendEnd,
-          vehicleId: this.vehicleId,
-          serviceType: this.selectedPicklistScheduleType,
-          refreshToken: this.refreshToken
-        }).then((result) => {
-          if (result) {
+        getExistingMaintenance({scheduleDate: this.selectedDateToSendStart,scheduleEndDate: this.selectedDateToSendEnd,vehicleId: this.vehicleId,serviceType: this.selectedPicklistScheduleType,refreshToken: this.refreshToken})
+
+        .then((result) => {
+          if(result){
             this.isAlreadyHaveMaintenance = result;
-          } else {
+          }else{
             this.FinalMainLoader = true;
-            if (this.selectedPicklistScheduleType === "一般整備") {
+            if (this.selectedPicklistScheduleType === '一般整備') {
               this.showPoster1 = true;
             } else {
               this.showPoster2 = true;
@@ -1943,7 +1879,8 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
             console.log("json", this.maintenanceHistory);
             console.log("images", this.imagesCreatedId);
           }
-        });
+        
+        })
         // this.FinalMainLoader = true;
         // if (this.selectedPicklistScheduleType === '一般整備') {
         //   this.showPoster1 = true;
@@ -2057,22 +1994,14 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
   selectDate2(event) {
     const selectedDay2 = parseInt(event.target.textContent, 10);
     if (!this.startDate2) {
-      this.startDate2 = {
-        day: selectedDay2,
-        month: this.month2,
-        year: this.year2
-      };
+      this.startDate2 = { day: selectedDay2, month: this.month2, year: this.year2 };
       console.log("Starting Date :", this.startDate2.year2);
       this.startMonth2 = this.month2;
       this.startYear2 = this.year2;
     } else if (!this.endDate2) {
-      this.endDate2 = {
-        day: selectedDay2,
-        month: this.month2,
-        year: this.year2
-      };
+      this.endDate2 = { day: selectedDay2, month: this.month2, year: this.year2 };
       this.endMonth2 = this.month2;
-      this.endYear2 = this.year2;
+      this.endYear2 = this.year2
       if (this.isDateAfter2(this.startDate2, this.endDate2)) {
         [this.startDate2, this.endDate2] = [this.endDate2, this.startDate2];
         [this.startMonth2, this.endMonth2] = [this.endMonth2, this.startMonth2];
@@ -2082,43 +2011,19 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
       this.selectedDateRange2 = `${this.formatDate2(this.startDate2)} - ${this.formatDate2(this.endDate2)}`;
       this.isCalendarOpen2 = false;
     } else {
-      this.startDate2 = {
-        day: selectedDay2,
-        month: this.month2,
-        year: this.year2
-      };
+      this.startDate2 = { day: selectedDay2, month: this.month2, year: this.year2 };
       this.startMonth2 = this.month2;
       this.startYear2 = this.year2;
       this.endDate2 = null;
-      this.selectedDateRange2 = "";
+      this.selectedDateRange2 = '';
     }
-    if (this.startDate2)
-      (this.selectedDateToSendStart = new Date(
-        this.startDate2.year,
-        this.startDate2.month - 1,
-        this.startDate2.day
-      )),
-        (this.selectedDateToSendStart = this.formatDateToYYYYMMDD(
-          this.selectedDateToSendStart
-        ));
-    if (this.endDate2)
-      (this.selectedDateToSendEnd = new Date(
-        this.endDate2.year,
-        this.endDate2.month - 1,
-        this.endDate2.day
-      )),
-        (this.selectedDateToSendEnd = this.formatDateToYYYYMMDD(
-          this.selectedDateToSendEnd
-        ));
+    if (this.startDate2) this.selectedDateToSendStart = new Date(this.startDate2.year, this.startDate2.month - 1, this.startDate2.day), this.selectedDateToSendStart = this.formatDateToYYYYMMDD(this.selectedDateToSendStart);
+    if (this.endDate2) this.selectedDateToSendEnd = new Date(this.endDate2.year, this.endDate2.month - 1, this.endDate2.day), this.selectedDateToSendEnd = this.formatDateToYYYYMMDD(this.selectedDateToSendEnd);
     this.myMonth2 = this.month2;
     this.myYear2 = this.year2;
     this.myday2 = this.selectedDay2;
     this.disablecalendar1 = true;
-    console.log(
-      "Sending Dates: ",
-      this.selectedDateToSendStart,
-      this.selectedDateToSendEnd
-    );
+    console.log("Sending Dates: ", this.selectedDateToSendStart, this.selectedDateToSendEnd);
     this.highlightRange2();
   }
 
@@ -2132,27 +2037,20 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     if (todayMonth === this.month2 && todayYear === this.year2) {
       this.isPrevDisabled2 = true;
     }
-    this.month2--;
-    this.selectedDay2 = null;
-    if (this.month2 < 1) {
-      this.month2 = 12;
-      this.year2--;
-    }
-    if (this.myMonth2 === this.month2 && this.myYear2 === this.year2) {
-      this.selectedDay2 = this.myday2;
-    }
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button2.selected2"
-    );
-    selectedButtons.forEach((button) =>
-      button.classList.remove(
-        "selected2",
-        "startborder2",
-        "endborder2",
-        "in-range2"
-      )
-    );
-    this.populateCalendar2();
+      this.month2--;
+      this.selectedDay2 = null;
+      if (this.month2 < 1) {
+        this.month2 = 12;
+        this.year2--;
+      }
+      if (this.myMonth2 === this.month2 && this.myYear2 === this.year2) {
+        this.selectedDay2 = this.myday2;
+      }
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-button2.selected2"
+      );
+      selectedButtons.forEach((button) => button.classList.remove("selected2", "startborder2", "endborder2", "in-range2"));
+      this.populateCalendar2();
     if (todayMonth === this.month2 && todayYear === this.year2) {
       this.isPrevDisabled2 = true;
     }
@@ -2170,31 +2068,24 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     let todayYear = today.getFullYear();
 
     this.month2++;
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button2.selected2"
-    );
-    selectedButtons.forEach((button) =>
-      button.classList.remove(
-        "selected2",
-        "in-range2",
-        "startborder2",
-        "endborder2"
-      )
-    );
-    this.selectedDay2 = null;
-    if (this.month2 > 12) {
-      this.month2 = 1;
-      this.year2++;
-    }
-    if (this.myMonth2 === this.month2 && this.myYear2 === this.year2) {
-      this.selectedDay2 = this.myday2;
-    }
-    this.populateCalendar2();
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-button2.selected2"
+      );
+      selectedButtons.forEach((button) => button.classList.remove("selected2", "in-range2", "startborder2", "endborder2"));
+      this.selectedDay2 = null;
+      if (this.month2 > 12) {
+        this.month2 = 1;
+        this.year2++;
+      }
+      if (this.myMonth2 === this.month2 && this.myYear2 === this.year2) {
+        this.selectedDay2 = this.myday2;
+      }
+      this.populateCalendar2();
 
-    /* Last Modified by Singh Jashanpreet */
-    if (todayYear + 1 <= this.year2 && todayMonth <= this.month2) {
-      this.isPrevYearDisabled2 = false;
-    }
+        /* Last Modified by Singh Jashanpreet */
+      if (todayYear + 1 <= this.year2 && todayMonth <= this.month2) {
+        this.isPrevYearDisabled2 = false;
+      }
   }
 
   populateCalendar2() {
@@ -2202,16 +2093,17 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     let todayMonth = today.getMonth() + 1;
     let todayYear = today.getFullYear();
 
+
     const firstDayOfMonth = new Date(this.year2, this.month2 - 1, 1).getDay();
     const daysInMonth = new Date(this.year2, this.month2, 0).getDate();
 
     this.calendarDates2 = [];
     for (let i = 0; i < firstDayOfMonth; i++) {
       this.calendarDates2.push({
-        value: "",
+        value: '',
         className: "day-button2 empty2",
         isEmpty: true,
-        isDisabled: true
+        isDisabled: true,
       });
     }
     console.log("Populate me year month: ", this.year2, this.month2);
@@ -2220,31 +2112,25 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
       const isDisabled = currentDate < today;
       this.calendarDates2.push({
         value: i,
-        className: isDisabled ? "day-button2 disabled2" : "day-button2",
+        className: isDisabled ? 'day-button2 disabled2' : 'day-button2',
         isEmpty: false,
         isDisabled,
         month: this.month2,
-        year: this.year2
+        year: this.year2,
       });
     }
     this.highlightRange2();
     console.log("All Calendar Dates: ", this.calendarDates2);
-    console.log(
-      "All stringified calendar dates: ",
-      JSON.stringify(this.calendarDates2)
-    );
+    console.log("All stringified calendar dates: ", JSON.stringify(this.calendarDates2));
     // Last Modified by Singh Jashanpreet
-    if (
-      this.year2 <= todayYear ||
-      (this.month2 < todayMonth && this.year2 === todayYear + 1)
-    ) {
+    if((this.year2 <= todayYear) || (this.month2 < todayMonth && this.year2 === todayYear + 1)){
       this.isPrevYearDisabled2 = true;
-    } else {
+    } else{
       this.isPrevYearDisabled2 = false;
     }
-    if (this.month2 === todayMonth && this.year2 === todayYear) {
+    if(this.month2 === todayMonth && this.year2 === todayYear){
       this.isPrevDisabled2 = true;
-    } else {
+    } else{
       this.isPrevDisabled2 = false;
     }
   }
@@ -2304,29 +2190,22 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
   //   }
   // }
   highlightRange2() {
-    const allDays = this.template.querySelectorAll(".day-button2");
-    allDays.forEach((day) =>
-      day.classList.remove(
-        "selected2",
-        "in-range2",
-        "startborder2",
-        "endborder2"
-      )
-    );
+    const allDays = this.template.querySelectorAll('.day-button2');
+    allDays.forEach(day => day.classList.remove("selected2", "in-range2", "startborder2", "endborder2"));
     if (this.startDate2) {
       const startDay = this.template.querySelector(
         `[data-day="${this.startDate2.day}"][data-month="${this.startDate2.month}"][data-year="${this.startDate2.year}"]`
       );
-      if (startDay) startDay.classList.add("selected2", "startborder2");
+      if (startDay) startDay.classList.add('selected2', 'startborder2');
     }
     if (this.endDate2) {
       const endDay = this.template.querySelector(
         `[data-day="${this.endDate2.day}"][data-month="${this.endDate2.month}"][data-year="${this.endDate2.year}"]`
       );
-      if (endDay) endDay.classList.add("selected2", "endborder2");
+      if (endDay) endDay.classList.add('selected2', 'endborder2');
     }
     if (this.startDate2 && this.endDate2) {
-      this.calendarDates2.forEach((day) => {
+      this.calendarDates2.forEach(day => {
         if (
           !day.isDisabled &&
           day.value &&
@@ -2336,14 +2215,8 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
             this.endDate2
           )
         ) {
-          console.log(
-            "HEre values: ",
-            day.value,
-            this.month2,
-            this.year2,
-            JSON.stringify(this.startDate2),
-            JSON.stringify(this.endDate2)
-          );
+
+          console.log("HEre values: ", day.value, this.month2, this.year2, JSON.stringify(this.startDate2), JSON.stringify(this.endDate2));
           if (
             !(
               day.value === this.startDate2.day &&
@@ -2359,22 +2232,17 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
             const dayElement = this.template.querySelector(
               `[data-day="${day.value}"][data-month="${this.month2}"][data-year="${this.year2}"]`
             );
-            if (dayElement) dayElement.classList.add("in-range2");
+            if (dayElement) dayElement.classList.add('in-range2');
           }
         }
       });
     }
 
-    if (
-      this.startDate2 &&
-      JSON.stringify(this.startDate2) === JSON.stringify(this.endDate2)
-    ) {
+    if (this.startDate2 && JSON.stringify(this.startDate2) === JSON.stringify(this.endDate2)) {
       const dayElement = this.template.querySelector(
         `[data-day="${this.startDate2.day}"][data-month="${this.month2}"][data-year="${this.year2}"]`
       );
-      if (dayElement)
-        dayElement.classList.remove("startborder2", "endborder2"),
-          dayElement.classList.add("singleborder2");
+      if (dayElement) dayElement.classList.remove('startborder2', 'endborder2'), dayElement.classList.add('singleborder2');
     }
   }
 
@@ -2395,22 +2263,17 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
   }
 
   convertToReiwaYear2(gregorianYear, month = 1, day = 1) {
-    if (
-      gregorianYear < 2019 ||
-      (gregorianYear === 2019 && (month < 5 || (month === 5 && day < 1)))
-    ) {
+    if (gregorianYear < 2019 || (gregorianYear === 2019 && (month < 5 || (month === 5 && day < 1)))) {
       return "無効な令和年";
     }
     const reiwaYear = gregorianYear - 2018;
     return reiwaYear === 1 ? `令和1年` : `令和${reiwaYear}年`;
   }
 
+
+
   isWithinRange2(currentDate, startDate, endDate) {
-    const current = new Date(
-      currentDate.year,
-      currentDate.month - 1,
-      currentDate.day
-    );
+    const current = new Date(currentDate.year, currentDate.month - 1, currentDate.day);
     const start = new Date(startDate.year, startDate.month - 1, startDate.day);
     const end = new Date(endDate.year, endDate.month - 1, endDate.day);
     return current >= start && current <= end;
@@ -2426,29 +2289,30 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
 
   nextyear2() {
     //for schedule
-    this.isPrevDisabled2 = false;
-    this.isPrevYearDisabled2 = false;
-
-    this.year2++;
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button2.selected2"
-    );
-    selectedButtons.forEach((button) =>
-      button.classList.remove(
-        "selected2",
-        "in-range2",
-        "startborder2",
-        "endborder2",
-        "singleborder2"
-      )
-    );
-    // this.selectedDay2 = null;
-    // if (this.myYear2 === this.year2) {
-    //   this.selectedDay2 = this.myday2;
-    //   this.month2 = this.myMonth2;
-    // }
-    this.populateCalendar2();
-
+      this.isPrevDisabled2 = false;
+      this.isPrevYearDisabled2 = false;
+  
+        this.year2++;
+        const selectedButtons = this.template.querySelectorAll(
+          ".day-button2.selected2"
+        );
+        selectedButtons.forEach((button) =>
+          button.classList.remove(
+            "selected2",
+            "in-range2",
+            "startborder2",
+            "endborder2",
+            "singleborder2"
+          )
+        );
+        // this.selectedDay2 = null;
+        // if (this.myYear2 === this.year2) {
+        //   this.selectedDay2 = this.myday2;
+        //   this.month2 = this.myMonth2;
+        // }
+        this.populateCalendar2();
+    
+    
     // this.isPrevDisabled2 = false;
     // if (!this.isNextYearDisabled2 && !this.showPosterreal) {
     //   this.year2++;
@@ -2486,53 +2350,49 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
 
   prevYear2() {
     //for schedule
-    this.year2--;
-    const selectedButtons = this.template.querySelectorAll(
-      ".day-button2.selected2"
-    );
-    selectedButtons.forEach((button) =>
-      button.classList.remove(
-        "selected2",
-        "in-range2",
-        "startborder2",
-        "endborder2",
-        "singleborder2"
-      )
-    );
-    // this.selectedDay2 = null;
-    // if (this.myYear2 === this.year2) {
-    //   this.selectedDay2 = this.myday2;
-    //   this.month2 = this.myMonth2;
-    // }
-    this.populateCalendar2();
+      this.year2--;
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-button2.selected2"
+      );
+      selectedButtons.forEach((button) =>
+        button.classList.remove(
+          "selected2",
+          "in-range2",
+          "startborder2",
+          "endborder2",
+          "singleborder2"
+        )
+      );
+      // this.selectedDay2 = null;
+      // if (this.myYear2 === this.year2) {
+      //   this.selectedDay2 = this.myday2;
+      //   this.month2 = this.myMonth2;
+      // }
+      this.populateCalendar2();
 
-    /* Last Modified by Singh Jashanpreet */
-    const today = new Date();
-    let todayMonth = today.getMonth() + 1;
-    let todayYear = today.getFullYear();
+      /* Last Modified by Singh Jashanpreet */
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
 
-    console.log(
-      todayYear,
-      " ",
-      this.year2,
-      " ",
-      todayMonth,
-      " ",
-      this.month2,
-      " ",
-      this.isPrevYearDisabled2
-    );
-    if (
-      todayYear >= this.year2 ||
-      (this.month2 < todayMonth && todayYear + 1 === this.year2)
-    ) {
-      //2025 -
-      this.isPrevYearDisabled2 = true;
-    }
-    if (todayYear === this.year2 && this.month2 === todayMonth) {
-      this.isPrevDisabled2 = true;
-      this.isPrevYearDisabled2 = true;
-    }
+      console.log(
+        todayYear,
+        " ",
+        this.year2,
+        " ",
+        todayMonth,
+        " ",
+        this.month2,
+        " ",
+        this.isPrevYearDisabled2
+      );
+      if (todayYear >= this.year2 || (this.month2 < todayMonth && todayYear + 1 === this.year2)) { //2025 -
+        this.isPrevYearDisabled2 = true;
+      }
+      if(todayYear === this.year2 && this.month2 === todayMonth){
+        this.isPrevDisabled2 = true;
+        this.isPrevYearDisabled2 = true;
+      }
   }
 
   getMonthLabel2(month) {
@@ -2557,7 +2417,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     this.selectedDate2 = null;
     this.startDate2 = null;
     this.endDate2 = null;
-    this.selectedDateRange2 = "";
+    this.selectedDateRange2 = '';
     this.selectedDay2 = null;
     this.startMonth2 = null;
     this.endMonth2 = null;
@@ -2591,17 +2451,12 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     }
 
     const allButtons = this.template.querySelectorAll(".day-button2");
-    allButtons.forEach((button) => {
-      button.classList.remove(
-        "selected2",
-        "in-range2",
-        "startborder2",
-        "endborder2",
-        "singleborder2"
-      );
+    allButtons.forEach(button => {
+      button.classList.remove("selected2", "in-range2", "startborder2", "endborder2", "singleborder2");
     });
     this.populateCalendar2();
   }
+
 
   handlesearchAccount2(event) {
     event.stopPropagation();
@@ -2613,6 +2468,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     } else {
       this.showmoreArray = [];
     }
+ 
   }
   handleImageClick(event) {
     const VinNumber = this.vehicleDetails.chassisnumber;
@@ -2620,9 +2476,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     const RegNo = this.vehicleDetails.registrationNumber;
     const ModelNo = this.vehicleDetails.ModelNumber;
     const ModelName = this.vehicleDetails.ModelName;
-    const imageName =
-      event.currentTarget.dataset.name ||
-      event.target.closest(".overlay").dataset.name;
+    const imageName = event.currentTarget.dataset.name || event.target.closest('.overlay').dataset.name;
     const stateData = {
       hinmoku: imageName,
       chassisNumber: VinNumber,
@@ -2632,7 +2486,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
       vehicleModelName: ModelName
     };
     //const baseUrl = `https://login.b2b-int.daimlertruck.com/corptbb2cstaging.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_signup_signin&client_id=4d21e801-db95-498f-8cc5-1363af53d834&nonce=defaultNonce&redirect_uri=https://fuso-shop-staging.app.mitsubishi-fuso.com/mftbc/ja/hinmoku-search`;
-    const baseUrl = this.FusoShop + "/hinmoku-search";
+    const baseUrl = this.FusoShop + '/hinmoku-search';
 
     const scope = `&scope=` + this.ECScope;
     //const baseUrl = `https://login.b2b-int.daimlertruck.com/corptbb2cstaging.onmicrosoft.com/oauth2/v2.0/authorize?p=B2C_1A_signup_signin&client_id=4d21e801-db95-498f-8cc5-1363af53d834&nonce=defaultNonce&redirect_uri=https://shop.mitsubishi-fuso.com/mftbc/ja/Open-Catalogue/c/1`;
@@ -2640,7 +2494,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     console.log(stateString);
     const url = `${baseUrl}&state=${stateString}${scope}`;
     console.log("urldev", url);
-    window.open(url, "_blank");
+    window.open(url, '_blank');
   }
   handleOk() {
     this.multipleDest = false;
@@ -2662,6 +2516,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     } else {
       console.error("InputsScheduleTypeSearch not found.");
     }
+
 
     if (recInput) {
       recInput.classList.add("errorinput");
@@ -2708,8 +2563,8 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
             address: address,
             city: city,
             hasAddress: address || city
-          };
-        });
+          }
+        })
         console.log("data final", JSON.stringify(this.searchArrayFuso));
       })
       .catch((error) => {
@@ -2753,13 +2608,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     this.searchFusoError = false;
     this.divforFusoAddress = true;
     this.showmylistFuso = true;
-    console.log(
-      "desti Fuso",
-      this.destinationFusotosend,
-      this.destinationFuso,
-      this.addressfuso,
-      this.cityfuso
-    );
+    console.log("desti Fuso", this.destinationFusotosend, this.destinationFuso, this.addressfuso, this.cityfuso);
   }
 
   searchClassFuso2(param) {
@@ -2778,8 +2627,8 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
             prefectures: item?.prefecture__c,
             city: city,
             hasAddress: address || city
-          };
-        });
+          }
+        })
         this.searchFusoError = false;
         this.showmoreofFuso = true;
         console.log("data final", JSON.stringify(this.showmoreArray2));
@@ -2791,8 +2640,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
         console.error("searchClassAccount", error);
         let err = JSON.stringify(error);
         ErrorLog({
-          lwcName: "ccp2_createHistoryMaintain",
-          errorLog: err,
+          lwcName: "ccp2_createHistoryMaintain", errorLog: err,
           methodName: "searchClassFuso",
           ViewName: "maintainence Register modal",
           InterfaceName: "Salesforce",
@@ -2817,6 +2665,7 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     } else {
       this.showmoreArray2 = [];
     }
+
   }
   handlesearchCancel2() {
     this.showmoreofFuso = false;
@@ -2841,13 +2690,15 @@ export default class Ccp2_CalendarMaintainenceRegisterModal extends LightningEle
     console.log("insdei show more2");
     // this.searchAccountError = false;
     // this.showMore=true;
+
   }
 
   get isFusoselected() {
-    return this.selectedPicklistfactoryType === "ふそう";
+    return this.selectedPicklistfactoryType === "ふそう"
   }
 
-  backfromSameinsp() {
-    this.isAlreadyHaveMaintenance = "";
+  backfromSameinsp(){
+    this.isAlreadyHaveMaintenance = '';
   }
+
 }

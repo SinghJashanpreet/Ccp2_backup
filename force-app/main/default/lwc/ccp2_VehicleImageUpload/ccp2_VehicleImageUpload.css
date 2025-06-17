@@ -8,10 +8,10 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scroller {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
-.header {
+.header{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,12 +34,12 @@ ul li {
 }
 
 .image-scroll-container::-webkit-scrollbar-thumb {
-  background: #bbbbbb;
+  background: #BBBBBB;
   border-radius: 10px;
 }
 
 .image-scroll-container::-webkit-scrollbar-thumb:hover {
-  background: #bbbbbb;
+  background: #BBBBBB;
 }
 
 .upload-main {
@@ -50,7 +50,7 @@ ul li {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items:center;
   gap: 32px;
   margin: 0 0 24px 0;
 }
@@ -68,11 +68,11 @@ ul li {
   gap: 16px;
   margin-top: 1%;
   flex-direction: column;
-  align-items: center;
+  align-items:center;
   width: 675px;
 }
 
-.image-scroll-container {
+.image-scroll-container{
   height: 100%;
   width: 100%;
   /* max-width: 330px;  */
@@ -83,18 +83,18 @@ ul li {
   justify-content: start;
   flex-wrap: wrap;
 }
-.image-scroll-container > div {
+.image-scroll-container > div{
   order: unset;
 }
 
-.image-scroll-container > div:nth-child(3) {
+.image-scroll-container > div:nth-child(3){
   order: 3;
 }
-.image-scroll-container > div:nth-child(4) {
+.image-scroll-container > div:nth-child(4){
   order: 2;
 }
 
-.padding-right {
+.padding-right{
   /* padding-right: 16px; */
 }
 
@@ -130,7 +130,7 @@ ul li {
 
   position: relative;
   justify-content: end;
-  align-items: center;
+  align-items:center;
 }
 .upload-image-red-color {
   width: 100%;
@@ -144,20 +144,20 @@ ul li {
   border: 1px solid #e10202;
   position: relative;
   justify-content: end;
-  align-items: center;
+  align-items:center;
 }
 .fav-image-container {
-  position: absolute;
-  left: 14px;
-  top: 10px;
-  width: max-content;
-  z-index: 4;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  gap: 4px;
+    position: absolute;
+    left: 14px;
+    top: 10px;
+    width: max-content;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 4px;
 }
-.overlay-button-select {
+.overlay-button-select{
   position: absolute;
   left: 16px;
   top: 12px;
@@ -166,31 +166,32 @@ ul li {
   display: none;
   cursor: pointer;
 }
-.fav-image-present {
+.fav-image-present{
   position: absolute;
   z-index: 4;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  padding: 10px;
-  border: 2.5px solid var(--red-button-alers, #e10202);
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    padding: 10px;
+    border: 2.5px solid var(--red-button-alers, #E10202);
 }
-.upload-image:hover .overlay-button-select {
-  display: flex;
-  /* justify-content: center; */
-  align-items: center;
-  gap: 4px;
+.upload-image:hover .overlay-button-select{
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    gap: 4px;
 }
-.overlay-button-select:hover {
-  color: #e10202;
+.overlay-button-select:hover{
+  color: #E10202;
 }
-.icon-star {
-  fill: #0a0a0a;
+.icon-star{
+  fill: #0A0A0A;
 }
 
-.overlay-button-select:hover .icon-star {
-  fill: #e10202;
+.overlay-button-select:hover .icon-star{
+  fill: #E10202;
 }
+
 
 .sample-image {
   width: 100%;
@@ -207,7 +208,7 @@ ul li {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 10px;
+  border-radius:10px;
 }
 
 .upload-image-bottom {
@@ -218,15 +219,15 @@ ul li {
   z-index: 10;
   justify-content: space-between;
   padding: 16px;
-  position: absolute;
-  background-color: #26262666;
-  color: white;
+  position:absolute;
+  background-color:#26262666;
+  color:white;
   margin-bottom: 8px;
   overflow-x: auto;
   overflow-y: hidden;
   align-items: center;
 }
-.upload-image-bottom p {
+.upload-image-bottom p{
   white-space: nowrap;
 }
 
@@ -234,7 +235,7 @@ ul li {
   --sds-c-icon-color-foreground-default: white;
   --sds-c-icon-color-foreground: white;
 }
-.upload-container-main {
+.upload-container-main{
   display: flex;
   flex-direction: column;
   height: 430px;
@@ -250,6 +251,7 @@ ul li {
 .upload-container-main::-webkit-scrollbar {
   width: 12px;
   height: 8px;
+
 }
 
 .upload-container-main::-webkit-scrollbar-track {
@@ -277,22 +279,23 @@ ul li {
   width: 100%;
   height: 210px;
   min-height: 210px;
-  background-color: white;
+  background-color:white;
 }
 
-.upload-image-icon-container:active {
+.upload-image-icon-container:active{
   border: 1px dotted #e10202;
 }
 
 .file-input {
   display: none;
 }
-.ellipsess {
+.ellipsess{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
 }
+
 
 .upload-instruction-container {
   display: flex;
@@ -301,7 +304,7 @@ ul li {
   font-size: 14px;
   margin: 10px 0 0 20px;
 }
-.left {
+ .left{
   align-self: start;
 }
 
@@ -357,8 +360,8 @@ button.upload-button.cancel:hover {
 
 button.upload-button.save:hover {
   background-color: white;
-  color: #e10202;
-  border: 1px solid #e10202;
+  color: #E10202;
+  border: 1px solid #E10202;
 }
 
 button.upload-button.save.disable {
@@ -438,13 +441,13 @@ p.header-title-text {
 }
 
 .buttontxt {
-  color: #0a0a0a;
-  font-family: "Noto Sans JP", sans-serif;
+  color: #0A0A0A;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 
 .buttontxt2 {
   color: white;
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 
 .searchbutton-download {
@@ -465,33 +468,33 @@ p.header-title-text {
 
 .searchbutton-download:hover .buttontxt2 {
   cursor: pointer;
-  color: #e10202;
+  color: #E10202;
 }
 @media (max-width: 1170px) {
-  .upload-container-main {
+  .upload-container-main{
     height: 403px;
-  }
+   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1024px){
   /* .upload-container{
     width: 550px;
    } */
-  .upload-image-bottom {
+   .upload-image-bottom{
     align-items: center;
-  }
-  .upload-image-icon-container {
+   }
+   .upload-image-icon-container{
     min-height: 170px;
     height: 170px;
-  }
-  .upload-image {
+   }
+   .upload-image{
     min-height: 170px;
     height: 170px;
-  }
-  .upload-image-sample {
+   }
+   .upload-image-sample{
     height: 170px;
-  }
-  .upload-container-main {
+   }
+   .upload-container-main{
     height: 348px;
-  }
+   }
 }

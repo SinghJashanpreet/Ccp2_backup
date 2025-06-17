@@ -1,89 +1,80 @@
 * {
-  font-family: "Noto Sans JP", sans-serif;
+    font-family: 'Noto Sans JP', sans-serif;
 }
 
 .main {
-  position: relative;
-  width: 100vw;
-  margin: -16px 0 0 -16px;
-  height: max-content;
+    position: relative;
+    width: 100vw;
+    margin: -16px 0 0 -16px;
+    height: max-content;
 }
 
 .button-grp {
-  align-items: center;
-  display: flex;
-  gap: 8px;
+    align-items: center;
+    display: flex;
+    gap: 8px;
 }
 
 .button-grp svg {
-  cursor: pointer;
+    cursor: pointer;
 }
 
-.fuso {
-  position: absolute;
-  z-index: 4;
-  top: 20px;
-  left: 45px;
+.fuso{
+    position: absolute;
+    z-index: 4;
+    top: 20px;
+    left: 45px;
 }
 
 .gradient-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; /* Adjust this value to control the height of the gradient */
-  background: var(
-    --Linear,
-    linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.45))
-  );
-  pointer-events: none; /* Prevents it from interfering with other interactions */
-  z-index: 2; /* Ensure it is above the image but below other elements */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Adjust this value to control the height of the gradient */
+    background: var(--Linear, linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(0,0,0,0.45)));
+    pointer-events: none; /* Prevents it from interfering with other interactions */
+    z-index: 2; /* Ensure it is above the image but below other elements */
 }
 
-.search-button {
-  min-width: 176px;
-  height: 48px;
-  background-color: #e10202;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 700;
-  padding: 10px 20px;
-  border: none;
-  color: white;
-  transition:
-    background-color 0.9s ease,
-    border 0.5s ease,
-    color 0.5s ease;
-  align-self: self-start;
+.search-button{
+    min-width: 176px;
+    height: 48px;
+    background-color: #e10202;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border: none;
+    color: white;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
+    align-self: self-start;
 }
 
-.search-button:hover {
-  border: 1px solid #e10202;
-  background-color: white;
-  color: #e10202;
-  transition:
-    background-color 0.9s ease,
-    border 0.5s ease,
-    color 0.5s ease;
+.search-button:hover{
+    border: 1px solid #e10202;
+    background-color: white;
+    color: #e10202;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
 }
 
-.register {
-  position: absolute;
-  top: 240px;
-  display: flex;
-  gap: 30px;
-  font-size: 30px;
-  flex-direction: column;
-  right: 140px;
-  align-items: end;
-  color: white;
-  font-weight: 700;
-  z-index: 2;
+.register{
+    position: absolute;
+    top: 240px;
+    display: flex;
+    gap: 30px;
+    font-size: 30px;
+    flex-direction: column;
+    right: 140px;
+    align-items: end;
+    color: white;
+    font-weight: 700;
+    z-index: 2;
 }
-
+ 
 @media (max-width: 1024px) {
-  .register {
-    right: 42px;
-    top: 180px;
-  }
+    .register{
+        right: 42px;
+        top: 180px;
+    }
 }

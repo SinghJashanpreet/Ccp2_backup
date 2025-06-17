@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from "lwc";
+import { LightningElement, track,wire } from "lwc";
 import Home_StaticResource from "@salesforce/resourceUrl/CCP_StaticResource_Home";
 import labelsBranch from "@salesforce/resourceUrl/ccp2_labels";
 import i18nextStaticResource from "@salesforce/resourceUrl/i18next";
@@ -14,28 +14,29 @@ export default class Ccp2_FusoFooter extends LightningElement {
   @track amIGuestUser = true;
   footer_logo = FOOTER_LOGO;
 
-  connectedCallback() {
+
+  connectedCallback(){
     this.loadCheckGuestUser();
   }
 
   //  loadCheckGuestUser() {
   //     checkGuestUser().then((result) => {
   //       console.log("guest and tnc check",result);
-
+        
   //     });
   //   }
-  @wire(checkGuestUser)
-  wiredGuestUser({ error, data }) {
-    if (data) {
-      console.log("footer data", data);
-      if (data.GuestUser === true || data.agreeTnC === false) {
-      } else {
-        this.amIGuestUser = data.GuestUser;
-      }
-    } else if (error) {
-      console.error("Error fetching guest user data:", error);
+    @wire(checkGuestUser)
+    wiredGuestUser({ error, data }) {
+        if (data) {
+          console.log("footer data",data);
+          if (data.GuestUser === true || data.agreeTnC === false) {
+          } else {
+            this.amIGuestUser = data.GuestUser;
+          }
+        } else if (error) {
+            console.error("Error fetching guest user data:", error);
+        }
     }
-  }
 
   loadLanguage() {
     Languagei18n()
@@ -57,8 +58,8 @@ export default class Ccp2_FusoFooter extends LightningElement {
           lwcName: "ccp2_FusoFooter",
           errorLog: err,
           methodName: "Load Language",
-          ViewName: "FusoFooter",
-          InterfaceName: "Salesforce",
+          ViewName:"FusoFooter",
+          InterfaceName:"Salesforce",
           EventName: "Data fetch",
           ModuleName: "footer"
         })
@@ -133,8 +134,8 @@ export default class Ccp2_FusoFooter extends LightningElement {
           lwcName: "ccp2_FusoFooter",
           errorLog: err,
           methodName: "Load Labels",
-          ViewName: "FusoFooter",
-          InterfaceName: "Salesforce",
+          ViewName:"FusoFooter",
+          InterfaceName:"Salesforce",
           EventName: "Data fetch",
           ModuleName: "footer"
         })

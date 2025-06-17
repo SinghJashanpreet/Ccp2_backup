@@ -55,7 +55,7 @@ const EmptyRecallDataIcon =
 const dropdownImg =
   Vehicle_StaticResource + "/CCP2_Resources/Common/arrow_under.png";
 
-const Trcksmall =
+  const Trcksmall =
   CCP2_Resources + "/CCP2_Resources/Vehicle/truckconnectsmall.webp";
 const fusoleaseeee =
   CCP2_Resources + "/CCP2_Resources/Vehicle/fusoleasepic.webp";
@@ -95,7 +95,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
   @track showVehicleListOrNoVehicle = true;
   @track showVehicleList = true;
   @track showVehicleListInListView = false;
-  @track lastChangedViewOfList = "showVehicleList";
+  @track lastChangedViewOfList = 'showVehicleList';
   @track showVehicleDetails = false;
   @track vehicleId;
   @track favIconForDetailPage;
@@ -473,15 +473,8 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     uiSearch: "$filterSuggestionsToSend"
   })
   Vehicledata(result) {
-    console.log(
-      "json file, limit range, pageno, sorting, uisearch",
-      JSON.stringify(this.jsonParameterForVehicleClass),
-      this.currentPagination,
-      this.currentPage,
-      this.finalsortingValue,
-      this.filterSuggestionsToSend
-    );
-    console.log("vehiclesss dats", result);
+    console.log("json file, limit range, pageno, sorting, uisearch",JSON.stringify(this.jsonParameterForVehicleClass),this.currentPagination,this.currentPage,this.finalsortingValue,this.filterSuggestionsToSend);
+    console.log("vehiclesss dats",result);
     this.vehicleListApiData = result;
     const { data, error } = result;
     if (data) {
@@ -508,8 +501,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
 
       this.updateVisiblePages();
       this.vehicleData = data.map((item) => {
-        const { vehicle, branches, imageUrl, ShakenExpDate, ActiveLease } =
-          item;
+        const { vehicle, branches, imageUrl, ShakenExpDate, ActiveLease } = item;
         // Map branch names
         let branchNames = branches.map((branch) => branch.Name);
 
@@ -520,11 +512,8 @@ export default class Ccp2_VehicleListNew extends LightningElement {
           branchNames = branchNames.join("・");
         }
 
-        let branchnameEllp = this.substringToProperLength(branchNames, 20);
-        let branchnameEllpforgrid = this.substringToProperLength(
-          branchNames,
-          52
-        );
+        let branchnameEllp = this.substringToProperLength(branchNames,20);
+        let branchnameEllpforgrid = this.substringToProperLength(branchNames,52);
         let expDate = vehicle?.Vehicle_Expiration_Date__c
           ? this.formatJapaneseDate3(vehicle.Vehicle_Expiration_Date__c)
           : "-";
@@ -551,12 +540,8 @@ export default class Ccp2_VehicleListNew extends LightningElement {
 
         let showAlerttruckorlease = truckConnect || ActiveLease;
         let showAlertrecallNdShaken = ShakenExpDate || showRecallM;
-        let regNumellp = vehicle?.Door_Number__c
-          ? this.substringToProperLength(vehicle.Door_Number__c, 16)
-          : "-";
-        let onlyregNumellp = vehicle?.Registration_Number__c
-          ? this.substringToProperLength(vehicle.Registration_Number__c, 16)
-          : "-";
+        let regNumellp = vehicle?.Door_Number__c ? this.substringToProperLength(vehicle.Door_Number__c,16) : "-";
+        let onlyregNumellp = vehicle?.Registration_Number__c ? this.substringToProperLength(vehicle.Registration_Number__c,16) : "-";
 
         return {
           ...vehicle,
@@ -1033,7 +1018,7 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       console.log("urlParamsVehicleId", urlParamsVehicleId);
       this.showVehicleList = false;
       this.showVehicleListInListView = false;
-      this.lastChangedViewOfList = "showVehicleList";
+      this.lastChangedViewOfList = 'showVehicleList';
       this.showVehicleDetails = true;
       this.vehicleId = urlParamsVehicleId;
     } else if (urlParamsFilter) {
@@ -1317,12 +1302,14 @@ export default class Ccp2_VehicleListNew extends LightningElement {
       window.history.replaceState({}, document.title, url);
       this.showVehicleDetails = true;
 
-      console.log("in card click", this.lastChangedViewOfList);
+      console.log('in card click', this.lastChangedViewOfList);
 
-      if (this.showVehicleList) this.lastChangedViewOfList = "showVehicleList";
-      else this.lastChangedViewOfList = "showVehicleListInListView";
+      if(this.showVehicleList)
+        this.lastChangedViewOfList = 'showVehicleList';
+      else
+      this.lastChangedViewOfList = 'showVehicleListInListView';
 
-      console.log("in card click", this.lastChangedViewOfList);
+      console.log('in card click', this.lastChangedViewOfList);
 
       this.pinnedFilter = false;
       this.showVehicleList = false;
@@ -1350,18 +1337,20 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     refreshApex(this.vehicleListApiData);
     // this.currentPage = 1;
 
-    console.log("in back click", this.lastChangedViewOfList);
-    if (this.lastChangedViewOfList === "showVehicleList") {
+
+    console.log('in back click', this.lastChangedViewOfList)
+    if(this.lastChangedViewOfList === 'showVehicleList'){
       this.showVehicleList = true;
       this.showVehicleListInListView = false;
-      this.lastChangedViewOfList = "showVehicleList";
-    } else {
+      this.lastChangedViewOfList = 'showVehicleList';
+    }
+    else{
       this.showVehicleList = false;
       this.showVehicleListInListView = true;
-      this.lastChangedViewOfList = "showVehicleListInListView";
+      this.lastChangedViewOfList = 'showVehicleListInListView';
     }
-    console.log("in back click", this.lastChangedViewOfList);
-
+    console.log('in back click', this.lastChangedViewOfList)
+    
     this.showVehicleDetails = false;
   }
 
@@ -1372,12 +1361,14 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     this.showVehicleModal = false;
   }
   handlemoveModal() {
-    console.log("in more modal", this.lastChangedViewOfList);
-    if (this.showVehicleList) this.lastChangedViewOfList = "showVehicleList";
-    else this.lastChangedViewOfList = "showVehicleListInListView";
-
-    this.showVehicleList = false;
-    console.log("in more modal", this.lastChangedViewOfList);
+    console.log('in more modal', this.lastChangedViewOfList)
+    if(this.showVehicleList)
+      this.lastChangedViewOfList = 'showVehicleList';
+    else
+    this.lastChangedViewOfList = 'showVehicleListInListView';
+  
+  this.showVehicleList = false;
+  console.log('in more modal', this.lastChangedViewOfList);
     this.showVehicleListInListView = false;
   }
 
@@ -4075,20 +4066,20 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     );
   }
 
-  handleListUiChange(event) {
+  handleListUiChange(event){
     event.stopPropagation();
-    console.log("event.target.name", event.target.dataset.name);
-    console.log("in UI chnage", this.lastChangedViewOfList);
-    if (event.currentTarget.dataset.name === "gridView") {
+    console.log('event.target.name', event.target.dataset.name)
+    console.log('in UI chnage', this.lastChangedViewOfList)
+    if(event.currentTarget.dataset.name === 'gridView'){
       this.showVehicleListInListView = false;
       this.showVehicleList = true;
-      this.lastChangedViewOfList = "showVehicleList";
-    } else {
+      this.lastChangedViewOfList = 'showVehicleList';
+    }else{
       this.showVehicleListInListView = true;
       this.showVehicleList = false;
-      this.lastChangedViewOfList = "showVehicleListInListView";
+      this.lastChangedViewOfList = 'showVehicleListInListView';
     }
-    console.log("in UI chnage", this.lastChangedViewOfList);
+    console.log('in UI chnage', this.lastChangedViewOfList)
   }
 
   substringToProperLength(string, limit) {
@@ -4104,9 +4095,8 @@ export default class Ccp2_VehicleListNew extends LightningElement {
         (charCode >= 0xff61 && charCode <= 0xff9f) ||
         (charCode >= 0x3040 && charCode <= 0x309f) ||
         (charCode >= 0x30a0 && charCode <= 0x30ff) ||
-        (charCode >= 0x4e00 && charCode <= 0x9fff) ||
-        charCode === 12290 ||
-        charCode === 12289
+        (charCode >= 0x4e00 && charCode <= 0x9fff) || 
+        (charCode === 12290 || charCode === 12289)
       ) {
         charCount += 2;
       } else {
@@ -4127,4 +4117,5 @@ export default class Ccp2_VehicleListNew extends LightningElement {
     }
     return tempString + (charCount >= limit ? "..." : "");
   }
+
 }

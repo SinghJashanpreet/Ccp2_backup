@@ -131,16 +131,16 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     // this.fetchUserServices();
     setTimeout(() => {
       this.createFusoHistoryRecords()
-        .then((res) => {
-          if (res === "Done") {
-            refreshApex(this.wiredCalVehResult);
+      .then((res) => {
+        if (res === "Done") {
+          refreshApex(this.wiredCalVehResult);
 
-            setTimeout(() => {
-              refreshApex(this.wiredCalVehResult);
-            }, 800);
-          }
-        })
-        .catch((e) => console.error("createFusoHistoryRecords", e));
+          setTimeout(() => {
+            refreshApex(this.wiredCalVehResult);
+          }, 800);
+        }
+      })
+      .catch((e) => console.error("createFusoHistoryRecords", e));
     }, 1500);
 
     const today = new Date();
@@ -240,27 +240,24 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     }
   }
 
-  get currentYearNoticeText() {
+  get currentYearNoticeText(){
     let startDateObj = new Date(this.startDate);
     startDateObj.setDate(startDateObj.getDate() + 31);
     startDateObj.setFullYear(startDateObj.getFullYear() - 1);
     return startDateObj.getFullYear();
   }
 
-  get nextYearNoticeText() {
+  get nextYearNoticeText(){
     let startDateObj = new Date(this.startDate);
     startDateObj.setDate(startDateObj.getDate() + 31);
     return startDateObj.getFullYear();
   }
 
-  get showNoticeForFusoHoliday() {
+  get showNoticeForFusoHoliday(){
     let startDateObj = new Date(this.startDate);
     startDateObj.setDate(startDateObj.getDate() + 31);
     let currentDateObj = new Date();
-    if (
-      currentDateObj.getMonth() + 1 >= 10 &&
-      startDateObj.getFullYear() === currentDateObj.getFullYear() + 1
-    )
+    if(currentDateObj.getMonth() + 1 >= 10 && startDateObj.getFullYear() === currentDateObj.getFullYear() + 1)
       return false;
 
     return startDateObj.getFullYear() >= currentDateObj.getFullYear() + 1;
@@ -318,7 +315,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           EventName: "Data fetch",
           ModuleName: "Calendar"
         })
-          .then(() => {})
+          .then(() => { })
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
@@ -375,7 +372,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           EventName: "Data fetch",
           ModuleName: "Calendar"
         })
-          .then(() => {})
+          .then(() => { })
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
@@ -460,7 +457,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     const { data, error } = result;
 
     if (data) {
-      console.log("calendar data : - ", data);
+      console.log('calendar data : - ', data);
 
       this.vehicleNearExpCount = data.expiringVehicleCount;
       this.vehiclesCount = data.vehicleCount;
@@ -500,56 +497,61 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           let updatedMaintenance =
             dateElm?.maintenance && dateElm?.maintenance.length > 0
               ? dateElm?.maintenance.map((maintainenceItem, i) => {
-                  let serviceType = "";
-                  if (index === 0) {
-                    if (dateElm?.isEnd[i])
-                      serviceType = this.getTrimmedServiceType(
-                        dateElm?.serviceType[i]
-                      );
-                    else serviceType = dateElm?.serviceType[i];
-                  }
-
-                  if (
-                    dateElm?.isStart[i] &&
-                    (index > 28 || (dateElm?.isStart[i] && dateElm?.isEnd[i]))
-                  ) {
+                let serviceType = "";
+                if (index === 0) {
+                  if (dateElm?.isEnd[i])
                     serviceType = this.getTrimmedServiceType(
                       dateElm?.serviceType[i]
                     );
-                  } else if (dateElm?.isStart[i]) {
-                    serviceType = dateElm?.serviceType[i];
-                  }
+                  else serviceType = dateElm?.serviceType[i];
+                }
 
-                  let width = dateElm?.width[i];
-                  if (
-                    index === 30 &&
-                    dateElm?.isStart[i] === false &&
-                    dateElm?.isEnd[i] === false
-                  )
-                    width = width + "min-width: calc(100%);";
-                  else if (
-                    index === 30 &&
-                    dateElm?.isStart[i] === true &&
-                    dateElm?.isEnd[i] === false
-                  )
-                    width = width + "left: 0px; padding-left: 5px;";
+                if (
+                  dateElm?.isStart[i] &&
+                  (index > 28 ||
+                    (dateElm?.isStart[i] && dateElm?.isEnd[i]))
+                ) {
+                  serviceType = this.getTrimmedServiceType(
+                    dateElm?.serviceType[i]
+                  );
+                } else if (dateElm?.isStart[i]) {
+                  serviceType = dateElm?.serviceType[i];
+                }
 
-                  if (index === 0 && dateElm?.isStart[i] === false) {
-                    width =
-                      width + "z-index: 3; left: 0px; width: calc(100% - 1px);";
-                  } else if (index === 0 && dateElm?.isStart[i] === true) {
-                    width = width + "z-index: 3;";
-                  }
+                let width = dateElm?.width[i];
+                if (
+                  index === 30 &&
+                  dateElm?.isStart[i] === false &&
+                  dateElm?.isEnd[i] === false
+                )
+                  width = width + "min-width: calc(100%);";
+                else if (
+                  index === 30 &&
+                  dateElm?.isStart[i] === true &&
+                  dateElm?.isEnd[i] === false
+                )
+                  width = width + "left: 0px; padding-left: 5px;";
 
-                  return {
-                    ...maintainenceItem,
-                    isStart: dateElm?.isStart[i],
-                    isEnd: dateElm?.isEnd[i],
-                    cssClass: dateElm?.cssClass[i],
-                    width: width,
-                    serviceType: serviceType
-                  };
-                })
+                if (index === 0 && dateElm?.isStart[i] === false) {
+                  width =
+                    width +
+                    "z-index: 3; left: 0px; width: calc(100% - 1px);";
+                } else if (
+                  index === 0 &&
+                  dateElm?.isStart[i] === true
+                ) {
+                  width = width + "z-index: 3;";
+                }
+
+                return {
+                  ...maintainenceItem,
+                  isStart: dateElm?.isStart[i],
+                  isEnd: dateElm?.isEnd[i],
+                  cssClass: dateElm?.cssClass[i],
+                  width: width,
+                  serviceType: serviceType
+                };
+              })
               : [];
 
           // this.populateDatesRange(this.startDate, 31);
@@ -600,7 +602,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         EventName: "Data fetch",
         ModuleName: "Calendar"
       })
-        .then(() => {})
+        .then(() => { })
         .catch((loggingErr) => {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });
@@ -626,7 +628,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           EventName: "Data fetch",
           ModuleName: "Calendar"
         })
-          .then(() => {})
+          .then(() => { })
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
@@ -639,13 +641,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   fetchHolidayData() {
     return getHolidayList()
       .then((result) => {
-        console.log("data from fetchHoliday : - ", result);
-        this.holidaydata = {
-          nationalHoliday: result?.nationalHoliday?.map(
-            (item) => item.Holiday_Date__c
-          ),
+        console.log('data from fetchHoliday : - ' , result);
+        this.holidaydata = 
+        {
+          nationalHoliday: result?.nationalHoliday?.map((item) => item.Holiday_Date__c),
           fusoHoliday: result?.fusoHoliday?.map((item) => item.Holiday_Date__c)
-        };
+        }
+        
 
         this.currentDates = this.populateDatesRange(this.startDate, 31);
       })
@@ -660,7 +662,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           EventName: "Data fetch",
           ModuleName: "Calendar"
         })
-          .then(() => {})
+          .then(() => { })
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
@@ -758,6 +760,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           // }
           let formattedDate = date.toLocaleDateString("en-CA");
 
+
           // let isWeekend = date.getDay() === 0 || date.getDay() === 6;
           let isHolidayN =
             this.holidaydata?.nationalHoliday?.length > 0 &&
@@ -765,7 +768,8 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           let isHolidayF =
             this.holidaydata?.fusoHoliday?.length > 0 &&
             this.holidaydata?.fusoHoliday.includes(formattedDate);
-
+            
+          
           let topLogoCss =
             date.toDateString() === new Date().toDateString() && isHolidayN
               ? "active-top-logos"
@@ -773,13 +777,14 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
                 ? "top-logos-holiday"
                 : "top-logos";
 
-          if (topLogoCss === "top-logos") {
-            if (date.getDay() === 0) {
-              topLogoCss = "top-logos-holiday";
-            } else if (date.getDay() === 6) {
-              topLogoCss = "top-logos-holiday-blue";
+            if(topLogoCss === 'top-logos'){
+              if(date.getDay() === 0){
+                topLogoCss = "top-logos-holiday";
+              }else if(date.getDay() === 6){
+                topLogoCss = "top-logos-holiday-blue";
+              }
             }
-          }
+                
 
           let isFusoHolidayDisabled =
             !this.finalFilterJson.fusoHoliday ||
@@ -789,22 +794,19 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
             date.toDateString() === new Date().toDateString()
               ? "active-top-days"
               : isHolidayF
-                ? isFusoHolidayDisabled
-                  ? "top-days-holiday-red"
-                  : "top-days-holiday"
+                ? isFusoHolidayDisabled ? "top-days-holiday-red" : "top-days-holiday"
                 : "top-days";
-          if (topDatesCss === "active-top-days")
-            topDatesCss =
-              isHolidayF && date.toDateString() === new Date().toDateString()
-                ? "active-top-days-holiday"
-                : "active-top-days";
+          if(topDatesCss === 'active-top-days')
+            topDatesCss = isHolidayF && date.toDateString() === new Date().toDateString() ? "active-top-days-holiday" : 'active-top-days';
 
           // if(topDatesCss === 'top-days'){
-          if (date.getDay() === 0 || isHolidayN) {
-            topDatesCss = topDatesCss + " red";
-          } else if (date.getDay() === 6) {
-            if (!isHolidayN) topDatesCss = topDatesCss + " blue";
-          }
+            if(date.getDay() === 0 || isHolidayN){
+              topDatesCss = topDatesCss + ' red'
+            }
+            else if(date.getDay() === 6){
+              if(!isHolidayN)
+              topDatesCss = topDatesCss + ' blue'
+            }
           // }
           dates.push({
             index: i,
@@ -820,7 +822,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           });
         }
       }
-    } catch (e) {}
+    } catch (e) { }
     return dates;
   }
 
@@ -1402,7 +1404,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         EventName: "Data fetch",
         ModuleName: "Calendar"
       })
-        .then(() => {})
+        .then(() => { })
         .catch((loggingErr) => {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });
@@ -1439,7 +1441,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         EventName: "Data fetch",
         ModuleName: "Calendar"
       })
-        .then(() => {})
+        .then(() => { })
         .catch((loggingErr) => {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });
@@ -1479,7 +1481,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         EventName: "Data fetch",
         ModuleName: "Calendar"
       })
-        .then(() => {})
+        .then(() => { })
         .catch((loggingErr) => {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });
@@ -2146,7 +2148,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         this.selectedDateToSend = this.formatDateToYYYYMMDD(selectedDateToSend);
       }
       this.isCalendarOpen = false;
-    } catch (e) {}
+    } catch (e) { }
   }
 
   formatDateToYYYYMMDD(date) {
@@ -2731,7 +2733,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     let vehidOriginal = event.currentTarget.dataset.vehicleIdd;
     this.maintainId = vehid;
     this.vehId2 = vehidOriginal;
-    console.log("this.vehId2", this.vehId2);
+    console.log('this.vehId2', this.vehId2)
     let currdate = event.currentTarget.dataset.id;
     this.vehicleRegNumber = event.currentTarget.dataset.regNo;
     this.showModalload = true;
@@ -2770,7 +2772,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       .then((data) => {
         if (data) {
           //this.vehiclModalData = data;
-          console.log("vehicle modal data : - ", data);
+          console.log('vehicle modal data : - ', data);
           this.vehicleModalobj = {
             DoorNumber: data.vehicle.Door_Number__c || "-",
             RegistrationNumber: data.vehicle.Registration_Number__c || "-",
@@ -2779,10 +2781,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
             vehicleId: data.vehicle.Id || "-",
             branches: data.vehicle.Branch_Vehicle_Junctions__r || [],
             isExpiringSoon: data.vehicle.isExpiringSoon || false,
-            expDate:
-              this.formatJapaneseDate(
-                data.vehicle.Vehicle_Expiration_Date__c
-              ) || "-"
+            expDate: this.formatJapaneseDate(data.vehicle.Vehicle_Expiration_Date__c) || "-"
           };
           const branchNames = this.vehicleModalobj.branches.map((branch) => {
             return branch.BranchName__c.length > 10
@@ -2815,7 +2814,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           EventName: "Data fetch",
           ModuleName: "Calendar"
         })
-          .then(() => {})
+          .then(() => { })
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
@@ -3019,7 +3018,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           // if (vehicle.Status__c === "Closed") {
           //   colorStrip = "grey-strip";
           //   colorBox = "grey-color";
-          // } else
+          // } else 
           if (vehicle.Service_Factory__c === "ふそう/自社 以外") {
             colorBox = "yellow-color";
             colorStrip = "yellow-strip";
@@ -3068,7 +3067,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           EventName: "Data fetch",
           ModuleName: "Calendar"
         })
-          .then(() => {})
+          .then(() => { })
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
@@ -3404,7 +3403,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         ?.refreshData();
     }, 0);
     this.noedit = true;
-    console.log("this.vehId2", this.vehId2);
+    console.log('this.vehId2', this.vehId2);
   }
   closenoedit() {
     this.vehiclModalData = {};
@@ -3480,7 +3479,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         EventName: "Data fetch",
         ModuleName: "Calendar"
       })
-        .then(() => {})
+        .then(() => { })
         .catch((loggingErr) => {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });
@@ -3590,7 +3589,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         EventName: "Data fetch",
         ModuleName: "Calendar"
       })
-        .then(() => {})
+        .then(() => { })
         .catch((loggingErr) => {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });

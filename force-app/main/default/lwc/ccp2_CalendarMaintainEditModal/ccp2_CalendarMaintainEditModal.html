@@ -8,7 +8,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-        "
+        " 
       >
         <lightning-spinner
           alternative-text="Loading"
@@ -338,46 +338,27 @@
                 <!-- <div>
                 </div> -->
                 <div style="display: flex; gap: 2px">
-                  <button
-                    class="prev-year"
-                    style="
-                      background: transparent;
-                      border: none;
-                      display: flex;
-                      align-items: center;
-                    "
-                  >
-                    <lightning-icon
-                      onclick={prevYear}
-                      class="prev-year-icon"
-                      icon-name="utility:chevronleft"
-                      alternative-text="Back"
-                      size="xx-small"
-                    ></lightning-icon>
-                  </button>
+
+                  <button class="prev-year"
+                  style="background: transparent; border: none; display: flex; align-items:center;">
+                  <lightning-icon onclick={prevYear} class="prev-year-icon"
+                     icon-name="utility:chevronleft" alternative-text="Back"
+                     size="xx-small"></lightning-icon>
+                </button>
+
 
                   <span class="calendar-year">{era}</span>
-                  <span class="calendar-year">{year}</span>
-
-                  <button
-                    disabled={isNextYearDisabled}
-                    class="next-year"
-                    style="
-                      background: transparent;
-                      border: none;
-                      display: flex;
-                      align-items: center;
-                    "
+                  <span class="calendar-year"
+                    >{year}</span
                   >
-                    <lightning-icon
-                      onclick={nextyear}
-                      class="next-year-icon"
-                      icon-name="utility:chevronright"
-                      alternative-text="Next"
-                      size="xx-small"
-                    >
-                    </lightning-icon>
-                  </button>
+
+                  <button disabled={isNextYearDisabled} class="next-year"
+                  style="background: transparent; border: none; display: flex; align-items:center;">
+                  <lightning-icon onclick={nextyear} class="next-year-icon"
+                      icon-name="utility:chevronright" alternative-text="Next"
+                      size="xx-small">
+                  </lightning-icon>
+                </button>
                 </div>
               </div>
 
@@ -533,7 +514,7 @@
                 <div class="selected-account">
                   <span class="ellipsess"> {destinationAccBranch} </span>
                   <span class="address-bottom">
-                    {postCode} {municipality} {perfecturess} {street}
+                    {postCode} {perfecturess}{municipality}{street}
                   </span>
                 </div>
               </template>
@@ -597,7 +578,7 @@
                       key={account.id}
                       onclick={handleAccountClick}
                       data-namee={account.name}
-                      data-postal={account.shippingAdd.PostalCode}
+                      data-postal={account.ShippingPostalCode}
                       data-mun={account.shippingAdd.municipality}
                       data-prefect={account.shippingAdd.prefect}
                       data-street={account.shippingAdd.street}
@@ -607,7 +588,7 @@
                       <p
                         onclick={handleAccountClick}
                         data-namee={account.name}
-                        data-postal={account.shippingAdd.PostalCode}
+                        data-postal={account.ShippingPostalCode}
                         data-mun={account.shippingAdd.municipality}
                         data-prefect={account.shippingAdd.prefect}
                         data-street={account.shippingAdd.street}
@@ -616,24 +597,25 @@
                       >
                         {account.name}
                       </p>
-                      <template if:true={account.hasAddress}>
+                      <template if:true={account.Address}>
                         <div
                           style="color: #7b7b7b"
                           class="ellipsess"
                           data-namee={account.name}
-                          data-postal={account.shippingAdd.PostalCode}
+                          data-postal={account.ShippingPostalCode}
                           data-mun={account.shippingAdd.municipality}
                           data-prefect={account.shippingAdd.prefect}
                           data-street={account.shippingAdd.street}
                           data-idd={account.id}
                         >
-                          {account.shippingAdd.PostalCode}
-                          {account.shippingAdd.municipality}
+                          <!-- {account.shippingAdd.PostalCode}
                           {account.shippingAdd.prefect}
-                          {account.shippingAdd.street}
+                          {account.shippingAdd.municipality}
+                          {account.shippingAdd.street} -->
+                          {account.Address}
                         </div>
                       </template>
-                      <template if:false={account.hasAddress}> </template>
+                      <template if:false={account.Address}> </template>
                     </div>
                   </template>
                 </template>
@@ -972,7 +954,7 @@
                     onclick={handleAccountClick}
                     data-namee={item.name}
                     data-idd={item.id}
-                    data-postal={item.shippingAdd.PostalCode}
+                    data-postal={item.ShippingPostalCode}
                     data-mun={item.shippingAdd.municipality}
                     data-prefect={item.shippingAdd.prefect}
                     data-street={item.shippingAdd.street}
@@ -983,7 +965,7 @@
                       data-namee={item.name}
                       onclick={handleAccountClick}
                       data-idd={item.id}
-                      data-postal={item.shippingAdd.PostalCode}
+                      data-postal={item.ShippingPostalCode}
                       data-mun={item.shippingAdd.municipality}
                       data-prefect={item.shippingAdd.prefect}
                       data-street={item.shippingAdd.street}
@@ -995,14 +977,15 @@
                       data-namee={item.name}
                       onclick={handleAccountClick}
                       data-idd={item.id}
-                      data-postal={item.shippingAdd.PostalCode}
+                      data-postal={item.ShippingPostalCode}
                       data-mun={item.shippingAdd.municipality}
                       data-prefect={item.shippingAdd.prefect}
                       data-street={item.shippingAdd.street}
                     >
-                      {item.shippingAdd.PostalCode}
-                      {item.shippingAdd.municipality} {item.shippingAdd.prefect}
-                      {item.shippingAdd.street}
+                      <!-- {item.shippingAdd.PostalCode}
+                      {item.shippingAdd.prefect} {item.shippingAdd.municipality}
+                      {item.shippingAdd.street} -->
+                      {account.Address}
                     </div>
                   </div>
                 </template>
@@ -1146,14 +1129,12 @@
   <template if:true={isAlreadyHaveMaintenance}>
     <div class="modal-background-last5">
       <div class="modal-window-small-sameIns">
-        <div style="display: flex; flex-direction: column">
+        <div style="display:flex;flex-direction:column;">
           <!-- <p>{labels2.ccp2_ch_sameInsp1}</p>
           <p>{labels2.ccp2_ch_sameInsp2}</p> -->
           <p>{isAlreadyHaveMaintenance}</p>
         </div>
-        <button class="back-button" onclick={backfromSameinsp}>
-          {labels2.ccp2_ch_back}
-        </button>
+        <button class="back-button" onclick={backfromSameinsp}>{labels2.ccp2_ch_back}</button>
       </div>
     </div>
   </template>

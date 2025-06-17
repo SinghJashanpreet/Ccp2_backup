@@ -1,6 +1,6 @@
-import { LightningElement, track, wire } from "lwc";
+import { LightningElement, track, wire } from 'lwc';
 import createCaseNew from "@salesforce/apex/CCP_Inquiry.createCaseNew";
-import Vehicle_StaticResource from "@salesforce/resourceUrl/CCP2_Resources";
+import Vehicle_StaticResource from '@salesforce/resourceUrl/CCP2_Resources';
 import { createRecord, getRecord } from "lightning/uiRecordApi";
 import deletecontentversion from "@salesforce/apex/CCP2_vehcileImageUploader.deleteContentDocumentByVersionId";
 import CONTENT_VERSION_OBJECT from "@salesforce/schema/ContentVersion";
@@ -14,15 +14,14 @@ import INQUIRY_TYPE_FIELD from "@salesforce/schema/Case.inquiryType__c";
 import CONTACT_ID_FIELD from "@salesforce/schema/User.ContactId";
 import ACCOUNT_ID_FIELD from "@salesforce/schema/Contact.AccountId";
 // import { getPicklistValues } from "lightning/uiObjectInfoApi";
-import { refreshApex } from "@salesforce/apex";
+import { refreshApex } from '@salesforce/apex';
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import i18nextStaticResource from "@salesforce/resourceUrl/i18next";
 import Languagei18n from "@salesforce/apex/CCP2_guestUserLanguage.guestuserLanguage";
 import labelsBranch from "@salesforce/resourceUrl/ccp2_labels";
 import ErrorLog from "@salesforce/apex/CCP2_lwc_ErrorLogs.createLwcErrorLog";
 
-const BACKGROUND_IMAGE_PC =
-  Vehicle_StaticResource + "/CCP2_Resources/Common/Main_Background.webp";
+const BACKGROUND_IMAGE_PC = Vehicle_StaticResource + '/CCP2_Resources/Common/Main_Background.webp';
 
 export default class Ccp2_Enquiry extends LightningElement {
   @track imageLoaded = false;
@@ -40,9 +39,9 @@ export default class Ccp2_Enquiry extends LightningElement {
     email: null,
     accountname: null
   };
-  @track descValInput = "";
+  @track descValInput = '';
   @track remainingChars = 1000;
-  @track textareaValue = "";
+  @track textareaValue = '';
   @track lastSavedValue = "";
   @track Languagei18n = "";
   @track isLanguageChangeDone = true;
@@ -108,9 +107,7 @@ export default class Ccp2_Enquiry extends LightningElement {
       console.error("Error fetching user info:", error);
       let error = JSON.stringify(error);
       ErrorLog({
-        lwcName: "ccp2_Enquiry",
-        errorLog: error,
-        methodName: "ContactId",
+        lwcName: "ccp2_Enquiry", errorLog: error, methodName: "ContactId",
         ViewName: "Enquiry",
         InterfaceName: "Salesforce",
         EventName: "Data fetch",
@@ -162,10 +159,12 @@ export default class Ccp2_Enquiry extends LightningElement {
         label: item,
         value: item // Here, value is the same as label
       }));
+
     } else {
       console.error(error);
     }
   }
+
 
   @wire(getRecord, { recordId: "$userId", fields: [CONTACT_ID_FIELD] })
   userRecord({ error, data }) {
@@ -176,9 +175,7 @@ export default class Ccp2_Enquiry extends LightningElement {
       console.error("Error fetching user record:", error);
       let error = JSON.stringify(error);
       ErrorLog({
-        lwcName: "ccp2_Enquiry",
-        errorLog: error,
-        methodName: "userId",
+        lwcName: "ccp2_Enquiry", errorLog: error, methodName: "userId",
         ViewName: "Enquiry",
         InterfaceName: "Salesforce",
         EventName: "Data fetch",
@@ -201,9 +198,7 @@ export default class Ccp2_Enquiry extends LightningElement {
       console.error("Error fetching contact record:", error);
       let error = JSON.stringify(error);
       ErrorLog({
-        lwcName: "ccp2_Enquiry",
-        errorLog: error,
-        methodName: "contactId",
+        lwcName: "ccp2_Enquiry", errorLog: error, methodName: "contactId",
         ViewName: "Enquiry",
         InterfaceName: "Salesforce",
         EventName: "Data fetch",
@@ -219,7 +214,7 @@ export default class Ccp2_Enquiry extends LightningElement {
   }
 
   get processedImageList() {
-    return this.imageList.map((image) => {
+    return this.imageList.map(image => {
       return {
         ...image,
         trimmedName: this.trimFileName(image.name, 24)
@@ -236,13 +231,9 @@ export default class Ccp2_Enquiry extends LightningElement {
 
     if (!recordId) {
       console.error("Error: No valid record ID found for deletion.");
-      let error = JSON.stringify(
-        "Error: No valid record ID found for deletion."
-      );
+      let error = JSON.stringify("Error: No valid record ID found for deletion.");
       ErrorLog({
-        lwcName: "ccp2_Enquiry",
-        errorLog: error,
-        methodName: "handleRemoveImage",
+        lwcName: "ccp2_Enquiry", errorLog: error, methodName: "handleRemoveImage",
         ViewName: "Enquiry",
         InterfaceName: "Salesforce",
         EventName: "Data delete",
@@ -257,9 +248,7 @@ export default class Ccp2_Enquiry extends LightningElement {
       return;
     }
 
-    const imageToDelete = this.imageList.find(
-      (img) => img.recordId === recordId
-    );
+    const imageToDelete = this.imageList.find((img) => img.recordId === recordId);
 
     if (imageToDelete) {
       imageToDelete.isDeleting = true;
@@ -269,26 +258,16 @@ export default class Ccp2_Enquiry extends LightningElement {
     try {
       await deletecontentversion({ contentVersionId: recordId });
 
-      this.imageList = this.imageList.filter(
-        (image) => image.recordId !== recordId
-      );
-      this.contentVersionIds = this.contentVersionIds.filter(
-        (image) => image !== recordId
-      );
+      this.imageList = this.imageList.filter((image) => image.recordId !== recordId);
+      this.contentVersionIds = this.contentVersionIds.filter((image) => image !== recordId);
 
-      this.uploadedImages = this.uploadedImages.filter(
-        (image) => image.recordId !== recordId
-      );
-      this.imagesCreatedId = this.imagesCreatedId.filter(
-        (id) => id !== recordId
-      );
+      this.uploadedImages = this.uploadedImages.filter((image) => image.recordId !== recordId);
+      this.imagesCreatedId = this.imagesCreatedId.filter((id) => id !== recordId);
     } catch (error) {
       console.error("Error deleting image:", error);
       let error2 = JSON.stringify(error);
       ErrorLog({
-        lwcName: "ccp2_Enquiry",
-        errorLog: error2,
-        methodName: "deleteContentVersion",
+        lwcName: "ccp2_Enquiry", errorLog: error2, methodName: "deleteContentVersion",
         ViewName: "Enquiry",
         InterfaceName: "Salesforce",
         EventName: "Data update",
@@ -318,17 +297,13 @@ export default class Ccp2_Enquiry extends LightningElement {
       this.contentVersionIds = this.contentVersionIds || [];
 
       for (const image of newImages) {
-        if (
-          this.uploadedImages.some((uploaded) => uploaded.name === image.name)
-        ) {
+        if (this.uploadedImages.some((uploaded) => uploaded.name === image.name)) {
           continue;
         }
 
         const fields = {};
         fields[TITLE_FIELD.fieldApiName] = image.name;
-        const base64String = image.src.includes("base64,")
-          ? image.src.split("base64,")[1]
-          : image.src;
+        const base64String = image.src.includes("base64,") ? image.src.split("base64,")[1] : image.src;
 
         if (base64String.length > 0 && base64String.length <= 5242880) {
           fields[VERSION_DATA_FIELD.fieldApiName] = base64String;
@@ -347,21 +322,18 @@ export default class Ccp2_Enquiry extends LightningElement {
             this.contentVersionIds.push(record.id);
             this.uploadedImages.push(image);
 
-            const imageToUpdate = this.imageList.find(
-              (img) => img.id === image.id
-            );
+            const imageToUpdate = this.imageList.find((img) => img.id === image.id);
             if (imageToUpdate) {
               imageToUpdate.recordId = record.id;
               imageToUpdate.progress = 100;
               imageToUpdate.isLoaded = true;
             }
+
           } catch (error) {
             this.handleUploadError(image, error);
             let error2 = JSON.stringify(err);
             ErrorLog({
-              lwcName: "ccp2_Enquiry",
-              errorLog: error2,
-              methodName: "createContentVersionRecords",
+              lwcName: "ccp2_Enquiry", errorLog: error2, methodName: "createContentVersionRecords",
               ViewName: "Enquiry",
               InterfaceName: "Salesforce",
               EventName: "Data update",
@@ -376,18 +348,18 @@ export default class Ccp2_Enquiry extends LightningElement {
             this.showSpinner = true;
             return;
           }
+
         } else {
           this.handleInvalidImage(image);
           return;
         }
       }
+
     } catch (e) {
       console.error("Error", e);
       let error = JSON.stringify(e);
       ErrorLog({
-        lwcName: "ccp2_Enquiry",
-        errorLog: error,
-        methodName: "createContentVersionRecords",
+        lwcName: "ccp2_Enquiry", errorLog: error, methodName: "createContentVersionRecords",
         ViewName: "Enquiry",
         InterfaceName: "Salesforce",
         EventName: "Data update",
@@ -404,16 +376,13 @@ export default class Ccp2_Enquiry extends LightningElement {
       // this.allLoadedImages = true;
       this.validateButton();
       this.isloadingImages = false;
+
     }
   }
 
   handleUploadError(image, error) {
-    const pillElement = document.querySelector(
-      `.pill-parent[data-id="${image.id}"]`
-    );
-    const loaderElement = pillElement
-      ? pillElement.querySelector(".progress-container")
-      : null;
+    const pillElement = document.querySelector(`.pill-parent[data-id="${image.id}"]`);
+    const loaderElement = pillElement ? pillElement.querySelector('.progress-container') : null;
     if (pillElement) pillElement.remove();
     if (loaderElement) loaderElement.remove();
     this.imageList = this.imageList.filter((img) => img.id !== image.id);
@@ -425,12 +394,8 @@ export default class Ccp2_Enquiry extends LightningElement {
     );
   }
   handleInvalidImage(image) {
-    const pillElement = document.querySelector(
-      `.pill-parent[data-id="${image.id}"]`
-    );
-    const loaderElement = pillElement
-      ? pillElement.querySelector(".progress-container")
-      : null;
+    const pillElement = document.querySelector(`.pill-parent[data-id="${image.id}"]`);
+    const loaderElement = pillElement ? pillElement.querySelector('.progress-container') : null;
     if (pillElement) pillElement.remove();
     if (loaderElement) loaderElement.remove();
     this.dispatchEvent(
@@ -468,20 +433,21 @@ export default class Ccp2_Enquiry extends LightningElement {
           this.allLoadedImages = true;
         }
         event.stopPropagation();
-        this.template.querySelector("file-upload-input").value = "";
-      } else {
+        this.template.querySelector('file-upload-input').value = "";
+      }
+      else {
         const fileTypes = [
-          "application/pdf",
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          "application/vnd.ms-excel",
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          "application/msword",
-          "application/vnd.ms-powerpoint",
-          "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-          "font/ttf",
-          "image/png",
-          "image/jpeg",
-          "image/jpg"
+          'application/pdf',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'application/msword',
+          'application/vnd.ms-powerpoint',
+          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+          'font/ttf',
+          'image/png',
+          'image/jpeg',
+          'image/jpg'
         ];
         const fileReadPromises = [];
 
@@ -500,42 +466,36 @@ export default class Ccp2_Enquiry extends LightningElement {
             continue;
           }
 
-          const isDuplicate = this.uploadedImages.some(
-            (image) => image.name === file.name
-          );
+          const isDuplicate = this.uploadedImages.some(image => image.name === file.name);
 
           if (isDuplicate) {
             this.dispatchEvent(
               new ShowToastEvent({
                 message: `${file.name} ${this.labels2.ccp2_en_duplicateFileError}`,
-                variant: "error"
+                variant: 'error',
               })
             );
             continue;
           }
-          if (fileSizeMB > 5 && file.type.startsWith("image/")) {
+          if (fileSizeMB > 5 && file.type.startsWith('image/')) {
             this.dispatchEvent(
               new ShowToastEvent({
                 message: `${file.name}${this.labels2.ccp2_en_imageSizeExceededError}`,
-                variant: "error"
+                variant: 'error',
               })
             );
             continue;
-          } else if (fileSizeMB > 2 && !file.type.startsWith("image/")) {
+          } else if (fileSizeMB > 2 && !file.type.startsWith('image/')) {
             this.dispatchEvent(
               new ShowToastEvent({
                 message: `${file.name}${this.labels2.ccp2_en_fileSizeExceededError}`,
-                variant: "error"
+                variant: 'error',
               })
             );
             continue;
           }
 
-          if (
-            file.type === "image/png" ||
-            file.type === "image/jpeg" ||
-            file.type === "image/jpg"
-          ) {
+          if (file.type === 'image/png' || file.type === 'image/jpeg' || file.type === 'image/jpg') {
             const newImage = {
               id: file.name + i,
               recordId: file.name + i,
@@ -589,7 +549,8 @@ export default class Ccp2_Enquiry extends LightningElement {
             });
 
             fileReadPromises.push(fileReadPromise);
-          } else {
+          }
+          else {
             const newImage = {
               id: file.name + i,
               recordId: file.name + i,
@@ -617,17 +578,14 @@ export default class Ccp2_Enquiry extends LightningElement {
 
               reader.onloadend = () => {
                 if (
-                  file.type === "application/pdf" ||
-                  file.type ===
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-                  file.type === "application/vnd.ms-excel" ||
-                  file.type ===
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-                  file.type === "application/msword" ||
-                  file.type === "application/vnd.ms-powerpoint" ||
-                  file.type ===
-                    "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
-                  file.type === "font/ttf"
+                  file.type === 'application/pdf' ||
+                  file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+                  file.type === 'application/vnd.ms-excel' ||
+                  file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+                  file.type === 'application/msword' ||
+                  file.type === 'application/vnd.ms-powerpoint' ||
+                  file.type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
+                  file.type === 'font/ttf'
                 ) {
                   newImage.src = reader.result;
                   newImage.halfName = this.trimFileName(file.name, 45);
@@ -643,6 +601,7 @@ export default class Ccp2_Enquiry extends LightningElement {
             });
 
             fileReadPromises.push(fileReadPromise);
+
           }
         }
         Promise.all(fileReadPromises)
@@ -663,9 +622,7 @@ export default class Ccp2_Enquiry extends LightningElement {
             console.error("Error uploading files: ", error);
             let error2 = JSON.stringify(error);
             ErrorLog({
-              lwcName: "ccp2_Enquiry",
-              errorLog: error2,
-              methodName: "HandleFilesChange",
+              lwcName: "ccp2_Enquiry", errorLog: error2, methodName: "HandleFilesChange",
               ViewName: "Enquiry",
               InterfaceName: "Salesforce",
               EventName: "Data fetch",
@@ -682,13 +639,12 @@ export default class Ccp2_Enquiry extends LightningElement {
             this.allLoadedImages = true;
           });
       }
+
     } catch (e) {
       console.error("HandleFiles Error: ", e);
       let error = JSON.stringify(e);
       ErrorLog({
-        lwcName: "ccp2_Enquiry",
-        errorLog: error,
-        methodName: "handleFilesChange",
+        lwcName: "ccp2_Enquiry", errorLog: error, methodName: "handleFilesChange",
         ViewName: "Enquiry",
         InterfaceName: "Salesforce",
         EventName: "Data update",
@@ -701,7 +657,8 @@ export default class Ccp2_Enquiry extends LightningElement {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });
       this.showSpinner = true;
-    } finally {
+    }
+    finally {
       event.target.value = null;
       // this.allLoadedImages = true;
       this.isloadingImages = false;
@@ -709,10 +666,9 @@ export default class Ccp2_Enquiry extends LightningElement {
     }
   }
 
+
   updateImageProgress(image, currentVal) {
-    const speed = image.isImage
-      ? this.getRandomSpeed()
-      : this.getRandomSpeed2();
+    const speed = image.isImage ? this.getRandomSpeed() : this.getRandomSpeed2();
     const interval = setInterval(() => {
       if (currentVal < 100) {
         if (currentVal < 90) {
@@ -723,7 +679,7 @@ export default class Ccp2_Enquiry extends LightningElement {
         }
 
         // Increment progress and update the UI
-        currentVal = Math.min(currentVal + 2, 100); // Cap progress at 100
+        currentVal = Math.min(currentVal + 2, 100);  // Cap progress at 100
         image.progress = currentVal;
         this.imageList = [...this.imageList];
 
@@ -743,7 +699,7 @@ export default class Ccp2_Enquiry extends LightningElement {
   getRandomInt(min, max) {
     const randomBuffer = new Uint32Array(1);
     window.crypto.getRandomValues(randomBuffer);
-    const randomNumber = randomBuffer[0] / (0xffffffff + 1);
+    const randomNumber = randomBuffer[0] / (0xFFFFFFFF + 1);
     return Math.floor(randomNumber * (max - min)) + min;
   }
 
@@ -753,6 +709,7 @@ export default class Ccp2_Enquiry extends LightningElement {
   getRandomSpeed2() {
     return this.getRandomInt(150, 250);
   }
+
 
   trimFileName(value, maxLength) {
     let adjustedLength = 0;
@@ -774,9 +731,7 @@ export default class Ccp2_Enquiry extends LightningElement {
         break;
       }
     }
-    return adjustedLength > maxLength
-      ? value.substring(0, actualLength) + "..."
-      : value;
+    return adjustedLength > maxLength ? value.substring(0, actualLength) + '...' : value;
   }
 
   isOnlySpaces(input) {
@@ -850,6 +805,7 @@ export default class Ccp2_Enquiry extends LightningElement {
     event.target.value = this.textareaValue;
   }
 
+
   handleFirstClick() {
     this.isStep1 = false;
     this.isStep2 = true;
@@ -872,14 +828,7 @@ export default class Ccp2_Enquiry extends LightningElement {
     const description = this.descValue;
     const accountName = this.userDetailData.accountname;
     const accountId = this.accountId;
-    console.log(
-      "Data for case: ",
-      inquiryType,
-      description,
-      accountName,
-      accountId,
-      JSON.stringify(this.contentVersionIds)
-    );
+    console.log("Data for case: ", inquiryType, description, accountName, accountId, JSON.stringify(this.contentVersionIds));
     createCaseNew({
       inquiryType,
       description,
@@ -887,19 +836,17 @@ export default class Ccp2_Enquiry extends LightningElement {
       accountId,
       contentVersionIds: this.contentVersionIds
     })
-      .then((result) => {
+      .then(result => {
         console.log("Case Created Successfully");
         this.FinalMainLoader = false;
         this.isStep2 = false;
         this.isStep3 = true;
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error creating case:", error);
         let error2 = JSON.stringify(error);
         ErrorLog({
-          lwcName: "ccp2_Enquiry",
-          errorLog: error2,
-          methodName: "CCP_Inquiry.createCaseNew",
+          lwcName: "ccp2_Enquiry", errorLog: error2, methodName: "CCP_Inquiry.createCaseNew",
           ViewName: "Enquiry",
           InterfaceName: "Salesforce",
           EventName: "Data update",
@@ -922,6 +869,7 @@ export default class Ccp2_Enquiry extends LightningElement {
       });
   }
 
+
   handlePicklistToggle(event) {
     event.stopPropagation();
     this.showOptions = !this.showOptions;
@@ -929,9 +877,7 @@ export default class Ccp2_Enquiry extends LightningElement {
 
   selectOption(event) {
     const selectedValue = event.currentTarget.dataset.id;
-    const selectedOption = this.dummyOptions.find(
-      (option) => option.value === selectedValue
-    );
+    const selectedOption = this.dummyOptions.find(option => option.value === selectedValue);
     this.selectedOption = selectedOption.label;
     this.showOptions = false;
   }
@@ -966,21 +912,16 @@ export default class Ccp2_Enquiry extends LightningElement {
   }
 
   validateButton() {
-    if (
-      this.descValInput &&
-      this.selectedOption &&
-      this.allLoadedImages &&
-      !this.isOnlySpaces(this.descValInput)
-    ) {
-      const button = this.template.querySelector(".submit-button-1");
-      const buttonParent = this.template.querySelector(".buttons1");
-      if (buttonParent) buttonParent.style.cursor = "pointer";
+    if (this.descValInput && this.selectedOption && this.allLoadedImages && !this.isOnlySpaces(this.descValInput)) {
+      const button = this.template.querySelector('.submit-button-1');
+      const buttonParent = this.template.querySelector('.buttons1');
+      if (buttonParent) buttonParent.style.cursor = 'pointer';
       if (button) button.classList.add("submit-button-1-red");
       if (button) button.classList.remove("submit-button-1");
     } else {
-      const button = this.template.querySelector(".submit-button-1-red");
-      const buttonParent = this.template.querySelector(".buttons1");
-      if (buttonParent) buttonParent.style.cursor = "not-allowed";
+      const button = this.template.querySelector('.submit-button-1-red');
+      const buttonParent = this.template.querySelector('.buttons1');
+      if (buttonParent) buttonParent.style.cursor = 'not-allowed';
       if (button) button.classList.remove("submit-button-1-red");
       if (button) button.classList.add("submit-button-1");
     }
@@ -989,7 +930,7 @@ export default class Ccp2_Enquiry extends LightningElement {
   goToMain() {
     let baseUrl = window.location.href;
     if (baseUrl.indexOf("/s/") !== -1) {
-      let addBranchUrl = baseUrl.split("/s/")[0] + "/s/";
+      let addBranchUrl = baseUrl.split("/s/")[0] + "/s/";;
       window.location.href = addBranchUrl;
     }
   }
@@ -1011,9 +952,7 @@ export default class Ccp2_Enquiry extends LightningElement {
         console.error("Error loading language or labels: ", error);
         let error2 = JSON.stringify(error);
         ErrorLog({
-          lwcName: "ccp2_Enquiry",
-          errorLog: error2,
-          methodName: "CCP_Inquiry.createCaseNew",
+          lwcName: "ccp2_Enquiry", errorLog: error2, methodName: "CCP_Inquiry.createCaseNew",
           ViewName: "Enquiry",
           InterfaceName: "Salesforce",
           EventName: "Data fetch",
@@ -1071,9 +1010,7 @@ export default class Ccp2_Enquiry extends LightningElement {
         console.error("Error loading labels: ", error);
         let error2 = JSON.stringify(error);
         ErrorLog({
-          lwcName: "ccp2_Enquiry",
-          errorLog: error2,
-          methodName: "LoadLabels",
+          lwcName: "ccp2_Enquiry", errorLog: error2, methodName: "LoadLabels",
           ViewName: "Enquiry",
           InterfaceName: "Salesforce",
           EventName: "Data fetch",
@@ -1107,9 +1044,7 @@ export default class Ccp2_Enquiry extends LightningElement {
     }
     if (this.lastchanged) {
       this.descValue = this.lastSavedValue;
-      const textarea = this.template.querySelector(
-        '[data-id="descriptionInput"]'
-      );
+      const textarea = this.template.querySelector('[data-id="descriptionInput"]');
       if (textarea) {
         textarea.value = this.descValue;
       }
@@ -1122,4 +1057,5 @@ export default class Ccp2_Enquiry extends LightningElement {
   connectedCallback() {
     document.removeEventListener("click", this.handleOutsideClick.bind(this));
   }
+
 }

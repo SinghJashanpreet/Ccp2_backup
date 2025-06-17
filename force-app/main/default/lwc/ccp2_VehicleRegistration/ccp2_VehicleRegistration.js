@@ -321,48 +321,23 @@ export default class Ccp2_VehicleRegistration extends LightningElement {
         ...elm,
         dummyId: elm?.Chassis_number__c + index,
         Vehicle_Expiration_Date__c: elm?.Vehicle_Expiration_Date__c || "-",
-        ellVehicle_Expiration_Date__c:
-          this.substringToProperLength(elm?.Vehicle_Expiration_Date__c, 18) ||
-          "-",
+        ellVehicle_Expiration_Date__c: this.substringToProperLength(elm?.Vehicle_Expiration_Date__c, 18) || "-",
         First_Registration_Date__c: elm?.First_Registration_Date__c || "-",
-        ellFirst_Registration_Date__c:
-          this.substringToProperLength(elm?.First_Registration_Date__c, 18) ||
-          "-",
+        ellFirst_Registration_Date__c: this.substringToProperLength(elm?.First_Registration_Date__c, 18) || "-",
         Vehicle_Type__c: elm?.Vehicle_Type__c || "-",
-        ellVehicle_Type__c:
-          this.substringToProperLength(elm?.Vehicle_Type__c, 18) || "-",
+        ellVehicle_Type__c: this.substringToProperLength(elm?.Vehicle_Type__c, 18) || "-",
         Vehicle_Name__c: elm?.Vehicle_Name__c || "-",
-        ellVehicle_Name__c:
-          this.substringToProperLength(elm?.Vehicle_Name__c, 16) || "-",
+        ellVehicle_Name__c: this.substringToProperLength(elm?.Vehicle_Name__c, 16) || "-",
         Chassis_number__c: elm?.Chassis_number__c || "-",
-        ellChassis_number__c:
-          this.substringToProperLength(elm?.Chassis_number__c, 16) || "-",
-        Registration_Number__c:
-          this.fullWidthToHalfWidth(elm?.Registration_Number__c) || "-",
-        ellRegistration_Number__c:
-          this.fullWidthToHalfWidth(
-            this.substringToProperLength(elm?.Registration_Number__c, 19)
-          ) || "-",
+        ellChassis_number__c: this.substringToProperLength(elm?.Chassis_number__c, 16) || "-",
+        Registration_Number__c: this.fullWidthToHalfWidth(elm?.Registration_Number__c) || "-",
+        ellRegistration_Number__c: this.fullWidthToHalfWidth(this.substringToProperLength(elm?.Registration_Number__c, 19)) || "-",
         // this.fullWidthToHalfWidth(elm?.Registration_Number__c) || "-",
-        isSelected:
-          elm?.Registration_Number__c !== "空白エラー" &&
-          elm?.Chassis_number__c !== "空白エラー",
-        isDisabled:
-          elm?.Registration_Number__c === "空白エラー" ||
-          elm?.Chassis_number__c === "空白エラー",
-        styles:
-          elm?.Registration_Number__c === "空白エラー" ||
-          elm?.Chassis_number__c === "空白エラー"
-            ? "opacity: 0.6;"
-            : "",
-        regStyle:
-          elm?.Registration_Number__c === "空白エラー"
-            ? "display: flex; gap: 8px; align-items: center; color: #e10202;"
-            : this.regStyle,
-        chassisStyle:
-          elm?.Chassis_number__c === "空白エラー"
-            ? "color: #e10202;"
-            : this.chassisStyle
+        isSelected: (elm?.Registration_Number__c !== "空白エラー" && elm?.Chassis_number__c !== "空白エラー"),
+        isDisabled: (elm?.Registration_Number__c === "空白エラー" || elm?.Chassis_number__c === "空白エラー"),
+        styles: (elm?.Registration_Number__c === "空白エラー" || elm?.Chassis_number__c === "空白エラー") ? "opacity: 0.6;" : "",
+        regStyle: elm?.Registration_Number__c === "空白エラー" ? "display: flex; gap: 8px; align-items: center; color: #e10202;" : this.regStyle,
+        chassisStyle: elm?.Chassis_number__c === "空白エラー" ? "color: #e10202;" : this.chassisStyle
       };
     });
 
@@ -397,7 +372,7 @@ export default class Ccp2_VehicleRegistration extends LightningElement {
   get inertionPassedLength() {
     return this.totalSelectedCount - this.inertionFailed?.length;
   }
-  get intertionfailedLength() {
+  get intertionfailedLength(){
     return this.inertionFailed?.length || 0;
   }
 
@@ -462,8 +437,8 @@ export default class Ccp2_VehicleRegistration extends LightningElement {
       lwcName: "ccp2_VehicleRegistration",
       errorLog: JSON.stringify(error),
       methodName: methodName,
-      ViewName: "Vehicle Registration",
-      InterfaceName: "Salesforce",
+      ViewName:"Vehicle Registration",
+      InterfaceName:"Salesforce",
       EventName: "Data Update",
       ModuleName: "VehicleManagement"
     })
@@ -572,7 +547,7 @@ export default class Ccp2_VehicleRegistration extends LightningElement {
 
   gotoShankenPortal() {
     // window.location.href = this.labels2.ccp2_vr_vehicle_registration2;
-    window.open(this.labels2.ccp2_vr_vehicle_registration2, "_blank");
+    window.open(this.labels2.ccp2_vr_vehicle_registration2, "_blank")
   }
 
   toggleCancelModal() {
@@ -763,6 +738,7 @@ export default class Ccp2_VehicleRegistration extends LightningElement {
       this.showRightDots = element !== this.totalVehiclePages;
     });
     this.showLeftDots = this.visiblePageCount[0] === 1 ? false : true;
+
   }
 
   /* Methods to handle Json File upload */
@@ -812,14 +788,12 @@ export default class Ccp2_VehicleRegistration extends LightningElement {
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
           const fileName = this.substringToProperLength(file.name, 45);
-          console.log("file.type", file.type);
+          console.log('file.type', file.type);
           //If its not a JSON file
           if (file.type !== "application/json") {
             this.dispatchEvent(
               new ShowToastEvent({
-                message:
-                  `アップロードできるファイルは、JSON（.json)形式のみです。` +
-                  fileName,
+                message: `アップロードできるファイルは、JSON（.json)形式のみです。` + fileName,
                 variant: "error"
               })
             );

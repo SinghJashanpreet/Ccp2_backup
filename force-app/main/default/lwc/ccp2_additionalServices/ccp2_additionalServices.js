@@ -6,7 +6,8 @@ import Languagei18n from "@salesforce/apex/CCP2_userData.userLanguage";
 import accData from "@salesforce/apex/CCP2_Additional_Services.getAccountDetails";
 import allAccosiatedAcc from "@salesforce/apex/CCP2_Additional_Services.getAllAssociatedAccounts";
 import createInvoice from "@salesforce/apex/CCP2_Additional_Services.createInvoiceGroup";
-import getLatestTermsUrls from "@salesforce/apex/CCP_RegisterAdminUserCtrl.getLatestTermsUrls";
+import getLatestTermsUrls from '@salesforce/apex/CCP_RegisterAdminUserCtrl.getLatestTermsUrls';
+
 
 const BACKGROUND_IMAGE_PC =
   Vehicle_StaticResource + "/CCP2_Resources/Common/Main_Background.webp";
@@ -23,9 +24,9 @@ export default class Ccp2_applicationServices extends LightningElement {
   einv = einv;
   vehicle = vehicle;
   dtfsa = dtfsa;
-  EmptyRecallDataIcon = EmptyRecallDataIcon;
+  EmptyRecallDataIcon = EmptyRecallDataIcon
 
-  @track accType = "";
+  @track accType = '';
   @track siebelCode = "";
   @track Languagei18n = "";
   @track isLanguageChangeDone = true;
@@ -49,23 +50,23 @@ export default class Ccp2_applicationServices extends LightningElement {
   @track isChecked1 = false;
   @track isCheckeddtfsa = false;
 
-  @track termsUrls = {};
+  @track termsUrls = {}; 
 
-  @track regNumPlaceName = "";
-  @track regNumClassificationNumber = "";
-  @track regNumHiragana = "";
-  @track regNumSerialNumber = "";
-  @track registrationNumber = "";
+  @track regNumPlaceName = '';
+  @track regNumClassificationNumber = '';
+  @track regNumHiragana = '';
+  @track regNumSerialNumber = '';
+  @track registrationNumber = '';
 
-  @track regNumPlaceNameError = "";
-  @track regNumClassificationNumberError = "";
-  @track regNumHiraganaError = "";
-  @track regNumSerialNumberError = "";
+  @track regNumPlaceNameError = '';
+  @track regNumClassificationNumberError = '';
+  @track regNumHiraganaError = '';
+  @track regNumSerialNumberError = '';
 
-  @track regNumPlaceNamecssclass = "regNumPlaceNamecss";
-  @track regNumClassificationNumbercssclass = "regNumClassificationNumbercss";
-  @track regNumHiraganacssclass = "regNumHiraganacss";
-  @track regNumSerialNumberclass = "regNumSerialNumbercss";
+  @track regNumPlaceNamecssclass = 'regNumPlaceNamecss';
+  @track regNumClassificationNumbercssclass = 'regNumClassificationNumbercss';
+  @track regNumHiraganacssclass = 'regNumHiraganacss';
+  @track regNumSerialNumberclass = 'regNumSerialNumbercss';
 
   @track isAccmodal = false;
 
@@ -76,34 +77,26 @@ export default class Ccp2_applicationServices extends LightningElement {
     if (data) {
       console.log("data", data);
       this.siebelCode = data.siebelAccountCode__c;
-    } else {
-      console.error("error in siebel code", error);
+    }else{
+      console.error("error in siebel code",error);
     }
   }
 
   @wire(allAccosiatedAcc)
-  handleAccountsData({ data, error }) {
-    if (data) {
-      console.log("dataa", data);
+  handleAccountsData({data,error}){
+    if(data){
+      console.log("dataa",data);
       this.accounts = data.map((acc) => ({
         Id: acc.Id,
-        customName: acc?.Name || "-",
-        customNum: acc?.siebelAccountCode__c || "-",
-        Address: (
-          (acc?.ShippingPostalCode ?? "") +
-          " " +
-          (acc.ShippingAddress?.state ?? "") +
-          "" +
-          (acc.ShippingAddress?.city ?? "") +
-          "" +
-          (acc.ShippingAddress?.street ?? "")
-        ).trim(),
+        customName: acc?.Name || '-',
+        customNum: acc?.siebelAccountCode__c  || '-',
+        Address: ((acc?.ShippingPostalCode ?? '')+ '\u00A0\u00A0' + (acc.ShippingAddress?.state ?? '') + '' +(acc.ShippingAddress?.city ?? '') + '' +(acc.ShippingAddress?.street ?? '')).trim(),
         canApply: acc.HasInvoiceGroup || false,
         isChecked: false
       }));
-      console.log("this.accounts", JSON.stringify(this.accounts));
-    } else {
-      console.error("error in wire", error);
+      console.log("this.accounts",JSON.stringify(this.accounts));
+    }else{
+      console.error("error in wire",error);
     }
   }
 
@@ -203,84 +196,67 @@ export default class Ccp2_applicationServices extends LightningElement {
     this.isLanguageChangeDone = false;
     if (this.Languagei18n === "en_US") {
       return "en";
-    }
-    return "jp";
+    } 
+      return "jp";
   }
 
   fetchTermsUrls() {
     getLatestTermsUrls()
-      .then((data) => {
-        console.log("Latest Terms Data:", JSON.stringify(data));
+        .then(data => {
+            console.log("Latest Terms Data:", JSON.stringify(data));
 
-        this.termsUrls = {
-          CCP: {
-            id: data?.CCP?.Id || null,
-            url: `/resource/${data?.CCP?.pdf_Url}` || null
-          },
-          DTFSA: {
-            id: data?.DTFSA?.Id || null,
-            url: `/resource/${data?.DTFSA?.pdf_Url}` || null
-          },
-          EInvoice: {
-            id: data?.["E-Invoice"]?.Id || null,
-            url: `/resource/${data?.["E-Invoice"]?.pdf_Url}` || null
-          }
-        };
+            this.termsUrls = {
+                CCP: {
+                    id: data?.CCP?.Id || null,
+                    url: `/resource/${data?.CCP?.pdf_Url}` || null
+                },
+                DTFSA: {
+                    id: data?.DTFSA?.Id || null,
+                    url: `/resource/${data?.DTFSA?.pdf_Url}` || null
+                },
+                EInvoice: {
+                    id: data?.["E-Invoice"]?.Id || null,
+                    url: `/resource/${data?.["E-Invoice"]?.pdf_Url}` || null
+                }
+            };
 
-        console.log("Processed Terms Data:", JSON.stringify(this.termsUrls));
-      })
-      .catch((error) => {
-        console.error("Error fetching Latest Terms Data:", error);
-      });
+            console.log("Processed Terms Data:", JSON.stringify(this.termsUrls));
+        })
+        .catch(error => {
+            console.error('Error fetching Latest Terms Data:', error);
+        });
   }
 
-  createInvoice(accids, type, regNum) {
-    createInvoice({ accIds: accids, permissionName: type, regNum: regNum })
-      .then((result) => {
-        console.log(
-          "in result",
-          result,
-          "accids",
-          accids,
-          "type",
-          type,
-          "regNum",
-          regNum
-        );
-      })
-      .catch((error) => {
-        console.error(
-          "Error creating invoice:",
-          error,
-          "accids",
-          accids,
-          "type",
-          type,
-          "regNum",
-          regNum
-        );
-      });
+  createInvoice(accids,type,regNum){
+    createInvoice({ accIds: accids,permissionName: type,regNum: regNum })
+    .then((result) => {
+      console.log("in result",result, "accids", accids, 'type', type, 'regNum', regNum);
+    })
+    .catch((error) => {
+      console.error('Error creating invoice:', error, "accids", accids, 'type', type, 'regNum', regNum);
+    })
   }
 
-  connectedCallback() {
+  connectedCallback(){
     const urlParamInstance = new URLSearchParams(window.location.search).get(
       "instance"
     );
 
-    if (urlParamInstance === "e-invoice") {
+    if(urlParamInstance === 'e-invoice'){
       this.isEinv = true;
       this.isVeh = false;
       this.isDtfsa = false;
-    } else if (urlParamInstance === "dtfsa") {
+    }else if(urlParamInstance === 'dtfsa'){
       this.isEinv = false;
       this.isVeh = false;
       this.isDtfsa = true;
-    } else {
+    }else{
       this.isEinv = false;
       this.isVeh = true;
       this.isDtfsa = false;
     }
     this.fetchTermsUrls();
+
   }
 
   renderedCallback() {
@@ -292,12 +268,12 @@ export default class Ccp2_applicationServices extends LightningElement {
   handlestep1inv() {
     this.step1inv = true;
     this.invmain = false;
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
   }
 
   handlebackstep1inv() {
     this.accids = [];
-    this.accounts = this.accounts.map((acc) => {
+    this.accounts = this.accounts.map(acc => { 
       return {
         ...acc,
         isChecked: false
@@ -306,39 +282,39 @@ export default class Ccp2_applicationServices extends LightningElement {
     this.isChecked1 = false;
     this.step1inv = false;
     this.invmain = true;
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
   }
 
-  handlestep2inv() {
+  handlestep2inv(){
     this.step2inv = true;
     this.step1inv = false;
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
   }
 
   handleCheckboxChange1(event) {
     this.isChecked1 = event.target.checked;
-    console.log("this.ischecked", this.isChecked1);
+    console.log("this.ischecked",this.isChecked1)
   }
 
-  get checkedInv() {
+  get checkedInv(){
     return !this.isChecked1;
   }
 
   handlestep3inv(event) {
-    const selectedIds = this.accids.map((acc) => acc.id);
+    const selectedIds = this.accids.map(acc => acc.id);
     this.accType = event.target.dataset.type;
-    console.log("idssss", selectedIds);
-    console.log("idssss typeee", this.accType);
-    this.createInvoice(selectedIds, this.accType, this.registrationNumber);
+    console.log("idssss",selectedIds);
+    console.log("idssss typeee",this.accType);
+    this.createInvoice(selectedIds,this.accType,this.registrationNumber);
     this.step2inv = false;
     this.step3inv = true;
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
   }
 
   handlebackstep2inv() {
     this.step2inv = false;
     this.step1inv = true;
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
   }
 
   navigateToHome() {
@@ -350,7 +326,7 @@ export default class Ccp2_applicationServices extends LightningElement {
     window.location.href = homeUrl;
   }
 
-  navigateInquiry() {
+  navigateInquiry(){
     let baseUrl = window.location.href;
     let homeUrl;
     if (baseUrl.indexOf("/s/") != -1) {
@@ -359,15 +335,15 @@ export default class Ccp2_applicationServices extends LightningElement {
     window.location.href = homeUrl + "/s/inquiry";
   }
 
-  handlestep1veh() {
+  handlestep1veh(){
     this.vehmain = false;
     this.step1veh = true;
-    this.createInvoice(this.accids, "Vehicle", this.registrationNumber);
-    window.scrollTo(0, 0);
+    this.createInvoice(this.accids,'Vehicle',this.registrationNumber);
+    window.scrollTo(0,0);
   }
 
-  handlenextstep1dtfsa() {
-    window.scrollTo(0, 0);
+  handlenextstep1dtfsa(){
+    window.scrollTo(0,0);
     this.dtfsamain = false;
     this.step1dtfsa = true;
   }
@@ -377,96 +353,88 @@ export default class Ccp2_applicationServices extends LightningElement {
     const value = event.target.value;
 
     switch (field) {
-      case "regNumPlaceName":
-        this.regNumPlaceName = value;
-        break;
-      case "regNumClassificationNumber":
-        this.regNumClassificationNumber = value;
-        break;
-      case "regNumHiragana":
-        this.regNumHiragana = value;
-        break;
-      case "regNumSerialNumber":
-        this.regNumSerialNumber = value;
-        break;
+      case 'regNumPlaceName':
+          this.regNumPlaceName = value;
+          break;
+      case 'regNumClassificationNumber':
+          this.regNumClassificationNumber = value;
+          break;
+      case 'regNumHiragana':
+          this.regNumHiragana = value;
+          break;
+      case 'regNumSerialNumber':
+          this.regNumSerialNumber = value;
+          break;
       default:
-        break;
+          break;
     }
   }
 
   @track hasError = false;
-  @track finalError = "";
+  @track finalError = '';
 
   handlestep2dtfsa() {
-    const onlyAlphanumeric = /^[a-zA-Z0-9]*$/; // 半角英数字のみのバリデーション用正規表現
+    const onlyAlphanumeric  = /^[a-zA-Z0-9]*$/; // 半角英数字のみのバリデーション用正規表現
     const specialCharacters = /[-!@#$%^&*()_+={}[\]:;"'<>,.?/\\|`~]/;
 
     // Reset error messages first
-    this.regNumPlaceNameError = "";
-    this.regNumClassificationNumberError = "";
-    this.regNumHiraganaError = "";
-    this.regNumSerialNumberError = "";
-    this.finalError = "";
+    this.regNumPlaceNameError = '';
+    this.regNumClassificationNumberError = '';
+    this.regNumHiraganaError = '';
+    this.regNumSerialNumberError = '';
+    this.finalError = '';
 
     this.hasError = false;
 
     if (specialCharacters.test(this.regNumPlaceName)) {
-      this.regNumPlaceNameError =
-        "入力内容に誤りがあります。内容をご確認ください。";
-      this.regNumPlaceNamecssclass = "regNumPlaceNamecss error-div";
-      this.hasError = true;
-      window.scrollTo(0, 0);
-    } else {
-      this.regNumPlaceNamecssclass = "regNumPlaceNamecss";
-      this.regNumPlaceNameError = "";
+        this.regNumPlaceNameError = '入力内容に誤りがあります。内容をご確認ください。';
+        this.regNumPlaceNamecssclass = 'regNumPlaceNamecss error-div';
+        this.hasError = true;
+        window.scrollTo(0,0);
+    }else{
+      this.regNumPlaceNamecssclass = 'regNumPlaceNamecss';
+      this.regNumPlaceNameError = '';
     }
 
     if (!onlyAlphanumeric.test(this.regNumClassificationNumber)) {
-      this.regNumClassificationNumberError =
-        "入力内容に誤りがあります。内容をご確認ください。";
-      this.regNumClassificationNumbercssclass =
-        "regNumClassificationNumbercss error-div";
-      this.hasError = true;
-      window.scrollTo(0, 0);
-    } else {
-      this.regNumClassificationNumbercssclass = "regNumClassificationNumbercss";
-      this.regNumPlaceNameError = "";
+        this.regNumClassificationNumberError = '入力内容に誤りがあります。内容をご確認ください。';
+        this.regNumClassificationNumbercssclass = 'regNumClassificationNumbercss error-div';
+        this.hasError = true;
+        window.scrollTo(0,0);
+    }else{
+      this.regNumClassificationNumbercssclass = 'regNumClassificationNumbercss';
+      this.regNumPlaceNameError = '';
     }
 
     if (specialCharacters.test(this.regNumHiragana)) {
-      this.regNumHiraganaError =
-        "入力内容に誤りがあります。内容をご確認ください。";
-      this.regNumHiraganacssclass = "regNumHiraganacss error-div";
-      this.hasError = true;
-      window.scrollTo(0, 0);
-    } else {
-      this.regNumHiraganacssclass = "regNumHiraganacss";
-      this.regNumPlaceNameError = "";
+        this.regNumHiraganaError = '入力内容に誤りがあります。内容をご確認ください。';
+        this.regNumHiraganacssclass = 'regNumHiraganacss error-div'
+        this.hasError = true;
+        window.scrollTo(0,0);
+    }else{
+      this.regNumHiraganacssclass = 'regNumHiraganacss'
+      this.regNumPlaceNameError = '';
     }
 
     if (!onlyAlphanumeric.test(this.regNumSerialNumber)) {
-      this.regNumSerialNumberError =
-        "入力内容に誤りがあります。内容をご確認ください。";
-      this.regNumSerialNumberclass = "regNumSerialNumbercss error-div";
-      this.hasError = true;
-      window.scrollTo(0, 0);
-    } else {
-      this.regNumSerialNumberclass = "regNumSerialNumbercss";
-      this.regNumPlaceNameError = "";
+        this.regNumSerialNumberError = '入力内容に誤りがあります。内容をご確認ください。';
+        this.regNumSerialNumberclass = 'regNumSerialNumbercss error-div';
+        this.hasError = true;
+        window.scrollTo(0,0);
+    }else{
+      this.regNumSerialNumberclass = 'regNumSerialNumbercss';
+      this.regNumPlaceNameError = '';
     }
 
     // Only proceed to next step if there are no errors
     if (!this.hasError) {
-      this.registrationNumber =
-        this.regNumPlaceName +
-        this.regNumClassificationNumber +
-        this.regNumHiragana +
-        this.regNumSerialNumber;
-      this.step1dtfsa = false;
-      this.step2dtfsa = true;
-    } else {
-      this.finalError = "入力内容に誤りがあります。内容をご確認ください。";
-      window.scrollTo(0, 0);
+        this.registrationNumber = this.regNumPlaceName + this.regNumClassificationNumber + this.regNumHiragana + this.regNumSerialNumber;
+        this.step1dtfsa = false;
+        this.step2dtfsa = true;
+    }
+    else{
+      this.finalError = '入力内容に誤りがあります。内容をご確認ください。';
+      window.scrollTo(0,0);
     }
   }
 
@@ -479,97 +447,88 @@ export default class Ccp2_applicationServices extends LightningElement {
     }
   }
 
-  handleCheckboxChangedtfsa(event) {
-    this.isCheckeddtfsa = event.target.checked;
+  handleCheckboxChangedtfsa(event){
+      this.isCheckeddtfsa = event.target.checked;
   }
 
-  get nextdtfsa() {
-    return (
-      !this.isCheckeddtfsa ||
-      !this.regNumPlaceName ||
-      !this.regNumClassificationNumber ||
-      !this.regNumHiragana ||
-      !this.regNumSerialNumber
-    );
+  get nextdtfsa(){
+    return !this.isCheckeddtfsa || (!this.regNumPlaceName || !this.regNumClassificationNumber || !this.regNumHiragana || !this.regNumSerialNumber);
   }
 
-  handlebackstep1dtfsa() {
-    window.scrollTo(0, 0);
+  handlebackstep1dtfsa(){
+    window.scrollTo(0,0);
     this.step1dtfsa = false;
     this.dtfsamain = true;
     this.isCheckeddtfsa = false;
-    this.regNumSerialNumber = "";
-    this.regNumHiragana = "";
-    this.regNumClassificationNumber = "";
-    this.regNumPlaceName = "";
-    this.finalError = "";
+    this.regNumSerialNumber = '';
+    this.regNumHiragana = '';
+    this.regNumClassificationNumber = '';
+    this.regNumPlaceName = '';
+    this.finalError = '';
     this.hasError = false;
-    this.regNumPlaceNameError = "";
-    this.regNumClassificationNumberError = "";
-    this.regNumHiraganaError = "";
-    this.regNumSerialNumberError = "";
-    this.regNumPlaceNamecssclass = "regNumPlaceNamecss";
-    this.regNumClassificationNumbercssclass = "regNumClassificationNumbercss";
-    this.regNumHiraganacssclass = "regNumHiraganacss";
-    this.regNumSerialNumberclass = "regNumSerialNumbercss";
-    this.registrationNumber = "";
+    this.regNumPlaceNameError = '';
+    this.regNumClassificationNumberError = '';
+    this.regNumHiraganaError = '';
+    this.regNumSerialNumberError = '';
+    this.regNumPlaceNamecssclass = 'regNumPlaceNamecss';
+    this.regNumClassificationNumbercssclass = 'regNumClassificationNumbercss';
+    this.regNumHiraganacssclass = 'regNumHiraganacss';
+    this.regNumSerialNumberclass = 'regNumSerialNumbercss';
+    this.registrationNumber = ''
   }
 
-  handlebackstep2dtfsa() {
+  handlebackstep2dtfsa(){
     this.step2dtfsa = false;
     this.step1dtfsa = true;
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
   }
 
-  handlestep3dtfsa(event) {
+  handlestep3dtfsa(event){
     this.accType = event.target.dataset.type;
     this.step2dtfsa = false;
     this.step3dtfsa = true;
-    this.createInvoice(this.accids, this.accType, this.registrationNumber);
-    console.log(
-      "accids TYPEEE DTFSAAAA",
-      this.accids,
-      this.accType,
-      this.registrationNumber
-    );
-    window.scrollTo(0, 0);
+    this.createInvoice(this.accids,this.accType,this.registrationNumber);
+    console.log("accids TYPEEE DTFSAAAA",this.accids,this.accType,this.registrationNumber);
+    window.scrollTo(0,0);
   }
 
-  handleAccModal() {
+  handleAccModal(){
     this.isAccmodal = true;
   }
 
   @track accids = [];
-  handleAccountselection(event) {
+  handleAccountselection(event){
     const isChecked = event.target.checked;
     const accId = event.target.dataset.id;
-    this.accounts = this.accounts.map((acc) => {
-      if (acc.Id === accId) {
-        return { ...acc, isChecked: isChecked };
-      }
-      return acc;
+    this.accounts = this.accounts.map(acc => {
+    if (acc.Id === accId) {
+      return { ...acc, isChecked: isChecked };
+    }
+    return acc;
     });
   }
 
-  handleFinalaccs(event) {
-    this.accids = this.accounts
-      .filter((acc) => acc.isChecked)
-      .map((acc) => {
-        return {
-          id: acc.Id,
-          siebel: acc.customNum
-        };
-      });
+
+
+handleFinalaccs(event) {
+  this.accids = this.accounts
+    .filter(acc => acc.isChecked)
+    .map(acc => {
+      return {
+        id: acc.Id,
+        siebel: acc.customNum
+      }
+    });
     this.isAccmodal = false;
-    console.log("Selected Accounts:", JSON.stringify(this.accids));
-    // Use accids as needed
+    console.log('Selected Accounts:', JSON.stringify(this.accids));
+  // Use accids as needed
   }
 
-  handlecancelAcc() {
+  handlecancelAcc(){
     this.isAccmodal = false;
-    const selectedIds = this.accids.map((acc) => acc.id);
+    const selectedIds = this.accids.map(acc => acc.id);
 
-    this.accounts = this.accounts.map((acc) => {
+    this.accounts = this.accounts.map(acc => {
       return {
         ...acc,
         isChecked: selectedIds.includes(acc.id)
@@ -577,25 +536,25 @@ export default class Ccp2_applicationServices extends LightningElement {
     });
   }
 
-  get accLen() {
+  get accLen(){
     return this.accounts.length;
   }
 
-  get showAcc() {
+  get showAcc(){
     return this.accids.length;
   }
 
-  get accSel() {
-    return !this.accounts.find((elm) => elm.isChecked === true);
+  get accSel(){
+    return  !this.accounts.find((elm) => elm.isChecked === true);
   }
-
-  handleremoveAcc(event) {
-    const idd = event.target.dataset.id;
-    this.accids = this.accids.filter((acc) => acc.id !== idd);
-
-    this.accounts = this.accounts.map((acc) => {
+  
+  handleremoveAcc(event){
+     const idd = event.target.dataset.id;
+    this.accids = this.accids.filter(acc => acc.id !== idd);
+ 
+    this.accounts = this.accounts.map(acc => {
       let isCheck = acc.Id === idd ? false : acc.isChecked;
-
+ 
       return {
         ...acc,
         isChecked: isCheck
@@ -603,7 +562,8 @@ export default class Ccp2_applicationServices extends LightningElement {
     });
   }
 
-  handleCloseNo() {
+  handleCloseNo(){
     this.isAccmodal = false;
   }
+
 }

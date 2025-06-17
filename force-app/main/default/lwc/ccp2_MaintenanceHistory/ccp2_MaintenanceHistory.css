@@ -1,5 +1,5 @@
 * {
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 
 /* main container css */
@@ -105,7 +105,7 @@
   width: 100%;
   height: 100%;
   border-radius: 10px;
-  border: 1px solid var(--Gray-line, #d9d9d9);
+  border: 1px solid var(--Gray-line, #D9D9D9);
 }
 
 .table-row:last-of-type {
@@ -120,15 +120,16 @@
   display: grid;
   height: 45px;
   width: 100%;
-  grid-template-columns: 100px 2fr 2fr 125px 2.2fr 2fr 1.5fr;
+  grid-template-columns: 100px 2fr 2fr 125px 2.2fr 2fr 1.5fr ;
   column-gap: 8px;
   align-items: center;
-  background: var(--Gray-bg, #f4f4f4);
+  background: var(--Gray-bg, #F4F4F4);
   border-radius: 10px 10px 0px 0px;
   padding: 0 24px;
   font-weight: 700;
   text-wrap: nowrap;
 }
+
 
 /* 100px 1.5fr 1.5fr 125px 2fr 1.5fr 1.5fr */
 .table-header2 {
@@ -138,7 +139,7 @@
   grid-template-columns: 136px 1fr;
   column-gap: 8px;
   align-items: center;
-  background: var(--Gray-bg, #f4f4f4);
+  background: var(--Gray-bg, #F4F4F4);
   border-radius: 10px 10px 0px 0px;
   padding: 0 24px;
   font-weight: 700;
@@ -158,10 +159,10 @@
   display: grid;
   height: 45px;
   width: 100%;
-  grid-template-columns: 100px 2fr 2fr 125px 2.2fr 2fr 1.5fr;
+  grid-template-columns: 100px 2fr 2fr 125px 2.2fr 2fr 1.5fr ;
   column-gap: 8px;
   align-items: center;
-  border-bottom: 1px solid var(--Gray-line, #d9d9d9);
+  border-bottom: 1px solid var(--Gray-line, #D9D9D9);
   padding: 0 24px;
 }
 
@@ -172,13 +173,13 @@
   grid-template-columns: 136px 1fr;
   column-gap: 8px;
   align-items: center;
-  border-bottom: 1px solid var(--Gray-line, #d9d9d9);
+  border-bottom: 1px solid var(--Gray-line, #D9D9D9);
   padding: 0 24px;
 }
 
-.mm-filter-dropdown-rows3 > input,
-.mm-filter-dropdown-rows2 > input,
-.mm-filter-dropdown-rows1 > input {
+.mm-filter-dropdown-rows3>input,
+.mm-filter-dropdown-rows2>input,
+.mm-filter-dropdown-rows1>input {
   cursor: pointer;
 }
 
@@ -196,7 +197,7 @@
 }
 
 .table-row-item:last-of-type {
-  color: #e10202;
+  color: #E10202;
   text-decoration: underline;
   cursor: pointer;
   text-underline-offset: 2px;
@@ -205,17 +206,18 @@
   width: 90%;
   padding: 10px 37px 10px 34px;
   height: 45px;
-  border: #d9d9d9 solid 1px;
+  border: #D9D9D9 solid 1px;
   border-radius: 10px;
 }
 
-.table-row > span,
-.table-header > span {
+.table-row>span,
+.table-header>span {
   padding: 8px 0;
 }
-.table-header2 > span {
+.table-header2>span {
   padding: 8px 0;
 }
+
 
 /* pagination of drop down */
 .mm-pagination-container {
@@ -225,7 +227,7 @@
 }
 
 .cuurent-page {
-  background-color: #e10202 !important;
+  background-color: #E10202 !important;
   color: white !important;
 }
 
@@ -295,6 +297,7 @@
   justify-content: center;
   align-items: center;
 }
+
 
 /* footer css */
 .footer {
@@ -437,17 +440,20 @@
   font-size: 16px !important;
 }
 
-.second-container-main-content {
+.second-container-main-content{
   font-size: 16px !important;
+
 }
 
-.second-container-footer {
+.second-container-footer{
   display: flex;
   justify-content: flex-end;
   padding-right: 8px;
 }
 
+
 /*End Fuso Mentainance Detail Page */
+
 
 .first-box-footer {
   display: flex;
@@ -460,8 +466,8 @@
   gap: 16px;
 }
 
-.first-box-footer-item > div:first-of-type {
-  color: #7b7b7b;
+.first-box-footer-item>div:first-of-type {
+  color: #7B7B7B;
 }
 
 .first-box-line1-1,
@@ -470,7 +476,7 @@
 .first-box-line1-3,
 .first-box-line2-3 {
   width: 11rem;
-  color: #7b7b7b;
+  color: #7B7B7B;
 }
 
 .second-container-content {
@@ -485,12 +491,12 @@
 }
 
 .second-container-content::-webkit-scrollbar-track {
-  background: #f4f4f4;
+  background: #F4F4F4;
   border-radius: 10px;
 }
 
 .second-container-content::-webkit-scrollbar-thumb {
-  background: #bbbbbb;
+  background: #BBBBBB;
   border-radius: 12px;
 }
 
@@ -550,18 +556,21 @@ svg {
 }
 
 .second-container-content-item1::-webkit-scrollbar-track {
-  background: #f4f4f4;
+  background: #F4F4F4;
   border-radius: 10px;
 }
 
 .second-container-content-item1::-webkit-scrollbar-thumb {
-  background: #bbbbbb;
+  background: #BBBBBB;
   border-radius: 12px;
 }
 
 .second-container-content-item1::-webkit-scrollbar-thumb:hover {
   background: #828282;
 }
+
+
+
 
 /* Image Modal Css */
 .modal-background-last {
@@ -599,6 +608,7 @@ svg {
   height: 450px;
   padding: 24px;
   padding-top: 0px;
+
 }
 
 .zoomInImageContainer img {
@@ -658,7 +668,7 @@ svg {
 .greytxt {
   color: white;
   font-size: 10px;
-  background-color: #bbbbbb;
+  background-color: #BBBBBB;
   padding: 5px 6px;
   width: 45px;
   height: 22px;
@@ -685,7 +695,7 @@ svg {
   width: 90%;
   padding: 10px;
   height: 45px;
-  border: #d9d9d9 solid 1px;
+  border: #D9D9D9 solid 1px;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -694,22 +704,22 @@ svg {
   width: 90%;
   padding: 10px;
   height: 45px;
-  border: #d9d9d9 solid 1px;
+  border: #D9D9D9 solid 1px;
   border-radius: 10px;
   cursor: auto;
 }
 
 .InputsScheduleNosearch::placeholder {
-  color: #bbbbbb;
+  color: #BBBBBB;
 }
 
-.InputsScheduleNosearch:disabled {
-  background-color: #f4f4f4;
+.InputsScheduleNosearch:disabled{
+  background-color: #F4F4F4;
   cursor: not-allowed;
 }
 
-.custom-input:disabled {
-  background-color: #f4f4f4;
+.custom-input:disabled{
+  background-color: #F4F4F4;
   cursor: not-allowed;
 }
 
@@ -717,26 +727,26 @@ svg {
   width: 90%;
   padding: 10px;
   height: 45px;
-  border: #d9d9d9 solid 1px;
+  border: #D9D9D9 solid 1px;
   border-radius: 10px;
   cursor: pointer;
 }
 
 .InputsSchedulebranch::placeholder {
-  color: #bbbbbb;
+  color: #BBBBBB;
 }
 
 .InputsScheduleSearch {
   width: 90%;
   padding: 10px 15px 10px 35px;
   height: 45px;
-  border: #d9d9d9 solid 1px;
+  border: #D9D9D9 solid 1px;
   border-radius: 10px;
   cursor: auto;
 }
 
 .InputsScheduleSearch::placeholder {
-  color: #bbbbbb;
+  color: #BBBBBB;
 }
 
 .inputs-edit {
@@ -794,7 +804,7 @@ svg {
 .remove-button {
   background: transparent;
   border: none;
-  color: #e10202;
+  color: #E10202;
   /* You can change this color */
   font-size: 18px;
   /* Adjust size as needed */
@@ -814,7 +824,7 @@ svg {
 }
 
 .content-edit-image {
-  /*object-fit: contain; */
+   /*object-fit: contain; */
   width: 220px;
   height: 120px;
   border-radius: 10px;
@@ -852,6 +862,7 @@ svg {
   cursor: pointer;
   /* margin-left: 15%; */
 }
+
 
 .list-item:hover {
   background-color: #f0f0f0;
@@ -909,13 +920,13 @@ svg {
   width: 90%;
   padding: 0px 10%;
   height: 60px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #D9D9D9;
   border-radius: 10px;
   justify-content: center;
 }
 
 .address-bottom {
-  color: #7b7b7b;
+  color: #7B7B7B;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -954,7 +965,7 @@ svg {
   max-height: 216px;
   width: 26.5%;
   background-color: white;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #D9D9D9;
   border-radius: 10px;
   padding: 8px;
   margin-top: 5px;
@@ -963,9 +974,9 @@ svg {
 .show-more {
   display: flex;
   align-items: center;
-  border: 1px solid #d9d9d9;
-  border-radius: 10px;
-  background-color: #f4f4f4;
+  border: 1px solid #D9D9D9;
+  BORDER-RADIUS: 10px;
+  background-color: #F4F4F4;
   padding: 10px;
   cursor: pointer;
   margin-right: 3px;
@@ -994,6 +1005,7 @@ svg {
   width: 12px;
   height: 8px;
   margin-right: 10px;
+
 }
 
 .searchlist::-webkit-scrollbar-track {
@@ -1021,7 +1033,7 @@ svg {
 }
 
 .svg-container svg {
-  fill: #7b7b7b;
+  fill: #7B7B7B;
   width: 25px;
   height: 24px;
 }
@@ -1036,7 +1048,7 @@ svg {
 }
 
 .svg-container-cal svg {
-  fill: #7b7b7b;
+  fill: #7B7B7B;
   width: 25px;
   height: 24px;
 }
@@ -1059,8 +1071,8 @@ svg {
   cursor: pointer;
   gap: 8px;
   border-radius: 10px;
-  border: 1px solid var(--Gray-line, #d9d9d9);
-  background: var(--Gray-bg, #f4f4f4);
+  border: 1px solid var(--Gray-line, #D9D9D9);
+  background: var(--Gray-bg, #F4F4F4);
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
 }
 
@@ -1069,7 +1081,7 @@ svg {
   background-color: white;
   border: 1px solid grey;
   cursor: pointer;
-  color: #0a0a0a;
+  color: #0A0A0A;
 }
 
 .save-edit {
@@ -1084,7 +1096,7 @@ svg {
   border: none;
   cursor: pointer;
   color: white;
-  background: var(--red-button-alers, #e10202);
+  background: var(--red-button-alers, #E10202);
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
 }
 
@@ -1099,7 +1111,7 @@ svg {
 .save-edit:disabled {
   border: none;
   color: white;
-  background-color: #bbbbbb;
+  background-color: #BBBBBB;
   cursor: not-allowed;
 }
 
@@ -1141,10 +1153,11 @@ svg {
   flex-direction: column;
 }
 
+
 .warntxt {
   font-size: 14px;
-  color: #0a0a0a;
-  font-family: "Noto Sans JP", sans-serif;
+  color: #0A0A0A;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 
 .more {
@@ -1169,8 +1182,8 @@ svg {
   cursor: pointer;
   gap: 8px;
   border-radius: 10px;
-  border: 1px solid var(--Gray-line, #d9d9d9);
-  background: var(--Gray-bg, #f4f4f4);
+  border: 1px solid var(--Gray-line, #D9D9D9);
+  background: var(--Gray-bg, #F4F4F4);
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
 }
 
@@ -1184,8 +1197,8 @@ svg {
   cursor: pointer;
   gap: 8px;
   border-radius: 10px;
-  border: 1px solid #e10202;
-  background: #e10202;
+  border: 1px solid #E10202;
+  background: #E10202;
   color: white;
   /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15); */
 }
@@ -1229,12 +1242,12 @@ svg {
   width: 100%;
   padding: 10px;
   height: 45px;
-  border: #d9d9d9 solid 1px;
+  border: #D9D9D9 solid 1px;
   border-radius: 10px;
 }
 
 .InputsScheduleTypesshowmore::placeholder {
-  color: #bbbbbb;
+  color: #BBBBBB;
 }
 
 .svg-container3 {
@@ -1251,15 +1264,17 @@ svg {
   background-color: white;
   flex-direction: column;
   align-items: baseline;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #D9D9D9;
   border-radius: 10px;
   /* margin-top: 10px; */
   height: 300px;
 }
 
+
 .showmoreAccount::-webkit-scrollbar {
   width: 12px;
   height: 8px;
+
 }
 
 .showmoreAccount::-webkit-scrollbar-track {
@@ -1278,6 +1293,7 @@ svg {
 }
 
 .showmoreAddress {
+  white-space: no-wrap;
   color: #262626;
   width: 50%;
   display: flex;
@@ -1299,6 +1315,7 @@ svg {
   justify-content: flex-start;
   gap: 70px;
 }
+
 
 .searchItemsShowmore:hover {
   background-color: #f0f0f0;
@@ -1330,7 +1347,7 @@ svg {
 }
 
 .custom-input::placeholder {
-  color: var(--gray-text-2-textbox-text-bg, #bbb);
+  color: var(--gray-text-2-textbox-text-bg, #BBB);
 }
 
 .calendar-popup {
@@ -1379,7 +1396,7 @@ svg {
 }
 
 .button-disable:disabled {
-  --slds-c-icon-color-foreground-default: #bbbbbb;
+  --slds-c-icon-color-foreground-default: #BBBBBB;
   cursor: not-allowed;
 }
 
@@ -1457,7 +1474,7 @@ svg {
   padding: 5px 0;
   font-size: 14px;
   font-weight: bold;
-  color: #aaa;
+  color: #AAA;
 }
 
 /* Dates section */
@@ -1488,14 +1505,15 @@ svg {
   cursor: not-allowed;
 }
 
+
 .day-button.selected {
-  background-color: #feeeed;
+  background-color: #FEEEED;
   border-radius: 30px;
-  color: #e10202;
+  color: #E10202;
 }
 
 .day-button.disabled {
-  color: #bbbbbb;
+  color: #BBBBBB;
   cursor: not-allowed;
 }
 
@@ -1517,7 +1535,7 @@ svg {
 }
 
 .yes-button {
-  background-color: #e10202;
+  background-color: #E10202;
   color: white;
   padding: 5px 10px;
   border: none;
@@ -1526,13 +1544,13 @@ svg {
 }
 
 .yes-button:disabled {
-  background-color: #bbb;
+  background-color: #BBB;
   cursor: not-allowed;
 }
 
 .errorinput {
   border: 1px solid red;
-  background-color: #feeeed;
+  background-color: #FEEEED;
 }
 
 .modal-window-loader {
@@ -1557,7 +1575,7 @@ svg {
 
 .list-precautions {
   list-style: disc;
-  color: #7b7b7b;
+  color: #7B7B7B;
 }
 
 .image-uploader-container {
@@ -1581,13 +1599,13 @@ svg {
 }
 
 .error-input {
-  background-color: #feeeed;
-  border: 1px solid #e10202;
+  background-color: #FEEEED;
+  border: 1PX solid #E10202;
 }
 
 .errortxt {
   font-size: 14px;
-  color: #e10202;
+  color: #E10202;
   width: 94%;
 }
 
@@ -1641,7 +1659,7 @@ svg {
 }
 
 .custom-input5::placeholder {
-  color: var(--gray-text-2-textbox-text-bg, #bbb);
+  color: var(--gray-text-2-textbox-text-bg, #BBB);
 }
 
 .svg-container5 {
@@ -1653,7 +1671,7 @@ svg {
 }
 
 .svg-container5 svg {
-  fill: #7b7b7b;
+  fill: #7B7B7B;
   width: 25px;
   height: 24px;
 }
@@ -1689,7 +1707,7 @@ svg {
 }
 
 .button-disable5:disabled {
-  --slds-c-icon-color-foreground-default: #bbbbbb;
+  --slds-c-icon-color-foreground-default: #BBBBBB;
   cursor: not-allowed;
 }
 
@@ -1702,10 +1720,11 @@ svg {
   pointer-events: none;
 }
 
+
 /* Last Modified by Singh Jashanpreet */
 .next-year:disabled .next-year-icon {
   pointer-events: none;
-  --slds-c-icon-color-foreground-default: #bbbbbb;
+  --slds-c-icon-color-foreground-default: #BBBBBB;
 }
 
 .prev-year-icon,
@@ -1727,7 +1746,7 @@ svg {
 
 .prev-year:disabled .prev-year-icon {
   pointer-events: none;
-  --slds-c-icon-color-foreground-default: #bbbbbb;
+  --slds-c-icon-color-foreground-default: #BBBBBB;
 }
 
 .nav-button5 {
@@ -1775,7 +1794,7 @@ svg {
   padding: 5px 0;
   font-size: 14px;
   font-weight: bold;
-  color: #aaa;
+  color: #AAA;
 }
 
 .calendar-dates-grid5 {
@@ -1803,7 +1822,7 @@ svg {
 }
 
 .day-button5.disabled5 {
-  color: #bbbbbb;
+  color: #BBBBBB;
   cursor: not-allowed;
 }
 
@@ -1967,13 +1986,13 @@ svg {
 }
 
 .buttontxt5 {
-  color: #0a0a0a;
-  font-family: "Noto Sans JP", sans-serif;
+  color: #0A0A0A;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 
 .buttontxt6 {
   color: white;
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 
 .searchbutton-download5 {
@@ -1994,14 +2013,14 @@ svg {
 
 .searchbutton-download5:hover .buttontxt6 {
   cursor: pointer;
-  color: #e10202;
+  color: #E10202;
 }
 
-.InputsScheduleTypeSearch::placeholder {
-  color: var(--gray-text-2-textbox-text-bg, #bbb);
+.InputsScheduleTypeSearch::placeholder{
+  color: var(--gray-text-2-textbox-text-bg, #BBB);
 }
 
-.modal-window-small-sameIns {
+.modal-window-small-sameIns{
   background-color: rgba(251, 251, 251, 1);
   display: flex;
   flex-direction: column;
@@ -2018,30 +2037,31 @@ svg {
   overflow: auto;
 }
 
-.back-button {
-  display: flex;
-  width: 176px;
-  height: 48px;
-  padding: 12px 16px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  font-weight: 400;
-  border-radius: 10px;
-  border: 1px solid var(--Gray-line, #d9d9d9);
-  background: var(--Gray-bg, #f4f4f4);
+.back-button{
+    display: flex;
+    width: 176px;
+    height: 48px;
+    padding: 12px 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 400;
+    border-radius: 10px;
+    border: 1px solid var(--Gray-line, #D9D9D9);
+    background: var(--Gray-bg, #F4F4F4);
 
-  /* DropShadow New */
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
+    /* DropShadow New */
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
 }
 
 .back-button:hover {
-  cursor: pointer;
-  background-color: white;
-  border: 1px solid #d9d9d9;
-  box-shadow: 0 0 0px rgba(0, 0, 0, 0);
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid #d9d9d9;
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0);
 }
+
 
 @media (max-width: 1170px) {
   .edit-label-right {

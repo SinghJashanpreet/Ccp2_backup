@@ -12,11 +12,7 @@
             </div>
             <p class="text-step">はじめに車両登録の流れをご確認ください</p>
             <div class="carousel-main-content">
-              <img
-                src={vehiclePoster}
-                class="carousel-picture"
-                alt="registration poster"
-              />
+              <img src={vehiclePoster} class="carousel-picture" alt="registration poster" />
               <!-- <div class="carousel-container" style={carouselStyle}>
                   <template for:each={CarouselItems} for:item="item" for:index="index">
                       <div class="carousel-item" key={item.id}>
@@ -52,17 +48,10 @@
                         （国土交通省：電子車検証特設サイト）
                       </p>
                     </div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="25"
-                      viewBox="0 0 24 25"
-                      fill="none"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
                       <path
                         d="M18 19.5H6C5.45 19.5 5 19.05 5 18.5V6.5C5 5.95 5.45 5.5 6 5.5H11C11.55 5.5 12 5.05 12 4.5C12 3.95 11.55 3.5 11 3.5H5C3.89 3.5 3 4.4 3 5.5V19.5C3 20.6 3.9 21.5 5 21.5H19C20.1 21.5 21 20.6 21 19.5V13.5C21 12.95 20.55 12.5 20 12.5C19.45 12.5 19 12.95 19 13.5V18.5C19 19.05 18.55 19.5 18 19.5ZM14 4.5C14 5.05 14.45 5.5 15 5.5H17.59L8.46 14.63C8.07 15.02 8.07 15.65 8.46 16.04C8.85 16.43 9.48 16.43 9.87 16.04L19 6.91V9.5C19 10.05 19.45 10.5 20 10.5C20.55 10.5 21 10.05 21 9.5V4.5C21 3.95 20.55 3.5 20 3.5H15C14.45 3.5 14 3.95 14 4.5Z"
-                        fill="#E10202"
-                      />
+                        fill="#E10202" />
                     </svg>
                   </div>
                 </button>
@@ -84,17 +73,10 @@
             <p class="text-step">ファイルのアップロード</p>
             <div class="image-uploader-container">
               <div class="image-uploader">
-                <svg
-                  width="47"
-                  height="32"
-                  viewBox="0 0 47 32"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg width="47" height="32" viewBox="0 0 47 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M12.9366 31.0938C10.0509 30.9234 7.30895 30.056 5.1023 28.6155C2.89565 27.1749 1.33714 25.235 0.6493 23.0726C-0.0385357 20.9101 0.179476 18.6358 1.2722 16.5744C2.36493 14.513 4.27651 12.7698 6.73397 11.5938C7.25687 8.4577 9.24757 5.57562 12.3335 3.48693C15.4195 1.39825 19.3892 0.246094 23.4998 0.246094C27.6104 0.246094 31.5801 1.39825 34.666 3.48693C37.752 5.57562 39.7427 8.4577 40.2656 11.5938C42.7231 12.7698 44.6346 14.513 45.7274 16.5744C46.8201 18.6358 47.0381 20.9101 46.3503 23.0726C45.6624 25.235 44.1039 27.1749 41.8973 28.6155C39.6906 30.056 36.9487 30.9234 34.0629 31.0938V31.1247H12.9366V31.0938ZM25.6124 18.1247H31.9503L23.4998 9.99968L15.0493 18.1247H21.3872V24.6247H25.6124V18.1247Z"
-                    fill="#E10202"
-                  />
+                    fill="#E10202" />
                 </svg>
                 <div class="image-uploader-inside-text">
                   <div style="display: flex">
@@ -103,21 +85,11 @@
                   </div>
                   <div style="display: flex">
                     <P class="image-uploader-text">またはファイルを</P>
-                    <P
-                      class="bolder-text-image-uploader"
-                      style="font-weight: 700"
-                      >選択</P
-                    >
+                    <P class="bolder-text-image-uploader" style="font-weight: 700">選択</P>
                   </div>
                 </div>
-                <input
-                  type="file"
-                  accept=".json"
-                  multiple
-                  title=""
-                  onchange={handleFilesChange}
-                  class="image-uploader-input"
-                />
+                <input type="file" accept=".json" multiple title="" onchange={handleFilesChange}
+                  class="image-uploader-input" />
               </div>
               <p class="image-uploader-instruction-text">
                 *アップロードできるファイルは、JSON（.json）形式のみです。
@@ -135,53 +107,31 @@
               <div class="uploaded-files" style="position: relative">
                 <template for:each={totalUploadedFiles} for:item="img">
                   <div class="up-file" key={img.id}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                       <path
                         d="M13.5514 0.466149C13.2477 0.17758 12.8271 0 12.4065 0H4.90654C3.9486 0 3.17757 0.732519 3.17757 1.64262V8.87902H1.1215C0.514019 8.87902 0 9.34517 0 9.94451V13.7625C0 14.3396 0.490654 14.828 1.1215 14.828H11.5654C12.1729 14.828 12.6869 14.3618 12.6869 13.7625V9.94451C12.6869 9.36737 12.1963 8.87902 11.5654 8.87902H5.04673V1.88679C5.04673 1.8424 5.09346 1.798 5.14019 1.798H12.3131C12.5935 1.798 12.8271 2.01998 12.8271 2.28635V5.34961C12.8271 6.25971 13.5981 6.99223 14.5561 6.99223H17.6168C17.8972 6.99223 18.1308 7.21421 18.1308 7.48058V18.1354C18.1308 18.1798 18.0841 18.2242 18.0374 18.2242H5.14019C5.09346 18.2242 5.04673 18.1798 5.04673 18.1354V16.6926C5.04673 16.5594 4.92991 16.4262 4.76636 16.4262H3.43458C3.29439 16.4262 3.15421 16.5372 3.15421 16.6926V18.3574C3.15421 19.2675 3.92523 20 4.88318 20H18.271C19.229 20 20 19.2675 20 18.3574V7.36959C20 6.97003 19.8364 6.59268 19.5561 6.30411L13.5514 0.466149ZM3.99533 13.2297C3.97196 13.2519 3.9486 13.2519 3.90187 13.2519H3.52804C3.48131 13.2519 3.45794 13.2519 3.43458 13.2297C3.41122 13.2075 3.38785 13.2075 3.38785 13.2075C3.38785 13.2075 3.36449 13.1854 3.36449 13.1632L2.80374 12.1643L2.24299 13.1853C2.24299 13.2075 2.21963 13.2075 2.21963 13.2297C2.21963 13.2519 2.19626 13.2519 2.1729 13.2519C2.14953 13.2519 2.12617 13.2741 2.07944 13.2741H1.72897C1.68224 13.2741 1.63551 13.2519 1.63551 13.2297C1.63551 13.2075 1.61215 13.1854 1.63551 13.1632C1.65888 13.141 1.65888 13.0966 1.68224 13.0522L2.38318 11.8313L1.72897 10.6548C1.70561 10.6104 1.68224 10.566 1.68224 10.5216V10.455C1.68224 10.4329 1.72897 10.4329 1.7757 10.4329H2.14953C2.19626 10.4329 2.21963 10.4329 2.24299 10.455C2.26636 10.4772 2.28972 10.4772 2.28972 10.4772C2.28972 10.4772 2.31308 10.4994 2.31308 10.5216L2.8271 11.4539L3.34112 10.5216C3.34112 10.4994 3.36449 10.4994 3.36449 10.4772C3.36449 10.455 3.38785 10.455 3.41122 10.455C3.43458 10.455 3.45794 10.4329 3.50467 10.4329H3.85514C3.90187 10.4329 3.92523 10.455 3.9486 10.455C3.97196 10.455 3.97196 10.4994 3.97196 10.5216C3.97196 10.5438 3.9486 10.5882 3.92523 10.6548L3.27103 11.8091L3.97196 13.03C3.99533 13.0744 4.01869 13.1188 4.01869 13.141C4.01869 13.1632 4.01869 13.2075 3.99533 13.2297ZM9.43925 10.5216C9.43925 10.4994 9.43925 10.4994 9.46262 10.4772C9.48598 10.455 9.48598 10.455 9.50935 10.455C9.53271 10.455 9.55607 10.4329 9.6028 10.4329H9.88318C9.90654 10.4329 9.95327 10.4329 9.97664 10.455C10 10.4772 10.0234 10.4772 10.0234 10.4772C10.0234 10.4772 10.0467 10.4994 10.0467 10.5216V12.7858H10.9813C11.0047 12.7858 11.0047 12.7858 11.028 12.808C11.0514 12.8302 11.0514 12.8302 11.0514 12.8524C11.0514 12.8746 11.0748 12.8968 11.0748 12.919V13.141C11.0748 13.1632 11.0748 13.1853 11.0514 13.2075C11.028 13.2297 11.028 13.2519 11.028 13.2519H9.62617C9.57944 13.2519 9.53271 13.2297 9.50935 13.2075C9.48598 13.1853 9.46262 13.141 9.46262 13.0744V10.5216H9.43925ZM5.51402 10.455C5.58411 10.455 5.65421 10.455 5.70093 10.4772C5.74766 10.4994 5.79439 10.4994 5.84112 10.5216C5.88785 10.5438 5.91121 10.5882 5.93458 10.6104C5.95794 10.6326 5.98131 10.6992 6.00467 10.7658L6.63551 12.4306L7.28972 10.7658C7.31308 10.6992 7.33645 10.6548 7.35981 10.6104C7.38318 10.566 7.40654 10.5438 7.45327 10.4994C7.5 10.455 7.52337 10.455 7.57009 10.455C7.61682 10.455 7.66355 10.4329 7.71028 10.4329H8.10748C8.15421 10.4329 8.17757 10.4329 8.2243 10.455C8.27103 10.4772 8.27103 10.4772 8.29439 10.4994C8.31776 10.5216 8.31776 10.5438 8.34112 10.566C8.36449 10.5882 8.36449 10.6326 8.36449 10.6548V13.1632C8.36449 13.1854 8.36449 13.1853 8.34112 13.2075C8.31776 13.2297 8.31776 13.2297 8.29439 13.2297C8.27103 13.2297 8.24766 13.2519 8.20093 13.2519H7.92056C7.87383 13.2519 7.85047 13.2519 7.8271 13.2297C7.80374 13.2075 7.78037 13.2075 7.78037 13.2075C7.78037 13.2075 7.75701 13.1854 7.75701 13.1632V10.899L6.89252 13.1853C6.89252 13.2075 6.86916 13.2297 6.86916 13.2297C6.86916 13.2297 6.84579 13.2519 6.82243 13.2519C6.79907 13.2519 6.7757 13.2741 6.72897 13.2741H6.4486C6.40187 13.2741 6.3785 13.2741 6.35514 13.2519C6.33178 13.2297 6.30841 13.2297 6.30841 13.2297C6.30841 13.2297 6.28505 13.2075 6.28505 13.1853L5.46729 10.899V13.1853C5.46729 13.2075 5.46729 13.2075 5.44392 13.2297C5.42056 13.2519 5.42056 13.2519 5.3972 13.2519C5.37383 13.2519 5.35047 13.2741 5.30374 13.2741H5.02336C4.97664 13.2741 4.95327 13.2741 4.92991 13.2519C4.90654 13.2297 4.90654 13.2297 4.90654 13.2075C4.90654 13.1853 4.88318 13.1854 4.88318 13.1632V10.677C4.88318 10.6104 4.90654 10.5438 4.95327 10.4994C5 10.455 5.04673 10.4329 5.11682 10.4329H5.51402V10.455Z"
-                        fill="#7B7B7B"
-                      />
+                        fill="#7B7B7B" />
                     </svg>
                     <p>{img.name}</p>
-                    <svg
-                      data-id={img.contentVersId}
-                      onclick={deleteFileChange}
-                      style="margin-left: auto; cursor: pointer"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                    >
-                      <path
-                        data-id={img.contentVersId}
+                    <svg data-id={img.contentVersId} onclick={deleteFileChange}
+                      style="margin-left: auto; cursor: pointer" xmlns="http://www.w3.org/2000/svg" width="20"
+                      height="20" viewBox="0 0 20 20" fill="none">
+                      <path data-id={img.contentVersId}
                         d="M15.8337 5.3415L14.6587 4.1665L10.0003 8.82484L5.34199 4.1665L4.16699 5.3415L8.82533 9.99984L4.16699 14.6582L5.34199 15.8332L10.0003 11.1748L14.6587 15.8332L15.8337 14.6582L11.1753 9.99984L15.8337 5.3415Z"
-                        fill="#E10202"
-                      />
+                        fill="#E10202" />
                     </svg>
                   </div>
                 </template>
                 <template if:true={isFileLoading}>
-                  <div
-                    style="
+                  <div style="
                       width: 100%;
                       height: 100%;
                       display: flex;
                       justify-content: center;
                       align-items: center;
                       z-index: 0;
-                    "
-                    class="spinner-container"
-                  >
-                    <lightning-spinner
-                      alternative-text="Loading"
-                      size="small"
-                    ></lightning-spinner>
+                    " class="spinner-container">
+                    <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
                   </div>
                 </template>
               </div>
@@ -191,11 +141,7 @@
               <button class="cancel-button" onclick={toggleCancelModal}>
                 {labels2.ccp2_vr_cancel}
               </button>
-              <button
-                class="next-button-page2"
-                onclick={gotoThirdPage}
-                disabled={isUploadSaveButtonDisabled}
-              >
+              <button class="next-button-page2" onclick={gotoThirdPage} disabled={isUploadSaveButtonDisabled}>
                 次へ &nbsp;
                 <!-- <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -225,20 +171,14 @@
             </div>
           </div>
           <template if:true={showSpinner}>
-            <div
-              style="
+            <div style="
                 width: 100%;
                 height: 100%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-              "
-              class="spinner-container"
-            >
-              <lightning-spinner
-                alternative-text="Loading"
-                size="small"
-              ></lightning-spinner>
+              " class="spinner-container">
+              <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
             </div>
           </template>
         </template>
@@ -293,73 +233,32 @@
             </div> -->
 
             <div class="main-content">
-              <span class="row-1-page2"
-                >{totalVehicleRead}{labels2.ccp2_vr_vehicles_scanned}</span
-              >
+              <span class="row-1-page2">{totalVehicleRead}{labels2.ccp2_vr_vehicles_scanned}</span>
               <div class="row-2-page2-table">
                 <div class="table">
                   <div class="table-header">
-                    <span class="table-header-item"
-                      >{labels2.ccp2_vr_registration_number}</span
-                    >
-                    <span class="table-header-item"
-                      >{labels2.ccp2_vr_vehicle_identification_number}</span
-                    >
-                    <span class="table-header-item"
-                      >{labels2.ccp2_vr_vehicle_name}</span
-                    >
-                    <span class="table-header-item"
-                      >{labels2.ccp2_vr_vehicle_type}</span
-                    >
-                    <span class="table-header-item"
-                      >{labels2.ccp2_vr_expiration_date}</span
-                    >
-                    <span class="table-header-item"
-                      >{labels2.ccp2_vr_initial_registration_date}</span
-                    >
+                    <span class="table-header-item">{labels2.ccp2_vr_registration_number}</span>
+                    <span class="table-header-item">{labels2.ccp2_vr_vehicle_identification_number}</span>
+                    <span class="table-header-item">{labels2.ccp2_vr_vehicle_name}</span>
+                    <span class="table-header-item">{labels2.ccp2_vr_vehicle_type}</span>
+                    <span class="table-header-item">{labels2.ccp2_vr_expiration_date}</span>
+                    <span class="table-header-item">{labels2.ccp2_vr_initial_registration_date}</span>
                   </div>
-                  <template
-                    for:each={vehicleRegistrationDataPerPage}
-                    for:item="elm"
-                  >
+                  <template for:each={vehicleRegistrationDataPerPage} for:item="elm">
                     <div class="table-row" key={elm.dummyId} style={elm.styles}>
-                      <span
-                        class="table-row-item"
-                        style={elm.regStyle}
-                        title={elm.Registration_Number__c}
-                      >
-                        <input
-                          type="checkbox"
-                          class="row-checkbox"
-                          checked={elm.isSelected}
-                          data-name={elm.dummyId}
-                          disabled={elm.isDisabled}
-                          onchange={handleCheckboxSelction}
-                        />
+                      <span class="table-row-item" style={elm.regStyle} title={elm.Registration_Number__c}>
+                        <input type="checkbox" class="row-checkbox" checked={elm.isSelected} data-name={elm.dummyId}
+                          disabled={elm.isDisabled} onchange={handleCheckboxSelction} />
                         {elm.ellRegistration_Number__c}
                       </span>
-                      <span
-                        class="table-row-item"
-                        style={elm.chassisStyle}
-                        title={elm.Chassis_number__c}
-                        >{elm.ellChassis_number__c}</span
-                      >
-                      <span class="table-row-item" title={elm.Vehicle_Name__c}
-                        >{elm.ellVehicle_Name__c}</span
-                      >
-                      <span class="table-row-item" title={elm.Vehicle_Type__c}
-                        >{elm.ellVehicle_Type__c}</span
-                      >
-                      <span
-                        class="table-row-item"
-                        title={elm.Vehicle_Expiration_Date__c}
-                        >{elm.ellVehicle_Expiration_Date__c}</span
-                      >
-                      <span
-                        class="table-row-item"
-                        title={elm.First_Registration_Date__c}
-                        >{elm.ellFirst_Registration_Date__c}</span
-                      >
+                      <span class="table-row-item" style={elm.chassisStyle}
+                        title={elm.Chassis_number__c}>{elm.ellChassis_number__c}</span>
+                      <span class="table-row-item" title={elm.Vehicle_Name__c}>{elm.ellVehicle_Name__c}</span>
+                      <span class="table-row-item" title={elm.Vehicle_Type__c}>{elm.ellVehicle_Type__c}</span>
+                      <span class="table-row-item"
+                        title={elm.Vehicle_Expiration_Date__c}>{elm.ellVehicle_Expiration_Date__c}</span>
+                      <span class="table-row-item"
+                        title={elm.First_Registration_Date__c}>{elm.ellFirst_Registration_Date__c}</span>
                     </div>
                   </template>
                 </div>
@@ -371,71 +270,34 @@
                 <div class="mm-pagination-container">
                   <template if:true={hasVehicleRegData}>
                     <div class="mm-big-div-page">
-                      <button
-                        class="mm-nav-button"
-                        onclick={handlePreviousPage}
-                        onkeydown={handlePreviousPage}
-                        tabindex="0"
-                        disabled={isPreviousDisabled}
-                      >
-                        <lightning-icon
-                          icon-name="utility:chevronleft"
-                          alternative-text="Previous"
-                          size="xx-small"
-                        ></lightning-icon>
+                      <button class="mm-nav-button" onclick={handlePreviousPage} onkeydown={handlePreviousPage}
+                        tabindex="0" disabled={isPreviousDisabled}>
+                        <lightning-icon icon-name="utility:chevronleft" alternative-text="Previous"
+                          size="xx-small"></lightning-icon>
                       </button>
-                      <button
-                        if:true={showLeftDots}
-                        class="mm-page-button"
-                        data-page="1"
-                        onclick={pageCountClick}
-                        onkeydown={pageCountClick}
-                      >
-                        1
-                      </button>
-                      <span if:true={showLeftDots} class="mm-page-button-dots"
-                        >...</span
-                      >
+                      <button if:true={showLeftDots} class="mm-page-button" data-page='1' onclick={pageCountClick}
+                          onkeydown={pageCountClick}>
+                          1
+                        </button>
+                      <span if:true={showLeftDots} class="mm-page-button-dots">...</span>
 
                       <template for:each={visiblePageCount} for:item="page">
-                        <button
-                          class="mm-page-button"
-                          data-page={page}
-                          onclick={pageCountClick}
-                          onkeydown={pageCountClick}
-                          tabindex="0"
-                          key={page}
-                        >
+                        <button class="mm-page-button" data-page={page} onclick={pageCountClick}
+                          onkeydown={pageCountClick} tabindex="0" key={page}>
                           {page}
                         </button>
                       </template>
 
-                      <span if:true={showRightDots} class="mm-page-button-dots"
-                        >...</span
-                      >
-                      <button
-                        if:true={showRightDots}
-                        class="mm-page-button"
-                        data-page={totalVehiclePages}
-                        onclick={pageCountClick}
-                        onkeydown={pageCountClick}
-                        tabindex="0"
-                      >
+                      <span if:true={showRightDots} class="mm-page-button-dots">...</span>
+                      <button if:true={showRightDots} class="mm-page-button" data-page={totalVehiclePages}
+                        onclick={pageCountClick} onkeydown={pageCountClick} tabindex="0">
                         {totalVehiclePages}
                       </button>
 
-                      <button
-                        class="mm-nav-button"
-                        onclick={handleNextPage}
-                        onkeydown={handleNextPage}
-                        tabindex="0"
-                        disabled={isNextDisabled}
-                      >
-                        <lightning-icon
-                          icon-name="utility:chevronright"
-                          alternative-text="Next"
-                          size="xx-small"
-                        ></lightning-icon>
+                      <button class="mm-nav-button" onclick={handleNextPage} onkeydown={handleNextPage} tabindex="0"
+                        disabled={isNextDisabled}>
+                        <lightning-icon icon-name="utility:chevronright" alternative-text="Next"
+                          size="xx-small"></lightning-icon>
                       </button>
                     </div>
                   </template>
@@ -447,11 +309,7 @@
               <button class="cancel-button" onclick={gotoSecondPage}>
                 戻る
               </button>
-              <button
-                class="next-button"
-                onclick={toggleConfirmModal}
-                disabled={isTotalSelectedCount}
-              >
+              <button class="next-button" onclick={toggleConfirmModal} disabled={isTotalSelectedCount}>
                 {labels2.ccp2_vr_done}
               </button>
             </div>
@@ -547,7 +405,7 @@
     <div class="modal-background-last">
       <div class="modal-window-small">
         <div class="warning-modal-text">
-          <div style="display: flex; flex-direction: column; width: 350px">
+          <div style="display: flex; flex-direction: column;width: 350px;">
             <P>{totalSelectedCount}ファイルの登録処理</P>
             <P>成功･･･{inertionPassedLength}件</P>
             <P>失敗･･･{intertionfailedLength}件</P>
@@ -562,18 +420,10 @@
           </div>
         </div>
         <div class="buttons-small" style="justify-content: center">
-          <button
-            class="cancel-button"
-            if:true={showLastBackButton}
-            onclick={handleNoMain}
-          >
+          <button class="cancel-button" if:true={showLastBackButton} onclick={handleNoMain}>
             戻る
           </button>
-          <button
-            if:false={showLastBackButton}
-            class="next-button"
-            onclick={handleYesMain}
-          >
+          <button if:false={showLastBackButton} class="next-button" onclick={handleYesMain}>
             次へ
           </button>
         </div>

@@ -4,7 +4,7 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import updateFirstPublishLocationId from "@salesforce/apex/CCP2_vehcileImageUploader.updateFirstPublishLocationId";
 import updatefav from "@salesforce/apex/CCP2_CalendarController.contentVersionUpdate";
 
-import { updateRecord } from "lightning/uiRecordApi";
+import { updateRecord } from 'lightning/uiRecordApi';
 const sample = Vehicle_StaticResource + "/CCP2_Resources/Vehicle/sample.png";
 const upload = Vehicle_StaticResource + "/CCP2_Resources/Vehicle/upload.png";
 const error_outline =
@@ -14,13 +14,13 @@ import deleteBranchApi from "@salesforce/apex/CCP2_vehcileImageUploader.deleteCo
 import Languagei18n from "@salesforce/apex/CCP2_userData.userLanguage";
 import ErrorLog from "@salesforce/apex/CCP2_lwc_ErrorLogs.createLwcErrorLog";
 
-import labelsVehicle from "@salesforce/resourceUrl/ccp2_labels";
-import i18nextStaticResource from "@salesforce/resourceUrl/i18next";
+import labelsVehicle from '@salesforce/resourceUrl/ccp2_labels';
+import i18nextStaticResource from '@salesforce/resourceUrl/i18next';
 
-import CCP2_FAV_IMAGE_FIELD from "@salesforce/schema/ContentVersion.CCP2_FavImage__c";
+import CCP2_FAV_IMAGE_FIELD from '@salesforce/schema/ContentVersion.CCP2_FavImage__c';
 
 export default class Ccp2_VehicleImageUpload extends LightningElement {
-  @track Languagei18n = "";
+  @track Languagei18n = '';
   @track isLanguageChangeDone = true;
   @api imageData;
   @api vehicleId;
@@ -64,11 +64,7 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
       .catch((error) => {
         console.error("Error loading language or labels: ", error);
         let err = JSON.stringify(error);
-        ErrorLog({
-          lwcName: "ccp2_VehicleImageUpload",
-          errorLog: err,
-          methodName: "Load Language"
-        })
+        ErrorLog({ lwcName: "ccp2_VehicleImageUpload", errorLog: err, methodName: "Load Language" })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
           })
@@ -79,34 +75,25 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
   }
 
   connectedCallback() {
-    this.loadI18nextLibrary()
-      .then(() => {
-        this.loadLabels(); // Now you can safely load the labels after i18next is loaded
-      })
-      .catch((error) => {
-        console.error("Error loading i18next library: ", error);
-        let err = JSON.stringify(error);
-        ErrorLog({
-          lwcName: "ccp2_VehicleImageUpload",
-          errorLog: err,
-          methodName: "Connected Callback"
+    this.loadI18nextLibrary().then(() => {
+      this.loadLabels(); // Now you can safely load the labels after i18next is loaded
+    }).catch((error) => {
+      console.error("Error loading i18next library: ", error);
+      let err = JSON.stringify(error);
+      ErrorLog({ lwcName: "ccp2_VehicleImageUpload", errorLog: err, methodName: "Connected Callback" })
+        .then(() => {
+          console.log("Error logged successfully in Salesforce");
         })
-          .then(() => {
-            console.log("Error logged successfully in Salesforce");
-          })
-          .catch((loggingErr) => {
-            console.error("Failed to log error in Salesforce:", loggingErr);
-          });
-      });
+        .catch((loggingErr) => {
+          console.error("Failed to log error in Salesforce:", loggingErr);
+        });
+    });
     // console.log("this.imageData", JSON.parse(JSON.stringify(this.imageData)));
     if (this.imageData != null) {
       this.uploadImagesArray = [...this.imageData];
       this.uploadImagesArray = this.imageData.map((file) => ({
         ...file,
-        fileNameTrimmed:
-          file.fileName?.length > 26
-            ? file.fileName.substring(0, 26) + "..."
-            : file.fileName
+        fileNameTrimmed: file.fileName?.length > 26 ? file.fileName.substring(0, 26) + "..." : file.fileName,
       }));
       this.setOriginalFlag();
       this.instructionContainerCss =
@@ -118,13 +105,11 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
           ? "image-scroll-container padding-right"
           : "image-scroll-container";
       this.uploadImageCss =
-        this.uploadImagesArray.length === 1 ||
-        this.uploadImagesArray.length === 2
+        this.uploadImagesArray.length === 1 || this.uploadImagesArray.length === 2
           ? "upload-image one-element"
           : "upload-image one-element";
       this.uploadImageIconCss =
-        this.uploadImagesArray.length === 1 ||
-        this.uploadImagesArray.length === 2
+        this.uploadImagesArray.length === 1 || this.uploadImagesArray.length === 2
           ? "upload-image-icon-box"
           : "upload-image-icon-box";
       this.saveButtonCss =
@@ -167,7 +152,7 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
 
     // Iterate over uploadImagesArray to find a record with CCP2_FavImage__c
     for (const record of this.uploadImagesArray) {
-      if (record.hasOwnProperty("FavImage") && record.FavImage) {
+      if (record.hasOwnProperty('FavImage') && record.FavImage) {
         this.originalFlag = record.FavImage;
         this.previousIdofFav = record.id;
         console.log("orginal flag", this.previousIdofFav);
@@ -183,7 +168,7 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
       console.log("dhe", this.originalFlag);
     }
 
-    console.log("Original Flag:", this.originalFlag);
+    console.log('Original Flag:', this.originalFlag);
   }
 
   loadI18nextLibrary() {
@@ -207,34 +192,28 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
   labels2 = {};
   loadLabels() {
     fetch(`${labelsVehicle}/labelsVehicle.json`)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         const userLocale = this.getLocale(); // Method to determine user locale (e.g., 'en', 'jp')
 
         // Initialize i18next with the fetched labels
-        i18next
-          .init({
-            lng: userLocale,
-            resources: {
-              [userLocale]: {
-                translation: data[userLocale]
-              }
+        i18next.init({
+          lng: userLocale,
+          resources: {
+            [userLocale]: {
+              translation: data[userLocale]
             }
-          })
-          .then(() => {
-            this.labels2 = i18next.store.data[userLocale].translation;
-            console.log("Delete Detail User Locale: ", userLocale);
-            console.log("Delete Detail User Labels: ", this.labels2);
-          });
+          }
+        }).then(() => {
+          this.labels2 = i18next.store.data[userLocale].translation;
+          console.log("Delete Detail User Locale: ", userLocale);
+          console.log("Delete Detail User Labels: ", this.labels2);
+        });
       })
       .catch((error) => {
         console.error("Error loading labels: ", error);
         let err = JSON.stringify(error);
-        ErrorLog({
-          lwcName: "ccp2_VehicleImageUpload",
-          errorLog: err,
-          methodName: "Load Labels"
-        })
+        ErrorLog({ lwcName: "ccp2_VehicleImageUpload", errorLog: err, methodName: "Load Labels" })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
           })
@@ -242,14 +221,16 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
       });
+
   }
   getLocale() {
     console.log("Lang 2", this.Languagei18n);
     this.isLanguageChangeDone = false;
-    if (this.Languagei18n === "en_US") {
+    if (this.Languagei18n === 'en_US') {
       console.log("working1");
       return "en";
-    } else {
+    }
+    else {
       console.log("working2");
       return "jp";
     }
@@ -257,10 +238,10 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
   get imagesWithTrimmed() {
     return this.uploadImagesArray.map((file) => ({
       ...file, // Keep all existing properties
-      fileNameTrimmed:
-        file.name.length > 26 ? file.name.substring(0, 26) + "..." : file.name
+      fileNameTrimmed: file.name.length > 26 ? file.name.substring(0, 26) + "..." : file.name,
     }));
   }
+
 
   handleFilesChange(event) {
     const files = event.target.files;
@@ -268,14 +249,12 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
 
     const fileTypeWeGet = files[0].type;
 
-    if (!["image/jpeg", "image/png"].includes(fileTypeWeGet)) {
-      this.showToast(
-        this.labels2.ccp2_vi_Error_9,
-        this.labels2.ccp2_vi_invalidFileType9,
-        "Error"
-      );
+    if (!['image/jpeg', 'image/png'].includes(fileTypeWeGet)) {
+
+      this.showToast(this.labels2.ccp2_vi_Error_9, this.labels2.ccp2_vi_invalidFileType9, 'Error');
       return;
     }
+
 
     if (files[0] && files[0].size > maxSizeInBytes) {
       this.showToast("f", this.labels2.ccp2_vi_file_size_exceeded, "Error");
@@ -296,11 +275,7 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
         this.saveLoader = false;
       })
       .catch((e) => {
-        this.showToast(
-          this.labels2.ccp2_vi_Error_9,
-          this.labels2.ccp2_vi_somethingWentWrong9,
-          "error"
-        );
+        this.showToast(this.labels2.ccp2_vi_Error_9, this.labels2.ccp2_vi_somethingWentWrong9, 'error');
         this.saveLoader = false;
         console.log("error", e);
       });
@@ -318,17 +293,9 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
       })
       .catch((error) => {
         console.log("error in uploading updateFirstPublishLocationId:-", error);
-        this.showToast(
-          this.labels2.ccp2_vi_Error_9,
-          this.labels2.ccp2_vi_tryAgain9,
-          "error"
-        );
+        this.showToast(this.labels2.ccp2_vi_Error_9, this.labels2.ccp2_vi_tryAgain9, "error");
         let err = JSON.stringify(error);
-        ErrorLog({
-          lwcName: "ccp2_VehicleImageUpload",
-          errorLog: err,
-          methodName: "Load Image"
-        })
+        ErrorLog({ lwcName: "ccp2_VehicleImageUpload", errorLog: err, methodName: "Load Image" })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
           })
@@ -351,11 +318,7 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
 
     // If the file name exists, do not proceed with the upload
     if (isFileNameExists) {
-      this.showToast(
-        this.labels2.ccp2_vi_Error_9,
-        `${file.name} ${this.labels2.ccp2_vi_alreadyUploaded9}`,
-        "error"
-      );
+      this.showToast(this.labels2.ccp2_vi_Error_9, `${file.name} ${this.labels2.ccp2_vi_alreadyUploaded9}`, "error");
       this.saveLoader = false;
       return;
     }
@@ -415,7 +378,8 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
 
           ContentLocation: "S",
 
-          Description: "Images"
+          Description: 'Images'
+
         };
 
         createRecord({
@@ -431,24 +395,19 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
               this.uploadImagesArray.push({
                 id: result.id,
                 fileName: file.name,
-                fileNameTrimmed:
-                  file.name.length > 26
-                    ? file.name.substring(0, 26) + "..."
-                    : file.name,
+                fileNameTrimmed: file.name.length > 26 ? file.name.substring(0, 26) + "..." : file.name,
                 fileURL: this.compressedImageData,
                 base64: this.compressedImageData.split(",")[1],
                 filetype: "vehicleImage"
               });
 
               this.uploadImagesOnlyIds.push(result.id);
-            } else {
+            }
+            else {
               this.uploadImagesArray.unshift({
                 id: result.id,
                 fileName: file.name,
-                fileNameTrimmed:
-                  file.name.length > 26
-                    ? file.name.substring(0, 26) + "..."
-                    : file.name,
+                fileNameTrimmed: file.name.length > 26 ? file.name.substring(0, 26) + "..." : file.name,
                 fileURL: this.compressedImageData,
                 base64: this.compressedImageData.split(",")[1],
                 filetype: "vehicleImage"
@@ -477,12 +436,12 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
                 : "image-scroll-container";
             this.uploadImageCss =
               this.uploadImagesArray.length === 1 ||
-              this.uploadImagesArray.length === 2
+                this.uploadImagesArray.length === 2
                 ? "upload-image one-element"
                 : "upload-image one-element";
             this.uploadImageIconCss =
               this.uploadImagesArray.length === 1 ||
-              this.uploadImagesArray.length === 2
+                this.uploadImagesArray.length === 2
                 ? "upload-image-icon-box"
                 : "upload-image-icon-box";
             this.saveButtonCss =
@@ -521,17 +480,9 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
 
           .catch((error) => {
             console.error("Error in callback:", error);
-            this.showToast(
-              this.labels2.ccp2_vi_Error_9,
-              this.labels2.ccp2_vi_tryAgain9,
-              "error"
-            );
+            this.showToast(this.labels2.ccp2_vi_Error_9, this.labels2.ccp2_vi_tryAgain9, "error");
             let err = JSON.stringify(error);
-            ErrorLog({
-              lwcName: "ccp2_VehicleImageUpload",
-              errorLog: err,
-              methodName: "uploadFile"
-            })
+            ErrorLog({ lwcName: "ccp2_VehicleImageUpload", errorLog: err, methodName: "uploadFile" })
               .then(() => {
                 console.log("Error logged successfully in Salesforce");
               })
@@ -660,48 +611,45 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
         this.deleteBranchApi(id);
       });
     } else {
-      console.log("No IDs to delete.");
+      console.log('No IDs to delete.');
     }
 
-    console.log("this.uploadImagesArray", this.uploadImagesArray);
-    console.log("this.uploadImagesOnlyIds", this.uploadImagesOnlyIds);
+    console.log('this.uploadImagesArray', this.uploadImagesArray)
+    console.log('this.uploadImagesOnlyIds', this.uploadImagesOnlyIds)
 
     this.uploadImage(this.uploadImagesOnlyIds);
     if (this.originalFlag === null) {
       if (this.selectedImageId !== null) {
         const fields = {};
-        fields["Id"] = this.selectedImageId;
+        fields['Id'] = this.selectedImageId;
         fields[CCP2_FAV_IMAGE_FIELD.fieldApiName] = true;
 
         // Prepare record input for update
         const recordInput = { fields };
 
+
         updateRecord(recordInput)
           .then(() => {
-            console.log("Record updated successfully");
+            console.log('Record updated successfully');
             this.dispatchEvent(
               new ShowToastEvent({
-                title: "Success",
-                message: "Record updated successfully",
-                variant: "success"
+                title: 'Success',
+                message: 'Record updated successfully',
+                variant: 'success',
               })
             );
           })
           .catch((error) => {
-            console.error("Error updating record:", error);
+            console.error('Error updating record:', error);
             this.dispatchEvent(
               new ShowToastEvent({
-                title: "Error",
-                message: "Error updating record: " + error.body.message,
-                variant: "error"
+                title: 'Error',
+                message: 'Error updating record: ' + error.body.message,
+                variant: 'error',
               })
             );
             let err = JSON.stringify(error);
-            ErrorLog({
-              lwcName: "ccp2_VehicleImageUpload",
-              errorLog: err,
-              methodName: "handleSaveClick"
-            })
+            ErrorLog({ lwcName: "ccp2_VehicleImageUpload", errorLog: err, methodName: "handleSaveClick" })
               .then(() => {
                 console.log("Error logged successfully in Salesforce");
               })
@@ -714,12 +662,9 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
       }
     } else {
       if (this.selectedImageId !== null) {
-        updatefav({
-          contentVersionId: this.selectedImageId,
-          vehicleId: this.vehicleId
-        })
+        updatefav({ contentVersionId: this.selectedImageId, vehicleId: this.vehicleId })
           .then(() => {
-            console.log("Success to update");
+            console.log('Success to update');
             // this.dispatchEvent(
             //     new ShowToastEvent({
             //         title: 'Success',
@@ -729,20 +674,16 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
             // );
           })
           .catch((error) => {
-            console.error("Error updating record:", error);
+            console.error('Error updating record:', error);
             this.dispatchEvent(
               new ShowToastEvent({
-                title: "Error",
-                message: error.body ? error.body.message : "Unknown error",
-                variant: "error"
+                title: 'Error',
+                message: error.body ? error.body.message : 'Unknown error',
+                variant: 'error'
               })
             );
             let err = JSON.stringify(error);
-            ErrorLog({
-              lwcName: "ccp2_VehicleImageUpload",
-              errorLog: err,
-              methodName: "handleSaveClick"
-            })
+            ErrorLog({ lwcName: "ccp2_VehicleImageUpload", errorLog: err, methodName: "handleSaveClick" })
               .then(() => {
                 console.log("Error logged successfully in Salesforce");
               })
@@ -761,10 +702,7 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
   }
 
   handleCancelClick(event) {
-    console.log(
-      "cancel button on this.uploadImagesArray",
-      JSON.stringify(this.uploadImagesArray)
-    );
+    console.log('cancel button on this.uploadImagesArray', JSON.stringify(this.uploadImagesArray))
     // const events = new CustomEvent("updateitems", {
     //   detail: this.uploadImagesArray
     // });
@@ -785,11 +723,7 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
   @track addedImages;
 
   handleCancelModal() {
-    console.log(
-      "All Image Ids: ",
-      JSON.stringify(this.uploadImagesOnlyIds),
-      JSON.stringify(this.deleteimagesids)
-    );
+    console.log("All Image Ids: ", JSON.stringify(this.uploadImagesOnlyIds), JSON.stringify(this.deleteimagesids));
 
     // Ensure arrays are not undefined or null
     const uploadedImages = this.uploadImagesOnlyIds || [];
@@ -839,16 +773,15 @@ export default class Ccp2_VehicleImageUpload extends LightningElement {
     this.uploadImagesArray = this.uploadImagesArray.map((image) => {
       if (image.id === previousId) {
         return { ...image, FavImage: false };
-      } else if (image.id === clickedImageId) {
+      }
+      else if (image.id === clickedImageId) {
         return { ...image, FavImage: true };
       }
       return { ...image };
     });
     this.selectedImageId = clickedImageId;
 
-    console.log(
-      "Updated uploadImagesArray:",
-      JSON.stringify(this.uploadImagesArray)
-    );
+    console.log("Updated uploadImagesArray:", JSON.stringify(this.uploadImagesArray));
   }
+
 }

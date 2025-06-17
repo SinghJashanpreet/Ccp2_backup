@@ -1,113 +1,107 @@
-.main-container {
-  width: calc(100vw - 16px);
-  margin: -16px 0 0 -16px;
-  height: max-content;
+.main-container{
+    width: calc(100vw - 16px);
+    margin: -16px 0 0 -16px;
+    height: max-content;
 }
 .modal-background-last {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 109;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 109;
 }
-.modal-window-small-news {
-  background-color: rgba(251, 251, 251, 1);
-  border-radius: 8px;
-  padding: 24px 32px 24px 32px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 90%;
-  width: 60%;
-  max-height: 90%;
+.modal-window-small-news{
+    background-color: rgba(251, 251, 251, 1);
+    border-radius: 8px;
+    padding: 24px 32px 24px 32px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    width: 60%;
+    max-height: 90%;
 }
-.header-container-more {
-  display: flex;
-  justify-content: flex-start;
-  font-size: 16px;
-  font-weight: 700;
-  --sds-c-icon-color-foreground-default: #0a0a0a;
+.header-container-more{
+    display: flex;
+    justify-content: flex-start;
+    font-size: 16px;
+    font-weight: 700;
+    --sds-c-icon-color-foreground-default: #0A0A0A;
 }
-.data-more-modal-terms {
-  display: flex;
-  gap: 10px;
-  flex-direction: column;
+.data-more-modal-terms{
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
 }
-.data-modal-news {
-  gap: 16px;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+.data-modal-news{
+    gap: 16px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
-.reg-date-terms {
-  display: flex;
-  flex-direction: column;
-  align-items: end;
+.reg-date-terms{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
 }
-.modal-description-terms {
-  color: var(--gray-text-1-bg, #7b7b7b);
-  font-size: 14px;
-  overflow-y: auto;
-  max-height: 326px;
-  padding-right: 10px;
+.modal-description-terms{
+    color: var(--gray-text-1-bg, #7B7B7B);
+    font-size: 14px;
+    overflow-y: auto;
+    max-height: 326px;
+    padding-right: 10px;
 }
 .modal-description-terms::-webkit-scrollbar {
-  width: 10px;
+    width: 10px;
 }
 
 .modal-description-terms::-webkit-scrollbar-track {
-  background: #f4f4f4;
-  border-radius: 10px;
+    background: #F4F4F4;
+    border-radius: 10px;
 }
 
 .modal-description-terms::-webkit-scrollbar-thumb {
-  background: #bbbbbb;
-  border-radius: 12px;
+    background: #BBBBBB;
+    border-radius: 12px;
 }
 
 .modal-description-terms::-webkit-scrollbar-thumb:hover {
-  background: #828282;
+    background: #828282;
 }
-.save-button {
-  min-width: 170px;
-  height: 40px;
-  align-self: center;
-  background-color: #e10202;
-  border-radius: 10px;
-  padding: 0 16px;
-  font-size: 18px;
-  font-weight: 400;
-  border: none;
-  color: #ffffff;
-  transition:
-    background-color 0.9s ease,
-    border 0.5s ease,
-    color 0.5s ease;
+.save-button{
+    min-width: 170px;
+    height: 40px;
+    align-self: center;
+    background-color: #e10202;
+    border-radius: 10px;
+    padding: 0 16px;
+    font-size: 18px;
+    font-weight: 400;
+    border: none;
+    color: #FFFFFF;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
 }
 
-.save-button:hover {
-  border: 1px solid #e10202;
-  background-color: white;
-  color: #e10202;
-  transition:
-    background-color 0.9s ease,
-    border 0.5s ease,
-    color 0.5s ease;
+.save-button:hover{
+    border: 1px solid #e10202;
+    background-color: white;
+    color: #e10202;
+    transition: background-color 0.9s ease, border 0.5s ease, color 0.5s ease;
 }
 
-.save-button:disabled {
-  min-width: 170px;
-  height: 40px;
-  align-self: center;
-  background-color: #bbbbbb;
-  border-radius: 10px;
-  padding: 0 16px;
-  font-size: 18px;
-  font-weight: 400;
-  border: none;
-  color: #ffffff;
-  cursor: not-allowed;
+.save-button:disabled{
+    min-width: 170px;
+    height: 40px;
+    align-self: center;
+    background-color: #BBBBBB;
+    border-radius: 10px;
+    padding: 0 16px;
+    font-size: 18px;
+    font-weight: 400;
+    border: none;
+    color: #FFFFFF;
+    cursor: not-allowed;
 }

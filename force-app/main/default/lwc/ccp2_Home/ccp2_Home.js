@@ -13,13 +13,14 @@ import countsVehicle from "@salesforce/apex/CCP2_CalendarController.topPageData"
 import getFeedbackques from "@salesforce/apex/CCP2_CalendarController.getFeedback";
 import insertFeedback from "@salesforce/apex/CCP2_CalendarController.insertFeedback";
 import getnotification from "@salesforce/apex/CCP2_CalendarController.getNotificationForTopPage";
-import labelsUser from "@salesforce/resourceUrl/ccp2_labels";
-import i18nextStaticResource from "@salesforce/resourceUrl/i18next";
+import labelsUser from '@salesforce/resourceUrl/ccp2_labels';
+import i18nextStaticResource from '@salesforce/resourceUrl/i18next';
 import Languagei18n from "@salesforce/apex/CCP2_userData.userLanguage";
 import ErrorLog from "@salesforce/apex/CCP2_lwc_ErrorLogs.createLwcErrorLog";
 import TNCLink from "@salesforce/label/c.CCP2_resource_Label";
 import FUSOShopLink from "@salesforce/label/c.FUSOShopLink";
-import fetchEInvoiceInfoByUserId from "@salesforce/apex/CCP_HomeCtrl.fetchEInvoiceInfoByUserId";
+import fetchEInvoiceInfoByUserId from '@salesforce/apex/CCP_HomeCtrl.fetchEInvoiceInfoByUserId';
+
 
 const BACKGROUND_IMAGE_PC =
   Vehicle_StaticResource + "/CCP2_Resources/Common/Main_Background.webp";
@@ -69,6 +70,8 @@ const VEHICLECARD =
 const VEHICLECARDFULL =
   Vehicle_StaticResource + "/CCP2_Resources/Vehicle/Vehicle-Card-Full.png";
 
+
+
 export default class Ccp2_Home extends LightningElement {
   backgroundImagePC = BACKGROUND_IMAGE_PC;
   p1 = P1;
@@ -95,7 +98,7 @@ export default class Ccp2_Home extends LightningElement {
   VEHICLECARD = VEHICLECARD;
   VEHICLECARDFULL = VEHICLECARDFULL;
   userId = Id;
-  @track Languagei18n = "";
+  @track Languagei18n = '';
   @track isLanguageChangeDone = true;
   @track isGuestuser = false;
   @track isLoading = true;
@@ -192,6 +195,7 @@ export default class Ccp2_Home extends LightningElement {
 
   loadCheckGuestUser() {
     checkGuestUser().then((result) => {
+
       this.isLoading = true;
       this.isGuestuser = result;
       this.isLoading = false;
@@ -214,6 +218,7 @@ export default class Ccp2_Home extends LightningElement {
   @track dtfsaUrl;
   @track vehiclemanagementUrl;
   @track einvoiceUrl;
+
 
   loadLanguage() {
     Languagei18n() // Assuming getLanguageI18n is the apex method that fetches the language.
@@ -238,6 +243,7 @@ export default class Ccp2_Home extends LightningElement {
         //   .catch((loggingErr) => {
         //     console.error("Failed to log error in Salesforce:", loggingErr);
         //   });
+
       });
   }
   loadI18nextLibrary() {
@@ -261,25 +267,23 @@ export default class Ccp2_Home extends LightningElement {
   labels2 = {};
   loadLabels() {
     fetch(`${labelsUser}/infoCenter.json`)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         const userLocale = this.getLocale(); // Method to determine user locale (e.g., 'en', 'jp')
 
         // Initialize i18next with the fetched labels
-        i18next
-          .init({
-            lng: userLocale,
-            resources: {
-              [userLocale]: {
-                translation: data[userLocale]
-              }
+        i18next.init({
+          lng: userLocale,
+          resources: {
+            [userLocale]: {
+              translation: data[userLocale]
             }
-          })
-          .then(() => {
-            this.labels2 = i18next.store.data[userLocale].translation;
-            console.log("Delete Detail User Locale: ", userLocale);
-            console.log("Delete Detail User Labels: ", this.labels2);
-          });
+          }
+        }).then(() => {
+          this.labels2 = i18next.store.data[userLocale].translation;
+          console.log("Delete Detail User Locale: ", userLocale);
+          console.log("Delete Detail User Labels: ", this.labels2);
+        });
       })
       .catch((error) => {
         console.error("Error loading labels: ", error);
@@ -292,18 +296,20 @@ export default class Ccp2_Home extends LightningElement {
         //     console.error("Failed to log error in Salesforce:", loggingErr);
         //   });
       });
+
   }
 
   getLocale() {
     console.log("Lang 2", this.Languagei18n);
     this.isLanguageChangeDone = false;
-    if (this.Languagei18n === "en_US") {
+    if (this.Languagei18n === 'en_US') {
       console.log("working1");
       return "en";
     }
-    console.log("working2");
-    return "jp";
+      console.log("working2");
+      return "jp";
   }
+
 
   connectedCallback() {
     window.scrollTo(0, 0);
@@ -318,8 +324,7 @@ export default class Ccp2_Home extends LightningElement {
     let baseUrl = window.location.href;
     if (baseUrl.indexOf("/s/") !== -1) {
       this.dtfsaUrl = baseUrl.split("/s/")[0] + "/s/dtfsa-docs";
-      this.vehiclemanagementUrl =
-        baseUrl.split("/s/")[0] + "/s/vehiclemanagement";
+      this.vehiclemanagementUrl = baseUrl.split("/s/")[0] + "/s/vehiclemanagement";
       this.einvoiceUrl = baseUrl.split("/s/")[0] + "/s/einvoice";
     }
   }
@@ -347,6 +352,8 @@ export default class Ccp2_Home extends LightningElement {
       console.log("vehi isAdmin", this.isAdmin);
       console.log("vehi restrictLeasePermission", this.restrictLeasePermission);
 
+
+
       // this.allServices = data;
 
       // this.allServices.forEach((serv) => {
@@ -354,7 +361,7 @@ export default class Ccp2_Home extends LightningElement {
       //     this.hasDTFSA = serv.isActive;
       //   } else if (serv.apiName === "E_invoice") {
       //     this.hasEinvoice = serv.isActive;
-      //   }
+      //   } 
       //   else if (serv.apiName === "FUSO_CCP_External_Vehicle_management") {
       //     this.hasvehicleManagement = serv.isActive;
       //   }
@@ -372,30 +379,30 @@ export default class Ccp2_Home extends LightningElement {
   @track wiredTermsData;
 
   @wire(countsVehicle)
-  countExp(result) {
-    this.wiredTermsData = result; // Store result reference for refreshApex
-    const { data, error } = result;
+    countExp(result) {
+        this.wiredTermsData = result; // Store result reference for refreshApex
+        const { data, error } = result;
 
-    if (data) {
-      this.isLoading = true;
-      console.log("data counttt", data);
+        if (data) {
+            this.isLoading = true;
+            console.log("data counttt", data);
 
-      this.allVehicles = data.AccountVehCount;
-      this.userVehiclecnt = data.VehCountLoggedIn;
-      this.allexpvehcount = data.vehicleForExpiryCountAccount;
-      this.expvehicleCountofUser = data.expiringVehicleCount;
-      this.allrecallcount = data.vehicleRecallCountAccount;
-      this.vehrecallCountofUser = data.vehicleRecallCount;
+            this.allVehicles = data.AccountVehCount;
+            this.userVehiclecnt = data.VehCountLoggedIn;
+            this.allexpvehcount = data.vehicleForExpiryCountAccount;
+            this.expvehicleCountofUser = data.expiringVehicleCount;
+            this.allrecallcount = data.vehicleRecallCountAccount;
+            this.vehrecallCountofUser = data.vehicleRecallCount;
 
-      this.hasFirstLoginUser = !data.agreeTnC;
+            this.hasFirstLoginUser = !data.agreeTnC;
 
-      this.isLoading = false;
+            this.isLoading = false;
 
-      this.SiebelCode = data.siebelAccountCode;
-    } else {
-      console.log("error", error);
+            this.SiebelCode = data.siebelAccountCode
+        } else {
+            console.log("error", error);
+        }
     }
-  }
 
   @wire(getFeedbackques)
   feedbackQues({ data, error }) {
@@ -506,9 +513,7 @@ export default class Ccp2_Home extends LightningElement {
         if (this.invoiceNotif.length !== 0) {
           this.noNotifinv = false;
           this.invoiceDate = this.formatJapaneseDate(
-            new Date(this.invoiceNotif[0].CreatedDate)
-              .toISOString()
-              .split("T")[0]
+            new Date(this.invoiceNotif[0].CreatedDate).toISOString().split("T")[0]
           );
           this.invoicedesc = this.invoiceNotif[0].Description__c;
         } else {
@@ -594,7 +599,8 @@ export default class Ccp2_Home extends LightningElement {
   // }
 
   handleVehicleClick() {
-    window.location.href = this.vehiclemanagementUrl;
+    window.location.href =
+      this.vehiclemanagementUrl;
   }
 
   // handleInvoiceclick() {
@@ -604,26 +610,29 @@ export default class Ccp2_Home extends LightningElement {
 
   async handleInvoiceclick() {
     try {
-      // Apexが完了するまで待機
-      const result = await fetchEInvoiceInfoByUserId();
-      console.log(result);
-      if (result) {
-        // eInvoiceが有効な場合は画面遷移
-        window.location.href = this.einvoiceUrl;
-      } else {
-        /// eInvoiceが有効な場合はモーダルを表示
-        this.isShowModal1 = true;
-      }
+        // Apexが完了するまで待機
+        const result = await fetchEInvoiceInfoByUserId();
+        console.log(result);
+        if (result) {
+            // eInvoiceが有効な場合は画面遷移
+            window.location.href =
+            this.einvoiceUrl;
+        } else {
+            /// eInvoiceが有効な場合はモーダルを表示
+            this.isShowModal1 = true;
+          
+        }
     } catch (error) {
-      console.error("Apex呼び出しエラー:", error);
+        console.error('Apex呼び出しエラー:', error);
     }
   }
 
   handledtfsaclick() {
-    window.location.href = this.dtfsaUrl;
+    window.location.href =
+      this.dtfsaUrl;
   }
 
-  @track SiebelCode = "";
+  @track SiebelCode = '';
 
   handleFusoshopclick() {
     // const SiebelCode = this.vehicleDetails.siebelAccountCode;
@@ -641,7 +650,8 @@ export default class Ccp2_Home extends LightningElement {
     console.log(stateString);
     const url = `${baseUrl}&state=${stateString}${scope}`;
     console.log("urldev", url);
-    window.open(url, "_blank");
+    window.open(url, '_blank');
+
 
     // window.open(this.FusoShop, "_blank");
   }
@@ -650,7 +660,7 @@ export default class Ccp2_Home extends LightningElement {
     this.feedbackModal = true;
   }
 
-  hideModalBox() {
+  hideModalBox(){
     this.isShowModal1 = false;
   }
 
@@ -792,6 +802,7 @@ export default class Ccp2_Home extends LightningElement {
     }
     console.log("responses seleected incvvvv", JSON.stringify(this.responses));
   }
+
 
   handlesuggestionboxveh(event) {
     this.handlevalchange(event);
@@ -1025,188 +1036,168 @@ export default class Ccp2_Home extends LightningElement {
   //   window.location.href = baseUrl;
   // }
 
-  handleApplicationclick(event) {
+  handleApplicationclick(event){
     let name = event.target.dataset.name;
-    if (event.target.dataset.name === "dtfsa") {
-      if (this.restrictLeasePermission) {
+    if(event.target.dataset.name === "dtfsa"){
+      if(this.restrictLeasePermission){
         this.restrictModal = true;
-      } else {
-        const baseUrl =
-          window.location.href + "additional-services?instance=" + name;
+      }else{
+        const baseUrl = window.location.href + "additional-services?instance=" + name;
         window.location.href = baseUrl;
       }
-    } else {
-      const baseUrl =
-        window.location.href + "additional-services?instance=" + name;
+    }else{
+      const baseUrl = window.location.href + "additional-services?instance=" + name;
       window.location.href = baseUrl;
     }
   }
   // terms and conditions modal
-  @track hasScrolledToBottom = false;
-  background = Background;
-  @track TncData = [];
+   @track hasScrolledToBottom = false; 
+    background = Background;
+    @track TncData = [];
+  
+      get isOpen() {
+        return !this.hasScrolledToBottom; 
+      }
+  
+      handleOkTerms(event){
+        let Id = event.target.dataset.id;
+        console.log("dataId",Id);
+        let record = this.TncData.find(record => record.Id === Id);
 
-  get isOpen() {
-    return !this.hasScrolledToBottom;
-  }
-
-  handleOkTerms(event) {
-    let Id = event.target.dataset.id;
-    console.log("dataId", Id);
-    let record = this.TncData.find((record) => record.Id === Id);
-
-    if (record) {
-      record.isLoading = true;
-      this.TncData = [...this.TncData];
-    }
-    insertFlag({ termId: Id })
-      .then(() => {
-        let updatedRecord = this.TncData.find((rec) => rec.Id === Id);
-
-        if (updatedRecord) {
-          updatedRecord.isLoading = false;
-          this.TncData = [...this.TncData];
+        if (record) {
+            record.isLoading = true; 
+            this.TncData = [...this.TncData];
         }
-        console.log(
-          "the values : ",
-          updatedRecord.index,
-          "sw",
-          this.TncData.length
-        );
-        if (updatedRecord.index === this.TncData.length - 1) {
-          window.location.reload();
+          insertFlag({ termId: Id})
+                  .then(() => {
+                    let updatedRecord = this.TncData.find(rec => rec.Id === Id);
+                  
+                    if (updatedRecord) {
+                        updatedRecord.isLoading = false;
+                        this.TncData = [...this.TncData]; 
+                    }
+                    console.log("the values : ",updatedRecord.index ,"sw",this.TncData.length);
+                    if(updatedRecord.index === this.TncData.length - 1){
+                      window.location.reload();
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Error updating record:", error);
+                    let err = JSON.stringify(error);
+                    ErrorLog({
+                      lwcName: "ccp2_TnCModal",
+                      errorLog: err,
+                      methodName: "handleOk",
+                      ViewName:"Home Page",
+                      InterfaceName:"Salesforce",
+                      EventName: "Data fetch",
+                      ModuleName: "HomePage"
+                    })
+                      .then(() => {
+                        console.log("Error logged successfully in Salesforce");
+                      })
+                      .catch((loggingErr) => {
+                        console.error("Failed to log error in Salesforce:", loggingErr);
+                      });
+                  });
+      }
+      
+      handleScroll() {
+        const scrollableDiv = this.template.querySelector('.modal-description-terms');
+        if (!scrollableDiv) return;
+
+        const isScrollable = scrollableDiv.scrollHeight > scrollableDiv.clientHeight;
+    
+        if (!isScrollable) {
+            this.hasScrolledToBottom = true;
+            console.log("No scrolling required, button enabled!");
+            return;
         }
-      })
-      .catch((error) => {
-        console.error("Error updating record:", error);
-        let err = JSON.stringify(error);
-        ErrorLog({
-          lwcName: "ccp2_TnCModal",
-          errorLog: err,
-          methodName: "handleOk",
-          ViewName: "Home Page",
-          InterfaceName: "Salesforce",
-          EventName: "Data fetch",
-          ModuleName: "HomePage"
-        })
-          .then(() => {
-            console.log("Error logged successfully in Salesforce");
-          })
-          .catch((loggingErr) => {
-            console.error("Failed to log error in Salesforce:", loggingErr);
-          });
-      });
-  }
+    
+        // Console log the scroll properties
+        console.log("scrollTop:", scrollableDiv.scrollTop);
+        console.log("clientHeight:", scrollableDiv.clientHeight);
+        console.log("scrollHeight:", scrollableDiv.scrollHeight);
+        console.log("Reached Bottom?:", scrollableDiv.scrollTop + scrollableDiv.clientHeight >= scrollableDiv.scrollHeight);
+    
+        // Check if the user has scrolled to the bottom
+        if (scrollableDiv.scrollTop + scrollableDiv.clientHeight >= scrollableDiv.scrollHeight) {
+            this.hasScrolledToBottom = true; // Enable button permanently
+            console.log("User reached the bottom, button enabled!");
+        }
+      }
+      @wire(getTermsAndConditionData)
+              wiredTnCData({ error, data }) {
+                  if (data) {
+                      console.log("TnC data ",JSON.stringify(data));
+                      this.TncData = Object.keys(data).map((key, index) => ({
+                        ...data[key], // Spread existing data from each object (CCP, DTFSA, etc.)
+                        index: index,
+                        pdfurl: `${TNC}${data[key].pdf_Url__c}`,
+                        createdDate: this.formatJapaneseDate(data[key].CreatedDate),
+                        startDate: this.formatJapaneseDate(data[key].Start_Date__c),
+                        LastModified: this.formatJapaneseDate(data[key].lstDate),
+                        isLoading: true,
+                        LastModifiedDay: this.formatJapaneseDateSmall(data[key].lstDate),
+                        description0: data[key].Description.split("。")[0] + "。",
+                        description1: data[key].Description.split("。")[1],
+                        TrueA: data[key].Type === 'E-Invoice',
+                        TrueB: data[key].Type === 'DTFSA',
+                        TrueC: data[key].Type === 'CCP'
+                    }));
+                    //   this.TncData = data.map((record, index) => ({
+                    //     ...record,
+                    //     index: index,
+                    //     pdfurl: "https://dm595--ccpdev2.sandbox.my.site.com/resource/"+ record.pdf_Url__c,
+                    //     createdDate: this.formatJapaneseDate(record.Start_Date__c),
+                    //     LastModified:  this.formatJapaneseDate(record.LastModifiedDate),
+                    //     isLoading : true,
+                    //     LastModifiedDay: this.formatJapaneseDateSmall(record.LastModifiedDate)
+                    // }));
+                      console.log("TnC data main",JSON.stringify(this.TncData));
+                  } else if (error) {
+                    console.error('Error fetching Notification Data:', error);
+                    let err = JSON.stringify(error);
+                        ErrorLog({ lwcName: "ccp2_TnCModal", errorLog: err, methodName: "wire",
+                          ViewName:"Home Page",
+                          InterfaceName:"Salesforce",
+                          EventName: "Data fetch",
+                          ModuleName: "HomePage"
+                         })
+                  .then(() => {
+                    console.log("Error logged successfully in Salesforce");
+                  })
+                  .catch((loggingErr) => {
+                    console.error("Failed to log error in Salesforce:", loggingErr);
+                  });
+                  }
+              }
+  
+      formatJapaneseDate(isoDate) {
+              if (isoDate == undefined) {
+                return "";
+              }
+              const date = new Date(isoDate);
+              const year = date.getFullYear();
+              const month = date.getMonth() + 1;
+              const day = date.getDate();
+              return `${year}年${month}月${day}日`;
+      }
+      formatJapaneseDateSmall(isoDate) {
+              if (isoDate == undefined) {
+                return "";
+              }
+              const date = new Date(isoDate);
+              const year = date.getFullYear();
+              const month = date.getMonth() + 1;
+              const day = date.getDate();
+              return `${month}月${day}日`;
+      }
 
-  handleScroll() {
-    const scrollableDiv = this.template.querySelector(
-      ".modal-description-terms"
-    );
-    if (!scrollableDiv) return;
-
-    const isScrollable =
-      scrollableDiv.scrollHeight > scrollableDiv.clientHeight;
-
-    if (!isScrollable) {
-      this.hasScrolledToBottom = true;
-      console.log("No scrolling required, button enabled!");
-      return;
-    }
-
-    // Console log the scroll properties
-    console.log("scrollTop:", scrollableDiv.scrollTop);
-    console.log("clientHeight:", scrollableDiv.clientHeight);
-    console.log("scrollHeight:", scrollableDiv.scrollHeight);
-    console.log(
-      "Reached Bottom?:",
-      scrollableDiv.scrollTop + scrollableDiv.clientHeight >=
-        scrollableDiv.scrollHeight
-    );
-
-    // Check if the user has scrolled to the bottom
-    if (
-      scrollableDiv.scrollTop + scrollableDiv.clientHeight >=
-      scrollableDiv.scrollHeight
-    ) {
-      this.hasScrolledToBottom = true; // Enable button permanently
-      console.log("User reached the bottom, button enabled!");
-    }
-  }
-  @wire(getTermsAndConditionData)
-  wiredTnCData({ error, data }) {
-    if (data) {
-      console.log("TnC data ", JSON.stringify(data));
-      this.TncData = Object.keys(data).map((key, index) => ({
-        ...data[key], // Spread existing data from each object (CCP, DTFSA, etc.)
-        index: index,
-        pdfurl: `${TNC}${data[key].pdf_Url__c}`,
-        createdDate: this.formatJapaneseDate(data[key].CreatedDate),
-        startDate: this.formatJapaneseDate(data[key].Start_Date__c),
-        LastModified: this.formatJapaneseDate(data[key].lstDate),
-        isLoading: true,
-        LastModifiedDay: this.formatJapaneseDateSmall(data[key].lstDate),
-        description0: data[key].Description.split("。")[0] + "。",
-        description1: data[key].Description.split("。")[1],
-        TrueA: data[key].Type === "E-Invoice",
-        TrueB: data[key].Type === "DTFSA",
-        TrueC: data[key].Type === "CCP"
-      }));
-      //   this.TncData = data.map((record, index) => ({
-      //     ...record,
-      //     index: index,
-      //     pdfurl: "https://dm595--ccpdev2.sandbox.my.site.com/resource/"+ record.pdf_Url__c,
-      //     createdDate: this.formatJapaneseDate(record.Start_Date__c),
-      //     LastModified:  this.formatJapaneseDate(record.LastModifiedDate),
-      //     isLoading : true,
-      //     LastModifiedDay: this.formatJapaneseDateSmall(record.LastModifiedDate)
-      // }));
-      console.log("TnC data main", JSON.stringify(this.TncData));
-    } else if (error) {
-      console.error("Error fetching Notification Data:", error);
-      let err = JSON.stringify(error);
-      ErrorLog({
-        lwcName: "ccp2_TnCModal",
-        errorLog: err,
-        methodName: "wire",
-        ViewName: "Home Page",
-        InterfaceName: "Salesforce",
-        EventName: "Data fetch",
-        ModuleName: "HomePage"
-      })
-        .then(() => {
-          console.log("Error logged successfully in Salesforce");
-        })
-        .catch((loggingErr) => {
-          console.error("Failed to log error in Salesforce:", loggingErr);
-        });
-    }
-  }
-
-  formatJapaneseDate(isoDate) {
-    if (isoDate == undefined) {
-      return "";
-    }
-    const date = new Date(isoDate);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}年${month}月${day}日`;
-  }
-  formatJapaneseDateSmall(isoDate) {
-    if (isoDate == undefined) {
-      return "";
-    }
-    const date = new Date(isoDate);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${month}月${day}日`;
-  }
-
-  handleInvoff() {
-    this.isShowModal1 = false;
-  }
-  handlebackDtfsa() {
-    this.restrictModal = false;
-  }
+      handleInvoff(){
+        this.isShowModal1 = false;
+      }
+      handlebackDtfsa(){
+        this.restrictModal = false;
+      }
 }

@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from "lwc";
+import { LightningElement, track, wire } from 'lwc';
 import Vehicle_StaticResource from "@salesforce/resourceUrl/CCP2_Resources";
 import returnNotificationData from "@salesforce/apex/CCP2_Notification_Controller.returnNotificationData";
 import labelsBranch from "@salesforce/resourceUrl/ccp2_labels";
@@ -20,7 +20,7 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
   @track notificationPage = true;
   @track vehicledetailspage = false;
   @track isAllSelected = true;
-  @track vehicleId = "";
+  @track vehicleId = '';
   @track isVehicleSelected = false;
   @track uid = Id;
   @track isNewsSelected = false;
@@ -35,7 +35,7 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
   @track Notificationshowmore = false;
   @track NotificationshowmoreNews = false;
   @track Notificationd = [];
-  @track NotifdecShowmore = "";
+  @track NotifdecShowmore = '';
   @track d = false;
   @track notificationdata = [];
   @track hasNotificationVehicle = false;
@@ -48,16 +48,14 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
 
   get notificationDataLength() {
     if (Array.isArray(this.notificationdata)) {
-      console.log("Notification Data Length:", this.notificationdata.length);
+      console.log('Notification Data Length:', this.notificationdata.length);
       return this.notificationdata.length;
     } else {
-      console.log(
-        "Notification Data is not an array or is undefined:",
-        this.notificationdata
-      );
+      console.log('Notification Data is not an array or is undefined:', this.notificationdata);
       return 0;
     }
   }
+
 
   @wire(returnNotificationData)
   wiredNotificationData({ error, data }) {
@@ -106,7 +104,7 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
       this.handleallcardstoshow();
     } else if (error) {
       // Log any errors if they occur
-      console.error("Error fetching Notification Data:", error);
+      console.error('Error fetching Notification Data:', error);
       let err = JSON.stringify(error);
       ErrorLog({
         lwcName: "ccp2_NotificationCentre",
@@ -128,9 +126,9 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
   directBook = false;
   eInvoice = false;
 
-  @track notifDescription = "";
-  @track notifDate = "";
-  @track notifRegistration = "";
+  @track notifDescription = '';
+  @track notifDate = '';
+  @track notifRegistration = '';
   @track showMoremodal = false;
   @track isVehicleSelectedNotEmpty = false;
   @track isRecallSelectedNotEmpty = false;
@@ -154,41 +152,42 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
     return this.notificationdata && this.isTermsSelectedNotEmpty;
   }
 
-  connectedCallback() {
-    getAllServices({ userId: this.uid, refresh: 0 })
-      .then((res) => {
-        console.log("res", res);
+  connectedCallback(){
+     getAllServices({ userId: this.uid, refresh: 0 })
+          .then((res) => {
+            console.log("res",res);
 
-        res.forEach((elm) => {
-          if (elm.apiName === "FUSO_CCP_External_Financial_service") {
-            this.directBook = elm.isActive;
-          } else if (elm.apiName === "E_invoice") {
-            this.eInvoice = elm.isActive;
-          } else if (elm.apiName === "FUSO_CCP_External_Vehicle_management") {
-            this.vehicleList = elm.isActive;
-          }
-        });
-      })
-      .catch((error) => {
-        this.errors = JSON.stringify(error);
-        console.error("checkManagerUser errors:" + JSON.stringify(error));
-        let err = JSON.stringify(error);
-        ErrorLog({
-          lwcName: "ccp2_NotificationCentre",
-          errorLog: err,
-          methodName: "getAllServices",
-          ViewName: "FusoHeader",
-          InterfaceName: "Salesforce",
-          EventName: "Data fetch",
-          ModuleName: "Header"
-        })
-          .then(() => {
-            console.log("Error logged successfully in Salesforce");
+            res.forEach((elm) => {
+              if (elm.apiName === "FUSO_CCP_External_Financial_service") {
+                this.directBook = elm.isActive;
+              } else if (elm.apiName === "E_invoice") {
+                this.eInvoice = elm.isActive;
+              }
+              else if (elm.apiName === "FUSO_CCP_External_Vehicle_management") {
+                this.vehicleList = elm.isActive;
+              }
+            });
           })
-          .catch((loggingErr) => {
-            console.error("Failed to log error in Salesforce:", loggingErr);
+          .catch((error) => {
+            this.errors = JSON.stringify(error);
+            console.error("checkManagerUser errors:" + JSON.stringify(error));
+            let err = JSON.stringify(error);
+            ErrorLog({
+              lwcName: "ccp2_NotificationCentre",
+              errorLog: err,
+              methodName: "getAllServices",
+              ViewName: "FusoHeader",
+              InterfaceName: "Salesforce",
+              EventName: "Data fetch",
+              ModuleName: "Header"
+            })
+              .then(() => {
+                console.log("Error logged successfully in Salesforce");
+              })
+              .catch((loggingErr) => {
+                console.error("Failed to log error in Salesforce:", loggingErr);
+              });
           });
-      });
   }
 
   handleallcardstoshow() {
@@ -197,7 +196,7 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
       return;
     }
 
-    this.notificationdata.forEach((group) => {
+    this.notificationdata.forEach(group => {
       if (!group.notifications || !Array.isArray(group.notifications)) {
         console.error("Invalid notifications structure in group");
         return;
@@ -209,7 +208,7 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
       group.showDateE = false;
       group.showDateF = false;
       group.date = this.formatJapaneseDate(group.date);
-      group.notifications.forEach((notification) => {
+      group.notifications.forEach(notification => {
         if (!notification) {
           console.error("Invalid notification object");
           return;
@@ -219,7 +218,7 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
         // const c = false;
         // const d = false;
         // const Notificationshowmore = false;
-        // const fullDesc = notification.Description || "";
+        // const fullDesc = notification.Description || ""; 
 
         notification["a"] = false;
         notification["b"] = false;
@@ -234,39 +233,26 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
         notification["newsTitleTrimmed"] = "";
         notification["fullDesc"] = notification.Description || "";
 
+
         const formatdate = this.formatJapaneseDate(notification.Date);
         notification.Date = formatdate;
         if (notification.newsDescription) {
-          notification.fullNewsDescription = this.convertRichTextToPlainText(
-            notification.newsDescription
-          );
-          notification.trimmedNewsDescription = this.substringToProperLength(
-            notification.fullNewsDescription,
-            149
-          );
+          notification.fullNewsDescription = this.convertRichTextToPlainText(notification.newsDescription);
+          notification.trimmedNewsDescription = this.substringToProperLength(notification.fullNewsDescription, 149);
         }
         if (notification.newsTitle) {
-          notification.newsTitleTrimmed = this.substringToProperLength(
-            notification.newsTitle,
-            76
-          );
+          notification.newsTitleTrimmed = this.substringToProperLength(notification.newsTitle, 76);
         }
         if (notification.Description && notification.Type === "dtfsa") {
-          notification.Description = notification.Description.replaceAll(
-            ",",
-            "、"
-          );
+          notification.Description = notification.Description.replaceAll(",", "、");
         }
 
+
         if (notification.Description && notification.Description.length > 90) {
-          notification.Description =
-            notification.Description.slice(0, 90) + "...";
+          notification.Description = notification.Description.slice(0, 90) + '...';
           notification.Notificationshowmore = true;
         }
-        if (
-          notification.newsDescription &&
-          notification.newsDescription.length > 90
-        ) {
+        if (notification.newsDescription && notification.newsDescription.length > 90) {
           //  notification.Description = notification.Description.slice(0, 90) + '...';
           notification.NotificationshowmoreNews = true;
         }
@@ -312,7 +298,7 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
             notification.e = true;
             group.showDateE = true;
             if (notification.URL) {
-              notification.URL = `${tncCustomlabel}${notification.URL}`;
+              notification.URL = `${tncCustomlabel}${notification.URL}`
             }
             break;
           case "Terms":
@@ -325,7 +311,7 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
         }
       });
 
-      group.notifications.forEach((notification) => {
+      group.notifications.forEach(notification => {
         // If any notification has b, c, or d as true, set the respective flag to false
         if (notification.b) {
           this.hasNotificationVehicle = false;
@@ -343,6 +329,7 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
           this.hasNotificationTerms = false;
         }
       });
+
     });
   }
   convertRichTextToPlainText(richText) {
@@ -350,6 +337,7 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
     tempDiv.innerHTML = richText;
     return tempDiv.textContent || tempDiv.innerText || "";
   }
+
 
   handleAllclick() {
     window.scrollTo(0, 0);
@@ -453,12 +441,12 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
   }
 
   handleShowmoreClick(event) {
-    const notificationCard = event.target.closest(".notification-card");
+    const notificationCard = event.target.closest('.notification-card');
     const id = notificationCard ? notificationCard.dataset.id : null;
     if (id) {
       const matchingNotification = this.notificationdata
-        .flatMap((group) => group.notifications)
-        .find((notification) => notification.id === id);
+        .flatMap(group => group.notifications)
+        .find(notification => notification.id === id);
       this.notifDescription = matchingNotification.fullDesc;
       this.notifRegistration = matchingNotification.vehicleNumber;
       this.notifDate = matchingNotification.Date;
@@ -467,13 +455,13 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
     this.showMoremodal = true;
   }
   handleShowmoreClickNews(event) {
-    const notificationCard = event.target.closest(".notification-card");
+    const notificationCard = event.target.closest('.notification-card');
     const id = notificationCard ? notificationCard.dataset.id : null;
-    console.log("id of click", id);
+    console.log("id of click", id)
     if (id) {
       const matchingNotification = this.notificationdata
-        .flatMap((group) => group.notifications)
-        .find((notification) => notification.id === id);
+        .flatMap(group => group.notifications)
+        .find(notification => notification.id === id);
       console.log("edc2", matchingNotification);
       this.notifDescription = matchingNotification.newsDescription;
       this.notifRegistration = matchingNotification.newsTitle;
@@ -484,12 +472,12 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
   }
   @track showMoremodalTerms = false;
   handleShowmoreClickTerms(event) {
-    const notificationCard = event.target.closest(".notification-card");
+    const notificationCard = event.target.closest('.notification-card');
     const id = notificationCard ? notificationCard.dataset.id : null;
     if (id) {
       const matchingNotification = this.notificationdata
-        .flatMap((group) => group.notifications)
-        .find((notification) => notification.id === id);
+        .flatMap(group => group.notifications)
+        .find(notification => notification.id === id);
       this.notifDescription = matchingNotification.newsDescription;
       this.notifRegistration = matchingNotification.newsTitle;
       this.notifDate = matchingNotification.Date;
@@ -499,18 +487,19 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
     this.showMoremodalTerms = true;
   }
   GotoDetailsPageModal(event) {
-    const vehicleDetailElement = event.target.closest(".check-details");
+    const vehicleDetailElement = event.target.closest('.check-details');
 
     if (vehicleDetailElement) {
-      const vehicleIdMain = vehicleDetailElement.getAttribute("data-id");
+      const vehicleIdMain = vehicleDetailElement.getAttribute('data-id');
       this.vehicleId = vehicleIdMain;
       let url = `/s/vehicle-details?vehicleId=${this.vehicleId}&instance=recall`;
       window.location.href = url;
       // this.vehicledetailspage = true;
       // window.scrollTo(0,0);
       // this.notificationPage = false;
+
     } else {
-      console.error("Vehicle detail element not found");
+      console.error('Vehicle detail element not found');
     }
   }
   gotodtfsa(event) {
@@ -532,18 +521,19 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
   }
 
   GotoDetailsPage(event) {
-    const vehicleDetailElement = event.target.closest(".vehicledetailmove");
+    const vehicleDetailElement = event.target.closest('.vehicledetailmove');
 
     if (vehicleDetailElement) {
-      const vehicleIdMain = vehicleDetailElement.getAttribute("data-id");
+      const vehicleIdMain = vehicleDetailElement.getAttribute('data-id');
       this.vehicleId = vehicleIdMain;
       let url = `/s/vehicle-details?vehicleId=${this.vehicleId}&instance=recall`;
       window.location.href = url;
       // this.vehicledetailspage = true;
       // window.scrollTo(0,0);
       // this.notificationPage = false;
+
     } else {
-      console.error("Vehicle detail element not found");
+      console.error('Vehicle detail element not found');
     }
   }
   GotoDetailsPageExpiry() {
@@ -583,50 +573,52 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
   //     return `${year}-${month}-${day}`;
   // }
 
+
+
   get allSelectedClass() {
-    return this.isAllSelected ? "border-right-black" : "";
+    return this.isAllSelected ? 'border-right-black' : '';
   }
 
   get vehicleSelectedClass() {
-    return this.isVehicleSelected ? "border-right-black" : "";
+    return this.isVehicleSelected ? 'border-right-black' : '';
   }
 
   get newsSelectedClass() {
-    return this.isNewsSelected ? "border-right-black" : "";
+    return this.isNewsSelected ? 'border-right-black' : '';
   }
 
   get EInvoiceSelectedClass() {
-    return this.isEInvoice ? "border-right-black" : "";
+    return this.isEInvoice ? 'border-right-black' : '';
   }
 
   get FinanceSelectedClass() {
-    return this.isFinanceSelected ? "border-right-black" : "";
+    return this.isFinanceSelected ? 'border-right-black' : '';
   }
   get TermsSelectedClass() {
-    return this.isTermsSelected ? "border-right-black" : "";
+    return this.isTermsSelected ? 'border-right-black' : '';
   }
 
   get allSelectedLabel() {
-    return this.isAllSelected ? "text-right-black" : "";
+    return this.isAllSelected ? 'text-right-black' : '';
   }
 
   get vehicleSelectedLabel() {
-    return this.isVehicleSelected ? "text-right-black" : "";
+    return this.isVehicleSelected ? 'text-right-black' : '';
   }
 
   get newsSelectedLabel() {
-    return this.isNewsSelected ? "text-right-black" : "";
+    return this.isNewsSelected ? 'text-right-black' : '';
   }
 
   get eInvoiceSelectedLabel() {
-    return this.isEInvoice ? "text-right-black" : "";
+    return this.isEInvoice ? 'text-right-black' : '';
   }
 
   get financeSelectedLabel() {
-    return this.isFinanceSelected ? "text-right-black" : "";
+    return this.isFinanceSelected ? 'text-right-black' : '';
   }
   get TermsSelectedLabel() {
-    return this.isTermsSelected ? "text-right-black" : "";
+    return this.isTermsSelected ? 'text-right-black' : '';
   }
 
   loadI18nextLibrary() {
@@ -656,7 +648,8 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
       .then(() => {
         return this.loadLabels(); // Load labels after i18next is ready
       })
-      .then(() => {})
+      .then(() => {
+      })
       .catch((error) => {
         console.error("Error loading language or labels: ", error);
         let err = JSON.stringify(error);
@@ -739,7 +732,7 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
     Date: "",
     Type: "",
     regno: []
-  };
+  }
 
   OpenExpiryModal(event) {
     const targetElement = event.currentTarget;
@@ -748,8 +741,8 @@ export default class Ccp2_NotificationsCentre extends LightningElement {
     this.termsdata.Title = targetElement.dataset.title;
     this.termsdata.Date = targetElement.dataset.date;
     this.termsdata.Type = targetElement.dataset.type;
-    const regnoArray = this.termsdata.Type.split(", ");
-    this.termsdata.regno = regnoArray.map((reg) => ({ regnumber: reg }));
+    const regnoArray = this.termsdata.Type.split(', ');
+    this.termsdata.regno = regnoArray.map(reg => ({ regnumber: reg }));
     this.ShowExpiryModal = true;
   }
   CloseExpiryModal() {
