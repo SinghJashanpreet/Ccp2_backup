@@ -2,18 +2,28 @@
 import { LightningElement, track, wire } from "lwc";
 import { getPicklistValues } from "lightning/uiObjectInfoApi";
 import Vehicle_StaticResource from "@salesforce/resourceUrl/CCP2_Resources";
-import vehicleModalData from "@salesforce/apex/CCP2_VehicleDetailController.vehicleDetail";
+import vehicleModalData from "@salesforce/apex/CCP2_VehicleDetailController.vehicleForCalendar";
 
 import VEHICLE_NAME from "@salesforce/schema/ccp2_Registered_Vehicle__c.Vehicle_Name__c";
 import VEHICLE_TYPE from "@salesforce/schema/ccp2_Registered_Vehicle__c.Vehicle_Type__c";
+import SERVICE_TYPE from "@salesforce/schema/CCP2_Maintenance_Booking__c.Service_Type__c";
+import SERVICE_FACTORY from "@salesforce/schema/CCP2_Maintenance_Booking__c.Service_Factory__c";
+
 import branchOptionsApi from "@salesforce/apex/ccp2_download_recall_controller.getBranchSelection";
-import maintainenceModalData from "@salesforce/apex/CCP2_CalendarController.getMaintenanceByVehicleId";
+import maintainenceModalData from "@salesforce/apex/CCP2_Notification_Controller.getMaintenanceDetails";
 import getCalenderData from "@salesforce/apex/CCP2_CalendarController.getCalendarDataWithFilter";
+import createCalenderRecords from "@salesforce/apex/CCP2_MaintenanceBookingProcessor.maintenanceBookingsCalendar";
+import getHolidayList from "@salesforce/apex/CCP2_CalendarController.getHolidayList";
 
 import labelsUser from "@salesforce/resourceUrl/ccp2_labels";
 import i18nextStaticResource from "@salesforce/resourceUrl/i18next";
 import Languagei18n from "@salesforce/apex/CCP2_userData.userLanguage";
 import ErrorLog from "@salesforce/apex/CCP2_lwc_ErrorLogs.createLwcErrorLog";
+
+import { refreshApex } from "@salesforce/apex";
+import Id from "@salesforce/user/Id";
+
+// import getUserServices from "@salesforce/apex/CCP2_userController.permissionValuesAccessControl";
 
 const BACKGROUND_IMAGE_PC =
   Vehicle_StaticResource + "/CCP2_Resources/Common/Main_Background.webp";
@@ -32,17 +42,27 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   @track FilterMaintainFactoryDot = false;
   @track FilterMaintainTypeDot = false;
   @track FilterOthersDot = false;
+  @track FilterOneDot = false;
+  @track SortOneDot = false;
+  @track showSortSelection = false;
 
   @track currentDates = [];
   @track startDate = new Date();
   @track TotalRecallCount;
   @track totalVehicles;
+  @track noedit = false;
+  @track refreshpage = 1;
 
   @track vehicleStoredData = [];
   @track vehicleAndDatesData = [];
   @track showModalload = false;
 
   @track onoffdata = "";
+
+  // @track uid = Id;
+
+  // @track allServices = [];
+  // @track hasVehicleManagement = true;
 
   @track vehicleNearExpCount = 0;
   @track wiredCalVehResult;
@@ -61,29 +81,40 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       value: "すべて",
       selected: true,
       DivLegend1: false,
-      DivLegend2: false
+      DivLegend2: false,
+      DivLegend3: false
+    },
+    {
+      label: "ふそう",
+      value: "ふそう",
+      selected: true,
+      DivLegend1: false,
+      DivLegend2: false,
+      DivLegend3: true
     },
     {
       label: "自社",
       value: "自社",
       selected: true,
       DivLegend1: true,
-      DivLegend2: false
+      DivLegend2: false,
+      DivLegend3: false
     },
     {
       label: "ふそう/自社 以外",
       value: "ふそう/自社 以外",
       selected: true,
       DivLegend2: true,
-      DivLegend1: false
+      DivLegend1: false,
+      DivLegend3: false
     }
   ];
   @track yearPicklistArray = [];
   @track showyearsPickList = false;
   @track OtherArray = [
     { label: "すべて", selected: true },
-    { label: "三菱ふそう工場休日を表示", selected: true },
-    { label: "車検満了日を表示", selected: true, showIcon: true }
+    { label: "車検満了日を表示", selected: true, showIcon: true },
+    { label: "三菱ふそう工場休日を表示", selected: true }
   ];
   @track CalenderSwapsmall = false;
   @track colordetailsModal = false;
@@ -94,9 +125,26 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
 
   @track isLoading = true;
 
-  connectedCallback() {
-    const today = new Date();
+  @track schEdit = true;
 
+  connectedCallback() {
+    // this.fetchUserServices();
+    setTimeout(() => {
+      this.createFusoHistoryRecords()
+        .then((res) => {
+          if (res === "Done") {
+            refreshApex(this.wiredCalVehResult);
+
+            setTimeout(() => {
+              refreshApex(this.wiredCalVehResult);
+            }, 800);
+          }
+        })
+        .catch((e) => console.error("createFusoHistoryRecords", e));
+    }, 1500);
+
+    const today = new Date();
+    this.fetchHolidayData();
     // Two years before
     const twoYearsBefore = new Date(today);
     twoYearsBefore.setFullYear(today.getFullYear() - 2);
@@ -122,11 +170,15 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     this.afterDay = twoYearsAfter.getDate();
 
     // Log Results
-    this.wiredServiceTypePicklist();
-    this.wiredServiceFactoryPicklist();
+    //this.wiredServiceTypePicklist();
+    //this.wiredServiceFactoryPicklist();
     this.wiredOtherPicklist();
     this.currentDates = this.populateDatesRange(this.startDate, 31);
     this.populateCalendar();
+
+    setTimeout(() => {
+      refreshApex(this.wiredCalVehResult);
+    }, 800);
   }
   disconnectedCallback() {
     document.removeEventListener("click", this.handleOutsideClickA);
@@ -136,6 +188,9 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     document.removeEventListener("click", this.handleOutsideClickF);
     document.removeEventListener("click", this.handleOutsideClickG);
     document.removeEventListener("click", this.handleOutsideClickH);
+    document.removeEventListener("click", this.handleOutsideClickI);
+    document.removeEventListener("click", this.handleOutsideClickJ);
+    document.removeEventListener("click", this.handleOutsideClickK);
   }
 
   renderedCallback() {
@@ -168,13 +223,76 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       document.addEventListener("click", this.handleOutsideClickH.bind(this));
       this.outsideClickHandlerAdded7 = true;
     }
+    if (!this.outsideClickHandlerAdded8) {
+      document.addEventListener("click", this.handleOutsideClickI.bind(this));
+      this.outsideClickHandlerAdded8 = true;
+    }
+    if (!this.outsideClickHandlerAdded9) {
+      document.addEventListener("click", this.handleOutsideClickJ.bind(this));
+      this.outsideClickHandlerAdded9 = true;
+    }
+    if (!this.outsideClickHandlerAdded10) {
+      document.addEventListener("click", this.handleOutsideClickK.bind(this));
+      this.outsideClickHandlerAdded10 = true;
+    }
     if (this.isLanguageChangeDone) {
       this.loadLanguage();
     }
   }
 
+  get currentYearNoticeText() {
+    let startDateObj = new Date(this.startDate);
+    startDateObj.setDate(startDateObj.getDate() + 31);
+    startDateObj.setFullYear(startDateObj.getFullYear() - 1);
+    return startDateObj.getFullYear();
+  }
+
+  get nextYearNoticeText() {
+    let startDateObj = new Date(this.startDate);
+    startDateObj.setDate(startDateObj.getDate() + 31);
+    return startDateObj.getFullYear();
+  }
+
+  get showNoticeForFusoHoliday() {
+    let startDateObj = new Date(this.startDate);
+    startDateObj.setDate(startDateObj.getDate() + 31);
+    let currentDateObj = new Date();
+    if (
+      currentDateObj.getMonth() + 1 >= 10 &&
+      startDateObj.getFullYear() === currentDateObj.getFullYear() + 1
+    )
+      return false;
+
+    return startDateObj.getFullYear() >= currentDateObj.getFullYear() + 1;
+  }
+
   @track picklist1Loader = true;
   @track picklist2Loader = true;
+
+  // fetchUserServices() {
+  //   getUserServices({ userId: this.uid, refresh: 0 })
+  //     .then((data) => {
+  //       if (data) {
+  //         this.allServices = data;
+  //         this.allServices.forEach((serv) => {
+  //           if (serv.apiName === "FUSO_CCP_External_Vehicle_management") {
+  //             this.hasVehicleManagement = serv.isActive;
+  //             if (this.hasVehicleManagement === false) {
+  //               let baseUrl = window.location.href;
+  //               let Newurl;
+  //               if (baseUrl.indexOf("/s/") !== -1) {
+  //                 Newurl = baseUrl.split("/s/")[0] + "/s/error";
+  //               }
+  //               window.location.href = Newurl;
+  //             }
+  //           }
+  //         });
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("User Services Fetching error:", error);
+  //     });
+  // }
 
   loadLanguage() {
     Languagei18n() // Assuming getLanguageI18n is the apex method that fetches the language.
@@ -186,7 +304,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         return this.loadLabels(); // Load labels after i18next is ready
       })
       .then(() => {
-        console.log("Upload Label: ", this.isLanguageChangeDone); // Check language change status
+        // Check language change status
       })
       .catch((error) => {
         console.error("Error loading language or labels: ", error);
@@ -194,11 +312,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         ErrorLog({
           lwcName: "ccp2_VehicleMaintenanceCalendar",
           errorLog: err,
-          methodName: "Load Language"
+          methodName: "Load Language",
+          ViewName: "Vehicle Maintainence Calendar",
+          InterfaceName: "Salesforce",
+          EventName: "Data fetch",
+          ModuleName: "Calendar"
         })
-          .then(() => {
-            console.log("Error logged successfully in Salesforce");
-          })
+          .then(() => {})
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
@@ -241,8 +361,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           })
           .then(() => {
             this.labels2 = i18next.store.data[userLocale].translation;
-            console.log("Delete Detail User Locale: ", userLocale);
-            console.log("Delete Detail User Labels: ", this.labels2);
           });
       })
       .catch((error) => {
@@ -251,11 +369,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         ErrorLog({
           lwcName: "ccp2_VehicleMaintenanceCalendar",
           errorLog: err,
-          methodName: "Load Labels"
+          methodName: "Load Labels",
+          ViewName: "Vehicle Maintainence Calendar",
+          InterfaceName: "Salesforce",
+          EventName: "Data fetch",
+          ModuleName: "Calendar"
         })
-          .then(() => {
-            console.log("Error logged successfully in Salesforce");
-          })
+          .then(() => {})
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
@@ -263,66 +383,64 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   }
 
   getLocale() {
-    console.log("Lang 2", this.Languagei18n);
     this.isLanguageChangeDone = false;
     if (this.Languagei18n === "en_US") {
-      console.log("working1");
       return "en";
     }
     return "jp";
   }
 
-  wiredServiceTypePicklist() {
-    let isAllSelected = this.maintainenceType
-      .filter((elm) => elm.label !== "すべて")
-      .every((item) => item.selected);
-    this.maintainenceType = this.maintainenceType.map((elm) => {
-      if (elm.label === "すべて") {
-        return { ...elm, selected: isAllSelected };
-      }
-      return elm;
-    });
-    this.finalVehicleTypeList = [];
-    this.maintainenceType.map((elm) => {
-      if (elm.label !== "すべて" && elm.selected === true) {
-        this.finalVehicleTypeList.push(elm.label);
-      }
-      return elm;
-    });
+  // wiredServiceTypePicklist() {
+  //   let isAllSelected = this.maintainenceType
+  //     .filter((elm) => elm.label !== "すべて")
+  //     .every((item) => item.selected);
+  //   this.maintainenceType = this.maintainenceType.map((elm) => {
+  //     if (elm.label === "すべて") {
+  //       return { ...elm, selected: isAllSelected };
+  //     }
+  //     return elm;
+  //   });
+  //   this.finalVehicleTypeList = [];
+  //   this.maintainenceType.map((elm) => {
+  //     if (elm.label !== "すべて" && elm.selected === true) {
+  //       this.finalVehicleTypeList.push(elm.label);
+  //     }
+  //     return elm;
+  //   });
 
-    this.finalFilterJson = {
-      ...this.finalFilterJson,
-      serviceType: this.finalVehicleTypeList
-    };
+  //   this.finalFilterJson = {
+  //     ...this.finalFilterJson,
+  //     serviceType: this.finalVehicleTypeList
+  //   };
 
-    this.picklist1Loader = false;
-  }
+  //   this.picklist1Loader = false;
+  // }
 
-  wiredServiceFactoryPicklist() {
-    let isAllSelected = this.maintainenceFactory
-      .filter((elm) => elm.label !== "すべて")
-      .every((item) => item.selected);
-    this.maintainenceFactory = this.maintainenceFactory.map((elm) => {
-      if (elm.label === "すべて") {
-        return { ...elm, selected: isAllSelected };
-      }
-      return elm;
-    });
-    this.finalVehicleFactoryList = [];
-    this.maintainenceFactory.map((elm) => {
-      if (elm.label !== "すべて" && elm.selected === true) {
-        this.finalVehicleFactoryList.push(elm.label);
-      }
-      return elm;
-    });
+  // wiredServiceFactoryPicklist() {
+  //   let isAllSelected = this.maintainenceFactory
+  //     .filter((elm) => elm.label !== "すべて")
+  //     .every((item) => item.selected);
+  //   this.maintainenceFactory = this.maintainenceFactory.map((elm) => {
+  //     if (elm.label === "すべて") {
+  //       return { ...elm, selected: isAllSelected };
+  //     }
+  //     return elm;
+  //   });
+  //   this.finalVehicleFactoryList = [];
+  //   this.maintainenceFactory.map((elm) => {
+  //     if (elm.label !== "すべて" && elm.selected === true) {
+  //       this.finalVehicleFactoryList.push(elm.label);
+  //     }
+  //     return elm;
+  //   });
 
-    this.finalFilterJson = {
-      ...this.finalFilterJson,
-      serviceFactory: this.finalVehicleFactoryList
-    };
+  //   this.finalFilterJson = {
+  //     ...this.finalFilterJson,
+  //     serviceFactory: this.finalVehicleFactoryList
+  //   };
 
-    this.picklist2Loader = false;
-  }
+  //   this.picklist2Loader = false;
+  // }
   wiredOtherPicklist() {
     this.finalFilterJson = {
       ...this.finalFilterJson,
@@ -333,21 +451,17 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
 
   @wire(getCalenderData, {
     uiStartStr: "$startDateObj",
-    jsonInput: "$jsonParameterForVehicleClass"
+    page: "$currentPage",
+    jsonInput: "$jsonParameterForVehicleClass",
+    appliedSort: "$sortSelectedValue"
   })
   handledata3(result) {
-    console.log(
-      "Calender params:- ",
-      this.jsonParameterForVehicleClass,
-      " ",
-      this.currentPage,
-      " ",
-      this.startDateObj
-    );
     this.wiredCalVehResult = result;
     const { data, error } = result;
+
     if (data) {
-      console.log("data of getCalenderData free:-", data);
+      console.log("calendar data : - ", data);
+
       this.vehicleNearExpCount = data.expiringVehicleCount;
       this.vehiclesCount = data.vehicleCount;
       this.TotalRecallCount = data.vehicleRecallCount;
@@ -363,11 +477,10 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           13
         );
 
-        const combinedNameType =
-          elm?.vehicle?.Vehicle_Name__c + " - " + elm?.vehicle?.Vehicle_Type__c;
+        const combinedNameType = `${elm?.vehicle?.Sub_Brand_Name__c || ""} - ${elm?.vehicle?.Vehicle_Type__c || ""}`;
         const ellipseCombinedNameType = this.substringToProperLength(
           combinedNameType,
-          15
+          16
         );
 
         let dates = elm?.dates.map((dateElm, index) => {
@@ -408,10 +521,23 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
                   }
 
                   let width = dateElm?.width[i];
-                  if (index === 30 && dateElm?.isEnd[i] === false)
+                  if (
+                    index === 30 &&
+                    dateElm?.isStart[i] === false &&
+                    dateElm?.isEnd[i] === false
+                  )
                     width = width + "min-width: calc(100%);";
+                  else if (
+                    index === 30 &&
+                    dateElm?.isStart[i] === true &&
+                    dateElm?.isEnd[i] === false
+                  )
+                    width = width + "left: 0px; padding-left: 5px;";
 
-                  if (index === 0) {
+                  if (index === 0 && dateElm?.isStart[i] === false) {
+                    width =
+                      width + "z-index: 3; left: 0px; width: calc(100% - 1px);";
+                  } else if (index === 0 && dateElm?.isStart[i] === true) {
                     width = width + "z-index: 3;";
                   }
 
@@ -425,6 +551,9 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
                   };
                 })
               : [];
+
+          // this.populateDatesRange(this.startDate, 31);
+          this.currentDates = this.populateDatesRange(this.startDate, 31);
           return {
             ...dateElm,
             classForBoxes: classForBoxes,
@@ -444,10 +573,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         };
       });
 
-      console.log(
-        "data of getCalenderData after modification:-",
-        JSON.stringify(this.vehicleStoredData)
-      );
       //   this.combineVehicleMaintainaceData();
       this.yearPicklistArray = this.generateYearMonthArray();
 
@@ -469,27 +594,111 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       ErrorLog({
         lwcName: "ccp2_VehicleMaintenanceCalendar",
         errorLog: err,
-        methodName: "handleData3"
+        methodName: "handleData3",
+        ViewName: "Vehicle Maintainence Calendar",
+        InterfaceName: "Salesforce",
+        EventName: "Data fetch",
+        ModuleName: "Calendar"
       })
-        .then(() => {
-          console.log("Error logged successfully in Salesforce");
-        })
+        .then(() => {})
         .catch((loggingErr) => {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });
     }
   }
 
+  async createFusoHistoryRecords() {
+    let res;
+    await createCalenderRecords()
+      .then((result) => {
+        console.log("Data in createFusoHistoryRecords", result);
+        res = result;
+      })
+      .catch((err) => {
+        console.error("Error in createFusoHistoryRecords", err);
+        let error = JSON.stringify(err);
+        ErrorLog({
+          lwcName: "ccp2_VehicleMaintenanceCalendar",
+          errorLog: error,
+          methodName: "fetchHolidayData",
+          ViewName: "Vehicle Maintainence Calendar",
+          InterfaceName: "Data Cloud",
+          EventName: "Data fetch",
+          ModuleName: "Calendar"
+        })
+          .then(() => {})
+          .catch((loggingErr) => {
+            console.error("Failed to log error in Salesforce:", loggingErr);
+          });
+      });
+    return res;
+  }
+
+  @track holidaydata = {};
+
+  fetchHolidayData() {
+    return getHolidayList()
+      .then((result) => {
+        console.log("data from fetchHoliday : - ", result);
+        this.holidaydata = {
+          nationalHoliday: result?.nationalHoliday?.map(
+            (item) => item.Holiday_Date__c
+          ),
+          fusoHoliday: result?.fusoHoliday?.map((item) => item.Holiday_Date__c)
+        };
+
+        this.currentDates = this.populateDatesRange(this.startDate, 31);
+      })
+      .catch((error) => {
+        let err = JSON.stringify(error);
+        ErrorLog({
+          lwcName: "ccp2_VehicleMaintenanceCalendar",
+          errorLog: err,
+          methodName: "fetchHolidayData",
+          ViewName: "Vehicle Maintainence Calendar",
+          InterfaceName: "Salesforce",
+          EventName: "Data fetch",
+          ModuleName: "Calendar"
+        })
+          .then(() => {})
+          .catch((loggingErr) => {
+            console.error("Failed to log error in Salesforce:", loggingErr);
+          });
+      });
+  }
+
+  // @wire(getHolidayList)
+  // handledata10(result) {
+  //   const { data, error } = result;
+  //   if (data) {
+  //     this.holidaydata = data.map(item => item.Holiday_Date__c);
+
+  //
+  //   } else if (error) {
+  //     let err = JSON.stringify(error);
+  //     ErrorLog({
+  //       lwcName: "ccp2_VehicleMaintenanceCalendar",
+  //       errorLog: err,
+  //       methodName: "handleData4"
+  //     })
+  //       .then(() => {
+  //
+  //       })
+  //       .catch((loggingErr) => {
+  //         console.error("Failed to log error in Salesforce:", loggingErr);
+  //       });
+  //   }
+  // }
   getTrimmedServiceType(serviceType) {
-    if (serviceType === "3か月点検") {
+    if (serviceType === "3ヵ月点検") {
       return "点3";
     } else if (serviceType === "一般整備") {
       return "一般";
     } else if (serviceType === "車検整備") {
       return "車検";
-    } else if (serviceType === "6か月点検") {
+    } else if (serviceType === "6ヵ月点検") {
       return "点6";
-    } else if (serviceType === "12か月点検") {
+    } else if (serviceType === "12ヵ月点検") {
       return "点12";
     }
     return "点24";
@@ -521,7 +730,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       }
       tempString += char;
     }
-    return tempString + (charCount >= limit ? "..." : "");
+    return tempString + (charCount > limit ? "..." : "");
   }
 
   populateDatesRange(startDate, days) {
@@ -530,11 +739,11 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       if (this.showMonthlyCalendar === true) {
         for (let i = 0; i < days; i++) {
           let date = new Date(startDate);
+          let month = date.getMonth();
           date.setDate(date.getDate() + i);
-          let classForBoxes =
-            date.getDay() === 0 || date.getDay() === 6
-              ? "Calender-tile"
-              : "Calender-tile-grey";
+          let classForBoxes = "Calender-tile";
+          // date.getDay() === 0 || date.getDay() === 6
+          // : "Calender-tile-grey";
           // let borderround = "";
           // if (this.vehicleIndex === 1 && i === 0) {
           //   borderround = "border-radius: 8px 0px 0px 0px;";
@@ -547,19 +756,56 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           // } else {
           //     borderround = "border-radius: 0px;";
           // }
+          let formattedDate = date.toLocaleDateString("en-CA");
+
+          // let isWeekend = date.getDay() === 0 || date.getDay() === 6;
+          let isHolidayN =
+            this.holidaydata?.nationalHoliday?.length > 0 &&
+            this.holidaydata?.nationalHoliday.includes(formattedDate);
+          let isHolidayF =
+            this.holidaydata?.fusoHoliday?.length > 0 &&
+            this.holidaydata?.fusoHoliday.includes(formattedDate);
+
           let topLogoCss =
-            date.toDateString() === new Date().toDateString()
+            date.toDateString() === new Date().toDateString() && isHolidayN
               ? "active-top-logos"
-              : date.getDay() === 0 || date.getDay() === 6
+              : isHolidayN
                 ? "top-logos-holiday"
                 : "top-logos";
+
+          if (topLogoCss === "top-logos") {
+            if (date.getDay() === 0) {
+              topLogoCss = "top-logos-holiday";
+            } else if (date.getDay() === 6) {
+              topLogoCss = "top-logos-holiday-blue";
+            }
+          }
+
+          let isFusoHolidayDisabled =
+            !this.finalFilterJson.fusoHoliday ||
+            this.finalFilterJson.fusoHoliday == false; // Only false (not undefined or true)
+
           let topDatesCss =
             date.toDateString() === new Date().toDateString()
               ? "active-top-days"
-              : date.getDay() === 0 || date.getDay() === 6
-                ? "top-days-holiday"
+              : isHolidayF
+                ? isFusoHolidayDisabled
+                  ? "top-days-holiday-red"
+                  : "top-days-holiday"
                 : "top-days";
+          if (topDatesCss === "active-top-days")
+            topDatesCss =
+              isHolidayF && date.toDateString() === new Date().toDateString()
+                ? "active-top-days-holiday"
+                : "active-top-days";
 
+          // if(topDatesCss === 'top-days'){
+          if (date.getDay() === 0 || isHolidayN) {
+            topDatesCss = topDatesCss + " red";
+          } else if (date.getDay() === 6) {
+            if (!isHolidayN) topDatesCss = topDatesCss + " blue";
+          }
+          // }
           dates.push({
             index: i,
             date: date.getDate(),
@@ -574,9 +820,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           });
         }
       }
-    } catch (e) {
-      console.log("in catch", e);
-    }
+    } catch (e) {}
     return dates;
   }
 
@@ -662,57 +906,53 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   //   this.isLoading = true;
   //   let temStDate = new Date(this.startDate);
   //   temStDate.setHours(0, 0, 0, 0);
-  //   console.log("a",temStDate);
+  //
   //   let temEndDate = new Date(temStDate);
   //   temEndDate.setHours(0, 0, 0, 0);
-  //   console.log("b",temEndDate);
+  //
   //   temEndDate.setDate(temEndDate.getDate() + 29);
-  //   console.log("c",temEndDate);
+  //
   //   let nowDate = new Date();
   //   nowDate.setHours(0, 0, 0, 0);
-  //   console.log("d",nowDate);
+  //
   //   this.isNormalMonthNextDisabled = false;
   //   nowDate.setFullYear(nowDate.getFullYear() - 2);
 
   //   let temStDateNext = new Date(temStDate);
   //   temStDateNext.setDate(temStDateNext.getDate() - 29);
   //   temStDateNext.setHours(0, 0, 0, 0);
-  //   console.log("Dates Prev: ", "nowDate", nowDate, "temStDateNext: ", temStDateNext, "temStDate: ", temStDate, "temEndDate: ", temEndDate);
-  //   console.log("e");
+  //
+  //
 
   //   if (
   //     this.showMonthlyCalendar === true &&
   //     nowDate <= temStDate &&
   //     nowDate <= temEndDate
   //   ) {
-  //     //console.log("this.endate2", this.endDate);
+  //     //
   //     this.startDate.setDate(this.startDate.getDate() - 29);
   //     this.currentPage -= 1;
-  //     console.log("f",this.startDate);
+  //
   //     setTimeout(() => {
   //       this.currentPage += 1;
   //     }, 0);
 
   //     this.currentDates = this.populateDatesRange(this.startDate, 30);
-  //     console.log("main console",this.currentDates);
+  //
   //   }
-  //   console.log(
-  //     "Prev Next: ",
-  //     this.isNormalMonthPrevDisabled,
-  //     this.isNormalMonthNextDisabled
-  //   );
+
   //   if (nowDate >= temStDateNext) {
   //     this.isNormalMonthPrevDisabled = true;
   //     this.startDate = nowDate;
   //     this.currentPage -= 1;
-  //     console.log("g");
+  //
   //     setTimeout(() => {
   //       this.currentPage += 1;
   //     }, 0);
   //     this.currentDates = this.populateDatesRange(nowDate, 30);
-  //     console.log("main console 2",this.currentDates);
+  //
   //   }
-  //   console.log("h");
+  //
   // }
 
   handleCalendarPrevClick() {
@@ -734,8 +974,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     let temStDateNext = new Date(temStDate);
     temStDateNext.setDate(temStDateNext.getDate() - 31); // Adjusting to 30-day gap
     temStDateNext.setHours(0, 0, 0, 0);
-
-    console.log("Prev Button: ", temStDate, nowDate, temEndDate, temStDateNext);
 
     // if (nowDate >= temStDateNext) {
     //   this.isNormalMonthPrevDisabled = true;
@@ -775,68 +1013,8 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         this.currentPage += 1;
       }, 0);
       this.currentDates = this.populateDatesRange(this.startDate, 31);
-      console.log("main console 2", this.currentDates);
     }
-
-    console.log(
-      "Prev Next: ",
-      this.isNormalMonthPrevDisabled,
-      this.isNormalMonthNextDisabled
-    );
   }
-
-  // handleCalendarNextClick() {
-  //   this.isLoading = true;
-  //   let temStDate = new Date(this.startDate);
-  //   temStDate.setHours(0, 0, 0, 0);
-  //   let temEndDate = new Date(temStDate);
-  //   temEndDate.setHours(0, 0, 0, 0);
-  //   temEndDate.setDate(temEndDate.getDate() + 29);
-  //   let nowDate = new Date();
-  //   nowDate.setHours(0, 0, 0, 0);
-  //   this.isNormalMonthPrevDisabled = false;
-  //   nowDate.setFullYear(nowDate.getFullYear() + 2);
-
-  //   let temStDateNext = new Date(temEndDate);
-  //   temStDateNext.setDate(temStDateNext.getDate() + 30);
-  //   temStDateNext.setHours(0, 0, 0, 0);
-  //   console.log("Next Button: ", temStDate, " ", nowDate, " ", temEndDate, " ", temStDateNext);
-  //   if (
-  //     this.showMonthlyCalendar === true &&
-  //     nowDate >= temStDate &&
-  //     nowDate >= temEndDate
-  //   ) {
-  //     this.startDate.setDate(this.startDate.getDate() + 30);
-  //     // console.log("this.startDate1", this.startDate);
-  //     // console.log("this.endate1", this.endDate, this.currentPage);
-  //     this.currentPage -= 1;
-  //     console.log("Coming in intermediate", this.startDate,);
-  //     setTimeout(() => {
-  //       this.currentPage += 1;
-  //     }, 0);
-  //     this.currentDates = this.populateDatesRange(this.startDate, 30);
-  //   }
-  //   if (nowDate <= temStDateNext) {
-  //     this.isNormalMonthNextDisabled = true;
-  //     let startDate2 = new Date(nowDate);
-  //     startDate2.setDate(startDate2.getDate() - 29);
-  //     this.startDate = startDate2;
-  //     console.log("Start Date on next: ", this.startDate, nowDate);
-  //     // console.log("this.startDate1", this.startDate);
-  //     // console.log("this.endate1", this.endDate, this.currentPage);
-  //     this.currentPage -= 1;
-
-  //     setTimeout(() => {
-  //       this.currentPage += 1;
-  //     }, 0);
-  //     this.currentDates = this.populateDatesRange(this.startDate, 30);
-  //   }
-  //   console.log(
-  //     "Prev Next: ",
-  //     this.isNormalMonthPrevDisabled,
-  //     this.isNormalMonthNextDisabled
-  //   );
-  // }
   handleCalendarNextClick() {
     this.isLoading = true;
 
@@ -857,8 +1035,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     temStDateNext.setDate(temStDateNext.getDate() + 31);
     temStDateNext.setHours(0, 0, 0, 0);
 
-    console.log("Next Button: ", temStDate, nowDate, temEndDate, temStDateNext);
-
     if (
       this.showMonthlyCalendar &&
       nowDate >= temStDate &&
@@ -870,8 +1046,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
 
       this.startDate = newStartDate;
       this.currentPage -= 1;
-
-      console.log("Intermediate state:", this.startDate);
 
       setTimeout(() => {
         this.currentPage += 1;
@@ -887,8 +1061,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       startDate2.setDate(startDate2.getDate() - 30); // Ensuring a 30-day range
       this.startDate = startDate2;
 
-      console.log("Start Date on next: ", this.startDate, nowDate);
-
       this.currentPage -= 1;
 
       setTimeout(() => {
@@ -897,12 +1069,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
 
       this.currentDates = this.populateDatesRange(this.startDate, 31);
     }
-
-    console.log(
-      "Prev Next: ",
-      this.isNormalMonthPrevDisabled,
-      this.isNormalMonthNextDisabled
-    );
   }
 
   handleCalendarResetClick() {
@@ -935,22 +1101,38 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   // }
   //modal of vehicle
   closeMVehicleModal() {
-    this.currentPage -= 1;
-
-    setTimeout(() => {
-      this.currentPage += 1;
-    }, 0);
     this.showVehicleModal = false;
+    this.currentPage += 1;
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 1000);
   }
+
+  closeMVehicleModal2() {
+    this.showVehicleModal2 = false;
+    this.currentPage += 1;
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 1000);
+  }
+
   calendertooglesmall() {
     this.CalenderSwapsmall = !this.CalenderSwapsmall;
   }
   // openColorDetailModal() {
   //   this.colordetailsModal = true;
   // }
-  // CloseColorDetailModal() {
-  //   this.colordetailsModal = false;
-  // }
+  CloseColorDetailModal() {
+    this.noedit = false;
+    this.currentPage += 1;
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 1000);
+    this.colordetailsModal = false;
+  }
   //picklists
   @track showMaintainTypeSelection = false;
   @track showMaintainFactorySelection = false;
@@ -1021,6 +1203,14 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       this.showOthersSelection = false;
     }
   };
+  handleOutsideClickI = (event) => {
+    const isClickInside = this.template
+      .querySelector(".branch-selection-container-sort")
+      .contains(event.target);
+    if (!isClickInside) {
+      this.showSortSelection = false;
+    }
+  };
   handleOutsideClickD = (event) => {
     // const dataDropElement = this.template.querySelector(".searchlist");
     // const listsElement = this.template.querySelector(".dropdown-item");
@@ -1066,12 +1256,31 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       this.showVehicleTypeDropdown = false;
     }
   };
+  handleOutsideClickJ = (event) => {
+    const isClickInside = this.template
+      .querySelector(".dropdown-container")
+      .contains(event.target);
+    if (!isClickInside) {
+      this.showServiceTypeDropdown = false;
+    }
+  };
+  handleOutsideClickK = (event) => {
+    const isClickInside = this.template
+      .querySelector(".dropdown-container")
+      .contains(event.target);
+    if (!isClickInside) {
+      this.showServiceFactoryDropdown = false;
+    }
+  };
 
   toggleMaintainTypeSelection(event) {
     event.stopPropagation();
     this.showMaintainTypeSelection = !this.showMaintainTypeSelection;
     this.showMaintainFactorySelection = false;
+    this.showServiceTypeDropdown = false;
+    this.showServiceFactoryDropdown = false;
     this.showOthersSelection = false;
+    this.showSortSelection = false;
     this.isCalendarOpen = false;
   }
   toggleMaintainFactorySelection(event) {
@@ -1086,6 +1295,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     this.showOthersSelection = !this.showOthersSelection;
     this.showMaintainTypeSelection = false;
     this.showMaintainFactorySelection = false;
+    this.showSortSelection = false;
     this.isCalendarOpen = false;
   }
   FilterOpen() {
@@ -1142,6 +1352,8 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   branchOpen(event) {
     event.stopPropagation();
     this.showbranchDropdown = !this.showbranchDropdown;
+    this.showServiceTypeDropdown = false;
+    this.showServiceFactoryDropdown = false;
     this.showVehicleNameDropdown = false;
     this.showVehicleNameDropdown = false;
   }
@@ -1184,16 +1396,19 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       ErrorLog({
         lwcName: "ccp2_VehicleMaintenanceCalendar",
         errorLog: err,
-        methodName: "branchApiFun"
+        methodName: "branchApiFun",
+        ViewName: "Vehicle Maintainence Calendar",
+        InterfaceName: "Salesforce",
+        EventName: "Data fetch",
+        ModuleName: "Calendar"
       })
-        .then(() => {
-          console.log("Error logged successfully in Salesforce");
-        })
+        .then(() => {})
         .catch((loggingErr) => {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });
     }
   }
+
   @wire(getPicklistValues, {
     recordTypeId: "012000000000000AAA",
     fieldApiName: VEHICLE_TYPE
@@ -1218,11 +1433,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       ErrorLog({
         lwcName: "ccp2_VehicleMaintenanceCalendar",
         errorLog: err,
-        methodName: "VehicleTypePicklist"
+        methodName: "VehicleTypePicklist",
+        ViewName: "Vehicle Maintainence Calendar",
+        InterfaceName: "Salesforce",
+        EventName: "Data fetch",
+        ModuleName: "Calendar"
       })
-        .then(() => {
-          console.log("Error logged successfully in Salesforce");
-        })
+        .then(() => {})
         .catch((loggingErr) => {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });
@@ -1256,11 +1473,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       ErrorLog({
         lwcName: "ccp2_VehicleMaintenanceCalendar",
         errorLog: err,
-        methodName: "Vehicle Name Picklist"
+        methodName: "Vehicle Name Picklist",
+        ViewName: "Vehicle Maintainence Calendar",
+        InterfaceName: "Salesforce",
+        EventName: "Data fetch",
+        ModuleName: "Calendar"
       })
-        .then(() => {
-          console.log("Error logged successfully in Salesforce");
-        })
+        .then(() => {})
         .catch((loggingErr) => {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });
@@ -1270,12 +1489,16 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     event.stopPropagation();
     this.showVehicleTypeDropdown = !this.showVehicleTypeDropdown;
     this.showVehicleNameDropdown = false;
+    this.showServiceTypeDropdown = false;
+    this.showServiceFactoryDropdown = false;
     this.showbranchDropdown = false;
   }
   toggleVehicleName(event) {
     event.stopPropagation();
     this.showVehicleNameDropdown = !this.showVehicleNameDropdown;
     this.showVehicleTypeDropdown = false;
+    this.showServiceTypeDropdown = false;
+    this.showServiceFactoryDropdown = false;
     this.showbranchDropdown = false;
   }
   @track CalenderPills = [
@@ -1332,18 +1555,11 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     }
     this.month = this.startDate.getMonth() + 1;
     this.year = this.startDate.getFullYear();
-    console.log(
-      "Calendar Opening Vars: ",
-      "this.month",
-      this.month,
-      "this.year",
-      this.year
-    );
 
     let populationNeeded = true;
     if (this.year <= this.beforeYear) {
       this.isYearDisabled = true;
-      console.log("this.month this.beforeMonth", this.month, this.beforeMonth);
+
       if (this.month <= this.beforeMonth) {
         this.populateCalendar(this.year, this.month, this.beforeDay, 0);
         populationNeeded = false;
@@ -1405,7 +1621,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       "11月",
       "12月"
     ];
-    console.log("month label", monthLabels[month - 1]);
+
     return monthLabels[month - 1];
   }
 
@@ -1419,7 +1635,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       if (!this.isPrevMonthDisabled) {
         this.month--;
 
-        console.log("no this is what i wnat ", this.month, this.myMonth);
         // this.selectedDay = null;
 
         if (this.month < 1) {
@@ -1439,13 +1654,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         );
         selectedButtons.forEach((button) =>
           button.classList.remove("selected")
-        );
-        console.log(
-          "Years: ",
-          this.currentYear,
-          this.month,
-          this.year,
-          this.beforeDay
         );
         if (this.year <= this.beforeYear) {
           this.isYearDisabled = true;
@@ -1478,7 +1686,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     } else {
       this.month--;
 
-      console.log("no this is what i wnat ", this.month, this.myMonth);
       // this.selectedDay = null;
 
       if (this.month < 1) {
@@ -1497,13 +1704,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         ".day-button.selected"
       );
       selectedButtons.forEach((button) => button.classList.remove("selected"));
-      console.log(
-        "Years: ",
-        this.currentYear,
-        this.month,
-        this.year,
-        this.beforeDay
-      );
       if (this.year <= this.beforeYear) {
         this.isYearDisabled = true;
         if (this.month <= this.beforeMonth) {
@@ -1535,13 +1735,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       );
       selectedButtons.forEach((button) => button.classList.remove("selected"));
       // this.selectedDay = null;
-      console.log("yes this is what i wnat 1", this.month, this.myMonth);
+
       if (this.month > 12) {
         this.month = 1;
         this.year++;
       }
       // if (this.myMonth === this.month && this.myYear === this.year) {
-      //   console.log("yes this is what i wnat ", this.month, this.myMonth);
+      //
       //   this.selectedDay = this.myday;
       //   // this.selectedDate = null;
       // }
@@ -1562,13 +1762,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       );
       selectedButtons.forEach((button) => button.classList.remove("selected"));
       // this.selectedDay = null;
-      console.log("yes this is what i wnat 1", this.month, this.myMonth);
+
       if (this.month > 12) {
         this.month = 1;
         this.year++;
       }
       // if (this.myMonth === this.month && this.myYear === this.year) {
-      //   console.log("yes this is what i wnat ", this.month, this.myMonth);
+      //
       //   this.selectedDay = this.myday;
       //   // this.selectedDate = null;
       // }
@@ -1615,25 +1815,23 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   }
 
   populateCalendar(year = -1, month = -1, day = -1, prev = -1) {
-    console.log("Populate Calendar me hai");
     if (!this.year || !this.month) {
       // const today = new Date();
       // this.year = today.getFullYear();
       // this.month = today.getMonth() + 1; // JS months are 0-based
-      console.log("Year:", this.year, "Month1:", this.month);
     }
     if (year === -1) {
       const today = new Date();
       const firstDayOfMonth = new Date(this.year, this.month - 1, 1).getDay();
-      console.log("Year:2", this.year, "Month:", this.month);
+
       const daysInMonth = new Date(this.year, this.month, 0).getDate();
-      console.log("Days in month2:", daysInMonth);
+
       this.calendarDates = [];
       this.isNextMonthDisabled = false; // Reset flag for next month
       this.isPrevMonthDisabled = false; // Reset flag for prev month
 
       // Add empty slots for days before the 1st of the month
-      console.log("Current Calendar Date: ", this.month, this.year);
+
       for (let i = 0; i < firstDayOfMonth; i++) {
         this.calendarDates.push({
           value: "",
@@ -1680,16 +1878,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
             this.year === this.myYear &&
             this.month === this.myMonth &&
             this.selectedDay === i;
-          if (isSelected)
-            console.log(
-              "True Values 2: ",
-              this.selectedDay,
-              this.year,
-              this.myYear,
-              this.month,
-              this.myMonth,
-              i
-            );
+
           const buttonClass = isDisabled
             ? "day-button filled disabled"
             : isSelected
@@ -1709,15 +1898,14 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       const prevMonth = new Date(this.year, this.month - 1);
       // this.isNextMonthDisabled = nextMonth > today;
       // this.isPrevMonthDisabled = prevMonth < today;
-      // console.log("isnextmonth", this.isNextMonthDisabled);
-      // console.log("isPrevMonth", this.isPrevMonthDisabled);
+      //
+      //
     } else if (prev === 0) {
       // Second case: Disable dates less than the day in the given year and month
       const currentDate = new Date(year, month - 1, day);
       const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
-      console.log("Year:33", this.year, "Month:", this.month);
+
       const daysInMonth = new Date(year, month, 0).getDate();
-      console.log("Days in month:3", daysInMonth);
 
       // Initialize calendarDates array
       this.calendarDates = [];
@@ -1764,9 +1952,8 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       // month = currentDate.getMonth() + 1;
       // day = currentDate.getDate();
       const firstDayOfMonth = new Date(year, month - 1, 1).getDay(); // First day of the month
-      console.log("Year:4", this.year, "Month:", this.month);
+
       const daysInMonth = new Date(year, month, 0).getDate(); // Total number of days in the month
-      console.log("Days in month:4", daysInMonth);
 
       // Initialize calendarDates array
       this.calendarDates = [];
@@ -1824,7 +2011,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
 
   selectDate(event) {
     const selectedDay = event.target.textContent;
-    console.log("Selected Day: ", selectedDay);
+
     // Remove 'selected' class from the previously selected day
     if (this.selectedDay) {
       const previouslySelected =
@@ -1845,7 +2032,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
 
     this.isCalendarOpen = false;
     this.confirmDate();
-    console.log("Selected Date in small Calendar: ", this.selectedDate);
   }
 
   nextYear() {
@@ -1908,23 +2094,14 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         this.myYear = this.year;
         let parsedDate = new Date(this.year, this.month - 1, this.selectedDay);
 
-        console.log("Start Date is Before: ", this.startDate);
         this.startDate = parsedDate;
-        console.log("Start Date is: ", this.startDate);
-        console.log(
-          "selectedDay: ",
-          this.selectedDay,
-          "month: ",
-          this.month,
-          "year: ",
-          this.year
-        );
+
         const beforeDate = new Date(
           this.beforeYear,
           this.beforeMonth - 1,
           this.beforeDay
         );
-        // console.log("Dates are: ", beforeDate, this.startDate);
+        //
         if (
           beforeDate.getFullYear() !== this.startDate.getFullYear() ||
           beforeDate.getMonth() !== this.startDate.getMonth() ||
@@ -1947,16 +2124,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         let temStDateNext = new Date(temEndDate);
         // temStDateNext.setDate(temStDateNext.getDate() + 20);
         temStDateNext.setHours(0, 0, 0, 0);
-        console.log(
-          "Next Button: ",
-          temStDate,
-          " ",
-          nowDate,
-          " ",
-          temEndDate,
-          " ",
-          temStDateNext
-        );
 
         if (
           nowDate.getFullYear() <= temStDateNext.getFullYear() &&
@@ -1967,10 +2134,10 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         } else {
           this.isNormalMonthNextDisabled = false;
         }
-        console.log("Start Date is at end: ", this.startDate);
+
         let temDatesRange = this.populateDatesRange(this.startDate, 31);
         this.currentDates = temDatesRange;
-        console.log("current Date is at end: ", [...this.currentDates]);
+
         const selectedDateToSend = new Date(
           this.year,
           this.month - 1,
@@ -1979,9 +2146,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         this.selectedDateToSend = this.formatDateToYYYYMMDD(selectedDateToSend);
       }
       this.isCalendarOpen = false;
-    } catch (e) {
-      console.log("error in confirmDate: ", e);
-    }
+    } catch (e) {}
   }
 
   formatDateToYYYYMMDD(date) {
@@ -2065,17 +2230,11 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         ...this.finalFilterJson,
         serviceType: this.finalVehicleTypeList
       };
-      console.log("final", JSON.stringify(this.finalFilterJson));
     } else {
       // eslint-disable-next-line no-unused-vars
       const { serviceType, ...rest } = this.finalFilterJson;
       this.finalFilterJson = rest;
-      console.log("final2", JSON.stringify(this.finalFilterJson));
     }
-    console.log(
-      "JSON Parameter for Vehicle Class: ",
-      this.jsonParameterForVehicleClass
-    );
   }
   handleMaintainFactorySelect(event) {
     event.stopPropagation();
@@ -2137,12 +2296,10 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         ...this.finalFilterJson,
         serviceFactory: this.finalVehicleFactoryList
       };
-      console.log("final", JSON.stringify(this.finalFilterJson));
     } else {
       // eslint-disable-next-line no-unused-vars
       const { serviceFactory, ...rest } = this.finalFilterJson;
       this.finalFilterJson = rest;
-      console.log("final", this.finalFilterJson);
     }
   }
   handleOthersSelect(event) {
@@ -2162,6 +2319,8 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       });
       if (!isChecked) {
         this.finalOthersList = [];
+      } else {
+        this.FilterOthersDot = false;
       }
 
       lengthOfList = this.finalOthersList.length;
@@ -2184,6 +2343,9 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       let isAllSelected = this.OtherArray.filter(
         (elm) => elm.label !== "すべて"
       ).every((item) => item.selected);
+      if (isAllSelected) {
+        this.FilterOthersDot = false;
+      }
       this.OtherArray = this.OtherArray.map((elm) => {
         if (elm.label === "すべて") {
           return { ...elm, selected: isAllSelected };
@@ -2211,13 +2373,10 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       } else {
         delete this.finalFilterJson.shakenExpiryDates;
       }
-      console.log("final", JSON.stringify(this.finalFilterJson));
     } else {
       // eslint-disable-next-line no-unused-vars
       const { shakenExpiryDates, fusoHoliday, ...rest } = this.finalFilterJson;
       this.finalFilterJson = rest;
-
-      console.log("final", this.finalFilterJson);
     }
   }
 
@@ -2241,10 +2400,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           ...this.filterselectedJson,
           brnIds: []
         };
-        console.log(
-          "deleted ones all",
-          JSON.stringify(this.filterselectedJson)
-        );
       }
 
       lengthOfList = this.finalBranchList.length;
@@ -2285,17 +2440,11 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         ...this.filterselectedJson,
         brnIds: this.finalBranchList
       };
-      console.log(
-        "fina11111111111111111111111l",
-        JSON.stringify(this.filterselectedJson)
-      );
     } else {
       this.filterselectedJson = {
         ...this.filterselectedJson,
         brnIds: []
       };
-
-      console.log("final22222222222222222222222", this.filterselectedJson);
     }
   }
   handleVehicleTypeSelect(event) {
@@ -2438,15 +2587,21 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     return (
       this.jsonParameterForVehicleClassWithoutString.vehicleName ||
       this.jsonParameterForVehicleClassWithoutString.vehicleType ||
-      this.jsonParameterForVehicleClassWithoutString.VehExp
+      this.jsonParameterForVehicleClassWithoutString.serviceType ||
+      this.jsonParameterForVehicleClassWithoutString.serviceFactory ||
+      this.jsonParameterForVehicleClassWithoutString.favVehicle
     );
   }
   handleFilterSave() {
-    console.log("final filter", JSON.stringify(this.filterselectedJson));
-    console.log("final", JSON.stringify(this.finalFilterJson));
     if (Object.keys(this.filterselectedJson).length === 0) {
-      const { vehicleType, vehicleName, ...remainingFilters } =
-        this.finalFilterJson;
+      const {
+        vehicleType,
+        vehicleName,
+        serviceType,
+        serviceFactory,
+        favVehicle,
+        ...remainingFilters
+      } = this.finalFilterJson;
       this.finalFilterJson = remainingFilters;
 
       this.filterselectedJson = {};
@@ -2465,18 +2620,32 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         let { vehicleType, ...remainingFilters2 } = this.filterselectedJson;
         this.filterselectedJson = remainingFilters2;
       }
+    } else if (this.filterselectedJson?.serviceType === undefined) {
+      const { serviceType, ...remainingFilters } = this.finalFilterJson;
+      this.finalFilterJson = remainingFilters;
+
+      if (this.filterselectedJson?.serviceType === undefined) {
+        let { serviceType, ...remainingFilters2 } = this.filterselectedJson;
+        this.filterselectedJson = remainingFilters2;
+      }
+    } else if (this.filterselectedJson?.favVehicle === undefined) {
+      const { favVehicle, ...remainingFilters } = this.finalFilterJson;
+      this.finalFilterJson = remainingFilters;
+
+      if (this.filterselectedJson?.favVehicle === undefined) {
+        let { favVehicle, ...remainingFilters2 } = this.filterselectedJson;
+        this.filterselectedJson = remainingFilters2;
+      }
     }
 
     Object.keys(this.filterselectedJson).forEach((key) => {
       const selectedValues = this.filterselectedJson[key];
 
-      console.log("q", JSON.stringify(selectedValues));
       if (selectedValues && selectedValues.length > 0) {
         this.finalFilterJson = {
           ...this.finalFilterJson,
           [key]: selectedValues
         };
-        console.log("final2", JSON.stringify(this.finalFilterJson));
       } else {
         if (key === "brnIds" && selectedValues.length === 0) {
           this.finalFilterJson = {
@@ -2486,7 +2655,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         } else {
           const { [key]: _, ...remainingFilters } = this.finalFilterJson;
           this.finalFilterJson = remainingFilters;
-          console.log("finalREMAINING", JSON.stringify(this.finalFilterJson));
         }
       }
     });
@@ -2500,10 +2668,16 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     delete this.finalFilterJson.brnIds;
     delete this.finalFilterJson.vehicleType;
     delete this.finalFilterJson.vehicleName;
+    delete this.finalFilterJson.serviceType;
+    delete this.finalFilterJson.serviceFactory;
     this.filterselectedJson = {};
     this.finalBranchList = [];
     this.finalTypeList = [];
     this.finalVehicleNameList = [];
+    this.finalServiceTypeList = [];
+    this.finalServiceFactoryList = [];
+    this.ServiceTypeValue = "";
+    this.ServiceFactoryValue = "";
     this.vehicleNameValue = "";
     this.vehicleTypeValue = "";
     this.vehicleTypesPicklistValues = this.vehicleTypesPicklistValues.map(
@@ -2516,11 +2690,21 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         return { ...elm, selected: false };
       }
     );
+    this.ServiceTypesPicklistValues = this.ServiceTypesPicklistValues.map(
+      (elm) => {
+        return { ...elm, selected: false };
+      }
+    );
+    this.ServiceFactoryPicklistValues = this.ServiceFactoryPicklistValues.map(
+      (elm) => {
+        return { ...elm, selected: false };
+      }
+    );
 
-    this.Expflag = false;
+    this.favVehicle = false;
 
-    delete this.finalFilterJson.VehExp;
-    const { VehExp, ...rest } = this.finalFilterJson;
+    delete this.finalFilterJson.favVehicle;
+    const { favVehicle, ...rest } = this.finalFilterJson;
     this.finalFilterJson = rest;
 
     this.branchOptions = this.branchOptionsBackup;
@@ -2536,43 +2720,69 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     branches: [],
     vehicleId: "-",
     DoorNumber: "-",
-    displaybranches: "-"
+    displaybranches: "-",
+    isExpiringSoon: false
   };
+
+  @track maintainId;
 
   openMaintainVehicleModal(event) {
     let vehid = event.currentTarget.dataset.vehicleId;
+    let vehidOriginal = event.currentTarget.dataset.vehicleIdd;
+    this.maintainId = vehid;
+    this.vehId2 = vehidOriginal;
+    console.log("this.vehId2", this.vehId2);
     let currdate = event.currentTarget.dataset.id;
     this.vehicleRegNumber = event.currentTarget.dataset.regNo;
     this.showModalload = true;
-    this.fetchMaintainModal(vehid, currdate);
-    console.log("ids", vehid, currdate);
-    this.showVehicleModaldouble = true;
+    this.fetchMaintainModal();
+
+    this.colordetailsModal = true;
   }
   closeMaintainVehicleModal() {
     this.showVehicleModaldouble = false;
   }
   @track vehId;
+  @track vehId2;
   handleEventWithVehicleId(event) {
+    event.stopPropagation();
     const vehId = event.currentTarget.dataset.id;
-    console.log("vehId", vehId);
     this.showModalload = true;
     this.vehId = vehId;
     this.fetchVehicleModalData(vehId);
     this.showVehicleModal = true;
   }
+
+  @track showModalload2 = false;
+  @track showVehicleModal2 = false;
+
+  handleEventWithVehicleId2(event) {
+    const vehId = event.currentTarget.dataset.id;
+
+    this.showModalload2 = true;
+    this.vehId = vehId;
+    this.fetchVehicleModalData(vehId);
+    this.showVehicleModal2 = true;
+  }
+
   fetchVehicleModalData(vehId) {
     vehicleModalData({ vehicleId: vehId })
       .then((data) => {
         if (data) {
           //this.vehiclModalData = data;
-          console.log("Vehicle Modal Data: ", data);
+          console.log("vehicle modal data : - ", data);
           this.vehicleModalobj = {
-            DoorNumber: data.Door_Number__c || "-",
-            RegistrationNumber: data.Registration_Number__c || "-",
-            CarName: data.Vehicle_Name__c || "-",
-            CarType: data.Vehicle_Type__c || "-",
-            vehicleId: data.Id || "-",
-            branches: data.Branch_Vehicle_Junctions__r || []
+            DoorNumber: data.vehicle.Door_Number__c || "-",
+            RegistrationNumber: data.vehicle.Registration_Number__c || "-",
+            CarName: data.vehicle.Sub_Brand_Name__c || "-",
+            CarType: data.vehicle.Vehicle_Type__c || "-",
+            vehicleId: data.vehicle.Id || "-",
+            branches: data.vehicle.Branch_Vehicle_Junctions__r || [],
+            isExpiringSoon: data.vehicle.isExpiringSoon || false,
+            expDate:
+              this.formatJapaneseDate(
+                data.vehicle.Vehicle_Expiration_Date__c
+              ) || "-"
           };
           const branchNames = this.vehicleModalobj.branches.map((branch) => {
             return branch.BranchName__c.length > 10
@@ -2581,7 +2791,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           });
 
           if (branchNames.length > 2) {
-            this.vehicleModalobj.displaybranches = `${branchNames[0]}・${branchNames[1]}等`;
+            this.vehicleModalobj.displaybranches = `${branchNames[0]}・${branchNames[1]} 等`;
           } else if (branchNames.length === 2) {
             this.vehicleModalobj.displaybranches = `${branchNames[0]}・${branchNames[1]}`;
           } else if (branchNames.length === 1) {
@@ -2590,6 +2800,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
             this.vehicleModalobj.displaybranches = "-";
           }
           this.showModalload = false;
+          this.showModalload2 = false;
         }
       })
       .catch((error) => {
@@ -2598,11 +2809,13 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         ErrorLog({
           lwcName: "ccp2_VehicleMaintenanceCalendar",
           errorLog: err,
-          methodName: "fetchVehicleModaldata"
+          methodName: "fetchVehicleModaldata",
+          ViewName: "Vehicle Maintainence Calendar",
+          InterfaceName: "Salesforce",
+          EventName: "Data fetch",
+          ModuleName: "Calendar"
         })
-          .then(() => {
-            console.log("Error logged successfully in Salesforce");
-          })
+          .then(() => {})
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
@@ -2630,7 +2843,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   // }
   // pageCountClick2(event) {
   //   // refreshApex(this.wiredVehicleResult);
-  //   console.log(event.target.dataset.page);
+  //
   //   this.currentPage = Number(event.target.dataset.page);
   //   this.updatePageButtons();
   //   this.updateVisiblePages();
@@ -2681,7 +2894,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   //     // refreshApex(this.wiredVehicleResult);
   //     this.prevGoing = false;
   //     this.currentPage += 1;
-  //     console.log("THIS is the current page in handle next", this.currentPage);
+  //
   //     this.isPreviousDisabled2 = this.currentPage === 1;
   //     this.isNextDisabled2 = this.currentPage === this.totalPageCount2;
   //     this.updatePageButtons();
@@ -2711,51 +2924,135 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   gotoMaintainDetail(event) {
     let vehid = event.currentTarget.dataset.id;
     let maintainId = event.currentTarget.dataset.type;
-    console.log("de", maintainId);
+
     let url = `/s/vehiclemanagement?vehicleId=${vehid}&maintenanceId=${maintainId}&instance=maintenanceDetail`;
     window.location.href = url;
   }
 
-  @track vehiclModalData = [];
+  @track vehiclModalData = {
+    Status__c: "-",
+    Service_Type__c: "-",
+    Service_Factory__c: "-",
+    Maintenance_Type__c: "-",
+    BoxColor: "-",
+    BoxStrip: "-",
+    DateToShow: "-",
+    isSchedule: "-",
+    image: []
+  };
+
   @track maintaincount;
   @track vehicleRegNumber;
-  fetchMaintainModal(vehId, clickDateString) {
-    maintainenceModalData({ vehicleId: vehId, clickDateStr: clickDateString })
+
+  fetchMaintainModal() {
+    maintainenceModalData({ maintenanceId: this.maintainId })
       .then((data) => {
         if (data) {
-          console.log("vehicle modal dataaaaaaa e54trhg", data);
-          this.vehiclModalData = data.map((vehicle, index) => {
-            let colorBox = "";
-            let colorStrip = "";
-            const isSchedule = vehicle.Maintenance_Type__c === "Scheduled";
-            const datetopush = vehicle.Implementation_Date__c
-              ? vehicle.Implementation_Date__c
-              : vehicle.Schedule_Date__c;
-            if (vehicle.Status__c === "Closed") {
-              colorStrip = "grey-strip";
-              colorBox = "grey-color";
-            } else if (vehicle.Service_Factory__c === "ふそう/自社 以外") {
-              colorBox = "yellow-color";
-              colorStrip = "yellow-strip";
-            } else if (vehicle.Service_Factory__c === "自社") {
-              colorBox = "green-color";
-              colorStrip = "green-strip";
-            } else if (vehicle.Service_Factory__c === "ふそう") {
-              colorBox = "blue-color";
-              colorStrip = "blue-strip";
+          console.log("data of modal: - ", JSON.stringify(data));
+          let vehicle = data.result[0];
+          let images = JSON.parse(data?.images) || [];
+          let colorBox = "";
+          let colorStrip = "";
+          const isSchedule =
+            vehicle.Maintenance_Type__c === "Scheduled" ? true : false;
+          let implementation = this.formatJapaneseDate(
+            vehicle.Implementation_Date__c
+          );
+          let schedule =
+            this.formatJapaneseDate(vehicle.Schedule_Date__c) +
+            " - " +
+            this.formatJapaneseDate(vehicle.Schedule_EndDate__c);
+          let datetopush;
+          let address;
+          let addressFuso;
+          let addressFlag = false;
+          let addressFlagFuso = false;
+          if (vehicle.Account__r) {
+            if (
+              vehicle.Account__r.ShippingPostalCode ||
+              vehicle.Account__r.ShippingCity ||
+              vehicle.Account__r.ShippingState ||
+              vehicle.Account__r.ShippingStreet
+            ) {
+              addressFlag = true;
+              let postcode = "";
+              let city = "";
+              let state = "";
+              let street = "";
+              if (vehicle.Account__r.ShippingPostalCode !== undefined) {
+                postcode = vehicle.Account__r.ShippingPostalCode;
+              } else {
+                postcode = "";
+              }
+              if (vehicle.Account__r.ShippingCity !== undefined) {
+                city = vehicle.Account__r.ShippingCity;
+              } else {
+                city = "";
+              }
+              if (vehicle.Account__r.ShippingState !== undefined) {
+                state = vehicle.Account__r.ShippingState;
+              } else {
+                state = "";
+              }
+              if (vehicle.Account__r.ShippingStreet !== undefined) {
+                street = vehicle.Account__r.ShippingStreet;
+              } else {
+                street = "";
+              }
+              address = postcode + " " + city + " " + state + " " + street;
             }
-            return {
-              ...vehicle,
-              number: index + 1,
-              BoxColor: colorBox,
-              BoxStrip: colorStrip,
-              DateToShow: this.formatJapaneseDate(datetopush),
-              isSchedule: isSchedule
-            };
-          });
-          console.log("de11", JSON.stringify(this.vehiclModalData));
-          this.maintaincount = data.length || 0;
-          console.log("Vehicle maintain Modal Data: ", data);
+          }
+          if (vehicle.Fuso_Address__c) {
+            addressFlagFuso = true;
+            addressFuso = vehicle.Fuso_Address__c;
+          }
+
+          if (vehicle.Implementation_Date__c) {
+            datetopush = implementation;
+            if (vehicle.Service_Factory__c === "ふそう") {
+              this.schEdit = false;
+            }
+          } else {
+            datetopush = schedule;
+            this.schEdit = true;
+          }
+          // if (vehicle.Status__c === "Closed") {
+          //   colorStrip = "grey-strip";
+          //   colorBox = "grey-color";
+          // } else
+          if (vehicle.Service_Factory__c === "ふそう/自社 以外") {
+            colorBox = "yellow-color";
+            colorStrip = "yellow-strip";
+          } else if (vehicle.Service_Factory__c === "自社") {
+            colorBox = "green-color";
+            colorStrip = "green-strip";
+          } else if (vehicle.Service_Factory__c === "ふそう") {
+            colorBox = "blue-color";
+            colorStrip = "blue-strip";
+          }
+
+          this.vehiclModalData = {
+            Id: vehicle.Id,
+            Status__c: vehicle.Status__c,
+            Service_Type__c: vehicle.Service_Type__c,
+            Service_Factory__c: vehicle.Service_Factory__c,
+            Maintenance_Type__c: vehicle.Maintenance_Type__c,
+            BoxColor: colorBox,
+            BoxStrip: colorStrip,
+            DateToShow: datetopush,
+            isSchedule: isSchedule,
+            RichText: vehicle.Description_Rich_Text__c,
+            Vehicle__c: vehicle.Vehicle__c,
+            Recieving_Destination_noSearch__c:
+              vehicle.Recieving_Destination_noSearch__c,
+            Recieving_Destination__c: vehicle.Recieving_Destination__c,
+            Shipping_address: address,
+            addressFlag: addressFlag,
+            addressFlagFuso: addressFlagFuso,
+            addressFuso: addressFuso,
+            image: images
+          };
+
           this.showModalload = false;
         }
       })
@@ -2765,35 +3062,36 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         ErrorLog({
           lwcName: "ccp2_VehicleMaintenanceCalendar",
           errorLog: err,
-          methodName: "fetch Maintain Modal"
+          methodName: "fetch Maintain Modal",
+          ViewName: "Vehicle Maintainence Calendar",
+          InterfaceName: "Salesforce",
+          EventName: "Data fetch",
+          ModuleName: "Calendar"
         })
-          .then(() => {
-            console.log("Error logged successfully in Salesforce");
-          })
+          .then(() => {})
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
       });
   }
   //@future
-  // @track Expflag = false;
-  // handleCheckboxChangeForPills(event) {
-  //   const value = event.target.value;
-  //   if (value === "VehExp") {
-  //     this.Expflag = event.target.checked;
-  //     if (event.target.checked) {
-  //       this.filterselectedJson = {
-  //         ...this.filterselectedJson,
-  //         [value]: "true"
-  //       };
-  //     } else {
-  //       delete this.filterselectedJson[value];
-  //       const { VehExp, ...rest } = this.filterselectedJson;
-  //       this.filterselectedJson = rest;
-  //     }
-  //     console.log("e3331", JSON.stringify(this.filterselectedJson));
-  //   }
-  // }
+  @track favVehicle = false;
+  handleCheckboxChangeForPills(event) {
+    const value = event.target.value;
+    if (value === "favVehicle") {
+      this.favVehicle = event.target.checked;
+      if (event.target.checked) {
+        this.filterselectedJson = {
+          ...this.filterselectedJson,
+          [value]: "true"
+        };
+      } else {
+        delete this.filterselectedJson[value];
+        const { favVehicle, ...rest } = this.filterselectedJson;
+        this.filterselectedJson = rest;
+      }
+    }
+  }
   formatJapaneseDate(isoDate) {
     if (isoDate == undefined) {
       return "";
@@ -2826,9 +3124,9 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   }
   removePillsfilter(event) {
     const key = event.target.dataset.key;
-    console.log("key", key);
+
     const value = event.target.dataset.value;
-    console.log("val", value);
+
     switch (key) {
       case "vehicleName": {
         this.vehicleNamesPicklistValues = this.vehicleNamesPicklistValues.map(
@@ -2854,6 +3152,12 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           lengthOfList === 0 ? "" : lengthOfList + "件選択中";
         break;
       }
+      case "favVehicle": {
+        this.favVehicle = false;
+
+        delete this.finalFilterJson.favVehicle;
+        delete this.filterselectedJson.favVehicle;
+      }
       case "vehicleType": {
         this.vehicleTypesPicklistValues = this.vehicleTypesPicklistValues.map(
           (elm) => {
@@ -2878,6 +3182,53 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           lengthOfList2 === 0 ? "" : lengthOfList2 + "件選択中";
         break;
       }
+      case "serviceType": {
+        this.ServiceTypesPicklistValues = this.ServiceTypesPicklistValues.map(
+          (elm) => {
+            if (elm.label === value) {
+              return { ...elm, selected: false };
+            } else if (elm.label === "すべて") {
+              return { ...elm, selected: false };
+            }
+            return { ...elm };
+          }
+        );
+
+        let lengthOfList2 = this.ServiceTypesPicklistValues.filter(
+          (elm) => elm.selected === true && elm.label !== "すべて"
+        ).length;
+
+        this.finalServiceTypeList = this.finalServiceTypeList.filter(
+          (item) => item !== value
+        );
+
+        this.ServiceTypeValue =
+          lengthOfList2 === 0 ? "" : lengthOfList2 + "件選択中";
+        break;
+      }
+      case "serviceFactory": {
+        this.ServiceFactoryPicklistValues =
+          this.ServiceFactoryPicklistValues.map((elm) => {
+            if (elm.label === value) {
+              return { ...elm, selected: false };
+            } else if (elm.label === "すべて") {
+              return { ...elm, selected: false };
+            }
+            return { ...elm };
+          });
+
+        let lengthOfList2 = this.ServiceFactoryPicklistValues.filter(
+          (elm) => elm.selected === true && elm.label !== "すべて"
+        ).length;
+
+        this.finalServiceFactoryList = this.finalServiceFactoryList.filter(
+          (item) => item !== value
+        );
+
+        this.ServiceFactoryValue =
+          lengthOfList2 === 0 ? "" : lengthOfList2 + "件選択中";
+        break;
+      }
       default: {
         this.vehicleNameValue = "";
         this.finalVehicleNameList = [];
@@ -2889,6 +3240,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     this.filterselectedJson[key] = this.filterselectedJson[key].filter(
       (item) => item !== value
     );
+
     if (this.finalFilterJson[key]?.length === 0) {
       delete this.finalFilterJson[key];
       delete this.filterselectedJson[key];
@@ -2904,11 +3256,39 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           );
           break;
         }
+        case "favVehicle": {
+          this.favVehicle = false;
+          this.favVehicle = false;
+
+          delete this.finalFilterJson.favVehicle;
+          delete this.filterselectedJson.favVehicle;
+        }
         case "vehicleType": {
           this.vehicleTypeValue = "";
           this.finalTypeList = [];
 
           this.vehicleTypesPicklistValues = this.vehicleTypesPicklistValues.map(
+            (elm) => {
+              return { ...elm, selected: false };
+            }
+          );
+          break;
+        }
+        case "serviceFactory": {
+          this.ServiceFactoryValue = "";
+          this.finalServiceFactoryList = [];
+
+          this.ServiceFactoryPicklistValues =
+            this.ServiceFactoryPicklistValues.map((elm) => {
+              return { ...elm, selected: false };
+            });
+          break;
+        }
+        case "serviceType": {
+          this.ServiceTypeValue = "";
+          this.finalServiceTypeList = [];
+
+          this.ServiceTypesPicklistValues = this.ServiceTypesPicklistValues.map(
             (elm) => {
               return { ...elm, selected: false };
             }
@@ -2936,7 +3316,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
   getSortedCalendarData(dates) {
     if (!dates || dates.length === 0) return [];
 
-    // console.log("dates", dates, dates[0].maintenance);
+    //
 
     let modifiedDates = [];
     let prevList = [...dates[0].maintenance];
@@ -2944,7 +3324,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
     modifiedDates.push({ ...dates[0] });
     for (let i = 1; i < dates.length; i++) {
       let currentDate = { ...dates[i] };
-      // console.log("currentDate.date", currentDate.date);
+      //
       let newMaintenance = Array(prevList.length).fill({
         Id: new Date().getTime() + Math.random(),
         showNulSpace: true,
@@ -2959,7 +3339,6 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
         Vehicle__c: null,
         cssClass: "empty-box"
       });
-      // console.log('newMaintenance first', [...newMaintenance])
       let usedIndices = new Set();
 
       let matchedCount = 0;
@@ -2975,23 +3354,18 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
           usedIndices.add(currentDate.maintenance.indexOf(matchedEvent));
           matchedCount++;
           lastMatchedIndex = index;
-          // console.log('newMaintenance if', [...newMaintenance])
         } else {
           newMaintenance[index] = this.createDummyEvent();
-          // console.log('newMaintenance else', [...newMaintenance])
         }
       });
 
       currentDate.maintenance.forEach((event, idx) => {
         if (!usedIndices.has(idx)) {
-          // console.log('event', event,idx, lastMatchedIndex)
-          // console.log('newMaintenance', newMaintenance)
           lastMatchedIndex = lastMatchedIndex + 1;
           // while ([...newMaintenance[insertIndex]]?.Id !== null || undefined) {
           //       insertIndex++;
           //   }
           newMaintenance[lastMatchedIndex] = event;
-          // console.log('newMaintenance2', newMaintenance)
         }
       });
 
@@ -3003,7 +3377,7 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       prevList = [...newMaintenance];
     }
 
-    // console.log("modifiedDates", JSON.stringify(modifiedDates));
+    //
     return modifiedDates;
   }
 
@@ -3022,5 +3396,300 @@ export default class Ccp2_VehicleMaintenanceCalendar extends LightningElement {
       Vehicle__c: null,
       cssClass: "empty-box"
     };
+  }
+  openNoedit() {
+    setTimeout(() => {
+      this.template
+        .querySelector("c-ccp2-_-Calendar-Maintain-Edit-Modal")
+        ?.refreshData();
+    }, 0);
+    this.noedit = true;
+    console.log("this.vehId2", this.vehId2);
+  }
+  closenoedit() {
+    this.vehiclModalData = {};
+    this.showModalload = true;
+    this.fetchMaintainModal();
+
+    setTimeout(() => {
+      this.fetchMaintainModal();
+    }, 1000);
+
+    this.noedit = false;
+  }
+  //sort
+  @track sortSelectedValue = "Default";
+  @track nameofsort = "";
+  @track defaultSort = true;
+  @track SecondSort = false;
+
+  toogleOpenSort(event) {
+    event.stopPropagation();
+    this.showSortSelection = !this.showSortSelection;
+    this.showOthersSelection = false;
+  }
+  handleSortChange(event) {
+    this.sortSelectedValue = event.target.value;
+    if (this.sortSelectedValue === "Default") {
+      this.defaultSort = true;
+      this.SecondSort = false;
+    } else {
+      this.defaultSort = false;
+      this.SecondSort = true;
+    }
+
+    this.SortOneDot = !this.defaultSort;
+  }
+
+  @track ServiceTypesPicklistValues = [];
+  @track finalServiceTypeList = [];
+  @track showServiceTypeDropdown = false;
+  @track ServiceTypeValue = "";
+  @track ServiceFactoryPicklistValues = [];
+  @track ServiceFactoryValue = "";
+  @track showServiceFactoryDropdown = false;
+  @track finalServiceFactoryList = [];
+
+  @wire(getPicklistValues, {
+    recordTypeId: "012000000000000AAA",
+    fieldApiName: SERVICE_TYPE
+  })
+  wiredServiceTypePicklistValues({ error, data }) {
+    if (data) {
+      this.ServiceTypesPicklistValues = [
+        {
+          label: "すべて",
+          value: "すべて",
+          selected: false
+        },
+        ...data.values.map((item) => ({
+          label: item.label,
+          value: item.value,
+          selected: false
+        }))
+      ];
+    } else if (error) {
+      console.error("Error fetching picklist values: ", error);
+      let err = JSON.stringify(error);
+      ErrorLog({
+        lwcName: "ccp2_VehicleMaintenanceCalendar",
+        errorLog: err,
+        methodName: "VehicleTypePicklist",
+        ViewName: "Vehicle Maintainence Calendar",
+        InterfaceName: "Salesforce",
+        EventName: "Data fetch",
+        ModuleName: "Calendar"
+      })
+        .then(() => {})
+        .catch((loggingErr) => {
+          console.error("Failed to log error in Salesforce:", loggingErr);
+        });
+    }
+  }
+  toggleServiceType(event) {
+    event.stopPropagation();
+    this.showServiceTypeDropdown = !this.showServiceTypeDropdown;
+    this.showServiceFactoryDropdown = false;
+    this.showVehicleTypeDropdown = false;
+    this.showbranchDropdown = false;
+  }
+  handleServiceTypeSelect(event) {
+    event.stopPropagation();
+    const value = event.target.name;
+    const isChecked = event.target.checked;
+    let lengthOfList = 0;
+    if (value === "すべて") {
+      this.finalServiceTypeList = [];
+      this.ServiceTypesPicklistValues = this.ServiceTypesPicklistValues.map(
+        (elm) => {
+          if (elm.label !== "すべて") {
+            this.finalServiceTypeList.push(elm.label);
+          }
+          return { ...elm, selected: isChecked };
+        }
+      );
+      if (!isChecked) {
+        this.finalServiceTypeList = [];
+      }
+
+      lengthOfList = this.finalServiceTypeList.length;
+    } else {
+      this.ServiceTypesPicklistValues = this.ServiceTypesPicklistValues.map(
+        (elm) => {
+          if (elm.label === value) {
+            return { ...elm, selected: isChecked };
+          }
+          return elm;
+        }
+      );
+      if (isChecked) {
+        if (!this.finalServiceTypeList.includes(value)) {
+          this.finalServiceTypeList = [...this.finalServiceTypeList, value];
+        }
+      } else {
+        this.finalServiceTypeList = this.finalServiceTypeList.filter(
+          (item) => item !== value
+        );
+      }
+      let isAllSelected = this.ServiceTypesPicklistValues.filter(
+        (elm) => elm.label !== "すべて"
+      ).every((item) => item.selected);
+      this.ServiceTypesPicklistValues = this.ServiceTypesPicklistValues.map(
+        (elm) => {
+          if (elm.label === "すべて") {
+            return { ...elm, selected: isAllSelected };
+          }
+          return elm;
+        }
+      );
+
+      lengthOfList = this.ServiceTypesPicklistValues.filter(
+        (elm) => elm.selected === true && elm.label !== "すべて"
+      ).length;
+    }
+
+    this.ServiceTypeValue = lengthOfList === 0 ? "" : lengthOfList + "件選択中";
+    if (this.finalServiceTypeList.length) {
+      this.filterselectedJson = {
+        ...this.filterselectedJson,
+        serviceType: this.finalServiceTypeList
+      };
+    } else {
+      // eslint-disable-next-line no-unused-vars
+      const { serviceType, ...rest } = this.filterselectedJson;
+      this.filterselectedJson = rest;
+    }
+  }
+  @wire(getPicklistValues, {
+    recordTypeId: "012000000000000AAA",
+    fieldApiName: SERVICE_FACTORY
+  })
+  wiredServiceFactoryPicklistValues({ error, data }) {
+    if (data) {
+      this.ServiceFactoryPicklistValues = [
+        {
+          label: "すべて",
+          value: "すべて",
+          selected: false
+        },
+        ...data.values.map((item) => ({
+          label: item.label,
+          value: item.value,
+          selected: false
+        }))
+      ];
+    } else if (error) {
+      console.error("Error fetching picklist values: ", error);
+      let err = JSON.stringify(error);
+      ErrorLog({
+        lwcName: "ccp2_VehicleMaintenanceCalendar",
+        errorLog: err,
+        methodName: "VehicleTypePicklist",
+        ViewName: "Vehicle Maintainence Calendar",
+        InterfaceName: "Salesforce",
+        EventName: "Data fetch",
+        ModuleName: "Calendar"
+      })
+        .then(() => {})
+        .catch((loggingErr) => {
+          console.error("Failed to log error in Salesforce:", loggingErr);
+        });
+    }
+  }
+  toggleServiceFactory(event) {
+    event.stopPropagation();
+    this.showServiceFactoryDropdown = !this.showServiceFactoryDropdown;
+    this.showServiceTypeDropdown = false;
+    this.showVehicleTypeDropdown = false;
+    this.showbranchDropdown = false;
+  }
+  handleServiceFactorySelect(event) {
+    event.stopPropagation();
+    const value = event.target.name;
+    const isChecked = event.target.checked;
+    let lengthOfList = 0;
+    if (value === "すべて") {
+      this.finalServiceFactoryList = [];
+      this.ServiceFactoryPicklistValues = this.ServiceFactoryPicklistValues.map(
+        (elm) => {
+          if (elm.label !== "すべて") {
+            this.finalServiceFactoryList.push(elm.label);
+          }
+          return { ...elm, selected: isChecked };
+        }
+      );
+      if (!isChecked) {
+        this.finalServiceFactoryList = [];
+      }
+
+      lengthOfList = this.finalServiceFactoryList.length;
+    } else {
+      this.ServiceFactoryPicklistValues = this.ServiceFactoryPicklistValues.map(
+        (elm) => {
+          if (elm.label === value) {
+            return { ...elm, selected: isChecked };
+          }
+          return elm;
+        }
+      );
+      if (isChecked) {
+        if (!this.finalServiceFactoryList.includes(value)) {
+          this.finalServiceFactoryList = [
+            ...this.finalServiceFactoryList,
+            value
+          ];
+        }
+      } else {
+        this.finalServiceFactoryList = this.finalServiceFactoryList.filter(
+          (item) => item !== value
+        );
+      }
+      let isAllSelected = this.ServiceFactoryPicklistValues.filter(
+        (elm) => elm.label !== "すべて"
+      ).every((item) => item.selected);
+      this.ServiceFactoryPicklistValues = this.ServiceFactoryPicklistValues.map(
+        (elm) => {
+          if (elm.label === "すべて") {
+            return { ...elm, selected: isAllSelected };
+          }
+          return elm;
+        }
+      );
+
+      lengthOfList = this.ServiceFactoryPicklistValues.filter(
+        (elm) => elm.selected === true && elm.label !== "すべて"
+      ).length;
+    }
+
+    this.ServiceFactoryValue =
+      lengthOfList === 0 ? "" : lengthOfList + "件選択中";
+    if (this.finalServiceFactoryList.length) {
+      this.filterselectedJson = {
+        ...this.filterselectedJson,
+        serviceFactory: this.finalServiceFactoryList
+      };
+    } else {
+      // eslint-disable-next-line no-unused-vars
+      const { serviceFactory, ...rest } = this.filterselectedJson;
+      this.filterselectedJson = rest;
+    }
+  }
+  @track showZoomInImageModal = false;
+  @track currentImageUrl;
+
+  handleToggleZoomInImage(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      if (this.showZoomInImageModal === false) {
+        this.currentImageUrl = event.target.dataset.fileurl;
+      }
+      if (event.target.dataset.fileurl) {
+        this.showZoomInImageModal = !this.showZoomInImageModal;
+      } else {
+        this.showZoomInImageModal = false;
+      }
+    }
   }
 }

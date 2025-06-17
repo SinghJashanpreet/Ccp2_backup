@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>CCP2_DTFSA_GetFilePath</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CCP2_DTFSA_GetFilePath</shortDescription>
+        <value>/canon_dtfsa_get_web_report/qa/nodes/</value>
+    </labels>
+    <labels>
+        <fullName>CCP2_DTFSA_NODE_ID</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CCP2_DTFSA_NODE_ID</shortDescription>
+        <value>7374392</value>
+    </labels>
+    <labels>
+        <fullName>CCP2_OTCS_Auth_Password</fullName>
+        <categories>for QA enviroment-DTFSA</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CCP2_OTCS_Auth_Password</shortDescription>
+        <value>R5mGt2Dw</value>
+    </labels>
+    <labels>
+        <fullName>CCP2_OTCS_Auth_Path</fullName>
+        <categories>for QA enviroment-DTFSA</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CCP2_OTCS_Auth_Path</shortDescription>
+        <value>/canon_dtfsa_auth/qa/</value>
+    </labels>
+    <labels>
+        <fullName>CCP2_OTCS_Auth_Username</fullName>
+        <categories>for QA enviroment-DTFSA</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CCP2_OTCS_Auth_Username</shortDescription>
+        <value>s_dtfsa-doc</value>
+    </labels>
+    <labels>
+        <fullName>CCP2_OTCS_Domain</fullName>
+        <categories>for QA enviroment</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CCP2_OTCS_Domain</shortDescription>
+        <value>tst.as.api.daimlertruck.com</value>
+    </labels>
+    <labels>
+        <fullName>CCP2_OTCS_XApiKey</fullName>
+        <categories>for QA enviroment-DTFSA</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CCP2_OTCS_XApiKey</shortDescription>
+        <value>XAGe6HeU1Mqez95V1rFgKe3r33Z6lYJtuULO8TR46CqfCjFh0t7rWxq4L7VBXDJL</value>
+    </labels>
+</CustomLabels>

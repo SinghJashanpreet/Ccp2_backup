@@ -1,53 +1,104 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-    <types>      
+        
         <!--
+        <types>
+ 
+        <members>CCP2_OTCS_Domain</members>
+        <members>CCP2_OTCS_Auth_Path</members>
+        <members>CCP2_OTCS_XApiKey</members>
+        <members>CCP2_OTCS_Auth_Username</members>
+        <members>CCP2_OTCS_Auth_Password</members>
+        <members>CCP2_DTFSA_GetFilePath</members>
+        <members>CCP2_DTFSA_NODE_ID</members>
+        
+        <name>CustomLabel</name>
+        </types>
+
+    <types>
+        <members>ccp2_AddUser</members>
+        <members>ccp2BranchRecordDetail</members>`````
+        <members>ccp2_branch</members>
+        <members>ccp2_createHistoryMaintain</members>
+        <members>ccp2DeleteBranch</members>
+        <members>ccp2_dtfsa</members>
+        <members>ccp2_Enquiry</members>
+        <members>ccp2_Einvoice</members>
+        <members>ccp2_Faq</members>
+        <members>ccp2_FusoFooter</members>
+        <members>ccp2_FusoHeader</members>
+        <members>ccp2_Home</members>
+        <members>ccp2_LandingPage</members>
+        <members>ccp2_MaintenanceHistory</members>
+        <members>ccp2_NotificationsCentre</members>
+        <members>ccp2UserManagement</members>
+        <members>ccp2_VehicleDashboard</members>
+        <members>ccp2_VehicleDetails</members>
+        <members>ccp2_VehicleImageUpload</members>
+        <members>ccp2_VehicleListNew</members>
+        <members>ccp2_VehicleMaintenanceCalendar</members>
+        <members>ccp2_VehicleRegistration</members>
+        <members>ccp2_CalendarMaintainenceRegisterModal</members>
+        <members>ccp2_CalendarMaintainEditModal</members>
+        <members>ccp2_AddBranch</members>
+        <members>ccp2_UserProfile</members>
+        <name>LightningComponentBundle</name>    
+    </types>
+    <members>ccp2_dtfsa</members>
+    <members>ccp2_CalendarMaintainenceRegisterModal</members> 
+ 
         <members>ccp2BranchRecordDetail</members>
         <members>ccp2DeleteBranch</members>
         <members>ccp2VehicleMaintainenceForm</members>
         <members>ccp2DeleteBranch</members>
-        <members>ccp2BranchRecordDetail</members>
-        <members>ccp_AddUser</members> 
         <members>ccp2AddBranchForm</members>
         <members>ccp_UserProfile</members>
         <members>ccp2_VehicleCertificateUpload</members>
-        <members>ccp2_BasicInfo</members>
-        <members>ccp2_branch</members>
         <members>ccp2cancelMembership</members>
         <members>ccp2DeleteBranch</members>
         <members>ccp2BranchRecordDetail</members>
         <members>ccp_UserProfile</members>
-        <members>ccp_Home</members>
         <members>ccp2_dtfsa</members>
-        <members>ccp2_NotificationsCentre</members>
         <members>ccp2VehicleMaintainenceForm</members>
         <members>ccp2_ManualInput</members>
         <members>ccp2_Home</members>
         <members>CCP2_Trial</members>
         <name>ApexClass</name>
-        <members>ccp2_FusoHeader</members>
-        <members>ccp2_VehicleListNew</members>
         <members>ccp2_VehicleImageUpload</members>
-        <members>ccp2_Faq</members>
-        <members>ccp2_Einvoice</members>
         <members>ccp2cancelMembership </members>
-        <members>ccp2_Enquiry</members>
-        <members>ccp_FusoFooter</members>
-        <members>ccp2_LandingPage</members>
         <members>ccp2UserManagement </members>
-        <members>ccp_AddUser</members>
         <members>ccp2VehicleModal</members>
         <members>ccp2AddBranchForm</members>
-        <members>ccp2_createHistoryMaintain</members>
         <members>ccp2_VehicleDetails</members>
         <members>ccp2_VehicleDashboard</members>
         <members>ccp2_DemoChart</members>
         <members>ccp2_VehicleMaintenanceCalendar</members>
         <members>ccp2_MaintenanceHistory</members>
         <members>ccp2_UserProfile</members>
-        -->
-
         <members>ccp2UserManagement</members>
+        <members>ccp2_LandingPage</members>
+        <members>ccp2_Home</members>
+        <members>ccp2_CalendarMaintainEditModal</members>
+        <members>ccp2_VehicleRegistration</members>
+        <members>ccp2_Enquiry</members>
+        <members>ccp2_VehicleListNew</members>
+        <members>ccp2_AddUser</members>
+        <members>ccp2_TnCModal</members>
+        <members>ccp2_FusoHeader</members>
+        <members>ccp2_BasicInfo</members>
+        <members>ccp2_Einvoice</members>
+        <members>ccp_RegisterAdminUser</members>
+        <members>ccp2_NotificationsCentre</members>
+        <members>ccp2_branch</members>
+        <members>ccp2BranchRecordDetail</members>
+        <members>ccp2_Faq</members>
+        <members>ccp2_createHistoryMaintain</members>
+        <members>ccp2_FusoFooter</members>
+        -->
+ 
+
+    <types>      
+        <members>ccp2_additionalServices</members>
         <name>LightningComponentBundle</name>
     </types> 
     <version>59.0</version>

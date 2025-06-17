@@ -1,0 +1,2433 @@
+<template>
+  <div
+    if:true={isLoading}
+    class="main"
+    style="
+      height: 500px;
+      top: calc(1.3rem + 54px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    "
+  >
+    <lightning-spinner
+      alternative-text="Loading"
+      size="small"
+    ></lightning-spinner>
+  </div>
+
+  <template if:true={isGuestuser}>
+    <div class="landing-page-container">
+      <c-ccp2_-landing-page></c-ccp2_-landing-page>
+    </div>
+  </template>
+
+  <template if:false={hasFirstLoginUser}>
+    <template if:false={isLoading}>
+      <template if:false={isGuestuser}>
+        <div class="main">
+          <!-- <img src={backgroundImagePC} class="main_image" alt="background_Image" /> -->
+          <div class="carousel">
+            <div class="head-over-image">
+              <!-- <p>三菱ふそうサービスを</p>
+                    <p>カスタマーポータルへ</p> -->
+            </div>
+            <div class="carousel-container" style={carouselStyle}>
+              <template for:each={images} for:item="image" for:index="index">
+                <div key={image.id} class={image.className}>
+                  <img src={image.src} alt="carousel image" />
+                  <div class="logo-desc-title">
+                    <div class="title">{image.heading}</div>
+                    <div class="logo-desc">
+                      <template if:true={image.logo}>
+                        <img src={image.logo} />
+                      </template>
+                      {image.description}
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+
+            <div class="carousel-indicators">
+              <template for:each={images} for:item="image" for:index="index">
+                <span
+                  key={image.id}
+                  class={image.indicatorClass}
+                  data-index={index}
+                  onclick={handleIndicatorClick}
+                ></span>
+              </template>
+            </div>
+            <!-- <div class="gradient-overlay"></div> -->
+          </div>
+          <div class="main-cards">
+            <div class="card-container" onclick={OpenTncModal}>
+              <template if:true={hasvehicleManagement}>
+                <div class="card" onclick={handleVehicleClick}>
+                  <div class="displaybeforehover">
+                    <div class="image-container">
+                      <img src={VEHICLECARD} />
+                    </div>
+                    <div style="width: 60%">
+                      <p class="card-heading">{labels2.ccp2_Home_Veh_Card}</p>
+                      <div class="below-info-vehicle">
+                        <div class="space-contents">
+                          <div class="space-label">
+                            {labels2.ccp2_Home_Veh_Count}
+                          </div>
+                          <div class="space-text">
+                            {allVehicles}{labels2.ccp2_Home_num}
+                          </div>
+                        </div>
+                        <div class="space-contents">
+                          <div class="space-label">
+                            {labels2.ccp2_Home_MyVeh_Count}
+                          </div>
+                          <div class="space-text-slash">
+                            <p class="red-text">{userVehiclecnt}</p>
+                            <p>
+                              {labels2.ccp2_Home_num}/{allVehicles}{labels2.ccp2_Home_num}
+                            </p>
+                          </div>
+                        </div>
+                        <div class="space-contents">
+                          <div class="space-label">
+                            {labels2.ccp2_Home_30days}
+                          </div>
+                          <div class="space-text-slash">
+                            <p class="red-text">{expvehicleCountofUser}</p>
+                            <p>
+                              {labels2.ccp2_Home_num}/{userVehiclecnt}{labels2.ccp2_Home_num}
+                            </p>
+                          </div>
+                        </div>
+                        <div class="space-contents">
+                          <div class="recall-card">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="21"
+                              viewBox="0 0 20 21"
+                              fill="none"
+                            >
+                              <path
+                                d="M9.16724 12.9243C9.16724 12.4641 9.54033 12.091 10.0006 12.091C10.4608 12.091 10.8339 12.4641 10.8339 12.9243V13.8334C10.8339 14.2937 10.4608 14.6667 10.0006 14.6667C9.54033 14.6667 9.16724 14.2937 9.16724 13.8334V12.9243ZM9.16724 7.16675C9.16724 6.70651 9.54033 6.33341 10.0006 6.33341C10.4608 6.33341 10.8339 6.70651 10.8339 7.16675V10.5001C10.8339 10.9603 10.4608 11.3334 10.0006 11.3334C9.54033 11.3334 9.16724 10.9603 9.16724 10.5001V7.16675ZM9.99224 2.16675C5.39224 2.16675 1.66724 5.90008 1.66724 10.5001C1.66724 15.1001 5.39224 18.8334 9.99224 18.8334C14.6006 18.8334 18.3339 15.1001 18.3339 10.5001C18.3339 5.90008 14.6006 2.16675 9.99224 2.16675ZM10.0006 17.1667C6.31723 17.1667 3.3339 14.1834 3.3339 10.5001C3.3339 6.81675 6.31723 3.83341 10.0006 3.83341C13.6839 3.83341 16.6672 6.81675 16.6672 10.5001C16.6672 14.1834 13.6839 17.1667 10.0006 17.1667Z"
+                                fill="#E10202"
+                              />
+                            </svg>
+                            <p>{labels2.ccp2_Home_market}</p>
+                          </div>
+                          <div style="display: flex">
+                            <p class="space-label-last">
+                              {vehrecallCountofUser}{labels2.ccp2_Home_num}
+                            </p>
+                            <p class="label-recall-last-new">
+                              /{expvehicleCountofUser}{labels2.ccp2_Home_num}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="displayonhover">
+                    <div class="image-overlay"></div>
+                    <img src={VEHICLECARD} style="margin-bottom: 50px" />
+                    <div class="over-hover">
+                      <div class="over-hover-in">
+                        <button
+                          class="search-button"
+                          onclick={handleVehicleClick}
+                        >
+                          {labels2.ccp2_Home_Veh_Card}
+                        </button>
+                        <div class="desc-hover">
+                          <p>{labels2.ccp2_Home_vehDesc1}</p>
+                          <p>{labels2.ccp2_Home_vehDesc2}</p>
+                          <p>{labels2.ccp2_Home_vehDesc3}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template if:false={hasvehicleManagement}>
+                <div class="card-noPerm">
+                  <div class="displaybeforehover">
+                    <div class="image-container">
+                      <img src={VEHICLECARD} />
+                    </div>
+                    <div style="width: 60%">
+                      <p class="card-heading-noPerm">
+                        {labels2.ccp2_Home_Veh_Card}
+                      </p>
+                      <div class="below-info-vehicle-noPerm">
+                        <div
+                          class="space-contents"
+                          style="flex-direction: column"
+                        >
+                          <p class="space-label-noPerm">
+                            {labels2.ccp2_Home_vehDescDisabled1}
+                            <!-- {labels2.ccp2_Home_vehDescDisabled2} -->
+                          </p>
+                        </div>
+                        <template if:true={isAdmin}>
+                          <div class="app-btn">
+                            <button
+                              class="appli-button"
+                              data-name="vehicle"
+                              onclick={handleApplicationclick}
+                            >
+                              {labels2.ccp2_home_application}
+                            </button>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+
+              <template if:true={hasEinvoice}>
+                <div class="card" onclick={handleInvoiceclick}>
+                  <div class="displaybeforehover">
+                    <div class="image-container">
+                      <img src={FINANCECARD} />
+                    </div>
+                    <div style="width: 60%">
+                      <div>
+                        <p class="card-heading">{labels2.ccp2_Home_Inv_Card}</p>
+                      </div>
+                      <div>
+                        <div class="below-info">
+                          <template if:false={noNotifinv}>
+                            <div class="space-contents">
+                              <div class="notify">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 20 20"
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M9.16724 12.4243C9.16724 11.9641 9.54033 11.591 10.0006 11.591C10.4608 11.591 10.8339 11.9641 10.8339 12.4243V13.3334C10.8339 13.7937 10.4608 14.1667 10.0006 14.1667C9.54033 14.1667 9.16724 13.7937 9.16724 13.3334V12.4243ZM9.16724 6.66675C9.16724 6.20651 9.54033 5.83341 10.0006 5.83341C10.4608 5.83341 10.8339 6.20651 10.8339 6.66675V10.0001C10.8339 10.4603 10.4608 10.8334 10.0006 10.8334C9.54033 10.8334 9.16724 10.4603 9.16724 10.0001V6.66675ZM9.99224 1.66675C5.39224 1.66675 1.66724 5.40008 1.66724 10.0001C1.66724 14.6001 5.39224 18.3334 9.99224 18.3334C14.6006 18.3334 18.3339 14.6001 18.3339 10.0001C18.3339 5.40008 14.6006 1.66675 9.99224 1.66675ZM10.0006 16.6667C6.31723 16.6667 3.3339 13.6834 3.3339 10.0001C3.3339 6.31675 6.31723 3.33341 10.0006 3.33341C13.6839 3.33341 16.6672 6.31675 16.6672 10.0001C16.6672 13.6834 13.6839 16.6667 10.0006 16.6667Z"
+                                    fill="#E10202"
+                                  />
+                                </svg>
+                                {labels2.ccp2_Home_notify}
+                              </div>
+                              <div>{invoiceDate}</div>
+                            </div>
+                            <div class="content">{invoicedesc}</div>
+                          </template>
+                          <template if:true={noNotifinv}>
+                            <div class="space-contents">
+                              <p style="width: 93%">
+                                {labels2.ccp2_Home_invdesc}
+                              </p>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="displayonhover">
+                    <div class="image-overlay"></div>
+                    <img src={FINANCECARD} />
+                    <div class="over-hover-inv">
+                      <div class="over-hover-in-inv">
+                        <button
+                          class="search-button"
+                          onclick={handleInvoiceclick}
+                        >
+                          {labels2.ccp2_Home_Inv_Card}
+                        </button>
+                        <div class="desc-hover-inv">
+                          <p>{labels2.ccp2_Home_invdesc1}</p>
+                          <p>{labels2.ccp2_Home_invdesc2}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template if:false={hasEinvoice}>
+                <div class="card-noPerm">
+                  <div class="displaybeforehover">
+                    <div class="image-container">
+                      <img src={FINANCECARD} />
+                    </div>
+                    <div style="width: 60%">
+                      <div>
+                        <p class="card-heading-noPerm">
+                          {labels2.ccp2_Home_Inv_Card}
+                        </p>
+                      </div>
+                      <div class="below-info-vehicle-noPerm">
+                        <div
+                          class="space-contents"
+                          style="flex-direction: column"
+                        >
+                          <p class="space-label-noPerm">
+                            {labels2.ccp2_Home_vehDescDisabled1}
+                            <!-- {labels2.ccp2_Home_vehDescDisabled2} -->
+                          </p>
+                        </div>
+                        <template if:true={isAdmin}>
+                          <div class="app-btn">
+                            <button
+                              class="appli-button"
+                              data-name="e-invoice"
+                              onclick={handleApplicationclick}
+                            >
+                              {labels2.ccp2_home_application}
+                            </button>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div class="card-container">
+              <template if:true={hasDTFSA}>
+                <div class="card" onclick={handledtfsaclick}>
+                  <div class="displaybeforehover">
+                    <div class="image-container">
+                      <img src={DTFSACARD} />
+                    </div>
+                    <div style="width: 60%">
+                      <div>
+                        <p class="card-heading">
+                          {labels2.ccp2_Home_Dtfsa_Card}
+                        </p>
+                      </div>
+                      <div>
+                        <div class="below-info">
+                          <template if:false={noNotifdtfsa}>
+                            <div class="space-contents">
+                              <div class="notify">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 20 20"
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M9.16724 12.4243C9.16724 11.9641 9.54033 11.591 10.0006 11.591C10.4608 11.591 10.8339 11.9641 10.8339 12.4243V13.3334C10.8339 13.7937 10.4608 14.1667 10.0006 14.1667C9.54033 14.1667 9.16724 13.7937 9.16724 13.3334V12.4243ZM9.16724 6.66675C9.16724 6.20651 9.54033 5.83341 10.0006 5.83341C10.4608 5.83341 10.8339 6.20651 10.8339 6.66675V10.0001C10.8339 10.4603 10.4608 10.8334 10.0006 10.8334C9.54033 10.8334 9.16724 10.4603 9.16724 10.0001V6.66675ZM9.99224 1.66675C5.39224 1.66675 1.66724 5.40008 1.66724 10.0001C1.66724 14.6001 5.39224 18.3334 9.99224 18.3334C14.6006 18.3334 18.3339 14.6001 18.3339 10.0001C18.3339 5.40008 14.6006 1.66675 9.99224 1.66675ZM10.0006 16.6667C6.31723 16.6667 3.3339 13.6834 3.3339 10.0001C3.3339 6.31675 6.31723 3.33341 10.0006 3.33341C13.6839 3.33341 16.6672 6.31675 16.6672 10.0001C16.6672 13.6834 13.6839 16.6667 10.0006 16.6667Z"
+                                    fill="#E10202"
+                                  />
+                                </svg>
+                                {labels2.ccp2_Home_notify}
+                              </div>
+                              <div>{dtfsaDate}</div>
+                            </div>
+                            <template if:false={dtfsareissue}>
+                              <div class="content">
+                                <p>
+                                  {labels2.ccp2_Home_dtfsaIssue1}{labels2.ccp2_Home_dtfsaIssue2}
+                                </p>
+                              </div>
+                            </template>
+                            <template if:true={dtfsareissue}>
+                              <div class="content">
+                                {labels2.ccp2_Home_dtfsaReissue}
+                              </div>
+                            </template>
+                          </template>
+                          <template if:true={noNotifdtfsa}>
+                            <div
+                              class="space-contents"
+                              style="flex-direction: column"
+                            >
+                              <div>
+                                {labels2.ccp2_Home_notify1}{labels2.ccp2_Home_notify2}
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="displayonhover">
+                    <div class="image-overlay"></div>
+                    <img src={DTFSACARD} />
+                    <div class="over-hover">
+                      <div class="over-hover-in">
+                        <button
+                          class="search-button"
+                          onclick={handledtfsaclick}
+                        >
+                          {labels2.ccp2_Home_Dtfsa_Card}
+                        </button>
+                        <div class="desc-hover-dtf">
+                          <p>{labels2.ccp2_Home_dtfsadesc1}</p>
+                          <p>{labels2.ccp2_Home_dtfsadesc2}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template if:false={hasDTFSA}>
+                <div class="card-noPerm">
+                  <div class="displaybeforehover">
+                    <div class="image-container">
+                      <img src={DTFSACARD} />
+                    </div>
+                    <div style="width: 60%">
+                      <div>
+                        <p class="card-heading-noPerm">
+                          {labels2.ccp2_Home_Dtfsa_Card}
+                        </p>
+                      </div>
+                      <div class="below-info-vehicle-noPerm">
+                        <div
+                          class="space-contents"
+                          style="flex-direction: column"
+                        >
+                          <!-- <div class="space-label-noPerm">
+                            {labels2.ccp2_Home_dtfsadesc}
+                          </div> -->
+                          <p class="space-label-noPerm">
+                            {labels2.ccp2_Home_vehDescDisabled1}
+                            <!-- {labels2.ccp2_Home_vehDescDisabled2} -->
+                          </p>
+                        </div>
+                        <template if:true={isAdmin}>
+                          <div class="app-btn">
+                            <button
+                              class="appli-button"
+                              data-name="dtfsa"
+                              onclick={handleApplicationclick}
+                            >
+                              {labels2.ccp2_home_application}
+                            </button>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+
+              <div class="card" onclick={handleFusoshopclick}>
+                <div class="displaybeforehover">
+                  <div class="image-container">
+                    <img style="border-radius: 10px" src={SALESCARD} />
+                  </div>
+                  <div style="width: 60%">
+                    <div>
+                      <p class="card-heading-shop">
+                        {labels2.ccp2_Home_MFTBC}
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <path
+                            d="M18 19H6C5.45 19 5 18.55 5 18V6C5 5.45 5.45 5 6 5H11C11.55 5 12 4.55 12 4C12 3.45 11.55 3 11 3H5C3.89 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V13C21 12.45 20.55 12 20 12C19.45 12 19 12.45 19 13V18C19 18.55 18.55 19 18 19ZM14 4C14 4.55 14.45 5 15 5H17.59L8.46 14.13C8.07 14.52 8.07 15.15 8.46 15.54C8.85 15.93 9.48 15.93 9.87 15.54L19 6.41V9C19 9.55 19.45 10 20 10C20.55 10 21 9.55 21 9V4C21 3.45 20.55 3 20 3H15C14.45 3 14 3.45 14 4Z"
+                            fill="#262626"
+                          />
+                        </svg>
+                      </p>
+                    </div>
+                    <div class="below-info-sales">
+                      <p class="content-dtfsa">{labels2.ccp2_Home_mftbcdesc}</p>
+                      <!-- <p>{labels2.ccp2_Home_extsite}</p> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="displayonhover">
+                  <div class="image-overlay"></div>
+                  <img src={SALESCARD} />
+                  <div class="over-hover-inv">
+                    <div class="over-hover-in-sal">
+                      <button
+                        class="search-button"
+                        onclick={handleFusoshopclick}
+                      >
+                        {labels2.ccp2_Home_MFTBC}
+                        <svg
+                          style="margin-left: 6px"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="25"
+                          height="25"
+                          viewBox="0 0 25 25"
+                          fill="none"
+                        >
+                          <path
+                            d="M20.5 21.8333H4.5C3.76667 21.8333 3.16667 21.2333 3.16667 20.5V4.5C3.16667 3.76667 3.76667 3.16667 4.5 3.16667H11.1667C11.9 3.16667 12.5 2.56667 12.5 1.83333C12.5 1.1 11.9 0.5 11.1667 0.5H3.16667C1.68667 0.5 0.5 1.7 0.5 3.16667V21.8333C0.5 23.3 1.7 24.5 3.16667 24.5H21.8333C23.3 24.5 24.5 23.3 24.5 21.8333V13.8333C24.5 13.1 23.9 12.5 23.1667 12.5C22.4333 12.5 21.8333 13.1 21.8333 13.8333V20.5C21.8333 21.2333 21.2333 21.8333 20.5 21.8333ZM15.1667 1.83333C15.1667 2.56667 15.7667 3.16667 16.5 3.16667H19.9533L7.78 15.34C7.26 15.86 7.26 16.7 7.78 17.22C8.3 17.74 9.14 17.74 9.66 17.22L21.8333 5.04667V8.5C21.8333 9.23333 22.4333 9.83333 23.1667 9.83333C23.9 9.83333 24.5 9.23333 24.5 8.5V1.83333C24.5 1.1 23.9 0.5 23.1667 0.5H16.5C15.7667 0.5 15.1667 1.1 15.1667 1.83333Z"
+                            fill="white"
+                          />
+                        </svg>
+                      </button>
+                      <div class="desc-hover-dtf">
+                        <p>{labels2.ccp2_Home_mftbcdesc1}</p>
+                        <p>{labels2.ccp2_Home_mftbcdesc2}</p>
+                        <p>{labels2.ccp2_Home_extsite}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feedback-block" onclick={handleFeedbackClick}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="26"
+              height="26"
+              viewBox="0 0 28 28"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_28345_27119)">
+                <path
+                  d="M14.2154 24.123L14.5923 26.3846L9.63846 23.8538L4.68462 26.3846L5.54616 20.8923L1.61539 16.9615L7.10769 16.1L8.61539 13.1384"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M22.5615 10.2308L22.9923 9.80001C24.8769 7.91539 24.8769 4.90001 22.9923 3.01539C21.1077 1.13077 18.0923 1.13077 16.2077 3.01539C14.3231 1.13077 11.3077 1.13077 9.42307 3.01539C7.53846 4.90001 7.53846 7.91539 9.42307 9.80001L14.2154 14.5923"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M11.3615 4.90002C10.9846 5.27695 10.7692 5.81541 10.7692 6.35387C10.7692 6.89233 10.9846 7.43079 11.3615 7.80772L12.8154 9.26156"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M19.3846 26.3846C23.2506 26.3846 26.3846 23.2506 26.3846 19.3846C26.3846 15.5187 23.2506 12.3846 19.3846 12.3846C15.5186 12.3846 12.3846 15.5187 12.3846 19.3846C12.3846 23.2506 15.5186 26.3846 19.3846 26.3846Z"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M23.4231 19.3846C23.4231 21.5923 21.5923 23.4231 19.3846 23.4231C17.1769 23.4231 15.3462 21.5923 15.3462 19.3846H23.4231Z"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-miterlimit="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M22.3461 17.5C22.7922 17.5 23.1538 17.1384 23.1538 16.6923C23.1538 16.2463 22.7922 15.8846 22.3461 15.8846C21.9001 15.8846 21.5385 16.2463 21.5385 16.6923C21.5385 17.1384 21.9001 17.5 22.3461 17.5Z"
+                  fill="white"
+                />
+                <path
+                  d="M16.4769 17.5C16.923 17.5 17.2846 17.1384 17.2846 16.6923C17.2846 16.2463 16.923 15.8846 16.4769 15.8846C16.0308 15.8846 15.6692 16.2463 15.6692 16.6923C15.6692 17.1384 16.0308 17.5 16.4769 17.5Z"
+                  fill="white"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_28345_27119">
+                  <rect width="28" height="28" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            <div class="feedback-hover">{labels2.ccp2_Home_feedback}</div>
+          </div>
+        </div>
+      </template>
+
+      <template if:true={feedbackModal}>
+        <div class="modal-background-last">
+          <div class="modal-window-small">
+            <div class="warning-modal">
+              <div class="feedbackHeader">
+                <p>{labels2.ccp2_Home_feedbackHeader}</p>
+                <svg
+                  style="cursor: pointer"
+                  onclick={handlecross}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                >
+                  <path
+                    style="cursor: pointer"
+                    onclick={handlecross}
+                    d="M25.3333 8.54669L23.4533 6.66669L16 14.12L8.54663 6.66669L6.66663 8.54669L14.12 16L6.66663 23.4534L8.54663 25.3334L16 17.88L23.4533 25.3334L25.3333 23.4534L17.88 16L25.3333 8.54669Z"
+                    fill="black"
+                  />
+                </svg>
+              </div>
+              <div class="questions">
+                <div class="scrollbar">
+                  <template if:true={generalQues}>
+                    <div class="general-ques">
+                      <template for:each={generalQues} for:item="gen">
+                        <div key={gen.genId} class="ques-head">
+                          <p>1. &nbsp;</p>
+                          <p>{gen.genQues}</p>
+                        </div>
+                        <template if:true={gen.ratingType}>
+                          <div key={gen.genId} class="rating-container">
+                            <p>
+                              {labels2.ccp2_Home_notMuch}<br />{labels2.ccp2_Home_idts}
+                            </p>
+                            <template if:false={gen.isRating1}>
+                              <div
+                                class="num-select"
+                                data-idd={gen.genId}
+                                data-ques={gen.genQues}
+                                data-valuee="1"
+                                onclick={handleRatingClickgen}
+                              >
+                                1
+                              </div>
+                            </template>
+                            <template if:true={gen.isRating1}>
+                              <div
+                                class="num-selected"
+                                data-idd={gen.genId}
+                                data-ques={gen.genQues}
+                                data-valuee="1"
+                                onclick={handleremoveRatingClickgen}
+                              >
+                                1
+                              </div>
+                            </template>
+                            <template if:false={gen.isRating2}>
+                              <div
+                                class="num-select"
+                                data-idd={gen.genId}
+                                data-ques={gen.genQues}
+                                data-valuee="2"
+                                onclick={handleRatingClickgen}
+                              >
+                                2
+                              </div>
+                            </template>
+                            <template if:true={gen.isRating2}>
+                              <div
+                                class="num-selected"
+                                data-idd={gen.genId}
+                                data-ques={gen.genQues}
+                                data-valuee="2"
+                                onclick={handleremoveRatingClickgen}
+                              >
+                                2
+                              </div>
+                            </template>
+                            <template if:false={gen.isRating3}>
+                              <div
+                                class="num-select"
+                                data-idd={gen.genId}
+                                data-ques={gen.genQues}
+                                data-valuee="3"
+                                onclick={handleRatingClickgen}
+                              >
+                                3
+                              </div>
+                            </template>
+                            <template if:true={gen.isRating3}>
+                              <div
+                                class="num-selected"
+                                data-idd={gen.genId}
+                                data-ques={gen.genQues}
+                                data-valuee="3"
+                                onclick={handleremoveRatingClickgen}
+                              >
+                                3
+                              </div>
+                            </template>
+                            <template if:false={gen.isRating4}>
+                              <div
+                                class="num-select"
+                                data-idd={gen.genId}
+                                data-ques={gen.genQues}
+                                data-valuee="4"
+                                onclick={handleRatingClickgen}
+                              >
+                                4
+                              </div>
+                            </template>
+                            <template if:true={gen.isRating4}>
+                              <div
+                                class="num-selected"
+                                data-idd={gen.genId}
+                                data-ques={gen.genQues}
+                                data-valuee="4"
+                                onclick={handleremoveRatingClickgen}
+                              >
+                                4
+                              </div>
+                            </template>
+                            <template if:false={gen.isRating5}>
+                              <div
+                                class="num-select"
+                                data-idd={gen.genId}
+                                data-ques={gen.genQues}
+                                data-valuee="5"
+                                onclick={handleRatingClickgen}
+                              >
+                                5
+                              </div>
+                            </template>
+                            <template if:true={gen.isRating5}>
+                              <div
+                                class="num-selected"
+                                data-idd={gen.genId}
+                                data-ques={gen.genQues}
+                                data-valuee="5"
+                                onclick={handleremoveRatingClickgen}
+                              >
+                                5
+                              </div>
+                            </template>
+                            <p>{labels2.ccp2_Home_Ithink}</p>
+                          </div>
+                        </template>
+                      </template>
+                      <template if:false={fixedContact}>
+                        <div class="satisfied-block">
+                          <template if:true={servicesFlag}>
+                            <div class="ques-head">
+                              <p>2. &nbsp;</p>
+                              <p>{labels2.ccp2_Home_Satisfied}</p>
+                            </div>
+                          </template>
+                          <template if:true={hasvehicleManagement}>
+                            <div class="">
+                              <p class="vehicleHead">
+                                {labels2.ccp2_Home_Veh_Card}
+                              </p>
+                              <div class="inside-vehicle">
+                                <template for:each={vehicleQues} for:item="veh">
+                                  <div key={veh.vehId} class="ques-head">
+                                    <p>{veh.vehQues}</p>
+                                  </div>
+                                  <template if:true={veh.ratingType}>
+                                    <div
+                                      key={veh.vehId}
+                                      class="rating-container-smile"
+                                    >
+                                      <template if:false={veh.isRating1}>
+                                        <div
+                                          class="smile"
+                                          data-idd={veh.vehId}
+                                          data-ques={veh.vehQues}
+                                          onclick={handleRatingClick}
+                                          data-valuee="1"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M12.5 13.5C10.17 13.5 8.19 14.96 7.39 17H17.61C16.81 14.96 14.83 13.5 12.5 13.5ZM8.32 12L9.38 10.94L10.44 12L11.5 10.94L10.44 9.88L11.5 8.82L10.44 7.76L9.38 8.82L8.32 7.76L7.26 8.82L8.32 9.88L7.26 10.94L8.32 12ZM12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM16.68 7.76L15.62 8.82L14.56 7.76L13.5 8.82L14.56 9.88L13.5 10.94L14.56 12L15.62 10.94L16.68 12L17.74 10.94L16.68 9.88L17.74 8.82L16.68 7.76Z"
+                                              fill="#D32228"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_notsatisfied1}<br />{labels2.ccp2_Home_notsatisfied2}
+                                        </div>
+                                      </template>
+                                      <template if:true={veh.isRating1}>
+                                        <div
+                                          class="smile-selected1"
+                                          data-idd={veh.vehId}
+                                          data-ques={veh.vehQues}
+                                          onclick={handleremoveRatingClick}
+                                          data-valuee="1"
+                                        >
+                                          <div class="highlight1">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M12.5 13.5C10.17 13.5 8.19 14.96 7.39 17H17.61C16.81 14.96 14.83 13.5 12.5 13.5ZM8.32 12L9.38 10.94L10.44 12L11.5 10.94L10.44 9.88L11.5 8.82L10.44 7.76L9.38 8.82L8.32 7.76L7.26 8.82L8.32 9.88L7.26 10.94L8.32 12ZM12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM16.68 7.76L15.62 8.82L14.56 7.76L13.5 8.82L14.56 9.88L13.5 10.94L14.56 12L15.62 10.94L16.68 12L17.74 10.94L16.68 9.88L17.74 8.82L16.68 7.76Z"
+                                                fill="#D32228"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_notsatisfied1}<br />{labels2.ccp2_Home_notverysatisfied2}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28628_117171)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#D32228"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath id="clip0_28628_117171">
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+
+                                      <template if:false={veh.isRating2}>
+                                        <div
+                                          data-idd={veh.vehId}
+                                          data-ques={veh.vehQues}
+                                          onclick={handleRatingClick}
+                                          data-valuee="2"
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                              fill="#F36E24"
+                                            />
+                                            <path
+                                              d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                              fill="#F36E24"
+                                            />
+                                            <path
+                                              d="M12.5 14C10.17 14 8.18 15.45 7.38 17.5H9.05C9.74 16.31 11.02 15.5 12.5 15.5C13.98 15.5 15.25 16.31 15.95 17.5H17.62C16.82 15.45 14.83 14 12.5 14ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                              fill="#F36E24"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_notverysatisfied1}<br />{labels2.ccp2_Home_notverysatisfied2}
+                                        </div>
+                                      </template>
+
+                                      <template if:true={veh.isRating2}>
+                                        <div
+                                          data-idd={veh.vehId}
+                                          data-ques={veh.vehQues}
+                                          onclick={handleremoveRatingClick}
+                                          data-valuee="2"
+                                          class="smile-selected2"
+                                        >
+                                          <div class="highlight2">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                                fill="#F36E24"
+                                              />
+                                              <path
+                                                d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                                fill="#F36E24"
+                                              />
+                                              <path
+                                                d="M12.5 14C10.17 14 8.18 15.45 7.38 17.5H9.05C9.74 16.31 11.02 15.5 12.5 15.5C13.98 15.5 15.25 16.31 15.95 17.5H17.62C16.82 15.45 14.83 14 12.5 14ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                                fill="#F36E24"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_notverysatisfied1}<br />{labels2.ccp2_Home_notverysatisfied2}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_140338)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#F36E24"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath id="clip0_28646_140338">
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+
+                                      <template if:false={veh.isRating3}>
+                                        <div
+                                          data-idd={veh.vehId}
+                                          data-ques={veh.vehQues}
+                                          onclick={handleRatingClick}
+                                          data-valuee="3"
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M9.5 14H15.5V15.5H9.5V14Z"
+                                              fill="#FDCF0B"
+                                            />
+                                            <path
+                                              d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                              fill="#FDCF0B"
+                                            />
+                                            <path
+                                              d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                              fill="#FDCF0B"
+                                            />
+                                            <path
+                                              d="M12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                              fill="#FDCF0B"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_usual}
+                                        </div>
+                                      </template>
+
+                                      <template if:true={veh.isRating3}>
+                                        <div
+                                          data-idd={veh.vehId}
+                                          data-ques={veh.vehQues}
+                                          onclick={handleremoveRatingClick}
+                                          data-valuee="3"
+                                          class="smile-selected3"
+                                        >
+                                          <div class="highlight3">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M9.5 14H15.5V15.5H9.5V14Z"
+                                                fill="#FDCF0B"
+                                              />
+                                              <path
+                                                d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                                fill="#FDCF0B"
+                                              />
+                                              <path
+                                                d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                                fill="#FDCF0B"
+                                              />
+                                              <path
+                                                d="M12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                                fill="#FDCF0B"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_usual}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_123890)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#FDCF0B"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath id="clip0_28646_123890">
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+
+                                      <template if:false={veh.isRating4}>
+                                        <div
+                                          data-idd={veh.vehId}
+                                          data-ques={veh.vehQues}
+                                          onclick={handleRatingClick}
+                                          data-valuee="4"
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                              fill="#91C942"
+                                            />
+                                            <path
+                                              d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                              fill="#91C942"
+                                            />
+                                            <path
+                                              d="M12.5 16C11.02 16 9.75 15.19 9.05 14H7.38C8.18 16.05 10.17 17.5 12.5 17.5C14.83 17.5 16.82 16.05 17.62 14H15.95C15.25 15.19 13.98 16 12.5 16ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                              fill="#91C942"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_someSat}
+                                        </div>
+                                      </template>
+
+                                      <template if:true={veh.isRating4}>
+                                        <div
+                                          data-idd={veh.vehId}
+                                          data-ques={veh.vehQues}
+                                          onclick={handleremoveRatingClick}
+                                          data-valuee="4"
+                                          class="smile-selected4"
+                                        >
+                                          <div class="highlight4">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                                fill="#91C942"
+                                              />
+                                              <path
+                                                d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                                fill="#91C942"
+                                              />
+                                              <path
+                                                d="M12.5 16C11.02 16 9.75 15.19 9.05 14H7.38C8.18 16.05 10.17 17.5 12.5 17.5C14.83 17.5 16.82 16.05 17.62 14H15.95C15.25 15.19 13.98 16 12.5 16ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                                fill="#91C942"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_someSat}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_120688)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#91C942"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath id="clip0_28646_120688">
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+
+                                      <template if:false={veh.isRating5}>
+                                        <div
+                                          data-idd={veh.vehId}
+                                          data-ques={veh.vehQues}
+                                          onclick={handleRatingClick}
+                                          data-valuee="5"
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM13.5 9.94L14.56 11L15.62 9.94L16.68 11L17.74 9.94L15.62 7.82L13.5 9.94ZM9.38 9.94L10.44 11L11.5 9.94L9.38 7.82L7.26 9.94L8.32 11L9.38 9.94ZM12.5 17.5C14.83 17.5 16.81 16.04 17.61 14H7.39C8.19 16.04 10.17 17.5 12.5 17.5Z"
+                                              fill="#2BB44C"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_fullSatified}
+                                        </div>
+                                      </template>
+
+                                      <template if:true={veh.isRating5}>
+                                        <div
+                                          data-idd={veh.vehId}
+                                          data-ques={veh.vehQues}
+                                          onclick={handleremoveRatingClick}
+                                          data-valuee="5"
+                                          class="smile-selected5"
+                                        >
+                                          <div class="highlight5">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM13.5 9.94L14.56 11L15.62 9.94L16.68 11L17.74 9.94L15.62 7.82L13.5 9.94ZM9.38 9.94L10.44 11L11.5 9.94L9.38 7.82L7.26 9.94L8.32 11L9.38 9.94ZM12.5 17.5C14.83 17.5 16.81 16.04 17.61 14H7.39C8.19 16.04 10.17 17.5 12.5 17.5Z"
+                                                fill="#2BB44C"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_fullSatified}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_133039)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#2BB44C"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath id="clip0_28646_133039">
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+                                    </div>
+                                  </template>
+                                  <template if:true={veh.textboxType}>
+                                    <textarea
+                                      key={veh.vehId}
+                                      data-idd={veh.vehId}
+                                      class="veh-textarea"
+                                      placeholder={labels2.ccp2_Home_Placeholder}
+                                      oninput={handlesuggestionboxveh}
+                                      maxlength="200"
+                                    ></textarea>
+                                  </template>
+                                </template>
+                              </div>
+                            </div>
+                          </template>
+                          <template if:true={hasEinvoice}>
+                            <div class="">
+                              <p class="vehicleHead">
+                                {labels2.ccp2_Home_feedbackInv}
+                              </p>
+                              <div class="inside-vehicle">
+                                <template for:each={invoiceQues} for:item="veh">
+                                  <div key={veh.invId} class="ques-head">
+                                    <p>{veh.invQues}</p>
+                                  </div>
+                                  <template if:true={veh.ratingType}>
+                                    <div
+                                      key={veh.invId}
+                                      class="rating-container-smile"
+                                    >
+                                      <template if:false={veh.isRating1}>
+                                        <div
+                                          data-idd={veh.invId}
+                                          onclick={handleRatingClickinv}
+                                          data-ques={veh.invQues}
+                                          data-valuee="1"
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M12.5 13.5C10.17 13.5 8.19 14.96 7.39 17H17.61C16.81 14.96 14.83 13.5 12.5 13.5ZM8.32 12L9.38 10.94L10.44 12L11.5 10.94L10.44 9.88L11.5 8.82L10.44 7.76L9.38 8.82L8.32 7.76L7.26 8.82L8.32 9.88L7.26 10.94L8.32 12ZM12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM16.68 7.76L15.62 8.82L14.56 7.76L13.5 8.82L14.56 9.88L13.5 10.94L14.56 12L15.62 10.94L16.68 12L17.74 10.94L16.68 9.88L17.74 8.82L16.68 7.76Z"
+                                              fill="#D32228"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_notsatisfied1}<br />{labels2.ccp2_Home_notsatisfied2}
+                                        </div>
+                                      </template>
+                                      <template if:true={veh.isRating1}>
+                                        <div
+                                          data-idd={veh.invId}
+                                          onclick={handleremoveRatingClickinv}
+                                          data-ques={veh.invQues}
+                                          data-valuee="1"
+                                          class="smile-selected1"
+                                        >
+                                          <div class="highlight1">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M12.5 13.5C10.17 13.5 8.19 14.96 7.39 17H17.61C16.81 14.96 14.83 13.5 12.5 13.5ZM8.32 12L9.38 10.94L10.44 12L11.5 10.94L10.44 9.88L11.5 8.82L10.44 7.76L9.38 8.82L8.32 7.76L7.26 8.82L8.32 9.88L7.26 10.94L8.32 12ZM12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM16.68 7.76L15.62 8.82L14.56 7.76L13.5 8.82L14.56 9.88L13.5 10.94L14.56 12L15.62 10.94L16.68 12L17.74 10.94L16.68 9.88L17.74 8.82L16.68 7.76Z"
+                                                fill="#D32228"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_notsatisfied1}<br />{labels2.ccp2_Home_notsatisfied2}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28628_117171)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#D32228"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath
+                                                id="clip0_28628_1171710"
+                                              >
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+                                      <template if:false={veh.isRating2}>
+                                        <div
+                                          data-idd={veh.invId}
+                                          onclick={handleRatingClickinv}
+                                          data-ques={veh.invQues}
+                                          data-valuee="2"
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                              fill="#F36E24"
+                                            />
+                                            <path
+                                              d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                              fill="#F36E24"
+                                            />
+                                            <path
+                                              d="M12.5 14C10.17 14 8.18 15.45 7.38 17.5H9.05C9.74 16.31 11.02 15.5 12.5 15.5C13.98 15.5 15.25 16.31 15.95 17.5H17.62C16.82 15.45 14.83 14 12.5 14ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                              fill="#F36E24"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_notverysatisfied1}<br />{labels2.ccp2_Home_notverysatisfied2}
+                                        </div>
+                                      </template>
+                                      <template if:true={veh.isRating2}>
+                                        <div
+                                          data-idd={veh.invId}
+                                          onclick={handleremoveRatingClickinv}
+                                          data-ques={veh.invQues}
+                                          data-valuee="2"
+                                          class="smile-selected2"
+                                        >
+                                          <div class="highlight2">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                                fill="#F36E24"
+                                              />
+                                              <path
+                                                d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                                fill="#F36E24"
+                                              />
+                                              <path
+                                                d="M12.5 14C10.17 14 8.18 15.45 7.38 17.5H9.05C9.74 16.31 11.02 15.5 12.5 15.5C13.98 15.5 15.25 16.31 15.95 17.5H17.62C16.82 15.45 14.83 14 12.5 14ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                                fill="#F36E24"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_notverysatisfied1}<br />{labels2.ccp2_Home_notverysatisfied2}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_140338)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#F36E24"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath
+                                                id="clip0_28646_1403389"
+                                              >
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+
+                                      <template if:false={veh.isRating3}>
+                                        <div
+                                          data-idd={veh.invId}
+                                          onclick={handleRatingClickinv}
+                                          data-ques={veh.invQues}
+                                          data-valuee="3"
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M9.5 14H15.5V15.5H9.5V14Z"
+                                              fill="#FDCF0B"
+                                            />
+                                            <path
+                                              d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                              fill="#FDCF0B"
+                                            />
+                                            <path
+                                              d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                              fill="#FDCF0B"
+                                            />
+                                            <path
+                                              d="M12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                              fill="#FDCF0B"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_usual}
+                                        </div>
+                                      </template>
+
+                                      <template if:true={veh.isRating3}>
+                                        <div
+                                          data-idd={veh.invId}
+                                          onclick={handleremoveRatingClickinv}
+                                          data-ques={veh.invQues}
+                                          data-valuee="3"
+                                          class="smile-selected3"
+                                        >
+                                          <div class="highlight3">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M9.5 14H15.5V15.5H9.5V14Z"
+                                                fill="#FDCF0B"
+                                              />
+                                              <path
+                                                d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                                fill="#FDCF0B"
+                                              />
+                                              <path
+                                                d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                                fill="#FDCF0B"
+                                              />
+                                              <path
+                                                d="M12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                                fill="#FDCF0B"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_usual}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_123890)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#FDCF0B"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath
+                                                id="clip0_28646_1238908"
+                                              >
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+
+                                      <template if:false={veh.isRating4}>
+                                        <div
+                                          data-idd={veh.invId}
+                                          onclick={handleRatingClickinv}
+                                          data-ques={veh.invQues}
+                                          data-valuee="4"
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                              fill="#91C942"
+                                            />
+                                            <path
+                                              d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                              fill="#91C942"
+                                            />
+                                            <path
+                                              d="M12.5 16C11.02 16 9.75 15.19 9.05 14H7.38C8.18 16.05 10.17 17.5 12.5 17.5C14.83 17.5 16.82 16.05 17.62 14H15.95C15.25 15.19 13.98 16 12.5 16ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                              fill="#91C942"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_someSat}
+                                        </div>
+                                      </template>
+
+                                      <template if:true={veh.isRating4}>
+                                        <div
+                                          data-idd={veh.invId}
+                                          onclick={handleremoveRatingClickinv}
+                                          data-ques={veh.invQues}
+                                          data-valuee="4"
+                                          class="smile-selected4"
+                                        >
+                                          <div class="highlight4">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                                fill="#91C942"
+                                              />
+                                              <path
+                                                d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                                fill="#91C942"
+                                              />
+                                              <path
+                                                d="M12.5 16C11.02 16 9.75 15.19 9.05 14H7.38C8.18 16.05 10.17 17.5 12.5 17.5C14.83 17.5 16.82 16.05 17.62 14H15.95C15.25 15.19 13.98 16 12.5 16ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                                fill="#91C942"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_someSat}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_120688)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#91C942"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath
+                                                id="clip0_28646_1206887"
+                                              >
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+
+                                      <template if:false={veh.isRating5}>
+                                        <div
+                                          data-idd={veh.invId}
+                                          onclick={handleRatingClickinv}
+                                          data-ques={veh.invQues}
+                                          data-valuee="5"
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM13.5 9.94L14.56 11L15.62 9.94L16.68 11L17.74 9.94L15.62 7.82L13.5 9.94ZM9.38 9.94L10.44 11L11.5 9.94L9.38 7.82L7.26 9.94L8.32 11L9.38 9.94ZM12.5 17.5C14.83 17.5 16.81 16.04 17.61 14H7.39C8.19 16.04 10.17 17.5 12.5 17.5Z"
+                                              fill="#2BB44C"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_fullSatified}
+                                        </div>
+                                      </template>
+
+                                      <template if:true={veh.isRating5}>
+                                        <div
+                                          data-idd={veh.invId}
+                                          onclick={handleremoveRatingClickinv}
+                                          data-ques={veh.invQues}
+                                          data-valuee="5"
+                                          class="smile-selected5"
+                                        >
+                                          <div class="highlight5">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM13.5 9.94L14.56 11L15.62 9.94L16.68 11L17.74 9.94L15.62 7.82L13.5 9.94ZM9.38 9.94L10.44 11L11.5 9.94L9.38 7.82L7.26 9.94L8.32 11L9.38 9.94ZM12.5 17.5C14.83 17.5 16.81 16.04 17.61 14H7.39C8.19 16.04 10.17 17.5 12.5 17.5Z"
+                                                fill="#2BB44C"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_fullSatified}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_133039)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#2BB44C"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath
+                                                id="clip0_28646_1330396"
+                                              >
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+                                    </div>
+                                  </template>
+                                  <template if:true={veh.textboxType}>
+                                    <textarea
+                                      key={veh.invId}
+                                      data-idd={veh.invId}
+                                      class="veh-textarea"
+                                      placeholder={labels2.ccp2_Home_Placeholder}
+                                      oninput={handlesuggestionboxveh}
+                                      maxlength="200"
+                                    ></textarea>
+                                  </template>
+                                </template>
+                              </div>
+                            </div>
+                          </template>
+                          <template if:true={hasDTFSA}>
+                            <div class="">
+                              <p class="vehicleHead">
+                                {labels2.ccp2_Home_Dtfsa_Card}
+                              </p>
+                              <div class="inside-vehicle">
+                                <template for:each={dtfsaQues} for:item="veh">
+                                  <div key={veh.dtId} class="ques-head">
+                                    <p>{veh.dtQues}</p>
+                                  </div>
+                                  <template if:true={veh.ratingType}>
+                                    <div
+                                      key={veh.dtId}
+                                      class="rating-container-smile"
+                                    >
+                                      <template if:false={veh.isRating1}>
+                                        <div
+                                          data-idd={veh.dtId}
+                                          data-ques={veh.dtQues}
+                                          data-valuee="1"
+                                          class="smile"
+                                          onclick={handleRatingClickdt}
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M12.5 13.5C10.17 13.5 8.19 14.96 7.39 17H17.61C16.81 14.96 14.83 13.5 12.5 13.5ZM8.32 12L9.38 10.94L10.44 12L11.5 10.94L10.44 9.88L11.5 8.82L10.44 7.76L9.38 8.82L8.32 7.76L7.26 8.82L8.32 9.88L7.26 10.94L8.32 12ZM12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM16.68 7.76L15.62 8.82L14.56 7.76L13.5 8.82L14.56 9.88L13.5 10.94L14.56 12L15.62 10.94L16.68 12L17.74 10.94L16.68 9.88L17.74 8.82L16.68 7.76Z"
+                                              fill="#D32228"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_notsatisfied1}<br />{labels2.ccp2_Home_notsatisfied2}
+                                        </div>
+                                      </template>
+                                      <template if:true={veh.isRating1}>
+                                        <div
+                                          data-idd={veh.dtId}
+                                          data-ques={veh.dtQues}
+                                          data-valuee="1"
+                                          class="smile-selected1"
+                                          onclick={handleremoveRatingClickdt}
+                                        >
+                                          <div class="highlight1">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M12.5 13.5C10.17 13.5 8.19 14.96 7.39 17H17.61C16.81 14.96 14.83 13.5 12.5 13.5ZM8.32 12L9.38 10.94L10.44 12L11.5 10.94L10.44 9.88L11.5 8.82L10.44 7.76L9.38 8.82L8.32 7.76L7.26 8.82L8.32 9.88L7.26 10.94L8.32 12ZM12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM16.68 7.76L15.62 8.82L14.56 7.76L13.5 8.82L14.56 9.88L13.5 10.94L14.56 12L15.62 10.94L16.68 12L17.74 10.94L16.68 9.88L17.74 8.82L16.68 7.76Z"
+                                                fill="#D32228"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_notsatisfied1}<br />{labels2.ccp2_Home_notsatisfied2}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28628_117171)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#D32228"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath
+                                                id="clip0_28628_1171715"
+                                              >
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+
+                                      <template if:false={veh.isRating2}>
+                                        <div
+                                          data-idd={veh.dtId}
+                                          data-ques={veh.dtQues}
+                                          data-valuee="2"
+                                          onclick={handleRatingClickdt}
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                              fill="#F36E24"
+                                            />
+                                            <path
+                                              d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                              fill="#F36E24"
+                                            />
+                                            <path
+                                              d="M12.5 14C10.17 14 8.18 15.45 7.38 17.5H9.05C9.74 16.31 11.02 15.5 12.5 15.5C13.98 15.5 15.25 16.31 15.95 17.5H17.62C16.82 15.45 14.83 14 12.5 14ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                              fill="#F36E24"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_notverysatisfied1}<br />{labels2.ccp2_Home_notverysatisfied2}
+                                        </div>
+                                      </template>
+                                      <template if:true={veh.isRating2}>
+                                        <div
+                                          data-idd={veh.dtId}
+                                          data-ques={veh.dtQues}
+                                          data-valuee="2"
+                                          onclick={handleremoveRatingClickdt}
+                                          class="smile-selected2"
+                                        >
+                                          <div class="highlight2">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                                fill="#F36E24"
+                                              />
+                                              <path
+                                                d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                                fill="#F36E24"
+                                              />
+                                              <path
+                                                d="M12.5 14C10.17 14 8.18 15.45 7.38 17.5H9.05C9.74 16.31 11.02 15.5 12.5 15.5C13.98 15.5 15.25 16.31 15.95 17.5H17.62C16.82 15.45 14.83 14 12.5 14ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                                fill="#F36E24"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_notverysatisfied1}<br />{labels2.ccp2_Home_notverysatisfied2}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_140338)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#F36E24"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath
+                                                id="clip0_28646_1403384"
+                                              >
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+                                      <template if:false={veh.isRating3}>
+                                        <div
+                                          data-idd={veh.dtId}
+                                          data-ques={veh.dtQues}
+                                          data-valuee="3"
+                                          onclick={handleRatingClickdt}
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M9.5 14H15.5V15.5H9.5V14Z"
+                                              fill="#FDCF0B"
+                                            />
+                                            <path
+                                              d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                              fill="#FDCF0B"
+                                            />
+                                            <path
+                                              d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                              fill="#FDCF0B"
+                                            />
+                                            <path
+                                              d="M12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                              fill="#FDCF0B"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_usual}
+                                        </div>
+                                      </template>
+                                      <template if:true={veh.isRating3}>
+                                        <div
+                                          data-idd={veh.dtId}
+                                          data-ques={veh.dtQues}
+                                          data-valuee="3"
+                                          onclick={handleremoveRatingClickdt}
+                                          class="smile-selected3"
+                                        >
+                                          <div class="highlight3">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M9.5 14H15.5V15.5H9.5V14Z"
+                                                fill="#FDCF0B"
+                                              />
+                                              <path
+                                                d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                                fill="#FDCF0B"
+                                              />
+                                              <path
+                                                d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                                fill="#FDCF0B"
+                                              />
+                                              <path
+                                                d="M12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                                fill="#FDCF0B"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_usual}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_123890)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#FDCF0B"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath
+                                                id="clip0_28646_1238903"
+                                              >
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+                                      <template if:false={veh.isRating4}>
+                                        <div
+                                          data-idd={veh.dtId}
+                                          data-ques={veh.dtQues}
+                                          data-valuee="4"
+                                          onclick={handleRatingClickdt}
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                              fill="#91C942"
+                                            />
+                                            <path
+                                              d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                              fill="#91C942"
+                                            />
+                                            <path
+                                              d="M12.5 16C11.02 16 9.75 15.19 9.05 14H7.38C8.18 16.05 10.17 17.5 12.5 17.5C14.83 17.5 16.82 16.05 17.62 14H15.95C15.25 15.19 13.98 16 12.5 16ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                              fill="#91C942"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_someSat}
+                                        </div>
+                                      </template>
+
+                                      <template if:true={veh.isRating4}>
+                                        <div
+                                          data-idd={veh.dtId}
+                                          data-ques={veh.dtQues}
+                                          data-valuee="4"
+                                          onclick={handleremoveRatingClickdt}
+                                          class="smile-selected4"
+                                        >
+                                          <div class="highlight4">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M16 11C16.8284 11 17.5 10.3284 17.5 9.5C17.5 8.67157 16.8284 8 16 8C15.1716 8 14.5 8.67157 14.5 9.5C14.5 10.3284 15.1716 11 16 11Z"
+                                                fill="#91C942"
+                                              />
+                                              <path
+                                                d="M9 11C9.82843 11 10.5 10.3284 10.5 9.5C10.5 8.67157 9.82843 8 9 8C8.17157 8 7.5 8.67157 7.5 9.5C7.5 10.3284 8.17157 11 9 11Z"
+                                                fill="#91C942"
+                                              />
+                                              <path
+                                                d="M12.5 16C11.02 16 9.75 15.19 9.05 14H7.38C8.18 16.05 10.17 17.5 12.5 17.5C14.83 17.5 16.82 16.05 17.62 14H15.95C15.25 15.19 13.98 16 12.5 16ZM12.49 2C6.97 2 2.5 6.48 2.5 12C2.5 17.52 6.97 22 12.49 22C18.02 22 22.5 17.52 22.5 12C22.5 6.48 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20Z"
+                                                fill="#91C942"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_someSat}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_120688)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#91C942"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath
+                                                id="clip0_28646_1206882"
+                                              >
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+
+                                      <template if:false={veh.isRating5}>
+                                        <div
+                                          data-idd={veh.dtId}
+                                          data-ques={veh.dtQues}
+                                          data-valuee="5"
+                                          onclick={handleRatingClickdt}
+                                          class="smile"
+                                        >
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="25"
+                                            height="24"
+                                            viewBox="0 0 25 24"
+                                            fill="none"
+                                          >
+                                            <path
+                                              d="M12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM13.5 9.94L14.56 11L15.62 9.94L16.68 11L17.74 9.94L15.62 7.82L13.5 9.94ZM9.38 9.94L10.44 11L11.5 9.94L9.38 7.82L7.26 9.94L8.32 11L9.38 9.94ZM12.5 17.5C14.83 17.5 16.81 16.04 17.61 14H7.39C8.19 16.04 10.17 17.5 12.5 17.5Z"
+                                              fill="#2BB44C"
+                                            />
+                                          </svg>
+                                          {labels2.ccp2_Home_fullSatified}
+                                        </div>
+                                      </template>
+
+                                      <template if:true={veh.isRating5}>
+                                        <div
+                                          data-idd={veh.dtId}
+                                          data-ques={veh.dtQues}
+                                          data-valuee="5"
+                                          onclick={handleremoveRatingClickdt}
+                                          class="smile-selected5"
+                                        >
+                                          <div class="highlight5">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              width="25"
+                                              height="24"
+                                              viewBox="0 0 25 24"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M12.49 2C6.97 2 2.5 6.47 2.5 12C2.5 17.53 6.97 22 12.49 22C18.01 22 22.5 17.53 22.5 12C22.5 6.47 18.02 2 12.49 2ZM12.5 20C8.08 20 4.5 16.42 4.5 12C4.5 7.58 8.08 4 12.5 4C16.92 4 20.5 7.58 20.5 12C20.5 16.42 16.92 20 12.5 20ZM13.5 9.94L14.56 11L15.62 9.94L16.68 11L17.74 9.94L15.62 7.82L13.5 9.94ZM9.38 9.94L10.44 11L11.5 9.94L9.38 7.82L7.26 9.94L8.32 11L9.38 9.94ZM12.5 17.5C14.83 17.5 16.81 16.04 17.61 14H7.39C8.19 16.04 10.17 17.5 12.5 17.5Z"
+                                                fill="#2BB44C"
+                                              />
+                                            </svg>
+                                            {labels2.ccp2_Home_fullSatified}
+                                          </div>
+                                          <svg
+                                            class="svg-tick"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="20"
+                                            height="20"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                          >
+                                            <g
+                                              clip-path="url(#clip0_28646_133039)"
+                                            >
+                                              <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="12"
+                                                fill="white"
+                                              />
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
+                                                fill="#2BB44C"
+                                              />
+                                            </g>
+                                            <defs>
+                                              <clipPath
+                                                id="clip0_28646_1330391"
+                                              >
+                                                <rect
+                                                  width="24"
+                                                  height="24"
+                                                  fill="white"
+                                                />
+                                              </clipPath>
+                                            </defs>
+                                          </svg>
+                                        </div>
+                                      </template>
+                                    </div>
+                                  </template>
+                                  <template if:true={veh.textboxType}>
+                                    <textarea
+                                      key={veh.dtId}
+                                      data-idd={veh.dtId}
+                                      class="veh-textarea"
+                                      placeholder={labels2.ccp2_Home_Placeholder}
+                                      oninput={handlesuggestionboxveh}
+                                      maxlength="200"
+                                    ></textarea>
+                                  </template>
+                                </template>
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+
+                        <div class="help-info">
+                          <p class="help-text" style="padding: 0 5px">
+                            {labels2.ccp2_Home_Supporttext}
+                          </p>
+                          <div class="phone">
+                            <p class="help-text">
+                              {labels2.ccp2_Home_Contact}:
+                            </p>
+                            <p class="help-bold">0120-523-500</p>
+                          </div>
+                          <div class="timing">
+                            <p class="help-text">
+                              {labels2.ccp2_Home_designatedTime}
+                            </p>
+                            <p class="help-bold">
+                              9:00 ～ 12:00 / 13:00 ～ 17:00
+                            </p>
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                    <template if:true={fixedContact}>
+                      <div class="fixedContact">
+                        <div class="help-info">
+                          <p class="help-text">
+                            {labels2.ccp2_Home_Supporttext}
+                          </p>
+                          <div class="phone">
+                            <p class="help-text">
+                              {labels2.ccp2_Home_Contact}:
+                            </p>
+                            <p class="help-bold">0120-739-200</p>
+                          </div>
+                          <div class="timing">
+                            <p class="help-text">
+                              {labels2.ccp2_Home_designatedTime}
+                            </p>
+                            <p class="help-bold">
+                              9:00 ～ 12:00 / 13:00 ～ 17:00
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+                  </template>
+                </div>
+              </div>
+              <div class="buttons-all">
+                <button
+                  class="save-button"
+                  onclick={handlesavedata}
+                  disabled={responseLength}
+                >
+                  {labels2.ccp2_Home_Send}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <template if:true={successModal}>
+        <div class="modal-background-last2">
+          <div class="modal-window-small2">
+            <div class="warning-modal2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="56"
+                height="56"
+                viewBox="0 0 56 56"
+                fill="none"
+              >
+                <path
+                  d="M28.0001 4.66663C15.1201 4.66663 4.66675 15.12 4.66675 28C4.66675 40.88 15.1201 51.3333 28.0001 51.3333C40.8801 51.3333 51.3334 40.88 51.3334 28C51.3334 15.12 40.8801 4.66663 28.0001 4.66663ZM28.0001 46.6666C17.7101 46.6666 9.33341 38.29 9.33341 28C9.33341 17.71 17.7101 9.33329 28.0001 9.33329C38.2901 9.33329 46.6667 17.71 46.6667 28C46.6667 38.29 38.2901 46.6666 28.0001 46.6666ZM38.7101 17.6866L23.3334 33.0633L17.2901 27.0433L14.0001 30.3333L23.3334 39.6666L42.0001 21L38.7101 17.6866Z"
+                  fill="#2BB44C"
+                />
+              </svg>
+              <div class="thankyou-font">
+                <p style="font-weight: 700">{labels2.ccp2_Home_Thankyou}</p>
+                <p>
+                  {labels2.ccp2_Home_appreciate1}<br />{labels2.ccp2_Home_appreciate2}
+                </p>
+              </div>
+            </div>
+            <div class="buttons-all-ok">
+              <button class="save-button" onclick={handleOk}>
+                {labels2.ccp2_Home_appreciate1}
+              </button>
+            </div>
+          </div>
+        </div>
+      </template>
+      <template if:true={restrictModal}>
+        <div class="modal-background-last2">
+          <div class="modal-window-smalldtfsa">
+            <div
+              style="display: flex; flex-direction: column; align-items: center"
+            >
+              <p>{labels2.ccp2_Home_dtfsamodal1}</p>
+              <p>{labels2.ccp2_Home_dtfsamodal2}</p>
+              <p>{labels2.ccp2_Home_dtfsamodal3}</p>
+              <p>{labels2.ccp2_Home_dtfsamodal4}</p>
+            </div>
+            <button class="save-button" onclick={handlebackDtfsa}>
+              {labels2.ccp2_Home_backTop}
+            </button>
+          </div>
+        </div>
+      </template>
+    </template>
+  </template>
+  <template if:true={hasFirstLoginUser}>
+    <div class="main-container">
+      <img
+        src={background}
+        class="main-container-background"
+        alt="background Image"
+      />
+    </div>
+    <template for:each={TncData} for:item="terms">
+      <div
+        if:true={terms.isLoading}
+        class="modal-background-last"
+        key={terms.Id}
+        for:index={terms.index}
+      >
+        <template if:true={terms.isLoading}>
+          <div class="modal-window-small-news">
+            <div class="header-container-more">
+              <template if:true={terms.TrueA}>
+                <p style="font-size: 16px; font-weight: 700">
+                  部整月次請求書（電子版）のダウンロードサービスの利用規約の更新のご案内
+                </p>
+              </template>
+              <template if:true={terms.TrueB}>
+                <p style="font-size: 16px; font-weight: 700">
+                  FUSOリース書類のダウンロードサービスの利用規約の更新のご案内
+                </p>
+              </template>
+              <template if:true={terms.TrueC}>
+                <p style="font-size: 16px; font-weight: 700">
+                  三菱ふそうカスタマーポータルの利用規約の更新のご案内
+                </p>
+              </template>
+            </div>
+            <div class="data-more-modal-terms">
+              <!-- <div class="recall-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M22.2151 8.50555C20.7223 4.12315 16.6663 1.19995 12.0007 1.19995C7.4071 1.19995 3.2695 4.18555 1.7863 8.50555C1.48376 8.5743 1.21354 8.74379 1.01993 8.98623C0.82633 9.22867 0.720822 9.52969 0.720703 9.83995V14.16C0.720703 14.8128 1.1767 15.3552 1.7863 15.4944C3.2695 19.8144 7.4071 22.8 12.0007 22.8C16.6615 22.8 20.7175 19.8768 22.2151 15.4944C22.5176 15.4256 22.7879 15.2561 22.9815 15.0137C23.1751 14.7712 23.2806 14.4702 23.2807 14.16V9.83995C23.2807 9.18715 22.8247 8.64475 22.2151 8.50555ZM22.3207 14.16C22.3207 14.3856 22.1383 14.5728 21.9079 14.5728H2.0935C1.98402 14.5728 1.87902 14.5293 1.80161 14.4518C1.72419 14.3744 1.6807 14.2694 1.6807 14.16V9.83995C1.6807 9.61435 1.8631 9.42715 2.0935 9.42715H21.9127C22.1383 9.42715 22.3255 9.60955 22.3255 9.83995V14.16H22.3207ZM11.5207 21.7824C9.7399 21.4032 8.1655 18.9696 7.5031 15.528H11.5207V21.7824ZM12.4807 21.7824V15.5328H16.4983C15.8359 18.9696 14.2615 21.408 12.4807 21.7824ZM12.4807 2.21755C14.2615 2.59675 15.8359 5.03515 16.4983 8.46715H12.4807V2.21755ZM11.5207 2.21755V8.46715H7.5031C8.1655 5.03515 9.7447 2.59675 11.5207 2.21755ZM21.1831 8.46715H17.4727C17.0071 5.89915 16.0663 3.84475 14.8567 2.58235C16.2919 3.01238 17.6089 3.76679 18.7059 4.78722C19.803 5.80766 20.6505 7.06677 21.1831 8.46715ZM9.1303 2.60155C7.9303 3.86395 6.9943 5.91355 6.5287 8.46715H2.8183C3.9127 5.63515 6.2791 3.48475 9.1303 2.60155ZM2.8183 15.5328H6.5287C6.9943 18.0864 7.9255 20.136 9.1255 21.3984C6.2791 20.5104 3.9079 18.3648 2.8183 15.5328ZM14.8567 21.4176C16.0663 20.1552 17.0023 18.1008 17.4727 15.5328H21.1831C20.6505 16.9331 19.803 18.1922 18.7059 19.2127C17.6089 20.2331 16.2919 20.9875 14.8567 21.4176Z" fill="#E10202"/>
+                    <path d="M6.81191 12.6192L5.29991 10.152H4.57031V13.848H5.26631V11.4384L6.75431 13.848H7.50311V10.152H6.81191V12.6192ZM9.03911 12.216H10.8967V11.5968H9.03911V10.776H11.0359V10.152H8.29511V13.848H11.1079V13.224H9.03911V12.216ZM14.9143 12.7344L14.2663 10.152H13.3783L12.7015 12.6912L12.1447 10.152H11.3815L12.2647 13.848H13.0711L13.8055 11.0832L14.5447 13.848H15.3319L16.2295 10.152H15.4807L14.9143 12.7344ZM18.8743 11.808C18.7015 11.7168 18.4327 11.6256 18.0679 11.544C17.7031 11.4576 17.4775 11.376 17.3815 11.2992C17.3476 11.2722 17.32 11.2379 17.3009 11.1989C17.2818 11.1598 17.2717 11.1171 17.2711 11.0736C17.2711 10.9776 17.3095 10.9008 17.3911 10.8432C17.5159 10.752 17.6839 10.7088 17.8999 10.7088C18.1111 10.7088 18.2695 10.752 18.3703 10.8336C18.4759 10.9152 18.5431 11.0544 18.5767 11.2416L19.3207 11.208C19.3111 10.8672 19.1863 10.5984 18.9511 10.392C18.7159 10.1856 18.3655 10.0848 17.9047 10.0848C17.6215 10.0848 17.3767 10.128 17.1751 10.2144C16.9735 10.3008 16.8199 10.4256 16.7143 10.5888C16.6087 10.752 16.5559 10.9296 16.5559 11.1168C16.5559 11.4096 16.6711 11.6592 16.8967 11.8608C17.0599 12.0048 17.3383 12.1296 17.7367 12.2256C18.0487 12.3024 18.2455 12.3552 18.3319 12.3888C18.4615 12.432 18.5479 12.4896 18.6007 12.5472C18.6535 12.6096 18.6775 12.6816 18.6775 12.768C18.6775 12.9024 18.6151 13.0224 18.4951 13.1232C18.3751 13.224 18.1927 13.2768 17.9527 13.2768C17.7271 13.2768 17.5447 13.2192 17.4103 13.104C17.2759 12.9888 17.1895 12.8112 17.1463 12.5664L16.4215 12.6384C16.4695 13.0512 16.6183 13.368 16.8727 13.584C17.1223 13.8 17.4823 13.9104 17.9479 13.9104C18.2695 13.9104 18.5383 13.8672 18.7543 13.776C18.9703 13.6848 19.1335 13.5504 19.2535 13.3632C19.3735 13.176 19.4311 12.9792 19.4311 12.768C19.4311 12.5328 19.3831 12.336 19.2823 12.1776C19.1815 12.024 19.0471 11.8992 18.8743 11.808Z" fill="#E10202"/>
+                  </svg>
+                </div> -->
+              <div class="data-modal-news">
+                <div class="reg-date-terms">
+                  <p style="font-size: 14px; padding-top: 5px">
+                    規約更新予定日：{terms.startDate}
+                  </p>
+                  <p style="font-size: 14px; padding-top: 5px">
+                    通知日：{terms.createdDate}
+                  </p>
+                </div>
+                <div class="modal-description-terms" onscroll={handleScroll}>
+                  <p>{terms.description0}</p>
+                  <P
+                    >{terms.description1}
+                    <a
+                      target="_blank"
+                      class="main-link-href"
+                      href={terms.pdfurl}
+                      >こちら</a
+                    ></P
+                  >
+                  <!-- <iframe src={terms.pdfurl} width="650px"
+                    height="400px"></iframe> -->
+                  <!-- <lightning-formatted-rich-text class="imageren" value={terms.Content__c}></lightning-formatted-rich-text> -->
+                </div>
+              </div>
+              <button
+                class="save-button"
+                data-id={terms.Id}
+                onclick={handleOkTerms}
+              >
+                閉じる
+              </button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </template>
+  </template>
+  <template if:true={isShowModal1}>
+    <div class="modal-background-last2">
+      <div class="modal-window-small-inv">
+        <div class="warning-modal-inv">
+          <p>ただいま、お客様の部整月次請求書(電子版)</p>
+          <p>ご利用の手続きを進めております。</p>
+          <p>手続き完了しましたらメールにてご案内差し上げます。</p>
+        </div>
+        <div class="buttons-all-inv">
+          <button class="save-button" onclick={handleInvoff}>
+            トップページへ戻る
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01"
+        aria-modal="true" aria-describedby="modal-content-id-1"
+        class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <div class="slds-modal__content slds-p-around_medium">
+                <H3 class="modal1">
+                    ただいま、お客様の部整月次請求書（電子版）ご利用の手続きを進めております。手続き完了しましたらメールにてご案内差し上げます。
+                </H3>
+            </div>
+            <footer class="slds-modal__footer">
+                <button class="return_btn--m button_add"
+                    onclick={hideModalBox}>TOPページへ戻る</button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div> -->
+  </template>
+</template>

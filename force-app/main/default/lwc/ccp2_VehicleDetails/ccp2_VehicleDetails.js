@@ -8,6 +8,7 @@ import truckconnectDetails from "@salesforce/apex/CCP2_vehicle_Maintenance_contr
 import branchOptionsApi from "@salesforce/apex/CCP2_vehicle_Maintenance_controller.getVehicleBranch";
 import updateeditinfo from "@salesforce/apex/CCP2_vehicle_Maintenance_controller.updateVehicle";
 import ErrorLog from "@salesforce/apex/CCP2_lwc_ErrorLogs.createLwcErrorLog";
+import DataCloudMaintenanceCreation from "@salesforce/apex/CCP2_MaintenanceBookingProcessor.processMaintenanceBookings";
 
 //import MaintainenceLeaseInfo from "@salesforce/apex/CCP2_Notification_Controller.maintenanceLeaseInfo";
 import getImagesAsBase64 from "@salesforce/apex/VehicleImageService.getImagesAsBase64";
@@ -20,11 +21,15 @@ import updateFavVehicleApi from "@salesforce/apex/CCP2_VehicleDetailController.u
 import { getPicklistValues } from "lightning/uiObjectInfoApi";
 import DELETE_STATUS from "@salesforce/schema/ccp2_Registered_Vehicle__c.Status__c";
 import DELETE_REASON from "@salesforce/schema/ccp2_Registered_Vehicle__c.Reason__c";
-import truckonnectLogo from "@salesforce/resourceUrl/CCP2_Truckonnect";
+// import truckonnectLogo from "@salesforce/resourceUrl/CCP2_Truckonnect";
 import CCP2_Resources from "@salesforce/resourceUrl/CCP2_Resources";
 import labelsVehicle from "@salesforce/resourceUrl/ccp2_labels";
 import i18nextStaticResource from "@salesforce/resourceUrl/i18next";
 import Languagei18n from "@salesforce/apex/CCP2_userData.userLanguage";
+import getAllServices from "@salesforce/apex/CCP2_userController.permissionValuesAccessControl";
+import Id from "@salesforce/user/Id";
+
+import getUserServices from "@salesforce/apex/CCP2_userController.permissionValuesAccessControl";
 
 const editIcon = CCP2_Resources + "/CCP2_Resources/Vehicle/write.png";
 const dropdownImg = CCP2_Resources + "/CCP2_Resources/Common/arrow_under.png";
@@ -44,6 +49,7 @@ const TruckConnectDetailIcon =
 export default class Ccp2_VehicleDetails extends LightningElement {
   Arrowdisabled = Arrowgrey;
   TKIcon = TruckConnectDetailIcon;
+  @track uid = Id;
   @track vehicleChessisNumberForHistory;
   @track Languagei18n = "";
   @track isLanguageChangeDone = true;
@@ -52,6 +58,10 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   @track showEmptyContiner = false;
   @track vehicleidforpictures = "";
   @track showTKwarnMessage = false;
+  @track uid = Id;
+
+  @track allServices = [];
+  @track hasVehicleManagement = true;
   // @track hasVehicles = true;
   @api vehicleIcons;
   @api vehicleId;
@@ -73,6 +83,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   @track clickedtab = "";
   @track showvehDetails = true;
   @track showRecallMessage = false;
+  @track isExpiringSoon = false;
   @track showvehDetailsDeleted = false;
   @track showMaintainencePage = false;
   @track showLeaseInformation = false;
@@ -173,6 +184,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   @track showNormalSortIcon2 = false;
   @track showDescSortIcon2 = true;
   @track showAscSortIcon2 = false;
+
   //delete vehicle variables
   @track opendeletesystem = false;
   @track openDeleteModal = false;
@@ -188,7 +200,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   @track StatusOptions = [];
   @track reasonOptions = [];
 
-  truckLogoUrl = truckonnectLogo;
+  // truckLogoUrl = truckonnectLogo;
 
   truckonnetURL = "https://qa.truckonnect.jp";
 
@@ -236,8 +248,43 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   @track ShowSuccessRecover = false;
   @track nextBtnCss = "next-btn1";
 
+  @track allServices = [];
+  @track hasDTFSA = false;
+
+  //sorting dates variable tk
+  @track startDateSortForQuery = "DESC";
+  @track showdefaultIconStartDate = false;
+  @track showascIconStartDate = false;
+  @track showdscIconStartDate = true;
+
+  @track enddateSortForQuery = "";
+  @track showdefaultIconEndDate = true;
+  @track showascIconEndDate = false;
+  @track showdscIconEndDate = false;
+  @track recallModal = false;
+
+  @track catRecallPicklist = [
+    {
+      label: "リコール"
+    },
+    {
+      label: "サービス キャンペーン"
+    },
+    {
+      label: "改善対策"
+    }
+  ];
+
   get isweightValid() {
-    return this.vehicleByIdData.vehicleWeigth !== '-';
+    return this.vehicleByIdData.vehicleWeigth !== "-";
+  }
+
+  get isgrossweightValid() {
+    return this.vehicleByIdData.grossWeigth !== "-";
+  }
+
+  get ispayloadweightValid() {
+    return this.vehicleByIdData.maxpayLoad !== "-";
   }
 
   updateFavVehicle(vehId, favBool, favIconName) {
@@ -272,7 +319,11 @@ export default class Ccp2_VehicleDetails extends LightningElement {
         ErrorLog({
           lwcName: "ccp2_vehicleDetails",
           errorLog: error,
-          methodName: "FAV ICON CLASS"
+          methodName: "FAV ICON CLASS",
+          ViewName: "Vehicle Details",
+          InterfaceName: "CCP User Interface",
+          EventName: "Data fetch",
+          ModuleName: "VehicleManagement"
         })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
@@ -302,7 +353,11 @@ export default class Ccp2_VehicleDetails extends LightningElement {
         ErrorLog({
           lwcName: "ccp2_vehicleDetails",
           errorLog: err,
-          methodName: "load labels"
+          methodName: "load labels",
+          ViewName: "Vehicle Details",
+          InterfaceName: "CCP User Interface",
+          EventName: "Data fetch",
+          ModuleName: "VehicleManagement"
         })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
@@ -310,6 +365,76 @@ export default class Ccp2_VehicleDetails extends LightningElement {
           .catch((loggingErr) => {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
+      });
+  }
+  fetchUserServices() {
+    getUserServices({ userId: this.uid, refresh: 0 })
+      .then((data) => {
+        if (data) {
+          this.allServices = data;
+          this.allServices.forEach((serv) => {
+            if (serv.apiName === "FUSO_CCP_External_Vehicle_management") {
+              this.hasVehicleManagement = serv.isActive;
+              if (this.hasVehicleManagement === false) {
+                let baseUrl = window.location.href;
+                let Newurl;
+                if (baseUrl.indexOf("/s/") !== -1) {
+                  Newurl = baseUrl.split("/s/")[0] + "/s/error";
+                }
+                window.location.href = Newurl;
+              }
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("User Services Fetching error:", error);
+      });
+  }
+
+  handleProcessMaintenanceBookings() {
+    console.log(
+      "this.vehicleId in data cloud : -",
+      this.vehicleId,
+      this.innerContainerLoader
+    );
+    DataCloudMaintenanceCreation({ vehicleId: this.vehicleId })
+      .then((result) => {
+        console.log("Data received FROM DATACLOUD:", result);
+        this.innerContainerLoader = false;
+      })
+      .then(() => {
+        let newUrl = `/s/vehiclemanagement?vehicleId=${this.vehicleId}&instance=maintenancelist`;
+        window.history.replaceState({}, document.title, newUrl);
+        const maintainhistoryquery = this.template.querySelector(
+          "c-ccp2-_-maintenance-history"
+        );
+        if (maintainhistoryquery) {
+          maintainhistoryquery.returnToList();
+        }
+        this.showMaintainList = true;
+        this.closeBranchedit();
+        this.closemileageedit();
+        this.showVehicleDetails = false;
+        this.showTruckConnectList = false;
+        this.maintainlistactive = true;
+        this.showCostManagement = false;
+        this.showMarketMeasure = false;
+        this.showLeaseInformation = false;
+        this.isAllSelected = true;
+        this.isVehicleSelected = false;
+        this.LeaseInfoActive = false;
+        this.classVehicleDetails = "underline-button";
+        this.classCostManagement = "";
+        this.classMaintainList = "underline-button-black";
+        this.classMarketMeasure = "underline-button";
+        this.ClassLeaseInformation = "underline-button";
+        this.classTruckConnectMain = "underline-button";
+      })
+      .catch((error) => {
+        // this.error = error;
+        console.error("Error received DATACLOUD:", error);
+        // Handle the error as needed
       });
   }
 
@@ -329,7 +454,11 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       ErrorLog({
         lwcName: "ccp2_vehicleDetails",
         errorLog: err,
-        methodName: "service type picklist"
+        methodName: "service type picklist",
+        ViewName: "Vehicle Details",
+        InterfaceName: "CCP User Interface",
+        EventName: "Data fetch",
+        ModuleName: "VehicleManagement"
       })
         .then(() => {
           console.log("Error logged successfully in Salesforce");
@@ -355,7 +484,11 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       ErrorLog({
         lwcName: "ccp2_vehicleDetails",
         errorLog: err,
-        methodName: "service factory"
+        methodName: "service factory",
+        ViewName: "Vehicle Details",
+        InterfaceName: "CCP User Interface",
+        EventName: "Data fetch",
+        ModuleName: "VehicleManagement"
       })
         .then(() => {
           console.log("Error logged successfully in Salesforce");
@@ -370,109 +503,155 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     this.wiredVehicleResult = result; // Store the wire result for refreshing
     console.log("wiredveh", JSON.stringify(this.wiredVehicleResult));
 
+    console.log("resultttt of owreeee", result);
     const { data, error } = result;
 
     if (data) {
       console.log("geting from vehicle by Id: ", this.vehicleId);
       console.log("geting from vehicle by Id api: ", JSON.stringify(data));
+      this.leaseFlag1yr = data.LeaseFlag;
+      this.showTKwarnMessage = data.truckConnect;
+      console.log("lease flaggggggg", this.leaseFlag1yr);
+
       this.vehidnew = this.vehicleId;
       this.vehId = this.vehicleId;
 
-      this.vehicelInfoId = data?.Vehicle_Info_Id__c;
-      this.vehicleChessisNumberForHistory = data?.Chassis_number__c;
+      this.vehicelInfoId = data.vehicle?.Vehicle_Info_Id__c;
+      this.vehicleChessisNumberForHistory = data.vehicle?.Chassis_number__c;
       if (data.length !== 0) {
         let obj = {
-          id: data?.Id === undefined ? "-" : data?.Id,
+          id: data.vehicle?.Id === undefined ? "-" : data.vehicle?.Id,
           name:
-            data?.Vehicle_Name__c === undefined ? "-" : data?.Vehicle_Name__c,
+            data.vehicle?.Sub_Brand_Name__c === undefined
+              ? "-"
+              : data.vehicle?.Sub_Brand_Name__c,
           type:
-            data?.Vehicle_Type__c === undefined ? "-" : data?.Vehicle_Type__c,
+            data.vehicle?.Vehicle_Type__c === undefined
+              ? "-"
+              : data.vehicle?.Vehicle_Type__c,
           Favourite: !this.vehicleIcons
-            ? data?.Favoruite_Vehicle__c === true
+            ? data.vehicle?.Favoruite_Vehicle__c === true
               ? "utility:favorite"
               : "utility:favorite_alt"
             : this.vehicleIcons,
           carBodyShape:
-            data?.Body_Shape__c === undefined ? "-" : data?.Body_Shape__c,
+            data.vehicle?.Body_Shape_Text__c === undefined
+              ? "-"
+              : data.vehicle?.Body_Shape_Text__c,
           chassisNumber:
-            data?.Chassis_number__c === undefined
+            data.vehicle?.Chassis_number__c === undefined
               ? "-"
-              : data?.Chassis_number__c,
+              : data.vehicle?.Chassis_number__c,
           doorNumber:
-            data?.Door_Number__c === undefined ? "-" : data?.Door_Number__c,
+            data.vehicle?.Door_Number__c === undefined
+              ? "-"
+              : data.vehicle?.Door_Number__c,
           newDoor:
-            data?.Door_Number__c === undefined ? "-" : data?.Door_Number__c,
+            data.vehicle?.Door_Number__c === undefined
+              ? "-"
+              : data.vehicle?.Door_Number__c,
           doorEllipse:
-            data?.Door_Number__c === undefined
+            data.vehicle?.Door_Number__c === undefined
               ? "-"
-              : data.Door_Number__c.length > 16
-                ? data.Door_Number__c.substring(0, 8) + "..."
-                : data.Door_Number__c,
+              : data.vehicle.Door_Number__c.length > 16
+                ? data.vehicle.Door_Number__c.substring(0, 8) + "..."
+                : data.vehicle.Door_Number__c,
           firstRegistrationDate:
-            data?.First_Registration_Date__c === undefined
+            data.vehicle?.First_Registration_Date__c === undefined
               ? "-"
-              : this.formatJapaneseDate2(data?.First_Registration_Date__c), // Apply Japanese date formatting
+              : this.formatJapaneseDate2(
+                  data.vehicle?.First_Registration_Date__c
+                ), // Apply Japanese date formatting
 
           typeOfFuel:
-            data?.Fuel_Type__c === undefined ? "-" : data?.Fuel_Type__c,
+            data.vehicle?.Fuel_Type_Text__c === undefined
+              ? "-"
+              : data.vehicle?.Fuel_Type_Text__c,
           mileage:
-            this.formatMileage(data?.Mileage__c) === undefined
+            this.formatMileage(data.vehicle?.Mileage__c) === undefined
               ? "-"
-              : this.formatMileage(data?.Mileage__c),
+              : this.formatMileage(data.vehicle?.Mileage__c),
           Newmileage:
-            this.formatMileage(data?.Mileage__c) === undefined
+            this.formatMileage(data.vehicle?.Mileage__c) === undefined
               ? "-"
-              : this.formatMileage(data?.Mileage__c),
+              : this.formatMileage(data.vehicle?.Mileage__c),
           privateBusinessUse:
-            data?.Private_Business_use__c === undefined
+            data.vehicle?.Private_Business_Text__c === undefined
               ? "-"
-              : data?.Private_Business_use__c,
+              : data.vehicle?.Private_Business_Text__c,
           vehicleNumber:
-            data?.Vehicle_Number__c === undefined
+            data.vehicle?.Vehicle_Number__c === undefined
               ? "-"
-              : data?.Vehicle_Number__c,
+              : data.vehicle?.Vehicle_Number__c,
           affiliation:
-            data?.affiliation === undefined ? "-" : data?.affiliation,
+            data.vehicle?.affiliation === undefined
+              ? "-"
+              : data.vehicle?.affiliation,
           vehicleWeigth:
-            this.formatMileage(data?.vehicleWeight__c) === undefined
+            this.formatMileage(data.vehicle?.vehicleWeight__c) === undefined
               ? "-"
-              : this.formatMileage(data?.vehicleWeight__c),
-          model: data?.fullModel__c === undefined ? "-" : data?.fullModel__c,
-          purpose: data?.Use__c === undefined ? "-" : data?.Use__c,
+              : this.formatMileage(data.vehicle?.vehicleWeight__c),
+          grossWeigth:
+            this.formatMileage(data.vehicle?.VehicleGrossWeight__c) ===
+            undefined
+              ? "-"
+              : this.formatMileage(data.vehicle?.VehicleGrossWeight__c),
+          maxpayLoad:
+            this.formatMileage(data.vehicle?.Payload__c) === undefined
+              ? "-"
+              : this.formatMileage(data.vehicle?.Payload__c),
+          vehSize:
+            data.vehicle?.Reg_Vehicle_Size__c === undefined
+              ? "-"
+              : data.vehicle?.Reg_Vehicle_Size__c,
+          model:
+            data.vehicle?.fullModel__c === undefined
+              ? "-"
+              : data.vehicle?.fullModel__c,
+          purpose:
+            data.vehicle?.Use_Text__c === undefined
+              ? "-"
+              : data.vehicle?.Use_Text__c,
           vehicleInspectionImage:
-            data?.vehicleInspectionImage === undefined
+            data.vehicle?.vehicleInspectionImage === undefined
               ? "-"
-              : data?.vehicleInspectionImage,
+              : data.vehicle?.vehicleInspectionImage,
           vehicleInspectionCertificateIssueDate:
-            data?.vehicleInspectionCertificateIssueDate === undefined
+            data.vehicle?.vehicleInspectionCertificateIssueDate === undefined
               ? "-"
               : this.formatJapaneseDate(
-                data?.vehicleInspectionCertificateIssueDate
-              ), // Apply Japanese date formatting
+                  data.vehicle?.vehicleInspectionCertificateIssueDate
+                ), // Apply Japanese date formatting
           registerationNumber:
-            data?.Registration_Number__c === undefined
+            data.vehicle?.Registration_Number__c === undefined
               ? "-"
-              : data?.Registration_Number__c,
+              : data.vehicle?.Registration_Number__c,
           expirationDate:
-            data?.Vehicle_Expiration_Date__c === undefined
+            data.vehicle?.Vehicle_Expiration_Date__c === undefined
               ? "-"
-              : this.formatJapaneseDate(data?.Vehicle_Expiration_Date__c),
+              : this.formatJapaneseDate3(
+                  data.vehicle?.Vehicle_Expiration_Date__c
+                ),
           devileryDate:
-            data?.Delivery_Date__c === undefined
+            data.vehicle?.Delivery_Date__c === undefined
               ? "-"
-              : this.formatJapaneseDate(data?.Delivery_Date__c),
+              : this.formatJapaneseDate3(data.vehicle?.Delivery_Date__c),
           truckConnect:
-            data?.Truck_Connect__c === 0 ? "" : data?.Truck_Connect__c,
+            data.vehicle?.Truck_Connect__c === 0
+              ? ""
+              : data.vehicle?.Truck_Connect__c,
           branchInfo:
-            data?.Branch_Vehicle_Junctions__r?.length === 0
+            data.vehicle?.Branch_Vehicle_Junctions__r?.length === 0
               ? []
-              : data?.Branch_Vehicle_Junctions__r
+              : data.vehicle?.Branch_Vehicle_Junctions__r
         };
         console.log("object geting from vehicle by Id api: ", obj);
         this.vehicleByIdData = obj;
         this.currentChassisNumber =
-          data?.Chassis_number__c === undefined ? "" : data?.Chassis_number__c;
-        const vehicle = data;
+          data.vehicle?.Chassis_number__c === undefined
+            ? ""
+            : data.vehicle?.Chassis_number__c;
+        const vehicle = data.vehicle;
         this.downloadvehicles = {
           Vehicle_Number__c: vehicle.Vehicle_Number__c || "",
           Registration_Number__c: vehicle.Registration_Number__c || "",
@@ -480,30 +659,34 @@ export default class Ccp2_VehicleDetails extends LightningElement {
           Delivery_Date__c: vehicle.Delivery_Date__c || "",
           Vehicle_Name__c: vehicle.Vehicle_Name__c || "",
           Vehicle_Type__c: vehicle.Vehicle_Type__c || "",
-          Body_Shape__c: vehicle.Body_Shape__c || "",
+          Body_Shape__c: vehicle.Body_Shape_Text__c || "",
           vehicleWeight__c: vehicle.vehicleWeight__c || "",
           First_Registration_Date__c: vehicle.First_Registration_Date__c || "",
           Vehicle_Expiration_Date__c: vehicle.Vehicle_Expiration_Date__c || "",
           Mileage__c: vehicle.Mileage__c || "",
-          Fuel_Type__c: vehicle.Fuel_Type__c || "",
-          Private_Business_use__c: vehicle.Private_Business_use__c || "",
-          Use__c: vehicle.Use__c || "",
+          Fuel_Type__c: vehicle.Fuel_Type_Text__c || "",
+          Private_Business_use__c: vehicle.Private_Business_Text__c || "",
+          Use__c: vehicle.Use_Text__c || "",
           fullModel__c: vehicle.fullModel__c || "",
           Door_Number__c: vehicle.Door_Number__c || "",
-          Status__c: vehicle.Status__c || ""
+          Status__c: vehicle.Status__c || "",
+          vehicleSize__c: vehicle.Reg_Vehicle_Size__c || "",
+          grossWeigth__c: vehicle.VehicleGrossWeight__c || "",
+          MaxPayload__c: vehicle.Payload__c || ""
         };
-        this.statusofvehicle = data?.Status__c;
-        if (this.wiredVehicleResult.data?.Status__c === "Deleted") {
+        console.log("downloaded", JSON.stringify(this.downloadvehicles));
+        this.statusofvehicle = data.vehicle?.Status__c;
+        if (this.wiredVehicleResult.data.vehicle?.Status__c === "Deleted") {
           this.showvehDetailsDeleted = true;
           this.showvehDetails = false;
           this.SelectedStatus = this.StatusOptions[1].label;
           const matchedReason = this.reasonOptions.find(
-            (option) => option.value === data?.Reason__c
+            (option) => option.value === data.vehicle?.Reason__c
           );
           this.selectedReason = matchedReason ? matchedReason.label : undefined;
-          if (data?.Description__c) {
+          if (data.vehicle?.Description__c) {
             this.vehicledeletedescriptionRecover = true;
-            this.deletedescription = data?.Description__c;
+            this.deletedescription = data.vehicle?.Description__c;
           } else {
             this.vehicledeletedescriptionRecover = false;
             this.deletedescription = "";
@@ -512,12 +695,15 @@ export default class Ccp2_VehicleDetails extends LightningElement {
           this.showvehDetails = true;
           this.showvehDetailsDeleted = false;
           if (this.vehicleByIdData.truckConnect == true) {
-            this.loadTKData();
+            this.loadTKData(
+              this.startDateSortForQuery,
+              this.enddateSortForQuery
+            );
             console.log("Tk flag in If", this.vehicleByIdData.truckConnect);
           }
           //this.SelectedStatus = this.StatusOptions[0].label;
         }
-        const status = data?.CCP2_Recall_Status__c;
+        const status = data.vehicle?.CCP2_Recall_Status__c;
         console.log("obisu", status);
         if (status === "Not Completed") {
           console.log("working status of dev");
@@ -526,6 +712,9 @@ export default class Ccp2_VehicleDetails extends LightningElement {
           console.log("working status of dev if");
           this.showRecallMessage = false;
         }
+        this.isExpiringSoon = data.vehicle?.isExpiringSoon
+          ? data.vehicle?.isExpiringSoon
+          : false;
         this.loadbranches(this.vehicleByIdData.branchInfo);
         //this.fetchVehicleCertificates();
       }
@@ -536,7 +725,11 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       ErrorLog({
         lwcName: "ccp2_vehicleDetails",
         errorLog: err,
-        methodName: "Main Class data"
+        methodName: "Main Class data",
+        ViewName: "Vehicle Details",
+        InterfaceName: "CCP User Interface",
+        EventName: "Data fetch",
+        ModuleName: "VehicleManagement"
       })
         .then(() => {
           console.log("Error logged successfully in Salesforce");
@@ -545,6 +738,10 @@ export default class Ccp2_VehicleDetails extends LightningElement {
           console.error("Failed to log error in Salesforce:", loggingErr);
         });
     }
+  }
+
+  get showalert() {
+    return this.isExpiringSoon || this.showRecallMessage;
   }
   // @wire(getVehicleByIdNew, { vehicleId: "$vehicleId" }) handledataNew(result) {
   //   // this.wiredVehicleResult = result; // Store the wire result for refreshing
@@ -559,6 +756,19 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   //     console.error("geting from vehicle by Id api New: ", error);
   //   }
   // }
+  @wire(getAllServices, { userId: "$uid", refresh: 0 })
+  handlePerm({ data, error }) {
+    if (data) {
+      this.allServices = data;
+      this.allServices.forEach((serv) => {
+        if (serv.apiName === "FUSO_CCP_External_Financial_service") {
+          this.hasDTFSA = serv.isActive;
+        }
+      });
+    } else {
+      console.log("error in perm", error);
+    }
+  }
 
   @track branchData;
   loadbranches(data) {
@@ -591,46 +801,28 @@ export default class Ccp2_VehicleDetails extends LightningElement {
         this.morethanOneBranch = true;
       }
       this.vehicleByIdData.branchReal = this.Branches[0].BranchName__c;
-      if (this.Branches[1]) this.vehicleByIdData.branchReal2 = this.Branches[1].BranchName__c;
-      if (this.Branches[2]) this.vehicleByIdData.branchReal3 = this.Branches[2].BranchName__c;
+      if (this.Branches[1])
+        this.vehicleByIdData.branchReal2 = this.Branches[1].BranchName__c;
+      if (this.Branches[2])
+        this.vehicleByIdData.branchReal3 = this.Branches[2].BranchName__c;
       // if (this.Branches[3]) this.vehicleByIdData.branchReal4 = this.Branches[3].BranchName__c;
-      this.Branches.forEach((branch) => {
-        // Check if branch.Branch_Code__c is present (not null or undefined)
-        if (branch.Branch_Code__c) {
-          const branchNumberStr = branch.Branch_Code__c.toString(); // Convert to string
 
-          // Extract the first and last characters
-          const firstDigit = branchNumberStr.charAt(0);
-          const lastDigit = branchNumberStr.charAt(branchNumberStr.length - 1);
-
-          // Check if both first and last digits are between 0 and 9
-          if (
-            firstDigit >= "0" &&
-            firstDigit <= "9" &&
-            lastDigit >= "0" &&
-            lastDigit <= "9"
-          ) {
-            this.showone = true;
-          } else {
-            this.showone = false;
-          }
-        } else {
-          // Handle case where Branch_Code__c is missing or not a valid number
-          this.showone = false; // or any other logic you'd like
-        }
-      });
       this.vehicleByIdData.branch =
         this.abbreviateName(this.Branches[0].BranchName__c) || "-";
-      if (this.Branches[1]) this.vehicleByIdData.branch2 =
-        this.abbreviateName(this.Branches[1].BranchName__c) || "-";
-      if (this.Branches[2]) this.vehicleByIdData.branch3 =
-        this.abbreviateName(this.Branches[2].BranchName__c) || "-";
+      if (this.Branches[1])
+        this.vehicleByIdData.branch2 =
+          this.abbreviateName(this.Branches[1].BranchName__c) || "-";
+      if (this.Branches[2])
+        this.vehicleByIdData.branch3 =
+          this.abbreviateName(this.Branches[2].BranchName__c) || "-";
       // if (this.Branches[3]) this.vehicleByIdData.branch4 =
       //   this.abbreviateName(this.Branches[3].BranchName__c) || "-";
 
       this.vehicleByIdData.branchCount = this.Branches.length;
       this.vehicleByIdData.OnScreenBranchCount =
-        this.vehicleByIdData.branchCount > 3 ? this.vehicleByIdData.branchCount - 3 : 0;
+        this.vehicleByIdData.branchCount > 3
+          ? this.vehicleByIdData.branchCount - 3
+          : 0;
       this.Branches = data.map((branch) => ({
         ...branch,
         originalName: branch.BranchName__c,
@@ -638,7 +830,10 @@ export default class Ccp2_VehicleDetails extends LightningElement {
           branch.BranchName__c.length > 11
             ? this.abbreviateName2(branch.BranchName__c)
             : branch.BranchName__c,
-        siebelAccountCode__c: branch.siebelAccountCode__c
+        siebelAccountCode__c: branch?.siebelAccountCode__c || "未登録",
+        formattedBranchCode: branch?.Branch_Code__c
+          ? branch.Branch_Code__c.toString().padStart(3, "0")
+          : ""
       }));
       console.log(
         "Branch assigned to vehicleByIdData.branch: ",
@@ -646,7 +841,8 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       );
       if (data.length > 0) {
         data.forEach((branch) => {
-          this.downloadbranch.push(branch.Name);
+          console.log("Download values: ", JSON.stringify(branch));
+          this.downloadbranch.push(branch.BranchName__c);
         });
       }
       // console.log("Branch data from API: ", JSON.stringify(this.Branches));
@@ -693,6 +889,44 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       : name.length <= 20
         ? name
         : name.slice(0, 20) + "...";
+  }
+
+  substringToProperLength(string, limit) {
+    let tempString = "";
+    let charCount = 0;
+
+    for (let i = 0; i < string.length; i++) {
+      const char = string.charAt(i);
+      const charCode = string.charCodeAt(i);
+
+      if (
+        (charCode >= 0xff01 && charCode <= 0xff5e) || // Full-width characters
+        (charCode >= 0xff61 && charCode <= 0xff9f) || // Half-width Katakana
+        (charCode >= 0x3040 && charCode <= 0x309f) || // Hiragana
+        (charCode >= 0x30a0 && charCode <= 0x30ff) || // Katakana
+        (charCode >= 0x4e00 && charCode <= 0x9fff) // Kanji
+      ) {
+        charCount += 2;
+      } else {
+        charCount += 1; // Normal English character counts as 1
+      }
+
+      // Check if we should stop adding characters
+      if (charCount > limit) {
+        break; // Stop when exceeding 19 characters for English
+      }
+      if (
+        charCount > limit &&
+        ((charCode >= 0x3040 && charCode <= 0x9fff) || // Full-width Japanese
+          (charCode >= 0xff01 && charCode <= 0xff5e)) // Full-width characters
+      ) {
+        break; // Stop when exceeding 12 for Japanese characters
+      }
+
+      tempString += char;
+    }
+
+    return tempString + (charCount >= limit ? "..." : "");
   }
 
   abbreviateName(name, maxLength = 11) {
@@ -744,7 +978,11 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       ErrorLog({
         lwcName: "ccp2_vehicleDetails",
         errorLog: error,
-        methodName: "branch error"
+        methodName: "branch error",
+        ViewName: "Vehicle Details",
+        InterfaceName: "CCP User Interface",
+        EventName: "Data fetch",
+        ModuleName: "VehicleManagement"
       })
         .then(() => {
           console.log("Error logged successfully in Salesforce");
@@ -839,7 +1077,11 @@ export default class Ccp2_VehicleDetails extends LightningElement {
         ErrorLog({
           lwcName: "ccp2_vehicleDetails",
           errorLog: err,
-          methodName: "Images Data"
+          methodName: "Images Data",
+          ViewName: "Vehicle Details",
+          InterfaceName: "CCP User Interface",
+          EventName: "Data fetch",
+          ModuleName: "VehicleManagement"
         })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
@@ -937,6 +1179,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     })
       .then((data) => {
         try {
+          console.log("data and len", data);
           console.log(
             "final params for without sql:- ",
             "this.categoryFilerListForQuery",
@@ -963,7 +1206,8 @@ export default class Ccp2_VehicleDetails extends LightningElement {
               recallCategory__c: elm?.ccp2_recallCategory__c || "-",
               recallSubject__c: elm?.recallSubject__c || "-",
               recallSubjectTrimmed: elm?.recallSubject__c
-                ? this.abbreviateName3(elm.recallSubject__c)
+                ? // ? this.abbreviateName3(elm.recallSubject__c)
+                  this.substringToProperLength(elm.recallSubject__c, 25)
                 : "-",
               renovationDate__c:
                 elm?.renovationDate__c !== undefined
@@ -1011,7 +1255,11 @@ export default class Ccp2_VehicleDetails extends LightningElement {
           ErrorLog({
             lwcName: "ccp2_vehicleDetails",
             errorLog: err,
-            methodName: "Market MEasures data"
+            methodName: "Market MEasures data",
+            ViewName: "Vehicle Details",
+            InterfaceName: "CCP User Interface",
+            EventName: "Data fetch",
+            ModuleName: "VehicleManagement"
           })
             .then(() => {
               console.log("Error logged successfully in Salesforce");
@@ -1038,7 +1286,15 @@ export default class Ccp2_VehicleDetails extends LightningElement {
 
         console.error("getMarketData without sql", err);
         let error = JSON.stringify(err);
-        ErrorLog({ lwcName: "ccp2_vehicleDetails", errorLog: error })
+        ErrorLog({
+          lwcName: "ccp2_vehicleDetails",
+          errorLog: error,
+          methodName: "fetch recall data",
+          ViewName: "Vehicle Details",
+          InterfaceName: "CCP User Interface",
+          EventName: "Data fetch",
+          ModuleName: "VehicleManagement"
+        })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
           })
@@ -1152,6 +1408,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
 
   connectedCallback() {
+    //this.fetchUserServices();
     const urlParamsInstance = new URLSearchParams(window.location.search).get(
       "instance"
     );
@@ -1169,8 +1426,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
             clearInterval(intervalId);
           }
         }, 1000);
-      }
-      else if (urlParamsInstance === "maintenanceDetail") {
+      } else if (urlParamsInstance === "maintenanceDetail") {
         let intervalId = setInterval(() => {
           console.log("interval stared");
           this.showMaintainListFun2();
@@ -1179,8 +1435,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
             clearInterval(intervalId);
           }
         }, 1000);
-      }
-      else if (urlParamsInstance === "maintenancelist") {
+      } else if (urlParamsInstance === "maintenancelist") {
         let intervalId = setInterval(() => {
           console.log("interval stared");
           this.showMaintainListFun();
@@ -1189,8 +1444,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
             clearInterval(intervalId);
           }
         }, 1000);
-      }
-      else if (urlParamsInstance === "lease") {
+      } else if (urlParamsInstance === "lease") {
         let intervalId = setInterval(() => {
           console.log("interval stared");
           this.showLeaseInformationFun();
@@ -1199,8 +1453,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
             clearInterval(intervalId);
           }
         }, 1000);
-      }
-      else if (urlParamsInstance === "truckonnect") {
+      } else if (urlParamsInstance === "truckonnect") {
         let intervalId = setInterval(() => {
           console.log("interval stared");
           this.showTruckConnectFun();
@@ -1209,8 +1462,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
             clearInterval(intervalId);
           }
         }, 1000);
-      }
-      else if (urlParamsInstance === "details") {
+      } else if (urlParamsInstance === "details") {
         let intervalId = setInterval(() => {
           console.log("interval stared");
           this.showVehicleDetailFun();
@@ -1219,8 +1471,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
             clearInterval(intervalId);
           }
         }, 1000);
-      }
-      else if (urlParamsInstance === "history") {
+      } else if (urlParamsInstance === "history") {
         let intervalId = setInterval(() => {
           console.log("interval stared");
           this.showMaintainListFun2();
@@ -1230,8 +1481,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
             clearInterval(intervalId);
           }
         }, 1000);
-      }
-      else if (urlParamsInstance === "schedule") {
+      } else if (urlParamsInstance === "schedule") {
         let intervalId = setInterval(() => {
           console.log("interval stared");
           this.showMaintainListFun2();
@@ -1242,7 +1492,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
           }
         }, 1000);
       }
-
     }
 
     this.isFirstPage = this.currentImageIndex === 0;
@@ -1301,14 +1550,21 @@ export default class Ccp2_VehicleDetails extends LightningElement {
           })
           .then(() => {
             this.labels2 = i18next.store.data[userLocale].translation;
-            console.log("Delete Detail User Locale: ", userLocale);
-            console.log("Delete Detail User Labels: ", this.labels2);
+            console.log("labels2", this.labels2);
           });
       })
       .catch((error) => {
         console.error("Error loading labels: ", error);
         let err = JSON.stringify(error);
-        ErrorLog({ lwcName: "ccp2_vehicleDetails", errorLog: err })
+        ErrorLog({
+          lwcName: "ccp2_vehicleDetails",
+          errorLog: err,
+          methodName: "load labels",
+          ViewName: "Vehicle Details",
+          InterfaceName: "CCP User Interface",
+          EventName: "Data fetch",
+          ModuleName: "VehicleManagement"
+        })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
           })
@@ -1318,13 +1574,10 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       });
   }
   getLocale() {
-    console.log("Lang 2", this.Languagei18n);
     this.isLanguageChangeDone = false;
     if (this.Languagei18n === "en_US") {
-      console.log("working1");
       return "en";
     } else {
-      console.log("working2");
       return "jp";
     }
   }
@@ -1476,10 +1729,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   //     });
   // }
 
-  dothis() {
-    console.log("dothis function called");
-  }
-
   showVehicleDetailFun() {
     const newUrl = `/s/vehiclemanagement?vehicleId=${this.vehicleId}&instance=details`;
     window.history.replaceState({}, document.title, newUrl);
@@ -1594,50 +1843,39 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     const newUrl = `/s/vehiclemanagement?vehicleId=${this.vehicleId}&instance=truckonnect`;
     window.history.replaceState({}, document.title, newUrl);
     this.closeBranchedit();
+    console.log("here1");
     this.closemileageedit();
-    this.loadTKData();
-    this.showVehicleDetails = false;
-    this.showMaintainList = false;
-    this.showCostManagement = false;
-    this.showMarketMeasure = false;
-    this.showLeaseInformation = false;
-    this.showTruckConnectList = true;
-    this.isAllSelected = true;
-    this.isVehicleSelected = false;
-    this.maintainlistactive = false;
-    this.LeaseInfoActive = false;
-    this.classVehicleDetails = "underline-button";
-    this.classCostManagement = "underline";
-    this.classMaintainList = "underline-button";
-    this.ClassLeaseInformation = "underline-button";
-    this.classTruckConnectMain = "underline-button-black";
+    console.log("here2");
+    this.loadTKData(this.startDateSortForQuery, this.enddateSortForQuery)
+      .then(() => {
+        this.showVehicleDetails = false;
+        this.showMaintainList = false;
+        this.showCostManagement = false;
+        this.showMarketMeasure = false;
+        this.showLeaseInformation = false;
+        this.isAllSelected = true;
+        this.showTruckConnectList = true;
+        this.isVehicleSelected = false;
+        this.maintainlistactive = false;
+        this.LeaseInfoActive = false;
+        this.classVehicleDetails = "underline-button";
+        this.classCostManagement = "underline";
+        this.classMaintainList = "underline-button";
+        this.ClassLeaseInformation = "underline-button";
+        this.classTruckConnectMain = "underline-button-black";
+        console.log("TruckConnect Data Loaded Successfully");
+        // You can perform additional actions here
+      })
+      .catch((error) => {
+        console.error("Error in Loading TruckConnect Data:", error);
+        // Handle errors here
+      });
+    console.log("here3");
   }
 
   showMaintainListFun() {
-    let newUrl = `/s/vehiclemanagement?vehicleId=${this.vehicleId}&instance=maintenancelist`;
-    window.history.replaceState({}, document.title, newUrl);
-    const maintainhistoryquery = this.template.querySelector('c-ccp2-_-maintenance-history');
-    if (maintainhistoryquery) {
-      maintainhistoryquery.returnToList();
-    }
-    this.closeBranchedit();
-    this.closemileageedit();
-    this.showVehicleDetails = false;
-    this.showMaintainList = true;
-    this.showTruckConnectList = false;
-    this.maintainlistactive = true;
-    this.showCostManagement = false;
-    this.showMarketMeasure = false;
-    this.showLeaseInformation = false;
-    this.isAllSelected = true;
-    this.isVehicleSelected = false;
-    this.LeaseInfoActive = false;
-    this.classVehicleDetails = "underline-button";
-    this.classCostManagement = "";
-    this.classMaintainList = "underline-button-black";
-    this.classMarketMeasure = "underline-button";
-    this.ClassLeaseInformation = "underline-button";
-    this.classTruckConnectMain = "underline-button";
+    this.innerContainerLoader = true;
+    this.handleProcessMaintenanceBookings();
   }
   showMaintainListFun2() {
     this.closeBranchedit();
@@ -1793,6 +2031,39 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     }
   }
 
+  formatJapaneseDate3(isoDate) {
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    let eraName, eraYear;
+
+    if (year > 2019 || (year === 2019 && month >= 5)) {
+      eraName = "令和";
+      eraYear = year - 2018;
+    } else if (year > 1989 || (year === 1989 && month >= 1)) {
+      eraName = "平成";
+      eraYear = year - 1988;
+    } else if (year > 1926 || (year === 1926 && month >= 12)) {
+      eraName = "昭和";
+      eraYear = year - 1925;
+    } else if (year > 1912 || (year === 1912 && month >= 7)) {
+      eraName = "大正";
+      eraYear = year - 1911;
+    } else if (year > 1868 || (year === 1868 && month >= 1)) {
+      eraName = "明治";
+      eraYear = year - 1867;
+    } else {
+      return "Date is before the Meiji era, which is not supported.";
+    }
+
+    if (eraYear === 1) {
+      eraYear = "元";
+    }
+
+    return `${eraName}${eraYear}年${month}月${day}日`;
+  }
+
   handleOutsideClick = (event) => {
     const dataDropElement = this.template.querySelector(".mm-filter-dropdown");
     const listsElement = this.template.querySelector(
@@ -1855,7 +2126,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   };
 
   handlebackhere() {
-    console.log("calledbydev");
     this.showvehDetails = true;
     this.showMaintainencePage = false;
     sessionStorage.removeItem("ongoingTransaction");
@@ -1881,7 +2151,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
 
   handleinsideclick(event) {
-    console.log("inside handle click");
     event.stopPropagation();
   }
 
@@ -1902,8 +2171,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       this.categoryFilerListForQuery = ["Nothing to show"];
       this.updateFinalQuery();
     }
-
-    console.log(JSON.stringify(this.recallCatFilter));
   }
 
   handleRecallCategoryChange(event) {
@@ -1935,7 +2202,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     } else this.categoryFilerListForQuery = [...recallArray];
 
     this.updateFinalQuery();
-    console.log("recallArray category", JSON.stringify(recallArray));
   }
 
   handleImplementationChangeAll(event) {
@@ -1982,7 +2248,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       } else if (key === "option3" && value === true) {
         recallArray.push("実施済み");
       }
-      console.log(`${key}: ${value}`);
     }
 
     if (recallArray.length === 0) {
@@ -1990,7 +2255,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     } else this.implementationStatusFilerListForQuery = [...recallArray];
 
     this.updateFinalQuery();
-    console.log("recallArray implementation", JSON.stringify(recallArray));
   }
 
   updateFinalQuery() {
@@ -2077,7 +2341,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       this.showNormalSortIcon2 = false;
       this.showDescSortIcon2 = false;
     }
-    console.log("notification sort", this.notificationSortForQuery);
     this.updateFinalQuery();
   }
 
@@ -2118,7 +2381,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       this.showNormalSortIcon1 = false;
       this.showDescSortIcon1 = false;
     }
-    console.log("implementation sort", this.renovationSortForQuery);
     this.updateFinalQuery();
   }
 
@@ -2136,6 +2398,15 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     return this.marketMeasureData.length > 0 && this.showMarketMeasure;
   }
 
+  gotoregistrationPage() {
+    let baseUrl = window.location.href;
+    let regurl = "";
+    if (baseUrl.indexOf("/s/") !== -1) {
+      regurl = baseUrl.split("/s/")[0] + "/s/vehicle-registration";
+    }
+    window.location.href = regurl;
+  }
+
   handlePreviousPage2() {
     if (this.currentPage > 1) {
       this.prevGoing = true;
@@ -2148,12 +2419,10 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
 
   updatePageButtons() {
-    console.log("in update pagination");
     const buttons = this.template.querySelectorAll(".mm-page-button");
     buttons.forEach((button) => {
       const pageNum = Number(button.dataset.page);
       if (pageNum === this.currentPage) {
-        console.log("Current Page Number clicked: ", pageNum);
         button.classList.add("cuurent-page");
       } else {
         button.classList.remove("cuurent-page");
@@ -2176,7 +2445,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     if (this.totalPageCount2 > this.currentPage) {
       this.prevGoing = false;
       this.currentPage += 1;
-      console.log("THIS is the current page in handle next", this.currentPage);
       this.isPreviousDisabled2 = this.currentPage === 1;
       this.isNextDisabled2 = this.currentPage === this.totalPageCount2;
       this.offsetOnMarketMeasure();
@@ -2185,7 +2453,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
 
   pageCountClick2(event) {
-    console.log(event.target.dataset.page);
     this.currentPage = Number(event.target.dataset.page);
     this.offsetOnMarketMeasure();
     this.updatePageButtons();
@@ -2194,18 +2461,23 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   updateVisiblePages() {
     let startPage, endPage;
 
-    if (this.currentPage <= 4) {
+    if (this.totalPageCount2 === 5) {
       startPage = 1;
-      endPage = Math.min(4, this.totalPageCount2);
-    } else if (
-      this.currentPage > 4 &&
-      this.currentPage <= this.totalPageCount2 - 4
-    ) {
-      startPage = this.currentPage - 1;
-      endPage = this.currentPage + 2;
+      endPage = Math.min(5, this.totalPageCount2);
     } else {
-      startPage = this.totalPageCount2 - 3;
-      endPage = this.totalPageCount2;
+      if (this.currentPage <= 4) {
+        startPage = 1;
+        endPage = Math.min(4, this.totalPageCount2);
+      } else if (
+        this.currentPage > 4 &&
+        this.currentPage <= this.totalPageCount2 - 4
+      ) {
+        startPage = this.currentPage - 1;
+        endPage = this.currentPage + 1;
+      } else {
+        startPage = this.totalPageCount2 - 3;
+        endPage = this.totalPageCount2;
+      }
     }
 
     this.visiblePageCount2 = [];
@@ -2216,14 +2488,14 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     this.visiblePageCount2.forEach((element) => {
       this.showRightDots2 = element === this.totalPageCount2 ? false : true;
     });
+
+    this.showLeftDots2 = this.visiblePageCount2[0] === 1 ? false : true;
   }
 
   //downlaod feature
   openDownloadModalfunction() {
     this.DownloadNameValue = `${this.currentDate} - カスタマーポータル車両リスト`;
     this.openDownloadModal = true;
-    console.log("forprintdata", JSON.stringify(this.downloadvehicles));
-    console.log("forprintdata2", JSON.stringify(this.downloadbranch));
   }
   closeDownloadModal() {
     this.DownloadNameValue = `${this.currentDate} - カスタマーポータル車両リスト`;
@@ -2250,7 +2522,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     //   console.error("No data available to download");
     //   return;
     // }
-    console.log("eorkdev", this.allVehiclesData);
     const vehiclesD = this.downloadvehicles;
     const branchesD = this.downloadbranch;
 
@@ -2270,17 +2541,18 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       "自家用・事業用の別",
       "用途",
       "型式",
-      // "ドアナンバー",
       "所属",
-      "削除済み車両"
+      "削除済み車両",
+      "サイズ",
+      "車両総重量",
+      "最大積載量"
     ];
-    console.log("statusdev");
     const allBranches = branchesD.join("・");
 
     let csvContent = headers.join(",") + "\n";
 
     const csvRow = [
-      vehiclesD.Vehicle_Number__c,
+      vehiclesD.Door_Number__c,
       vehiclesD.Registration_Number__c,
       vehiclesD.Chassis_number__c,
       vehiclesD.Delivery_Date__c,
@@ -2290,14 +2562,16 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       vehiclesD.vehicleWeight__c,
       vehiclesD.First_Registration_Date__c,
       vehiclesD.Vehicle_Expiration_Date__c,
-      vehiclesD.Mileage__c,
+      vehiclesD.Mileage__c || 0,
       vehiclesD.Fuel_Type__c,
       vehiclesD.Private_Business_use__c,
       vehiclesD.Use__c,
       vehiclesD.fullModel__c,
-      // vehiclesD.Door_Number__c,
       allBranches,
-      vehiclesD.Status__c === "CurrentlyOwned" ? " " : "削除済み" || ""
+      vehiclesD.Status__c === "CurrentlyOwned" ? " " : "削除済み" || "",
+      vehiclesD.vehicleSize__c,
+      vehiclesD.grossWeigth__c,
+      vehiclesD.MaxPayload__c
     ];
 
     csvContent += csvRow.join(",") + "\n";
@@ -2322,7 +2596,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     if (this.opendeletesystem === false) {
       this.openDeleteModal = true;
     } else {
-      console.log("already on window");
     }
   }
   closeDeleteModal() {
@@ -2369,7 +2642,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     //   console.log("calledrecovery");
     // } else {
     this.gotodelete();
-    console.log("callednormal");
     sessionStorage.removeItem("ongoingTransaction");
   }
 
@@ -2398,7 +2670,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       this.deletedescription = "";
       this.SelectedStatus = "";
       this.showRecoverReason = true;
-      console.log("oep");
       this.openRecoversystem = false;
       refreshApex(this.wiredVehicleResult);
       this.vehicledeletedescription = false;
@@ -2459,12 +2730,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     // if (this.deletedescription == "") {
     //   this.allselectedDeleted = false;
     // }
-    console.log(
-      "the values",
-      this.deletedescription,
-      this.selectedReason,
-      this.SelectedStatus
-    );
   }
 
   handlevalchange(event) {
@@ -2495,7 +2760,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       Description: this.deletedescription
     })
       .then((result) => {
-        console.log(result);
         this.cancelmodaldeletevehicle = false;
         this.openDeleteModal = false;
         this.showVehicleDetailFun();
@@ -2505,7 +2769,15 @@ export default class Ccp2_VehicleDetails extends LightningElement {
         console.error("Error:", error);
         this.showErrorMessage("An error occurred during deletion.");
         let err = JSON.stringify(error);
-        ErrorLog({ lwcName: "ccp2_vehicleDetails", errorLog: err, methodName: "deleteandrecovervehicle" })
+        ErrorLog({
+          lwcName: "ccp2_vehicleDetails",
+          errorLog: err,
+          methodName: "deleteandrecovervehicle",
+          ViewName: "Vehicle Details",
+          InterfaceName: "CCP User Interface",
+          EventName: "Data update",
+          ModuleName: "VehicleManagement"
+        })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
           })
@@ -2611,7 +2883,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       Description: this.deletedescription
     })
       .then((result) => {
-        console.log(result);
         this.cancelmodalrecovervehicle = false;
         this.ShowSuccessRecover = true;
         this.showFinishTimeModalRecover();
@@ -2621,7 +2892,15 @@ export default class Ccp2_VehicleDetails extends LightningElement {
         console.error("Error:", error);
         this.showErrorMessage("An error occurred during deletion.");
         let err = JSON.stringify(error);
-        ErrorLog({ lwcName: "ccp2_VehicleDetails", errorLog: err, methodName: "deleteandrecovervehicle" })
+        ErrorLog({
+          lwcName: "ccp2_VehicleDetails",
+          errorLog: err,
+          methodName: "deleteandrecovervehicle",
+          ViewName: "Vehicle Details",
+          InterfaceName: "CCP User Interface",
+          EventName: "Data update",
+          ModuleName: "VehicleManagement"
+        })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
           })
@@ -2639,31 +2918,28 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
 
   closeRecoverModal() {
-    console.log("infunction");
     this.ShowSuccessRecover = false;
-    console.log("infunction last");
   }
 
   showFinishTimeModalRecover() {
     window.scrollTo(0, 0);
-      this.selectedReason = "";
-      this.deletedescription = "";
-      this.SelectedStatus = "";
-      this.noreasonisselected = true;
-      refreshApex(this.wiredVehicleResult);
-      console.log("changes", JSON.stringify(this.wiredVehicleResult));
-      console.log("a", this.selectedReason);
-      this.vehicledeletedescription = false;
-      this.vehgoesdeletion = false;
-      this.openRecoversystem = false;
-      this.opendeletesystem = false;
-      // this.ShowSuccessRecover = false;
+    this.selectedReason = "";
+    this.deletedescription = "";
+    this.SelectedStatus = "";
+    this.noreasonisselected = true;
+    refreshApex(this.wiredVehicleResult);
+    this.vehicledeletedescription = false;
+    this.vehgoesdeletion = false;
+    this.openRecoversystem = false;
+    this.opendeletesystem = false;
+    // this.ShowSuccessRecover = false;
   }
 
   //lease
   @track isAllSelected = true;
   @track isVehicleSelected = false;
   @track leaseisempty = false;
+  @track leaseFlag1yr = false;
   @track maintainleaseisempty = false;
   @track leaseloader = true;
   @track leasedata = {
@@ -2690,50 +2966,89 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   loadleasedata() {
     leaseInformation({ vehicleId: this.vehicleId })
       .then((result) => {
-        console.log("result", result);
-        if (result.length === 0) {
-          console.log("result", result);
-          this.leaseisempty = true;
-          this.leaseloader = false;
-        } else {
+        console.log("result for lease : -", result);
+        if (result?.Flag) {
           this.leaseisempty = false;
-          if (
-            !result[0].contractNumber_nv__c &&
-            !result[0].contractorName__c &&
-            !result[0].datefronInitialRegistrationDate__c &&
-            !result[0].expirationDate__c &&
-            !result[0].monthlyLeaseWithoutTax__c &&
-            !result[0].voluntaryInsuranceIncluded__c
-          ) {
-            this.leaseisempty = true;
-            this.leaseloader = false;
-          } else {
-            this.leaseisempty = false;
-          }
+          this.leaseloader = false;
+          // this.leaseFlag1yr = result.Flag;
+          // console.log("lease flaggggggg",this.leaseFlag1yr)
           this.leasedata = {
-            ContractNumber: result[0].contractNumber_nv__c || "-",
-            ContractName: result[0].contractorName__c || "-",
-            ContractExpirationdate: result[0].expirationDate__c
-              ? this.formatJapaneseDate(result[0].expirationDate__c)
+            ContractNumber: result.contractNumber_nv__c ?? "-",
+            Memo: result.Memo ?? "入力してください",
+            otherLease: result.otherLease ?? false,
+            CompanyName: result.CompanyName
+              ? this.substringToProperLength(result.CompanyName, 32)
               : "-",
-            ContractYears: result[0].datefronInitialRegistrationDate__c
-              ? result[0].datefronInitialRegistrationDate__c + "年"
+            CompanyNameFull: result.CompanyName ?? "-",
+            ContractName: result.contractorName__c ?? "-",
+            ContractExpirationdate: result.expirationDate__c
+              ? this.formatJapaneseDate(result.expirationDate__c)
+              : "-",
+            ContractYears: result.datefronInitialRegistrationDate__c
+              ? result.datefronInitialRegistrationDate__c + "年"
               : "-",
             MonthlyLeaseFee: this.formatCurrency(
-              result[0].monthlyLeaseWithoutTax__c
+              result.monthlyLeaseWithoutTax__c
             ),
-            VoluntaryInsurance: result[0].voluntaryInsuranceIncluded__c
+            VoluntaryInsurance: result.voluntaryInsuranceIncluded__c
               ? "あり"
               : "なし" || "-"
           };
-          console.log("Lease data:", JSON.stringify(this.leasedata));
+        } else {
+          this.leaseisempty = true;
           this.leaseloader = false;
         }
+        // if (result.length === 0) {
+        //   console.log("result", result);
+        //   this.leaseisempty = true;
+        //   this.leaseloader = false;
+        // } else {
+        //   this.leaseisempty = false;
+        //   if (
+        //     !result[0].contractNumber_nv__c &&
+        //     !result[0].contractorName__c &&
+        //     !result[0].datefronInitialRegistrationDate__c &&
+        //     !result[0].expirationDate__c &&
+        //     !result[0].monthlyLeaseWithoutTax__c &&
+        //     !result[0].voluntaryInsuranceIncluded__c
+        //   ) {
+        //     this.leaseisempty = true;
+        //     this.leaseloader = false;
+        //   } else {
+        //     this.leaseisempty = false;
+        //   }
+        // this.leasedata = {
+        //   ContractNumber: result[0].contractNumber_nv__c || "-",
+        //   ContractName: result[0].contractorName__c || "-",
+        //   ContractExpirationdate: result[0].expirationDate__c
+        //     ? this.formatJapaneseDate(result[0].expirationDate__c)
+        //     : "-",
+        //   ContractYears: result[0].datefronInitialRegistrationDate__c
+        //     ? result[0].datefronInitialRegistrationDate__c + "年"
+        //     : "-",
+        //   MonthlyLeaseFee: this.formatCurrency(
+        //     result[0].monthlyLeaseWithoutTax__c
+        //   ),
+        //   VoluntaryInsurance: result[0].voluntaryInsuranceIncluded__c
+        //     ? "あり"
+        //     : "なし" || "-"
+        // };
+        //   console.log("Lease data:", JSON.stringify(this.leasedata));
+        //   this.leaseloader = false;
+        // }
       })
       .catch((error) => {
         console.error("Error fetching lease data:", error);
         let err = JSON.stringify(error);
-        ErrorLog({ lwcName: "ccp2_VehicleDetails", errorLog: err, methodName: "loadleasedata" })
+        ErrorLog({
+          lwcName: "ccp2_VehicleDetails",
+          errorLog: err,
+          methodName: "loadleasedata",
+          ViewName: "Vehicle Details",
+          InterfaceName: "CCP User Interface",
+          EventName: "Data fetch",
+          ModuleName: "VehicleManagement"
+        })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
           })
@@ -2834,20 +3149,16 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
   closeMaintainenceHistory() {
     window.scrollTo(0, 0);
-
-    console.log("calling refresh method from parent comp2!!!");
     sessionStorage.removeItem("ongoingTransaction");
     this.openvehicleMaintainencehistory = false;
     this.showvehDetails = true;
     this.showMaintainListFun();
     // eslint-disable-next-line @lwc/lwc/no-async-operation
     setTimeout(() => {
-      console.log("calling refresh method from parent comp3!!!");
       const childComponent = this.template.querySelector(
         "c-ccp2-_-maintenance-history"
       );
       if (childComponent) {
-        console.log("calling refresh method from parent comp!!!");
         childComponent.refreshData();
       }
     }, 1);
@@ -2861,32 +3172,25 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
 
   ismileagenull() {
-    console.log("this.nullMileage", this.nullMileage);
-    console.log(
-      "this.vehicleByIdData.Newmileage",
-      this.vehicleByIdData.Newmileage
-    );
     return this.nullMileage || this.vehicleByIdData.Newmileage === ""
       ? true
       : false;
   }
 
+  newmileageback = "";
   openmileageedit() {
     this.vehicleByIdData.Newmileage = this.formatNumberWithCommas(
       this.vehicleByIdData.Newmileage
     );
+    this.newmileageback = this.vehicleByIdData.Newmileage;
     this.editmileage = true;
   }
   closemileageedit() {
-    console.log(
-      "this.vehicleByIdData.Newmileage",
-      this.vehicleByIdData.Newmileage
-    );
-    if(this.vehicleByIdData.Newmileage > 0){
-      this.vehicleByIdData.Newmileage = this.vehicleByIdData.mileage.replace(
-        /,/g,
-        ""
-      );
+    if (this.vehicleByIdData.Newmileage > 0) {
+      this.vehicleByIdData.Newmileage =
+        this.vehicleByIdData.mileage && this.vehicleByIdData.mileage > "0"
+          ? String(this.vehicleByIdData.mileage).replace(/,/g, "")
+          : "0";
     }
     // console.log(
     //   "this.vehicleByIdData.mileage",
@@ -2900,13 +3204,10 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     this.editbranches = true;
 
     this.temBranchoptions = this.branchOptions;
-    console.log("tem branches on open", this.temBranchoptions);
   }
 
   closeBranchedit() {
     // refreshApex(this.originalbranchoptions);
-    console.log("before bo", this.branchOptions);
-
     let lengthOfList = 0;
 
     this.branchOptions = this.temBranchoptions.map((a) => {
@@ -2943,11 +3244,11 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     // console.log('in input')
     let input = event.target.value;
     console.log("value of input chnged by oninput", input);
-    // const onlyDigitsRegex = /^[0-9,]*$/;
-    // if(!onlyDigitsRegex.test(input)){
-    //   event.target.blur();
-    // }
-    // input = input.replace(/[^0-9]/g, "");
+    const onlyDigitsRegex = /^[0-9,]*$/;
+    if (!onlyDigitsRegex.test(input)) {
+      event.target.blur();
+    }
+    input = input.replace(/[^0-9]/g, "");
     console.log("value of input chnged by oninput1", input);
     //console.log('in input1', input)
     if (input === "") {
@@ -3053,6 +3354,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       Mileage__c: this.vehicleByIdData.Newmileage.replace(/,/g, "")
     };
     console.log("devil payload", JSON.stringify(payload));
+    this.vehicleByIdData.mileage = this.vehicleByIdData.Newmileage;
     this.updateeditinformation(payload);
     this.editmileage = false;
   }
@@ -3064,9 +3366,9 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
   formatNumberWithCommas(number) {
     if (number === 0) {
-      return number.toString(); 
+      return number.toString();
     }
-     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   handlemileageFocus(event) {
     event.target.value = event.target.value.replace(/,/g, ""); // Remove commas on focus
@@ -3136,7 +3438,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     // }, 2000);
     setTimeout(() => {
       this.vehicleByIdLoader2 = false;
-    }, 1400);
+    }, 2500);
     window.scrollTo(0, 0);
     window.scrollTo(0, 0);
     this.showUploadModal = false;
@@ -3227,7 +3529,15 @@ export default class Ccp2_VehicleDetails extends LightningElement {
         // Handle errors
         console.error("Error updating vehicle information:", error);
         let err = JSON.stringify(error);
-        ErrorLog({ lwcName: "ccp2_VehicleDetails", errorLog: err, methodName: "updateeditinformation" })
+        ErrorLog({
+          lwcName: "ccp2_VehicleDetails",
+          errorLog: err,
+          methodName: "updateeditinformation",
+          ViewName: "Vehicle Details",
+          InterfaceName: "CCP User Interface",
+          EventName: "Data update",
+          ModuleName: "VehicleManagement"
+        })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
           })
@@ -3237,65 +3547,114 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       });
   }
   //tk
-  loadTKData() {
-    //console.log(this.vehicleId);
-    truckconnectDetails({ vehicleId: this.vehicleId })
+  // loadTKData() {
+  //   //console.log(this.vehicleId);
+  //   truckconnectDetails({ vehicleId: this.vehicleId })
+  //     .then((data) => {
+  //       if (data) {
+  //         console.log("vehicleTKData",JSON.stringify(data));
+  //         // const startDate = data[0].subscriptionStartTime__c
+  //         //   ? new Date(data[0].subscriptionStartTime__c)
+  //         //   : null;
+  //         this.truckConnectData = data.truckConnectRecords.map((record) => {
+  //           if (record.isExpiringSoon) {
+  //             this.showTKwarnMessage = true;
+  //           }
+  //           return {
+  //               Id: record.Id,
+  //               VehicleId: data.vehicleId,
+  //               ContractStartDate: record.subscriptionStartTime__c
+  //                   ? this.formatJapaneseDate(record.subscriptionStartTime__c)
+  //                   : "-",
+  //               ContractEndDate: record.subscriptionEndTime__c
+  //                   ? this.formatJapaneseDate(record.subscriptionEndTime__c)
+  //                   : "-",
+  //               ContractDetails: record.packageNameJp__c
+  //                   ? record.packageNameJp__c
+  //                   : "-",
+  //               AutomaticUpdates: record.isAutoRenewal__c ? "あり" : "なし",
+  //               showTKwarnMessage: record.isExpiringSoon || false
+  //           };
+  //       });
+  //         console.log("TK Data:", JSON.stringify(this.truckConnectData));
+  //         // this.truckConnectData = {
+  //         //   Contractstartdate: data[0].subscriptionStartTime__c
+  //         //     ? this.formatJapaneseDate(data[0].subscriptionStartTime__c)
+  //         //     : "-",
+  //         //   ContractEnddate: data[0].subscriptionEndTime__c
+  //         //     ? this.formatJapaneseDate(data[0].subscriptionEndTime__c)
+  //         //     : "-",
+  //         //   Contractdetails: data[0].packageNameJp__c
+  //         //     ? data[0].packageNameJp__c
+  //         //     : "-",
+  //         //   AutomaticUpdates: data[0].isAutoRenewal__c ? "あり" : "なし" || "-"
+  //         // };
+  //         // if (startDate && endDate) {
+  //         //   const timeDiff = endDate - startDate;
+  //         //   const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
+  //         //   this.showTKwarnMessage = dayDiff < 30;
+  //         //   console.log("flag", this.showTKwarnMessage);
+  //         // } else {
+  //         //   this.showTKwarnMessage = false;
+  //         // }
+  //       } else {
+  //         console.warn("No data found for the provided vehicle ID");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching Truck Connect Details:", error);
+  //       let err = JSON.stringify(error);
+  //       ErrorLog({
+  //         lwcName: "ccp2_VehicleDetails",
+  //         errorLog: err,
+  //         methodName: "loadTKData",
+  //         ViewName: "Vehicle Details",
+  //         InterfaceName: "CCP User Interface",
+  //         EventName: "Data fetch",
+  //         ModuleName: "VehicleManagement"
+  //       })
+  //         .then(() => {
+  //           console.log("Error logged successfully in Salesforce");
+  //         })
+  //         .catch((loggingErr) => {
+  //           console.error("Failed to log error in Salesforce:", loggingErr);
+  //         });
+  //     });
+  // }
+
+  loadTKData(subStartDT, subEndDT) {
+    return truckconnectDetails({
+      vehicleId: this.vehicleId,
+      subStartDT: subStartDT,
+      subEndDT: subEndDT
+    })
       .then((data) => {
         if (data) {
-          // const startDate = data[0].subscriptionStartTime__c
-          //   ? new Date(data[0].subscriptionStartTime__c)
-          //   : null;
-          const today = new Date();
-          const endDate = data[0].subscriptionEndTime__c
-            ? new Date(data[0].subscriptionEndTime__c)
-            : null;
-          console.log("endateo", endDate);
-          console.log("TK Data:", data);
-          this.truckConnectData = {
-            Contractstartdate: data[0].subscriptionStartTime__c
-              ? this.formatJapaneseDate(data[0].subscriptionStartTime__c)
-              : "-",
-            ContractEnddate: data[0].subscriptionEndTime__c
-              ? this.formatJapaneseDate(data[0].subscriptionEndTime__c)
-              : "-",
-            Contractdetails: data[0].packageNameJp__c
-              ? data[0].packageNameJp__c
-              : "-",
-            AutomaticUpdates: data[0].isAutoRenewal__c ? "あり" : "なし" || "-"
-          };
-          // if (startDate && endDate) {
-          //   const timeDiff = endDate - startDate;
-          //   const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
-          //   this.showTKwarnMessage = dayDiff < 30;
-          //   console.log("flag", this.showTKwarnMessage);
-          // } else {
-          //   this.showTKwarnMessage = false;
-          // }
-          if (endDate) {
-            const currentDate = new Date(
-              today.getFullYear(),
-              today.getMonth(),
-              today.getDate()
-            );
-            const lastDate = new Date(
-              endDate.getFullYear(),
-              endDate.getMonth(),
-              endDate.getDate()
-            );
-            console.log("current", currentDate);
-            console.log("last", lastDate);
-
-            const oneMonthBeforeEndDate = new Date(lastDate);
-            oneMonthBeforeEndDate.setMonth(lastDate.getMonth() - 1);
-            //console.log("onebefore",oneMonthBeforeEndDate);
-            console.log("onebeforeend", oneMonthBeforeEndDate);
-
-            this.showTKwarnMessage =
-              currentDate >= oneMonthBeforeEndDate && currentDate <= lastDate;
-            console.log("flag", this.showTKwarnMessage);
-          } else {
-            this.showTKwarnMessage = false;
-          }
+          console.log(
+            "vehicleTKData, subStartDT,subEndDT",
+            JSON.stringify(data),
+            subStartDT,
+            subEndDT
+          );
+          this.truckConnectData = data.truckConnectRecords.map((record) => {
+            return {
+              Id: record.Id,
+              VehicleId: data.vehicleId,
+              ContractStartDate: record.subscriptionStartTime__c
+                ? this.formatJapaneseDate(record.subscriptionStartTime__c)
+                : "-",
+              ContractEndDate: record.subscriptionEndTime__c
+                ? this.formatJapaneseDate(record.subscriptionEndTime__c)
+                : "-",
+              ContractDetails: record.packageNameJp__c
+                ? record.packageNameJp__c
+                : "-",
+              AutomaticUpdates: record.isAutoRenewal__c ? "あり" : "なし",
+              showTKwarnMessage: record.isExpiringSoon || false,
+              expiredTruck: record.Expired || false
+            };
+          });
+          console.log("TK Data:", JSON.stringify(this.truckConnectData));
         } else {
           console.warn("No data found for the provided vehicle ID");
         }
@@ -3303,7 +3662,15 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       .catch((error) => {
         console.error("Error fetching Truck Connect Details:", error);
         let err = JSON.stringify(error);
-        ErrorLog({ lwcName: "ccp2_VehicleDetails", errorLog: err, methodName: "loadTKData" })
+        return ErrorLog({
+          lwcName: "ccp2_VehicleDetails",
+          errorLog: err,
+          methodName: "loadTKData",
+          ViewName: "Vehicle Details",
+          InterfaceName: "CCP User Interface",
+          EventName: "Data fetch",
+          ModuleName: "VehicleManagement"
+        })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
           })
@@ -3318,6 +3685,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
   finalChecktoChange() {
     if (this.clickedflag === "mileage") {
+      this.vehicleByIdData.Newmileage = this.newmileageback;
       this.closemileageedit();
       this.CloseModalSureEdit();
     } else if (this.clickedflag === "doornumber") {
@@ -3353,7 +3721,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     console.log(
       "end branch 3",
       JSON.stringify(this.branchOptions) ===
-      JSON.stringify(this.temBranchoptions)
+        JSON.stringify(this.temBranchoptions)
     );
     if (
       JSON.stringify(this.branchOptions) !==
@@ -3365,5 +3733,181 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     } else {
       this.closeBranchedit();
     }
+  }
+
+  // @track startDateSortForQuery = "Default";
+  // @track showdefaultIconStartDate = true;
+  // @track showascIconStartDate = false;
+  // @track showdscIconStartDate = false;
+
+  // @track enddateSortForQuery = "";
+  // @track showdefaultIconEndDate = true;
+  // @track showascIconEndDate = false;
+  // @track showdscIconEndDate = false;
+
+  handlesortconStartdate(event) {
+    event.stopPropagation();
+    this.enddateSortForQuery = "";
+    if (this.startDateSortForQuery === "") {
+      this.startDateSortForQuery = "ASC";
+
+      this.enddateSortForQuery = "";
+      this.showascIconStartDate = true;
+      this.showdefaultIconStartDate = false;
+      this.showdscIconStartDate = false;
+
+      this.showascIconEndDate = false;
+      this.showdefaultIconEndDate = true;
+      this.showdscIconEndDate = false;
+    } else if (this.startDateSortForQuery === "ASC") {
+      this.startDateSortForQuery = "DESC";
+
+      this.enddateSortForQuery = "";
+      this.showascIconStartDate = false;
+      this.showdefaultIconStartDate = false;
+      this.showdscIconStartDate = true;
+
+      this.showascIconEndDate = false;
+      this.showdefaultIconEndDate = true;
+      this.showdscIconEndDate = false;
+    } else if (this.startDateSortForQuery === "DESC") {
+      this.startDateSortForQuery = "ASC";
+
+      this.enddateSortForQuery = "";
+      this.showascIconStartDate = true;
+      this.showdefaultIconStartDate = false;
+      this.showdscIconStartDate = false;
+
+      this.showascIconEndDate = false;
+      this.showdefaultIconEndDate = true;
+      this.showdscIconEndDate = false;
+    }
+    console.log(
+      "start date sort asc default desc starttt",
+      this.showascIconStartDate,
+      this.showdefaultIconStartDate,
+      this.showdscIconStartDate
+    );
+    console.log(
+      "end date sort asc default desc startttt",
+      this.showascIconEndDate,
+      this.showdefaultIconEndDate,
+      this.showdscIconEndDate
+    );
+    console.log(
+      "startDateSortForQuery enddateSortForQuery startttt",
+      this.startDateSortForQuery,
+      this.enddateSortForQuery
+    );
+    this.loadTKData(this.startDateSortForQuery, this.enddateSortForQuery);
+  }
+
+  handlesortconEnddate(event) {
+    event.stopPropagation();
+    this.startDateSortForQuery = "";
+    if (this.enddateSortForQuery === "") {
+      this.enddateSortForQuery = "ASC";
+
+      this.startDateSortForQuery = "";
+      this.showascIconEndDate = true;
+      this.showdefaultIconEndDate = false;
+      this.showdscIconEndDate = false;
+
+      this.showascIconStartDate = false;
+      this.showdefaultIconStartDate = true;
+      this.showdscIconStartDate = false;
+    } else if (this.enddateSortForQuery === "ASC") {
+      this.enddateSortForQuery = "DESC";
+
+      this.startDateSortForQuery = "";
+      this.showascIconEndDate = false;
+      this.showdefaultIconEndDate = false;
+      this.showdscIconEndDate = true;
+
+      this.showascIconStartDate = false;
+      this.showdefaultIconStartDate = true;
+      this.showdscIconStartDate = false;
+    } else if (this.enddateSortForQuery === "DESC") {
+      this.enddateSortForQuery = "ASC";
+
+      this.startDateSortForQuery = "";
+      this.showascIconEndDate = true;
+      this.showdefaultIconEndDate = false;
+      this.showdscIconEndDate = false;
+
+      this.showascIconStartDate = false;
+      this.showdefaultIconStartDate = true;
+      this.showdscIconStartDate = false;
+    }
+    console.log(
+      "start date sort asc default desc endddd",
+      this.showascIconStartDate,
+      this.showdefaultIconStartDate,
+      this.showdscIconStartDate
+    );
+    console.log(
+      "end date sort asc default desc enddd",
+      this.showascIconEndDate,
+      this.showdefaultIconEndDate,
+      this.showdscIconEndDate
+    );
+    console.log(
+      "startDateSortForQuery enddateSortForQuery enddd",
+      this.startDateSortForQuery,
+      this.enddateSortForQuery
+    );
+    this.loadTKData(this.startDateSortForQuery, this.enddateSortForQuery);
+  }
+
+  handleCreaterecall() {
+    this.recallModal = true;
+  }
+
+  @track showLeaseDeleteConfirmationModal = false;
+  handleLeaseDeleteConfirmationModal(event) {
+    console.log("delete is called!");
+    this.showLeaseDeleteConfirmationModal =
+      !this.showLeaseDeleteConfirmationModal;
+  }
+
+  @track showCreateLeaseModal = false;
+  handleCreateLeaseModal(event) {
+    console.log("this.showCreateLeaseModal", this.showCreateLeaseModal);
+    this.showCreateLeaseModal = !this.showCreateLeaseModal;
+  }
+
+  @track inputLeaseData = {
+    inputCompanyName: "",
+    inputContractNumber: "",
+    inputContractName: "",
+    inputContractExpDate: "",
+    inputContractYear: "",
+    inputMonthlyLeaseFee: "",
+    inputVoluntryInsurance: "",
+    inputMemo: ""
+  };
+
+  get isSaveLeaseButtonDisable() {
+    return (
+      this.inputLeaseData.inputCompanyName === "" ||
+      this.inputLeaseData.inputContractExpDate === "" ||
+      this.inputLeaseData.inputContractYear === ""
+    );
+  }
+
+  handleLeaseCreateInputChange(event) {
+    console.log("event Name", event.target.name);
+    const name = event.target.name;
+    const value = event.target.value;
+
+    this.inputLeaseData[name] = value;
+  }
+
+  handleLeaseSave(event) {
+    console.log("inputLeaseData", this.inputLeaseData);
+  }
+
+  handlebackRecallCreate() {
+    this.recallModal = false;
   }
 }

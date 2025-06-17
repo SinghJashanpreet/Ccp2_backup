@@ -7,7 +7,10 @@
       <div class="center-content">
         <div class="upper-main">
           <div class="Count-card">
-            <div class="Count-card-inner" style="border-bottom: 1px solid #d9d9d9; padding-bottom: 34px">
+            <div
+              class="Count-card-inner"
+              style="border-bottom: 1px solid #d9d9d9; padding-bottom: 25px"
+            >
               <p style="text-wrap: nowrap">
                 {labels2.ccp2_vda_myCompanyVehicle}
               </p>
@@ -16,7 +19,7 @@
                 <p style="font-weight: 400">{labels2.ccp2_vda_vehicleCount}</p>
               </div>
             </div>
-            <div class="Count-card-inner" style="margin-top: 28px">
+            <div class="Count-card-inner" style="margin-top: 22px">
               <p style="text-wrap: nowrap">
                 {labels2.ccp2_vda_myAffiliatedVehicle}
               </p>
@@ -30,96 +33,185 @@
           </div>
           <div class="Weekly-calender-card">
             <div class="calender-header">
-              <P style="font-weight: 700; font-size: 16px">{labels2.ccp2_vda_upcomingMaintenanceWeek}</P>
+              <P style="font-weight: 700; font-size: 16px"
+                >{labels2.ccp2_vda_upcomingMaintenanceWeek}</P
+              >
               <p class="link-calender" onclick={gotoMonthlyCalender}>
                 {labels2.ccp2_vda_maintenanceCalendar}
               </p>
             </div>
             <div class="calender-body">
-              <div class="calendar-top-dates" style="
+              <div
+                class="calendar-top-dates"
+                style="
                   display: grid;
                   grid-template-columns: minmax(119px, 165px) repeat(7, 1fr);
                   align-items: center;
-                ">
-                <div style="
+                "
+              >
+                <div
+                  style="
                     font-weight: 700;
                     font-size: 18px;
                     color: #7b7b7b;
                     padding-left: 8px;
                     padding-bottom: 8.5px;
-                  ">
+                  "
+                >
                   {currentYearMonth}
                 </div>
-                <div class="calendar-top-dates-items" for:each={currentDates} for:item="date" key={date.date}>
+                <div
+                  class="calendar-top-dates-items"
+                  for:each={currentDates}
+                  for:item="date"
+                  key={date.date}
+                >
                   <div class={date.topDatesCss}>
                     {date.date} <span style="font-size: 12px">{date.day}</span>
                   </div>
                 </div>
               </div>
 
-              <div class="calendar-middle-container" style="
+              <div
+                class="calendar-middle-container"
+                style="
                   display: flex;
                   flex-direction: column;
-                  gap: 4px;
                   background-color: white;
-                " if:false={showEmptyUi}>
-                <template for:each={vehicleStoredData} for:item="elm" if:true={showWeeklyCalendar}>
-                  <div style="
+                "
+                if:false={showEmptyUi}
+              >
+                <template
+                  for:each={vehicleStoredData}
+                  for:item="elm"
+                  if:true={showWeeklyCalendar}
+                >
+                  <div
+                    style="
                       display: grid;
-                      gap: 4px;
                       align-items: start;
                       grid-template-columns: minmax(119px, 165px) repeat(7, 1fr);
-                    " key={elm.Id}>
-                    <div class="calendar-middle-items-left" data-id={elm.vehicle.Id} onclick={handleEventWithVehicleId}>
-                      <lightning-icon icon-name={elm.favIcon} class="back-icon" alternative-text="Star" size="x-small"
-                        data-vehicle-id={elm.Id}></lightning-icon>
-                      <p class="Vehicle-Text" title={elm.Registration_Number__c}>
+                    "
+                    key={elm.Id}
+                  >
+                    <div
+                      class="calendar-middle-items-left"
+                      data-id={elm.vehicle.Id}
+                      onclick={handleEventWithVehicleId}
+                    >
+                      <lightning-icon
+                        icon-name={elm.favIcon}
+                        class="back-icon"
+                        alternative-text="Star"
+                        size="x-small"
+                        data-vehicle-id={elm.Id}
+                      ></lightning-icon>
+                      <p
+                        class="Vehicle-Text"
+                        title={elm.Registration_Number__c}
+                      >
                         {elm.ellipseRegNum}
                       </p>
                     </div>
 
-                    <div class={date.classForBoxes} for:each={elm.dates} for:item="date" key={date.date}>
+                    <div
+                      class={date.classForBoxes}
+                      for:each={elm.dates}
+                      for:item="date"
+                      key={date.date}
+                    >
                       <template if:true={date.isContinue}>
-                        <span if:true={date.isMaintenanceAvailable} class="more-maintenance-box" data-id={date.date}
-                          data-vehicle-id={elm.vehicle.Id} data-reg-no={elm.Registration_Number__c}
-                          onclick={openMaintainVehicleModal}>+{date.countOfMaintenance}</span>
+                        <span
+                          if:true={date.isMaintenanceAvailable}
+                          class="more-maintenance-box"
+                          data-id={date.date}
+                          data-vehicle-id={elm.vehicle.Id}
+                          data-reg-no={elm.Registration_Number__c}
+                          onclick={openMaintainVehicleModal}
+                          >+{date.countOfMaintenance}</span
+                        >
                         <span class="prev-color-cover"></span>
-                        <svg if:true={date.isExpirationDate} class="red-box" xmlns="http://www.w3.org/2000/svg"
-                          width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <svg
+                          if:true={date.isExpirationDate}
+                          class="red-box"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                        >
                           <path
                             d="M7.33203 9.93956C7.33203 9.57137 7.63051 9.27289 7.9987 9.27289C8.36689 9.27289 8.66536 9.57137 8.66536 9.93956V10.6668C8.66536 11.035 8.36689 11.3335 7.9987 11.3335C7.63051 11.3335 7.33203 11.035 7.33203 10.6668V9.93956ZM7.33203 5.3335C7.33203 4.96531 7.63051 4.66683 7.9987 4.66683C8.36689 4.66683 8.66536 4.96531 8.66536 5.3335V8.00016C8.66536 8.36835 8.36689 8.66683 7.9987 8.66683C7.63051 8.66683 7.33203 8.36835 7.33203 8.00016V5.3335ZM7.99203 1.3335C4.31203 1.3335 1.33203 4.32016 1.33203 8.00016C1.33203 11.6802 4.31203 14.6668 7.99203 14.6668C11.6787 14.6668 14.6654 11.6802 14.6654 8.00016C14.6654 4.32016 11.6787 1.3335 7.99203 1.3335ZM7.9987 13.3335C5.05203 13.3335 2.66536 10.9468 2.66536 8.00016C2.66536 5.0535 5.05203 2.66683 7.9987 2.66683C10.9454 2.66683 13.332 5.0535 13.332 8.00016C13.332 10.9468 10.9454 13.3335 7.9987 13.3335Z"
-                            fill="#E10202" />
+                            fill="#E10202"
+                          />
                         </svg>
                       </template>
                       <template if:false={date.isContinue}>
                         <template if:true={date.isMultiple}>
-                          <span if:true={date.isMaintenanceAvailable} class={date.cssClass} data-id={date.date}
-                            data-vehicle-id={elm.vehicle.Id} data-reg-no={elm.Registration_Number__c}
-                            onclick={openMaintainVehicleModal} style={date.width}>{date.serviceType}</span>
-                          <p if:true={date.isStart} style="height: calc(50% - 2px)"></p>
-                          <span if:true={date.isMaintenanceAvailable} data-id={date.date}
-                            data-vehicle-id={elm.vehicle.Id} data-reg-no={elm.Registration_Number__c}
+                          <span
+                            if:true={date.isMaintenanceAvailable}
+                            class={date.cssClass}
+                            data-id={date.date}
+                            data-vehicle-id={elm.vehicle.Id}
+                            data-reg-no={elm.Registration_Number__c}
                             onclick={openMaintainVehicleModal}
-                            class="more-maintenance-box">+{date.countOfMaintenance}</span>
+                            style={date.width}
+                            >{date.serviceType}</span
+                          >
+                          <p
+                            if:true={date.isStart}
+                            style="height: calc(50% - 2px)"
+                          ></p>
+                          <span
+                            if:true={date.isMaintenanceAvailable}
+                            data-id={date.date}
+                            data-vehicle-id={elm.vehicle.Id}
+                            data-reg-no={elm.Registration_Number__c}
+                            onclick={openMaintainVehicleModal}
+                            class="more-maintenance-box"
+                            >+{date.countOfMaintenance}</span
+                          >
                           <span class="prev-color-cover"></span>
-                          <svg if:true={date.isExpirationDate} class="red-box" xmlns="http://www.w3.org/2000/svg"
-                            width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <svg
+                            if:true={date.isExpirationDate}
+                            class="red-box"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
                             <path
                               d="M7.33203 9.93956C7.33203 9.57137 7.63051 9.27289 7.9987 9.27289C8.36689 9.27289 8.66536 9.57137 8.66536 9.93956V10.6668C8.66536 11.035 8.36689 11.3335 7.9987 11.3335C7.63051 11.3335 7.33203 11.035 7.33203 10.6668V9.93956ZM7.33203 5.3335C7.33203 4.96531 7.63051 4.66683 7.9987 4.66683C8.36689 4.66683 8.66536 4.96531 8.66536 5.3335V8.00016C8.66536 8.36835 8.36689 8.66683 7.9987 8.66683C7.63051 8.66683 7.33203 8.36835 7.33203 8.00016V5.3335ZM7.99203 1.3335C4.31203 1.3335 1.33203 4.32016 1.33203 8.00016C1.33203 11.6802 4.31203 14.6668 7.99203 14.6668C11.6787 14.6668 14.6654 11.6802 14.6654 8.00016C14.6654 4.32016 11.6787 1.3335 7.99203 1.3335ZM7.9987 13.3335C5.05203 13.3335 2.66536 10.9468 2.66536 8.00016C2.66536 5.0535 5.05203 2.66683 7.9987 2.66683C10.9454 2.66683 13.332 5.0535 13.332 8.00016C13.332 10.9468 10.9454 13.3335 7.9987 13.3335Z"
-                              fill="#E10202" />
+                              fill="#E10202"
+                            />
                           </svg>
                         </template>
                         <template if:false={date.isMultiple}>
-                          <span if:true={date.isMaintenanceAvailable} data-id={date.date}
-                            data-vehicle-id={elm.vehicle.Id} data-reg-no={elm.Registration_Number__c}
-                            onclick={openMaintainVehicleModal} class={date.cssClass}
-                            style={date.width}>{date.serviceType}</span>
+                          <span
+                            if:true={date.isMaintenanceAvailable}
+                            data-id={date.date}
+                            data-vehicle-id={elm.vehicle.Id}
+                            data-reg-no={elm.Registration_Number__c}
+                            onclick={openMaintainVehicleModal}
+                            class={date.cssClass}
+                            style={date.width}
+                            >{date.serviceType}</span
+                          >
                           <p if:true={date.isStart}></p>
-                          <svg if:true={date.isExpirationDate} class="red-box" xmlns="http://www.w3.org/2000/svg"
-                            width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <svg
+                            if:true={date.isExpirationDate}
+                            class="red-box"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
                             <path
                               d="M7.33203 9.93956C7.33203 9.57137 7.63051 9.27289 7.9987 9.27289C8.36689 9.27289 8.66536 9.57137 8.66536 9.93956V10.6668C8.66536 11.035 8.36689 11.3335 7.9987 11.3335C7.63051 11.3335 7.33203 11.035 7.33203 10.6668V9.93956ZM7.33203 5.3335C7.33203 4.96531 7.63051 4.66683 7.9987 4.66683C8.36689 4.66683 8.66536 4.96531 8.66536 5.3335V8.00016C8.66536 8.36835 8.36689 8.66683 7.9987 8.66683C7.63051 8.66683 7.33203 8.36835 7.33203 8.00016V5.3335ZM7.99203 1.3335C4.31203 1.3335 1.33203 4.32016 1.33203 8.00016C1.33203 11.6802 4.31203 14.6668 7.99203 14.6668C11.6787 14.6668 14.6654 11.6802 14.6654 8.00016C14.6654 4.32016 11.6787 1.3335 7.99203 1.3335ZM7.9987 13.3335C5.05203 13.3335 2.66536 10.9468 2.66536 8.00016C2.66536 5.0535 5.05203 2.66683 7.9987 2.66683C10.9454 2.66683 13.332 5.0535 13.332 8.00016C13.332 10.9468 10.9454 13.3335 7.9987 13.3335Z"
-                              fill="#E10202" />
+                              fill="#E10202"
+                            />
                           </svg>
                         </template>
                       </template>
@@ -160,26 +252,45 @@
                   </div>
                   <div class="calender-legends">
                     <div class="box-of-color colorD">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                      >
                         <path
                           d="M7.33381 9.9395C7.33381 9.57131 7.63228 9.27283 8.00047 9.27283C8.36866 9.27283 8.66714 9.57131 8.66714 9.9395V10.6668C8.66714 11.035 8.36866 11.3334 8.00047 11.3334C7.63228 11.3334 7.33381 11.035 7.33381 10.6668V9.9395ZM7.33381 5.33343C7.33381 4.96524 7.63228 4.66677 8.00047 4.66677C8.36866 4.66677 8.66714 4.96524 8.66714 5.33343V8.0001C8.66714 8.36829 8.36866 8.66677 8.00047 8.66677C7.63228 8.66677 7.33381 8.36829 7.33381 8.0001V5.33343ZM7.99381 1.33344C4.31381 1.33344 1.33381 4.3201 1.33381 8.0001C1.33381 11.6801 4.31381 14.6668 7.99381 14.6668C11.6805 14.6668 14.6671 11.6801 14.6671 8.0001C14.6671 4.3201 11.6805 1.33344 7.99381 1.33344ZM8.00047 13.3334C5.05381 13.3334 2.66714 10.9468 2.66714 8.0001C2.66714 5.05343 5.05381 2.66677 8.00047 2.66677C10.9471 2.66677 13.3338 5.05343 13.3338 8.0001C13.3338 10.9468 10.9471 13.3334 8.00047 13.3334Z"
-                          fill="#E10202" />
+                          fill="#E10202"
+                        />
                       </svg>
                     </div>
-                    <P class="legend-title">{labels2.ccp2_vda_inspectionExpiry}</P>
+                    <P class="legend-title"
+                      >{labels2.ccp2_vda_inspectionExpiry}</P
+                    >
+                  </div>
+                  <div class="calender-legends">
+                    <div class="box-of-color colorE"></div>
+                    <P class="legend-title">三菱ふそう工場休日</P>
                   </div>
                 </div>
               </div>
             </template>
             <template if:true={vehicleNearExpCountToshow}>
               <div class="calender-footer">
-                <div class="calendar-middle-items-left" style="
+                <div
+                  class="calendar-middle-items-left"
+                  style="
                     width: 161px;
                     display: flex;
                     justify-content: center;
                     font-size: 14px;
                     text-wrap: nowrap;
-                  " if:false={showEmptyUi}>
+                    padding: 16px 8px;
+                    margin-bottom: auto;
+                  "
+                  if:false={showEmptyUi}
+                >
                   +{vehicleNearExpCount}{labels2.ccp2_vda_scheduledVehicles}
                 </div>
                 <div class="footer-left">
@@ -203,13 +314,26 @@
                   </div>
                   <div class="calender-legends">
                     <div class="box-of-color colorD">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                      >
                         <path
                           d="M7.33381 9.9395C7.33381 9.57131 7.63228 9.27283 8.00047 9.27283C8.36866 9.27283 8.66714 9.57131 8.66714 9.9395V10.6668C8.66714 11.035 8.36866 11.3334 8.00047 11.3334C7.63228 11.3334 7.33381 11.035 7.33381 10.6668V9.9395ZM7.33381 5.33343C7.33381 4.96524 7.63228 4.66677 8.00047 4.66677C8.36866 4.66677 8.66714 4.96524 8.66714 5.33343V8.0001C8.66714 8.36829 8.36866 8.66677 8.00047 8.66677C7.63228 8.66677 7.33381 8.36829 7.33381 8.0001V5.33343ZM7.99381 1.33344C4.31381 1.33344 1.33381 4.3201 1.33381 8.0001C1.33381 11.6801 4.31381 14.6668 7.99381 14.6668C11.6805 14.6668 14.6671 11.6801 14.6671 8.0001C14.6671 4.3201 11.6805 1.33344 7.99381 1.33344ZM8.00047 13.3334C5.05381 13.3334 2.66714 10.9468 2.66714 8.0001C2.66714 5.05343 5.05381 2.66677 8.00047 2.66677C10.9471 2.66677 13.3338 5.05343 13.3338 8.0001C13.3338 10.9468 10.9471 13.3334 8.00047 13.3334Z"
-                          fill="#E10202" />
+                          fill="#E10202"
+                        />
                       </svg>
                     </div>
-                    <P class="legend-title">{labels2.ccp2_vda_inspectionExpiry}</P>
+                    <P class="legend-title"
+                      >{labels2.ccp2_vda_inspectionExpiry}</P
+                    >
+                  </div>
+                  <div class="calender-legends">
+                    <div class="box-of-color colorE"></div>
+                    <P class="legend-title">三菱ふそう工場休日</P>
                   </div>
                 </div>
               </div>
@@ -220,7 +344,7 @@
           <div class="lower-left">
             <div class="half-card">
               <div class="data-heading-grey">
-                <p class="heading-title-card" style="font-weight: 700;">
+                <p class="heading-title-card" style="font-weight: 700">
                   {labels2.ccp2_vda_left_head_1}{BranchCountsAll.daysofexpiry}{labels2.ccp2_vda_left_head_2}
                 </p>
                 <div class="count-layout">
@@ -230,32 +354,57 @@
                   </div>
                   /
                   <P class="data-total">
-                    {BranchCountsAll.TotalBranchVehicles}{labels2.ccp2_vda_support}</P>
+                    {BranchCountsAll.TotalBranchVehicles}{labels2.ccp2_vda_support}</P
+                  >
                 </div>
               </div>
-              <div class="data-present-count" style="padding-bottom: 15px; border-bottom: 1px solid #d9d9d9">
+              <div
+                class="data-present-count"
+                style="padding-bottom: 15px; border-bottom: 1px solid #d9d9d9"
+              >
                 <div class="data-present-count-elm" style="border: none">
                   <div class="data-title-card">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 22 22" fill="none">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 22 22"
+                      fill="none"
+                    >
                       <path
                         d="M10.084 13.6668C10.084 13.1606 10.4944 12.7502 11.0007 12.7502C11.5069 12.7502 11.9173 13.1606 11.9173 13.6668V14.6668C11.9173 15.1731 11.5069 15.5835 11.0007 15.5835C10.4944 15.5835 10.084 15.1731 10.084 14.6668V13.6668ZM10.084 7.3335C10.084 6.82723 10.4944 6.41683 11.0007 6.41683C11.5069 6.41683 11.9173 6.82723 11.9173 7.3335V11.0002C11.9173 11.5064 11.5069 11.9168 11.0007 11.9168C10.4944 11.9168 10.084 11.5064 10.084 11.0002V7.3335ZM10.9915 1.8335C5.93148 1.8335 1.83398 5.94016 1.83398 11.0002C1.83398 16.0602 5.93148 20.1668 10.9915 20.1668C16.0606 20.1668 20.1673 16.0602 20.1673 11.0002C20.1673 5.94016 16.0606 1.8335 10.9915 1.8335ZM11.0007 18.3335C6.94898 18.3335 3.66732 15.0518 3.66732 11.0002C3.66732 6.9485 6.94898 3.66683 11.0007 3.66683C15.0523 3.66683 18.334 6.9485 18.334 11.0002C18.334 15.0518 15.0523 18.3335 11.0007 18.3335Z"
-                        fill="#E10202" />
+                        fill="#E10202"
+                      />
                     </svg>
-                    <P class="title-recall-count-lower-left">{labels2.ccp2_vda_left_Recall}</P>
+                    <P class="title-recall-count-lower-left"
+                      >{labels2.ccp2_vda_left_Recall}</P
+                    >
                   </div>
                   <div class="count-layout-present">
                     <div class="elm-present">
-                      <P style="color: #e10202; font-size: 16px;">{BranchCountsAll.recallCount}</P>{labels2.ccp2_vda_support}
+                      <P style="color: #e10202; font-size: 16px"
+                        >{BranchCountsAll.recallCount}</P
+                      >
+                      {labels2.ccp2_vda_support}
                     </div>
                     /
-                    <p>{BranchCountsAll.expiryCount}{labels2.ccp2_vda_support}</p>
+                    <p>
+                      {BranchCountsAll.expiryCount}{labels2.ccp2_vda_support}
+                    </p>
                   </div>
                 </div>
                 <div class="notification-data-cards">
-                  <template for:each={BranchCountsAll.expiredVehiclesArray} for:item="vehicle">
-                    <div key={vehicle.regVehicleId} class="notification-card" data-id={vehicle.regVehicleId}
-                      onclick={gotomaintainvehicle}>
-                      <div class="notification-card-item">
+                  <template
+                    for:each={BranchCountsAll.expiredVehiclesArray}
+                    for:item="vehicle"
+                  >
+                    <div
+                      key={vehicle.regVehicleId}
+                      class="notification-card"
+                      data-id={vehicle.regVehicleId}
+                      onclick={gotomaintainvehicle}
+                    >
+                      <!-- <div class="notification-card-item">
                         <template if:true={vehicle.recallCreatedDate}>
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 22 22"
                             fill="none">
@@ -268,25 +417,25 @@
                           <div style="width: 18px; height: 5px"></div>
                         </template>
                       </div>
-                      <div class="notification-card-item" style="
+                      <div class="notification-card-item left-reg" style="
                           margin-left: 2%;
                           font-size: 18px;
                           font-weight: 700;
                         ">
                         {vehicle.registrationNumber}
                       </div>
-                      <div class="notification-card-item" style="margin-left: auto">
+                      <div class="notification-card-item middle-exp" style="margin-left: auto">
                         <div class="notification-card-item-top">
                           {labels2.ccp2_vda_left_Expiry}
                         </div>
                         <template if:true={vehicle.recallCreatedDate}>
                           <div class="notification-card-item-bottom" style="margin-top: 5px">
-                           {labels2.ccp2_vda_left_Recall_Notification}
+                            {labels2.ccp2_vda_left_Recall_Notification}
                           </div>
                         </template>
                       </div>
-                      <div class="notification-card-item" style="margin-left: 24px">
-                        <div class="notification-card-item-top">
+                      <div class="notification-card-item" style="margin-left: 16px">
+                        <div class="notification-card-item-top right-date">
                           {vehicle.expirationDate}
                         </div>
                         <template if:true={vehicle.recallCreatedDate}>
@@ -294,6 +443,54 @@
                             {vehicle.recallCreatedDate}
                           </div>
                         </template>
+                      </div> -->
+                      <div class="left-reg">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="22"
+                          height="22"
+                          viewBox="0 0 22 22"
+                          fill="none"
+                        >
+                          <path
+                            d="M10.084 13.6673C10.084 13.1611 10.4944 12.7507 11.0007 12.7507C11.5069 12.7507 11.9173 13.1611 11.9173 13.6673V14.6673C11.9173 15.1736 11.5069 15.584 11.0007 15.584C10.4944 15.584 10.084 15.1736 10.084 14.6673V13.6673ZM10.084 7.33398C10.084 6.82772 10.4944 6.41732 11.0007 6.41732C11.5069 6.41732 11.9173 6.82772 11.9173 7.33398V11.0007C11.9173 11.5069 11.5069 11.9173 11.0007 11.9173C10.4944 11.9173 10.084 11.5069 10.084 11.0007V7.33398ZM10.9915 1.83398C5.93148 1.83398 1.83398 5.94065 1.83398 11.0007C1.83398 16.0606 5.93148 20.1673 10.9915 20.1673C16.0606 20.1673 20.1673 16.0606 20.1673 11.0007C20.1673 5.94065 16.0606 1.83398 10.9915 1.83398ZM11.0007 18.334C6.94898 18.334 3.66732 15.0523 3.66732 11.0007C3.66732 6.94898 6.94898 3.66732 11.0007 3.66732C15.0523 3.66732 18.334 6.94898 18.334 11.0007C18.334 15.0523 15.0523 18.334 11.0007 18.334Z"
+                            fill="#E10202"
+                          />
+                        </svg>
+                        <div class="reg-num" style="">
+                          {vehicle.registrationNumber}
+                        </div>
+                      </div>
+                      <div class="right-date">
+                        <div
+                          class="left-reg"
+                          style="
+                            flex-direction: column;
+                            font-size: 12px;
+                            font-weight: 400;
+                            align-items: start;
+                          "
+                        >
+                          <div>{labels2.ccp2_vda_left_Expiry}</div>
+                          <template if:true={vehicle.recallCreatedDate}>
+                            <div>
+                              {labels2.ccp2_vda_left_Recall_Notification}
+                            </div>
+                          </template>
+                        </div>
+                        <div
+                          class="left-reg"
+                          style="
+                            flex-direction: column;
+                            font-size: 12px;
+                            font-weight: 400;
+                          "
+                        >
+                          <div>{vehicle.expirationDate}</div>
+                          <template if:true={vehicle.recallCreatedDate}>
+                            <div>{vehicle.recallCreatedDate}</div>
+                          </template>
+                        </div>
                       </div>
                     </div>
                   </template>
@@ -302,7 +499,7 @@
                   <p class="link-of-redirect" onclick={gotovehicleShakenExpiry}>
                     {labels2.ccp2_vda_left_Expiry_link}
                   </p>
-              </div>
+                </div>
               </div>
               <div class="link-card-final">
                 <p class="data-noti-link">
@@ -331,29 +528,42 @@
               <template if:false={loadcarddata}>
                 <div class="half-card-lease">
                   <div class="data-heading-grey">
-                    <p class="heading-title-card">{labels2.ccp2_vda_right_upper_heading}</p>
+                    <p class="heading-title-card">
+                      {labels2.ccp2_vda_right_upper_heading}
+                    </p>
                     <div class="count-layout">
                       <div class="data-present">
                         <p class="red-color-count">{Allcounts.TotalLease}</p>
                         {labels2.ccp2_vda_support}
                       </div>
                       /
-                      <P class="data-total">{Allcounts.TotalVehicle}{labels2.ccp2_vda_support}</P>
+                      <P class="data-total"
+                        >{Allcounts.TotalVehicle}{labels2.ccp2_vda_support}</P
+                      >
                     </div>
                   </div>
                   <div class="data-present-count">
                     <div class="data-present-count-elm">
                       <div class="data-title-card">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 22 22" fill="none">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 22 22"
+                          fill="none"
+                        >
                           <path
                             d="M10.084 13.6668C10.084 13.1606 10.4944 12.7502 11.0007 12.7502C11.5069 12.7502 11.9173 13.1606 11.9173 13.6668V14.6668C11.9173 15.1731 11.5069 15.5835 11.0007 15.5835C10.4944 15.5835 10.084 15.1731 10.084 14.6668V13.6668ZM10.084 7.3335C10.084 6.82723 10.4944 6.41683 11.0007 6.41683C11.5069 6.41683 11.9173 6.82723 11.9173 7.3335V11.0002C11.9173 11.5064 11.5069 11.9168 11.0007 11.9168C10.4944 11.9168 10.084 11.5064 10.084 11.0002V7.3335ZM10.9915 1.8335C5.93148 1.8335 1.83398 5.94016 1.83398 11.0002C1.83398 16.0602 5.93148 20.1668 10.9915 20.1668C16.0606 20.1668 20.1673 16.0602 20.1673 11.0002C20.1673 5.94016 16.0606 1.8335 10.9915 1.8335ZM11.0007 18.3335C6.94898 18.3335 3.66732 15.0518 3.66732 11.0002C3.66732 6.9485 6.94898 3.66683 11.0007 3.66683C15.0523 3.66683 18.334 6.9485 18.334 11.0002C18.334 15.0518 15.0523 18.3335 11.0007 18.3335Z"
-                            fill="#E10202" />
+                            fill="#E10202"
+                          />
                         </svg>
                         <P>{labels2.ccp2_vda_right_upper_3_month_title}</P>
                       </div>
                       <div class="count-layout-present">
                         <div class="elm-present">
-                          <P style="color: #e10202">{Allcounts.ThreeMonthLease}</P>{labels2.ccp2_vda_support}
+                          <P style="color: #e10202"
+                            >{Allcounts.ThreeMonthLease}</P
+                          >{labels2.ccp2_vda_support}
                         </div>
                         /
                         <p>{Allcounts.TotalLease}{labels2.ccp2_vda_support}</p>
@@ -361,16 +571,24 @@
                     </div>
                     <div class="data-present-count-elm">
                       <div class="data-title-card">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 22 22" fill="none">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 22 22"
+                          fill="none"
+                        >
                           <path
                             d="M10.084 13.6668C10.084 13.1606 10.4944 12.7502 11.0007 12.7502C11.5069 12.7502 11.9173 13.1606 11.9173 13.6668V14.6668C11.9173 15.1731 11.5069 15.5835 11.0007 15.5835C10.4944 15.5835 10.084 15.1731 10.084 14.6668V13.6668ZM10.084 7.3335C10.084 6.82723 10.4944 6.41683 11.0007 6.41683C11.5069 6.41683 11.9173 6.82723 11.9173 7.3335V11.0002C11.9173 11.5064 11.5069 11.9168 11.0007 11.9168C10.4944 11.9168 10.084 11.5064 10.084 11.0002V7.3335ZM10.9915 1.8335C5.93148 1.8335 1.83398 5.94016 1.83398 11.0002C1.83398 16.0602 5.93148 20.1668 10.9915 20.1668C16.0606 20.1668 20.1673 16.0602 20.1673 11.0002C20.1673 5.94016 16.0606 1.8335 10.9915 1.8335ZM11.0007 18.3335C6.94898 18.3335 3.66732 15.0518 3.66732 11.0002C3.66732 6.9485 6.94898 3.66683 11.0007 3.66683C15.0523 3.66683 18.334 6.9485 18.334 11.0002C18.334 15.0518 15.0523 18.3335 11.0007 18.3335Z"
-                            fill="#E10202" />
+                            fill="#E10202"
+                          />
                         </svg>
                         <P>{labels2.ccp2_vda_right_upper_1_year_title}</P>
                       </div>
                       <div class="count-layout-present">
                         <div class="elm-present">
-                          <P style="color: #e10202">{Allcounts.OneYearLease}</P>{labels2.ccp2_vda_support}
+                          <P style="color: #e10202">{Allcounts.OneYearLease}</P
+                          >{labels2.ccp2_vda_support}
                         </div>
                         /
                         <p>{Allcounts.TotalLease}{labels2.ccp2_vda_support}</p>
@@ -412,26 +630,37 @@
                         {labels2.ccp2_vda_support}
                       </div>
                       /
-                      <P class="data-total">{Allcounts.TotalVehicle}{labels2.ccp2_vda_support}</P>
+                      <P class="data-total"
+                        >{Allcounts.TotalVehicle}{labels2.ccp2_vda_support}</P
+                      >
                     </div>
                   </div>
                   <div class="data-present-count-year">
                     <div class="data-present-count-elm">
-                      <P style="color: #585757">{labels2.ccp2_vda_right_lower_type_A}</P>
+                      <P style="color: #585757"
+                        >{labels2.ccp2_vda_right_lower_type_A}</P
+                      >
                       <div class="data-preset-count-elm-dt">
-                        <P style="color: #e10202">{Allcounts.LargeVehicles}</P>{labels2.ccp2_vda_support}
+                        <P style="color: #e10202">{Allcounts.LargeVehicles}</P
+                        >{labels2.ccp2_vda_support}
                       </div>
                     </div>
                     <div class="data-present-count-elm">
-                      <P style="color: #585757">{labels2.ccp2_vda_right_lower_type_B}</P>
+                      <P style="color: #585757"
+                        >{labels2.ccp2_vda_right_lower_type_B}</P
+                      >
                       <div class="data-preset-count-elm-dt">
-                        <P style="color: #e10202">{Allcounts.MediumVehicles}</P>{labels2.ccp2_vda_support}
+                        <P style="color: #e10202">{Allcounts.MediumVehicles}</P
+                        >{labels2.ccp2_vda_support}
                       </div>
                     </div>
                     <div class="data-present-count-elm">
-                      <P style="color: #585757">{labels2.ccp2_vda_right_lower_type_C}</P>
+                      <P style="color: #585757"
+                        >{labels2.ccp2_vda_right_lower_type_C}</P
+                      >
                       <div class="data-preset-count-elm-dt">
-                        <P style="color: #e10202">{Allcounts.SmallVehicles}</P>{labels2.ccp2_vda_support}
+                        <P style="color: #e10202">{Allcounts.SmallVehicles}</P
+                        >{labels2.ccp2_vda_support}
                       </div>
                     </div>
                   </div>

@@ -1,162 +1,1843 @@
 <template>
-    <div class="main">
-        <div class="half top">
-            <img src={backgroundImagePC} class="main_image" alt="background_Image" />
-        </div>
-        <div class="half bottom"> 
-            <div class="center-content">
-                <div class="main-content">
-                    <div class="heading">
-                        {labels2.ccp_up_basic_info}
-                    </div>
-                    <div class="account-info">
-                        <div class="acc-left">
-                            <div class="account-text">
-                                <p class="acc-label">{labels2.ccp_up_company_name}</p>
-                                <p>{userDetailData.accountname}</p>
-                            </div>                        
-                            <div class="account-text">
-                                <p class="acc-label">{labels2.ccp_up_customer_number}</p>
-                                <p>{userDetailData.siebelAccountCode}</p>
-                            </div>                        
+  <div class="main">
+    <div class="half top">
+      <img src={backgroundImagePC} class="main_image" alt="background_Image" />
+    </div>
+    <div class="half bottom">
+      <div class="center-content">
+        <template if:true={showchangeAdmin}>
+          <div class="main-content2" style="gap: 0px">
+            <template if:true={showstep1}>
+              <div class="heading-auth">
+                <p>{labels2.ccp_up_change_admin_info}</p>
+              </div>
+              <div class="step">
+                <img src={truckpic1} style="height: 56px" />
+              </div>
+              <div class="contents-box contents-box--inner">
+                <!-- <template if:true={errors}>
+                                    <div style="color:red">an error occurs: {errors}</div>
+                                </template> -->
+                <!-- 基本情報  -->
+                <!-- <p class="text-main text-main--profile-title">基本情報の変更をご希望の際は、「<a onclick={toInquiryPage}
+                                        class="underline-decoration">お問い合わせ</a>」よりご連絡をお願い致します。</p> -->
+                <div class="section profile" style="width: 84%">
+                  <h3 class="step1-head">
+                    {labels2.ccp_up_change_admin_below}
+                  </h3>
+
+                  <div class="form_container">
+                    <div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_company_name}</div>
+                        <div class="data2">{userDetailData.accountname}</div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_customer_number}</div>
+                        <div class="data2">
+                          {userDetailData.siebelAccountCode}
                         </div>
-                        <div style="display: flex; align-items:end;">
-                            <button class="edit-button">{labels2.ccp_up_edit}</button>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_name}</div>
+                        <div class="data2">
+                          {userDetailData.lastName} {userDetailData.firstName}
                         </div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_name_furigana}</div>
+                        <div class="data2">
+                          {userDetailData.lastNameKana}
+                          {userDetailData.firstNameKana}
+                        </div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_employee_number}</div>
+                        <div class="data2">{userDetailData.Employee_Code}</div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_department}</div>
+                        <div class="data2">{userDetailData.Department}</div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_position}</div>
+                        <div class="data2">{userDetailData.Title}</div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_affiliation}</div>
+                        <div class="data-branch">
+                          <template
+                            for:each={userDetailData.Branchs2}
+                            for:item="branch"
+                          >
+                            <li
+                              key={branch.Id}
+                              style="list-style: none"
+                              class="data"
+                            >
+                              {branch.Name}
+                            </li>
+                          </template>
+                        </div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_email}</div>
+                        <div class="data2">{userDetailData.email}</div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_phone_number}</div>
+                        <div class="data2">{userDetailData.Phone}</div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_mobile_number}</div>
+                        <div class="data2">{userDetailData.MobilePhone}</div>
+                      </div>
                     </div>
-                    <div class="container">
-                        <div class="user-info">
-                            <div class="user-info-head">
-                                <p>{labels2.ccp2_up_userInfo}</p>
-                            </div>
-                            <div class="data-div">
-                                <div class="left-div" style="border-right: 1px solid #D9D9D9;">
-                                    <div class="info-rec">
-                                        <p class="info-label">{labels2.ccp_up_name}</p>
-                                        <p class="info-text">{userDetailData.lastName} {userDetailData.firstName}</p>
-                                    </div>
-                                    <div class="info-rec">
-                                        <p class="info-label">{labels2.ccp_up_name_furigana}</p>
-                                        <p class="info-text">{userDetailData.lastNameKana} {userDetailData.firstNameKana}</p>
-                                    </div>
-                                    <div class="info-rec">
-                                        <p class="info-label">{labels2.ccp_up_employee_number}</p>
-                                        <p class="info-text">{userDetailData.Employee_Code}</p>
-                                    </div>
-                                    <div class="info-rec">
-                                        <p class="info-label">{labels2.ccp_up_phone_number}</p>
-                                        <p class="info-text">{userDetailData.Phone}</p>
-                                    </div>
-                                    <div class="info-rec">
-                                        <p class="info-label">{labels2.ccp_up_email}</p>
-                                        <p class="info-text">{userDetailData.email}</p>
-                                    </div>
-                                    
-                                </div>
-                                <div class="right-div">
-                                    <div class="info-rec">
-                                        <p class="info-label">{labels2.ccp_up_position}</p>
-                                        <p class="info-text">{userDetailData.Title}</p>
-                                    </div>
-                                    <div class="info-rec">
-                                        <p class="info-label">{labels2.ccp_up_affiliation}</p>
-                                        <div class="info-text">
-                                            <div class="data-branch2">
-                                                <template for:each={userDetailData.Branchs} for:item="branch">
-                                                    <li key={branch} style="list-style: none;" class="data">{branch}</li>
-                                                </template>
-                                            </div>
+                  </div>
+
+                  <!-- <dl class="section__outline">
+                                        
+                                        <div class="section__definition-list">
+                                            <dt>会社名</dt>
+                                            <dd>{userDetailData.accountname}</dd>
                                         </div>
-                                    </div>
-                                    <div class="info-rec">
-                                        <p class="info-label">{labels2.ccp_up_department}</p>
-                                        <p class="info-text">{userDetailData.Department}</p>
-                                    </div>
-                                    <div class="info-rec">
-                                        <p class="info-label">{labels2.ccp_up_mobile_number}</p>
-                                        <p class="info-text">{userDetailData.MobilePhone}</p>
-                                    </div>
-                                    <template if:false={showcanceledit}>
-                                    </template>
-                                    <template if:true={showcanceledit}>
-                                        <div class="info-rec">
-                                            <p class="info-label">{labels2.ccp_up_preferred_contact_time}</p>
-                                            <div class="info-text">
-                                                <div class="conv-times">
-                                                    <div class="time-value">
-                                                        <p>
-                                                            {labels2.ccp_up_weekdays}
-                                                        </p>
-                                                        <p>
-                                                            {startwork} {labels2.ccp_up_2_time} ~ {endwork} {labels2.ccp_up_2_time}
-                                                        </p>
+                                        <div class="section__definition-list">
+                                            <dt>お客様番号</dt>
+                                            <dd>{userDetailData.siebelAccountCode}</dd>
+                                        </div>
+                                        <div class="section__definition-list">
+                                            <dt>氏名</dt>
+                                            <dd>{userDetailData.lastName} {userDetailData.firstName}</dd>
+                                        </div>
+                                        <div class="section__definition-list">
+                                            <dt>氏名（カタカナ）</dt>
+                                            <dd>{userDetailData.lastNameKana} {userDetailData.firstNameKana}</dd>
+                                        </div>
+                                        <div class="section__definition-list">
+                                            <dt>社員番号</dt>
+                                            <dd>{userDetailData.Employee_Code}</dd>
+                                        </div>
+                                        <div class="section__definition-list">
+                                            <dt>所属</dt>
+                                            <dd>
+                                                <template for:each={userDetailData.Branchs} for:item="branch">
+                                                    <div key={branch.Name}>
+                                                        <div class="data">{branch.Name}</div>
                                                     </div>
-                                                    <div class="time-value">
-                                                        <p>
-                                                            {labels2.ccp_up_weekdays}
-                                                        </p>
-                                                        <p>
-                                                            {startwork} {labels2.ccp_up_2_time} ~ {endwork} {labels2.ccp_up_2_time}
-                                                        </p>
+                                                </template>
+                                            </dd>
+                                        </div>
+                                        <div class="section__definition-list">
+                                            <dt>部署</dt>
+                                            <dd>{userDetailData.Department}</dd>
+                                        </div>
+                                        <div class="section__definition-list">
+                                            <dt>役職</dt>
+                                            <dd>{userDetailData.Title}</dd>
+                                        </div>
+                                        <div class="section__definition-list">
+                                            <dt>メールアドレス</dt>
+                                            <dd>{userDetailData.email}</dd>
+                                        </div>
+                                        <div class="section__definition-list">
+                                            <dt>電話番号</dt>
+                                            <dd>{userDetailData.Phone}</dd>
+                                        </div>
+                                        <div class="section__definition-list">
+                                            <dt>携帯番号</dt>
+                                            <dd>{userDetailData.MobilePhone}</dd>
+                                        </div>
+                                        
+                                    </dl> -->
+                </div>
+                <!-- userDropdown.html -->
+
+                <div style="width: 84%">
+                  <div class="dropdown-label">
+                    <label for="userDropdown" class="dropdownHead"
+                      >{labels2.ccp_up_new_admin}</label
+                    >
+                  </div>
+
+                  <!-- <div class="custom-dropdown">
+                                        <select id="userDropdown" class="dropdown" onchange={handleChange}>
+                                                <option value="選択してください" hidden selected>選択してください</option>
+                                                <template for:each={userList} for:item="user">
+                                                    <option key={user.Id} class="devil" value={user.Id}>{user.Name}</option>
+                                                </template>
+                                        </select>
+                                    </div> -->
+
+                  <div class="custom-dropdown">
+                    <div class="dropdown">
+                      <input
+                        type="text"
+                        onclick={toggleDropdown}
+                        class="Inputs1 icon"
+                        placeholder={labels2.ccp_up_select23}
+                        value={selectedValue}
+                        readonly
+                      />
+                      <div>
+                        <label
+                          >{labels2.ccp_up_line0}<span style="color: red"
+                            >{labels2.ccp_up_line1}</span
+                          >{labels2.ccp_up_line2}<span style="color: red"
+                            >{labels2.ccp_up_line3}</span
+                          >{labels2.ccp_up_line4}</label
+                        >
+                      </div>
+                      <ul class="dropdown-options" if:true={isDropdownOpen}>
+                        <template for:each={userList} for:item="user">
+                          <li
+                            key={user.value}
+                            class="dropdown-option"
+                            data-id={user.value}
+                            onclick={handleChange}
+                          >
+                            {user.label}
+                          </li>
+                        </template>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <template if:true={showagreeModal}>
+                  <section
+                    role="dialog"
+                    tabindex="-1"
+                    class="slds-modal slds-fade-in-open"
+                    style="background-color: #ffffff0d"
+                  >
+                    <div class="modal-background-last2">
+                      <div
+                        class="modal-window-small2"
+                        style="
+                          border-radius: 8px;
+                          background-color: rgba(255, 255, 255, 0.9);
+                        "
+                      >
+                        <div class="content-modal2">
+                          <div style="white-space: nowrap">
+                            <p style="margin-left: -8px">
+                              {labels2.ccp_up_agreeToAdminChange7}
+                            </p>
+                            <p>{labels2.ccp_up_check7}</p>
+                          </div>
+                          <button class="save-btn" onclick={handleagreeyes}>
+                            {labels2.ccp_up_yes7}
+                          </button>
+                          <!-- <div class="btn-modal2">
+                                                        <button class="btn-yes" onclick={handleagreeyes}>{labels2.ccp_up_yes7}</button>
+                                                    </div> -->
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                  <div class="slds-backdrop slds-backdrop_open"></div>
+                </template>
+
+                <template if:true={newusershow}>
+                  <div class="form_container" style="width: 84%">
+                    <div class="data-rec">
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_name}</div>
+                        <div class="data2">
+                          {userInfo.lastName} {userInfo.firstName}
+                        </div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_name_furigana}</div>
+                        <div class="data2">
+                          {userInfo.lastNameKana} {userInfo.firstNameKana}
+                        </div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_employee_number}</div>
+                        <div class="data2">{userInfo.Employee_Code}</div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_department}</div>
+                        <div class="data2">{userInfo.Department}</div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_position}</div>
+                        <div class="data2">{userInfo.Title}</div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_affiliation}</div>
+                        <div class="data-branch">
+                          <template
+                            for:each={userInfo.Branchs}
+                            for:item="branch"
+                          >
+                            <li
+                              key={branch.Id}
+                              style="list-style: none"
+                              class="data"
+                            >
+                              {branch.Name}
+                            </li>
+                          </template>
+                        </div>
+                        <!-- TO BE CONTINUED BRANCH
+                                                <div class="data">{userDetailData.accountname}</div> -->
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_email}</div>
+                        <div class="data2">{userInfo.email}</div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_phone_number}</div>
+                        <div class="data2">{userInfo.Phone}</div>
+                      </div>
+                      <div class="records">
+                        <div class="head">{labels2.ccp_up_mobile_number}</div>
+                        <div class="data2">{userInfo.MobilePhone}</div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+
+                <label class="check-final">
+                  <input
+                    type="checkbox"
+                    name="agreechange"
+                    onchange={handleCheckboxChange}
+                    checked={termServiceChecked}
+                    class="selected"
+                  />
+                  <p>{labels2.ccp_up_line5}</p>
+                </label>
+
+                <div class="footer-buttons">
+                  <button class="cancel-btn" onclick={handlecancel}>
+                    {labels2.ccp_up_cancel23}
+                  </button>
+                  <button class="save-btn" onclick={handlenext}>
+                    {labels2.ccp2_cm_next}
+                  </button>
+                </div>
+              </div>
+            </template>
+            <template if:true={showcancelModal}>
+              <div class="modal-background-last">
+                <div class="modal-window-small">
+                  <div class="warning">
+                    <p class="warntxt">
+                      {labels2.ccp_up_unsavedChangesPrompt23}
+                    </p>
+                    <p class="warntxt more">
+                      {labels2.ccp_up_unsavedChangesPrompt233}
+                    </p>
+                  </div>
+                  <div class="buttons-small">
+                    <button class="cancel-btn" onclick={handleNoCancel}>
+                      {labels2.ccp_up_no23}
+                    </button>
+                    <button class="save-btn" onclick={handleYesCancel}>
+                      {labels2.ccp_up_yes23}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <template if:true={showstep2}>
+              <div class="heading-auth">
+                <p>{labels2.ccp_up_change_admin}</p>
+              </div>
+              <div class="step">
+                <img src={truckpic2} style="height: 56px" />
+              </div>
+
+              <div class="contents-box contents-box--inner" style="width: 55vw">
+                <div class="label1-step2">
+                  <label>{labels2.ccp_up_line6}</label>
+                  <label>{labels2.ccp_up_line7}</label>
+                </div>
+                <div class="form_container">
+                  <div class="data-rec">
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_company_name}</div>
+                      <div class="data2">{userDetailData.accountname}</div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_customer_number}</div>
+                      <div class="data2">
+                        {userDetailData.siebelAccountCode}
+                      </div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_name}</div>
+                      <div class="data2">
+                        {userDetailData.lastName} {userDetailData.firstName}
+                      </div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_name_furigana}</div>
+                      <div class="data2">
+                        {userDetailData.lastNameKana}
+                        {userDetailData.firstNameKana}
+                      </div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_employee_number}</div>
+                      <div class="data2">{userDetailData.Employee_Code}</div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_department}</div>
+                      <div class="data2">{userDetailData.Department}</div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_position}</div>
+                      <div class="data2">{userDetailData.Title}</div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_affiliation}</div>
+                      <!-- TO BE CONTINUED BRANCH
+                                            <div class="data">{userDetailData.accountname}</div> -->
+                      <!-- <div class="data-branch">
+                                                <template for:each={userDetailData.Branchs2} for:item="branch">
+                                                    <li key={branch.Id} style="list-style: none;" class="data">{branch}
+                                                    </li>
+                                                </template>
+                                            </div> -->
+
+                      <div class="data-branch">
+                        <template
+                          for:each={userDetailData.Branchs2}
+                          for:item="branch"
+                        >
+                          <li
+                            key={branch.Id}
+                            style="list-style: none"
+                            class="data"
+                          >
+                            {branch.Name}
+                          </li>
+                        </template>
+                      </div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_email}</div>
+                      <div class="data2">{userDetailData.email}</div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_phone_number}</div>
+                      <div class="data2">{userDetailData.Phone}</div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_mobile_number}</div>
+                      <div class="data2">{userDetailData.MobilePhone}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="label1-step2" style="margin-top: 24px">
+                  <label>{labels2.ccp_up_line8}</label>
+                </div>
+                <div class="form_container">
+                  <div class="data-rec">
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_name}</div>
+                      <div class="data2">
+                        {userInfo.lastName} {userInfo.firstName}
+                      </div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_name_furigana}</div>
+                      <div class="data2">
+                        {userInfo.lastNameKana} {userInfo.firstNameKana}
+                      </div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_employee_number}</div>
+                      <div class="data2">{userInfo.Employee_Code}</div>
+                    </div>
+
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_department}</div>
+                      <div class="data2">{userInfo.Department}</div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_position}</div>
+                      <div class="data2">{userInfo.Title}</div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_affiliation}</div>
+                      <!-- TO BE CONTINUED BRANCH
+                                            <div class="data">{userDetailData.accountname}</div> -->
+                      <div class="data-branch">
+                        <template for:each={userInfo.Branchs} for:item="branch">
+                          <li
+                            key={branch.Id}
+                            style="list-style: none"
+                            class="data"
+                          >
+                            {branch.Name}
+                          </li>
+                        </template>
+                      </div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_email}</div>
+                      <div class="data2">{userInfo.email}</div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_phone_number}</div>
+                      <div class="data2">{userInfo.Phone}</div>
+                    </div>
+                    <div class="records">
+                      <div class="head">{labels2.ccp_up_mobile_number}</div>
+                      <div class="data2">{userInfo.MobilePhone}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="footer-buttons2">
+                <button class="cancel-btn" onclick={handleprev}>
+                  {labels2.ccp_up_line9}
+                </button>
+                <button class="save-btn" onclick={handlenext2}>
+                  {labels2.ccp_up_line10}
+                </button>
+              </div>
+            </template>
+            <template if:true={showstep3}>
+              <div class="heading-auth">
+                <p>{labels2.ccp_up_adminChangeComplete7}</p>
+              </div>
+              <div class="step">
+                <img src={truckpic3} style="height: 56px" />
+              </div>
+              <div class="label-step3">
+                <label>{labels2.ccp_up_adminChanged7}</label>
+              </div>
+              <div class="last-button">
+                <button class="save-btn" onclick={handlelastbutton}>
+                  {labels2.ccp_up_toBasicInfo7}
+                </button>
+              </div>
+            </template>
+          </div>
+        </template>
+        <template if:false={showchangeAdmin}>
+          <div class="main-content">
+            <template if:true={showcanceledit}>
+              <div class="heading">{labels2.ccp_up_basic_info}</div>
+            </template>
+            <template if:false={showcanceledit}>
+              <div class="heading">{labels2.ccp_up_basic_infoGen}</div>
+            </template>
+            <div class="account-info">
+              <div class="acc-left">
+                <div class="account-text">
+                  <p class="acc-label">{labels2.ccp_up_company_name}</p>
+                  <p>{userDetailData.accountname}</p>
+                </div>
+                <div class="account-text">
+                  <p class="acc-label">{labels2.ccp_up_customer_number}</p>
+                  <p>{userDetailData.siebelAccountCode}</p>
+                </div>
+              </div>
+              <template if:false={showeditscreen}>
+                <template if:true={showcanceledit}>
+                  <div style="display: flex; align-items: end; gap: 16px">
+                    <button class="edit-button" onclick={handlechangeadmin}>
+                      {labels2.ccp_up_change_admin}
+                    </button>
+                    <button class="edit-button" onclick={handleEdit}>
+                      {labels2.ccp_up_edit}
+                    </button>
+                  </div>
+                </template>
+                <template if:false={showcanceledit}>
+                  <div style="display: flex; align-items: end">
+                    <button class="edit-button" onclick={handleEdit}>
+                      {labels2.ccp_up_edit}
+                    </button>
+                  </div>
+                </template>
+              </template>
+            </div>
+
+            <template if:true={showeditscreen}>
+              <div class="container">
+                <div class="user-info">
+                  <div class="user-info-head">
+                    <p>{labels2.ccp2_up_userInfo}</p>
+                  </div>
+                  <div class="edit-data-div">
+                    <div class="record-edit">
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading">{labels2.ccp_up_name}</p>
+                          <p class="reqtxt">{labels2.ccp_up_required}</p>
+                          <p class="valid-input">{labels2.ccp2_up_val_10}</p>
+                        </div>
+                        <div class="value-grp">
+                          <div class="inputs-name">
+                            <p>{labels2.ccp_up_lastName23}</p>
+                            <input
+                              type="text"
+                              class={contactClassLastName}
+                              oninput={handlevalchange}
+                              onchange={handleInputChange}
+                              data-field="姓"
+                              value={InputLastName}
+                              placeholder={labels2.ccp_up_exampleLastName23}
+                              maxlength="10"
+                            />
+                            <div if:true={Lnameerror} class="error-text">
+                              {Lnameerror}
+                            </div>
+                          </div>
+                          <div class="inputs-name">
+                            <p>{labels2.ccp_up_firstName23}</p>
+                            <input
+                              type="text"
+                              class={contactClassFirstName}
+                              onchange={handleInputChange}
+                              oninput={handlevalchange}
+                              data-field="名"
+                              value={InputFirstName}
+                              placeholder="○○"
+                              maxlength="10"
+                            />
+                            <div if:true={Fnameerror} class="error-text">
+                              {Fnameerror}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading">
+                            {labels2.ccp_up_name_furigana}
+                          </p>
+                          <p class="reqtxt">{labels2.ccp_up_required}</p>
+                          <p class="valid-input">{labels2.ccp2_up_val_10}</p>
+                        </div>
+                        <div class="value-grp">
+                          <div class="inputs-name">
+                            <p>{labels2.ccp_up_lastNameFurigana23}</p>
+                            <input
+                              type="text"
+                              class={contactClassLKanaName}
+                              onchange={handleInputChange}
+                              oninput={handlevalchange}
+                              data-field="姓（フリガナ）"
+                              value={InputLKanaName}
+                              placeholder={labels2.ccp_up_exampleFirstName23}
+                              maxlength="10"
+                            />
+                            <div if:true={Lkanaerror} class="error-text">
+                              {Lkanaerror}
+                            </div>
+                          </div>
+                          <div class="inputs-name">
+                            <p>{labels2.ccp_up_firstNameFurigana23}</p>
+                            <input
+                              type="text"
+                              class={contactClassFKanaName}
+                              onchange={handleInputChange}
+                              oninput={handlevalchange}
+                              data-field="名（フリガナ）"
+                              value={InputFKanaName}
+                              placeholder="○○"
+                              maxlength="10"
+                            />
+                            <div if:true={Fkanaerror} class="error-text">
+                              {Fkanaerror}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="record-edit">
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading">
+                            {labels2.ccp_up_employee_number}
+                          </p>
+                          <p class="valid-input">{labels2.ccp2_up_val_24}</p>
+                        </div>
+                        <input
+                          type="text"
+                          onchange={handleInputChange}
+                          data-field="社員番号"
+                          value={InputEmpCode}
+                          placeholder="A0002"
+                          oninput={handlevalchange}
+                          maxlength="24"
+                        />
+                      </div>
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading">
+                            {labels2.ccp_up_department}
+                          </p>
+                          <p class="valid-input">{labels2.ccp2_up_val_24}</p>
+                        </div>
+                        <input
+                          type="text"
+                          oninput={handlevalchange}
+                          onchange={handleInputChange}
+                          data-field="部署"
+                          value={InputDepartment}
+                          placeholder={labels2.ccp_up_department23}
+                          maxlength="24"
+                        />
+                      </div>
+                    </div>
+                    <div class="record-edit">
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading">{labels2.ccp_up_position}</p>
+                          <p class="valid-input">{labels2.ccp2_up_val_24}</p>
+                        </div>
+                        <input
+                          type="text"
+                          oninput={handlevalchange}
+                          onchange={handleInputChange}
+                          data-field="役職"
+                          value={InputPost}
+                          placeholder={labels2.ccp_up_manager23}
+                          maxlength="24"
+                        />
+                      </div>
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading">
+                            {labels2.ccp_up_affiliation}
+                          </p>
+                          <p class="reqtxt">{labels2.ccp_up_required}</p>
+                        </div>
+                        <!-- <div class="dataDrop">
+                                                    <input type="text" onclick={handlebranChange}
+                                                        class="Inputs1 icon slds-form-element__control"
+                                                        placeholder={labels2.ccp_au_affiliation_placeholder}
+                                                        value={countofbranch} name="branchsss" readonly />
+                                                    <template if:true={showlist}>
+                                                        <div class="branch-selection-container" onclick={handleInsideClick}>
+                                                            <div class="mm-filter-dropdown">
+                                                                <div class="mm-filter-dropdown-rows"
+                                                                    onclick={handleAllBranchSelect} data-id="all">
+                                                                    <input type="checkbox" name="all"
+                                                                        checked={isAllBranchSelected}
+                                                                        onchange={handleAllBranchSelect}
+                                                                        style="cursor: pointer;" />
+                                                                    <p>すべて</p>
+                                                                </div>
+                                                                <template for:each={filteredbranch} for:item="veh">
+                                                                    <div key={veh.value} class="mm-filter-dropdown-rows"
+                                                                        onclick={handleBranchSelect} data-id={veh.value}>
+                                                                        <input type="checkbox" name={veh.value}
+                                                                            checked={veh.selected}
+                                                                            onchange={handleBranchSelect}
+                                                                            style="cursor: pointer;" />
+                                                                        <p>{veh.label}</p>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                    <template if:true={branchError}>
+                                                        <p class="_error">{branchErrorText}</p>
+                                                    </template>
+                                                </div> -->
+                        <template if:false={showcanceledit}>
+                          <div
+                            style="display: flex; gap: 3px; align-items: center"
+                          >
+                            <div
+                              class="branches"
+                              style="width: auto; flex-wrap: wrap"
+                            >
+                              <span title={allBranchesData.firstbranchreal}
+                                >{allBranchesData.firstbranch}</span
+                              >
+                              <template if:true={morethanonebranch}>
+                                <span class="branch-All" onclick={branchopen}
+                                  >{labels2.ccp2_up_Other_10} +
+                                  {allBranchesData.onscreenbranchcount}</span
+                                >
+                              </template>
+                            </div>
+                          </div>
+                        </template>
+                        <template if:true={showcanceledit}>
+                          <div class="" style="display: flex; gap: 23px">
+                            <div class="dataDrop">
+                              <input
+                                type="text"
+                                style="min-height: 48px"
+                                oninput={handleSearch}
+                                onclick={handlebranChange}
+                                class={contactClassBranch}
+                                placeholder={labels2.ccp_up_select23}
+                                readonly
+                              />
+
+                              <template if:true={showlist}>
+                                <div class="lists" onclick={handleInsideClick}>
+                                  <div class="list-scroll">
+                                    <template
+                                      for:each={filteredbranch}
+                                      for:item="veh"
+                                    >
+                                      <div
+                                        key={veh.value}
+                                        class="list-item"
+                                        onclick={handleBranchSelect}
+                                        data-id={veh.value}
+                                      >
+                                        <p>{veh.label}</p>
+                                      </div>
+                                    </template>
+                                  </div>
+                                </div>
+                              </template>
+                              <div if:true={ErrorText} class="error-text">
+                                {ErrorText}
+                              </div>
+                            </div>
+                            <div style="width: 50%">
+                              <div class="branchrecords">
+                                <template if:false={branchPlaceholder}>
+                                  <div class="scrollbar">
+                                    <template
+                                      for:each={branchfromjunction}
+                                      for:item="veh"
+                                    >
+                                      <div key={veh.Id} class="record-item">
+                                        <lightning-icon
+                                          icon-name="utility:close"
+                                          size="x-small"
+                                          alternative-text="Delete"
+                                          onclick={handleDeleteBranch}
+                                          data-id={veh.Id}
+                                          class="filtericn"
+                                        ></lightning-icon>
+                                        <span>{veh.Name}</span>
+                                        <br />
+                                      </div>
+                                    </template>
+
+                                    <template for:each={branch} for:item="veh">
+                                      <div key={veh.Id} class="record-item">
+                                        <lightning-icon
+                                          icon-name="utility:close"
+                                          size="x-small"
+                                          alternative-text="Delete"
+                                          onclick={handleDeleteBranch}
+                                          data-id={veh.Id}
+                                          class="filtericn"
+                                        ></lightning-icon>
+                                        <span>{veh.Name}</span>
+                                        <br />
+                                      </div>
+                                    </template>
+                                  </div>
+                                </template>
+                                <template if:true={branchPlaceholder}>
+                                  <p class="custom-placeholder">
+                                    {labels2.ccp_up_selectedLocation23}
+                                  </p>
+                                </template>
+                              </div>
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                    <div
+                      class="record-edit"
+                      style="flex-direction: column; gap: 16px"
+                    >
+                      <div class="req-rec">
+                        <p class="input-heading">
+                          {labels2.ccp_up_phone_number}
+                        </p>
+                        <p class="reqtxt">{labels2.ccp_up_required}</p>
+                      </div>
+                      <div
+                        class="req-rec"
+                        style="font-size: 12px; color: #a7a7a7; gap: 0px"
+                      >
+                        <p>{labels2.ccp_up_phoneNumberInput23}</p>
+                        <p>{labels2.ccp2_up_val_11}</p>
+                      </div>
+                      <div class="record-edit">
+                        <div class="label-inputs">
+                          <p class="input-heading">
+                            {labels2.ccp_up_phone_number}
+                          </p>
+                          <div class="inputs-name">
+                            <input
+                              type="tel"
+                              class={contactClassTelephone}
+                              oninput={handleInputChange}
+                              data-field="電話番号"
+                              value={InputTelephone}
+                              maxlength="11"
+                              placeholder="04512345678"
+                            />
+                            <div
+                              if:true={cellPhoneErrorText}
+                              class="error-text"
+                            >
+                              {cellPhoneErrorText}
+                            </div>
+                            <div
+                              if:true={telephoneErrorText}
+                              class="error-text"
+                            >
+                              {telephoneErrorText}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="label-inputs">
+                          <p class="input-heading">
+                            {labels2.ccp_up_mobile_number}
+                          </p>
+                          <input
+                            type="tel"
+                            class={contactClassCellPhone}
+                            oninput={handleInputChange}
+                            data-field="携帯番号"
+                            value={InputCellPhone}
+                            maxlength="11"
+                            placeholder="08012345678"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="record-edit">
+                      <div class="label-inputs">
+                        <p class="input-heading">{labels2.ccp_up_email}</p>
+                        <input
+                          type="text"
+                          data-field="メールアドレス"
+                          value={InputEmail}
+                          class="disabled-input"
+                          placeholder="sample@sample.com"
+                          disabled
+                          readonly
+                        />
+                      </div>
+                      <div class="label-inputs">
+                        <!-- <template if:true={showcanceledit}>
+                                                    <p class="input-heading">{labels2.ccp_up_preferred_contact_time}</p>
+                                                    <div style="display: flex; gap:30px;">
+                                                        <div class="time-div">
+                                                            <p>{labels2.ccp_up_weekdays}</p>
+                                                            <div style="display: flex;">
+                                                                <div class="custom-dropdown2">
+                                                                    <button class="dropdown-button icon2"
+                                                                        onclick={toggleDropdownStart}>
+                                                                        {workdayStartDisplay}
+                                                                    </button>
+                                                                    <p style="width: 25px;">
+                                                                        {labels2.ccp_up_fromHour23}
+                                                                    </p>
+                                                                    <div class={dropdownStartClass}>
+                                                                        <ul class="scrollbar2">
+                                                                            <template for:each={workdayStartOptions}
+                                                                                for:item="option">
+                                                                                <li key={option} data-value={option}
+                                                                                    onclick={handleWorkdayStartChange}>
+                                                                                    {option}
+                                                                                </li>
+                                                                            </template>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="custom-dropdown2">
+
+                                                                    <button class="dropdown-button icon2"
+                                                                        onclick={toggleDropdownEnd}>
+                                                                        {workdayEndDisplay}
+                                                                    </button>{labels2.ccp_up_toHour23}
+                                                                    <div class={dropdownEndClass}>
+                                                                        <ul class="scrollbar2">
+                                                                            <template for:each={workdayStartOptions}
+                                                                                for:item="option">
+                                                                                <li key={option} data-value={option}
+                                                                                    onclick={handleWorkdayEndChange}>
+                                                                                    {option}
+                                                                                </li>
+                                                                            </template>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="time-div">
+                                                            <p>{labels2.ccp_up_weekends}</p>
+                                                            <div style="display: flex;">
+                                                                <div class="custom-dropdown2">
+                                                                    <button class="dropdown-button icon2"
+                                                                        onclick={toggleDropdownStartholi}>
+                                                                        {holidayStartDisplay}
+                                                                    </button>
+                                                                    <p style="width: 25px;">
+                                                                        {labels2.ccp_up_fromHour23}
+                                                                    </p>
+                                                                    <div class={dropdownStartClassholi}>
+                                                                        <ul class="scrollbar2">
+                                                                            <template for:each={workdayStartOptions}
+                                                                                for:item="option">
+                                                                                <li key={option} data-value={option}
+                                                                                    onclick={handleHolidayStartChange}>
+                                                                                    {option}
+                                                                                </li>
+                                                                            </template>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="custom-dropdown2">
+                                                                    <button class="dropdown-button icon2"
+                                                                        onclick={toggleDropdownEndholi}>
+                                                                        {holidayEndDisplay}
+                                                                    </button>{labels2.ccp_up_toHour23}
+                                                                    <div class={dropdownEndClassholi}>
+                                                                        <ul class="scrollbar2">
+                                                                            <template for:each={workdayStartOptions}
+                                                                                for:item="option">
+                                                                                <li key={option} data-value={option}
+                                                                                    onclick={handleHolidayEndChange}>
+                                                                                    {option}
+                                                                                </li>
+                                                                            </template>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div if:true={workError} class="error-text">{workError}</div>
+                                                    </div>
+                                                </template> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <template if:false={servlen}>
+                  <div class="user-info">
+                    <div class="user-info-head">
+                      <p>{labels2.ccp2_up_servused}</p>
+                    </div>
+                    <div class="services-data">
+                      <div style="flex-wrap: wrap; display: flex; gap: 20px">
+                        <template for:each={servicesArray} for:item="ser">
+                          <div key={ser} class="serv-items">{ser}</div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <div class="user-info">
+                  <div class="user-info-head">
+                    <p>{labels2.ccp2_up_notifSet}</p>
+                  </div>
+                  <div class="notification" style="gap: 0">
+                    <div class="notif-head" lwc:if={isVehicleService}>
+                      <p
+                        style="font-size: 16px; font-weight: 700; width: 190px"
+                      >
+                        {labels2.ccp2__up_2_inspectionNotification}
+                      </p>
+                      <template if:true={notifiOff}>
+                        <div
+                          class="offButton"
+                          onclick={handleNotificationOn}
+                          data-fieldd="車検満了日の通知設定"
+                          data-valuee="オン"
+                          style="
+                            background: var(--Gray-line, #d9d9d9);
+                            align-items: flex-start;
+                          "
+                        >
+                          <div
+                            class="insideOff"
+                            onclick={handleNotificationOn}
+                            data-fieldd="車検満了日の通知設定"
+                            data-valuee="オン"
+                            style="background: var(--White-white, #fff)"
+                          >
+                            <!-- <p style="color: var(--gray-text-2-textbox-text-bg, #BBB);" onclick={handleNotificationOn} data-fieldd="車検満了日の通知設定" data-valuee="オン">
+                                                            {labels2.ccp2_up_2_Off}
+                                                        </p> -->
+                          </div>
+                        </div>
+                      </template>
+                      <template if:false={notifiOff}>
+                        <div
+                          class="offButton"
+                          onclick={handleNotificationOff}
+                          data-field="車検満了日の通知設定"
+                          data-value="オフ"
+                          style="
+                            background: var(--red-button-alers, #e10202);
+                            align-items: flex-end;
+                          "
+                        >
+                          <div
+                            class="insideOff"
+                            onclick={handleNotificationOff}
+                            data-field="車検満了日の通知設定"
+                            data-value="オフ"
+                            style="background: var(--White-white, #fff)"
+                          >
+                            <!-- <p onclick={handleNotificationOff} data-field="車検満了日の通知設定" data-value="オフ" style="color: var(--red-button-alers, #E10202);">
+                                                            {labels2.ccp2_up_2_On}
+                                                        </p> -->
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                    <template if:false={notifiOff}>
+                      <div
+                        lwc:if={isVehicleService}
+                        class="notifOn"
+                        style="gap: 65px; justify-content: start"
+                      >
+                        <!-- <div class="notifHeader">{labels2.ccp2__up_2_AdvNotif}</div> -->
+                        <div class="records-notif-input">
+                          <div
+                            class="input-heading"
+                            style="display: flex; gap: 16px"
+                          >
+                            {labels2.ccp2__up_2_notifTarget}<span class="reqtxt"
+                              >{labels2.ccp_up_required}</span
+                            >
+                          </div>
+                          <div class="data">
+                            <div class="notif-days">
+                              <p>{labels2.ccp2__up_2_UntillExp}</p>
+                              <div>
+                                <input
+                                  type="text"
+                                  value={inputNumVal}
+                                  class={contactClassRecordInput}
+                                  data-field="通知対象"
+                                  oninput={handleNumberChange}
+                                  style="
+                                    padding: 16px;
+                                    border-radius: 10px;
+                                    border: 1px solid #d9d9d9;
+                                    width: 86px;
+                                    text-align: center;
+                                  "
+                                />
+                              </div>
+                              <p>{labels2.ccp2__up_2_NotifWithin}</p>
+                            </div>
+                            <template if:true={numerrorVal}>
+                              <div class="error-val" style="color: #e10202">
+                                {numerrorVal}
+                              </div>
+                            </template>
+                            <template if:false={numerrorVal}>
+                              <p style="color: var(--gray-text-1-bg, #7b7b7b)">
+                                {labels2.ccp2__up_2_range}
+                              </p>
+                            </template>
+                          </div>
+                        </div>
+                        <div class="records-notif-input" style="width: 40%">
+                          <div
+                            class="input-heading"
+                            style="display: flex; gap: 16px"
+                          >
+                            {labels2.ccp2__up_notifDate}<span class="reqtxt"
+                              >{labels2.ccp_up_required}</span
+                            >
+                          </div>
+                          <div class="data">
+                            <div
+                              style="
+                                display: flex;
+                                gap: 12px;
+                                flex-direction: column;
+                              "
+                            >
+                              <div class="radio-btn-notif">
+                                <template if:false={NotificationError}>
+                                  <input
+                                    type="radio"
+                                    name="selectionGroup"
+                                    value="NotifyWhenExp"
+                                    data-field="通知日"
+                                    onchange={handleNotificationSelection}
+                                    style="
+                                      width: 18px;
+                                      height: 18px;
+                                      cursor: pointer;
+                                    "
+                                    checked={isNotifyWhenExpSelected}
+                                  />{labels2.ccp2__up_2_soonasGen}
+                                </template>
+                                <template if:true={NotificationError}>
+                                  <div class="red-radio">
+                                    <input
+                                      type="radio"
+                                      name="selectionGroup"
+                                      value="NotifyWhenExp"
+                                      data-field="通知日"
+                                      onchange={handleRedRadioClick}
+                                      style="
+                                        width: 18px;
+                                        height: 18px;
+                                        cursor: pointer;
+                                      "
+                                      checked={isNotifyWhenExpSelected}
+                                    />{labels2.ccp2__up_2_soonasGen}
+                                  </div>
+                                </template>
+                              </div>
+                              <div class="radio-btn-notif">
+                                <template if:false={NotificationError}>
+                                  <input
+                                    type="radio"
+                                    name="selectionGroup"
+                                    value="NotifySelectedDate"
+                                    data-field="通知日"
+                                    onchange={handleNotificationSelection}
+                                    style="
+                                      width: 18px;
+                                      height: 18px;
+                                      cursor: pointer;
+                                    "
+                                    checked={isNotifySelectedDateSelected}
+                                  />{labels2.ccp2__up_2_selectedNotif}
+                                </template>
+                                <template if:true={NotificationError}>
+                                  <div class="red-radio">
+                                    <input
+                                      type="radio"
+                                      name="selectionGroup"
+                                      value="NotifySelectedDate"
+                                      data-field="通知日"
+                                      onchange={handleRedRadioClick}
+                                      style="
+                                        width: 18px;
+                                        height: 18px;
+                                        cursor: pointer;
+                                      "
+                                      checked={isNotifySelectedDateSelected}
+                                    />{labels2.ccp2__up_2_selectedNotif}
+                                  </div>
+                                </template>
+                              </div>
+                            </div>
+                            <template if:true={notifPicklist}>
+                              <div class="dropdown-wrapper-date">
+                                <div
+                                  class={contactClassSelectedDate}
+                                  onclick={toggleStartDropdown}
+                                >
+                                  <template if:true={placeholderNotification}>
+                                    <span>{selectedNotifDatetoDisp}</span>
+                                  </template>
+                                  <template if:false={placeholderNotification}>
+                                    <span
+                                      style="
+                                        color: var(
+                                          --gray-text-2-textbox-text-bg,
+                                          #bbb
+                                        );
+                                      "
+                                      >{labels2.ccp2__up_2_pleaseSelect}</span
+                                    >
+                                  </template>
+                                </div>
+                                <div
+                                  if:true={isNotifDropdownOpen}
+                                  class="dropdown-list-date"
+                                  onclick={handleInsideClick}
+                                >
+                                  <div
+                                    data-field="特定の日に該当の車両をまとめて通知する"
+                                    data-value="1"
+                                    data-name="毎月1日"
+                                    class="dropdown-item"
+                                    onclick={handleNotificationdateClick}
+                                  >
+                                    {labels2.ccp2__up_2_1stMon}
+                                  </div>
+                                  <div
+                                    data-field="特定の日に該当の車両をまとめて通知する"
+                                    data-value="15"
+                                    data-name="毎月15日"
+                                    class="dropdown-item"
+                                    onclick={handleNotificationdateClick}
+                                  >
+                                    {labels2.ccp2__up_2_15thMon}
+                                  </div>
+                                </div>
+                              </div>
+                            </template>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+                    <div
+                      class="notifOn"
+                      if:true={isEinvoicePermission}
+                      style={styleOfEinvoiceContainer2}
+                    >
+                      <div class="notif-email">
+                        <div class="email-labels">
+                          <p style="font-weight: 700">
+                            {labels2.ccp2_not_emailinv}
+                          </p>
+                          <p
+                            style="
+                              font-size: 14px;
+                              color: var(--gray-text-1-bg, #7b7b7b);
+                            "
+                          >
+                            {labels2.ccp2_not_emailinvsupport}
+                          </p>
+                        </div>
+                        <template if:true={notifiOffinv}>
+                          <div
+                            class="offButton"
+                            onclick={handleNotificationOninv}
+                            data-fieldd="車検満了日の通知設定"
+                            data-valuee="true"
+                            style="
+                              background: var(--Gray-line, #d9d9d9);
+                              align-items: flex-start;
+                            "
+                          >
+                            <div
+                              class="insideOff"
+                              onclick={handleNotificationOninv}
+                              data-fieldd="車検満了日の通知設定"
+                              data-valuee="true"
+                              style="background: var(--White-white, #fff)"
+                            >
+                              <!-- <p style="color: var(--gray-text-2-textbox-text-bg, #BBB);" onclick={handleNotificationOn} data-fieldd="車検満了日の通知設定" data-valuee="オン">
+                                                                {labels2.ccp2_up_2_Off}
+                                                            </p> -->
+                            </div>
+                          </div>
+                        </template>
+                        <template if:false={notifiOffinv}>
+                          <div
+                            class="offButton"
+                            onclick={handleNotificationOffinv}
+                            data-field="車検満了日の通知設定"
+                            data-value="false"
+                            style="
+                              background: var(--red-button-alers, #e10202);
+                              align-items: flex-end;
+                            "
+                          >
+                            <div
+                              class="insideOff"
+                              onclick={handleNotificationOffinv}
+                              data-field="車検満了日の通知設定"
+                              data-value="false"
+                              style="background: var(--White-white, #fff)"
+                            >
+                              <!-- <p onclick={handleNotificationOff} data-field="車検満了日の通知設定" data-value="オフ" style="color: var(--red-button-alers, #E10202);">
+                                                                {labels2.ccp2_up_2_On}
+                                                            </p> -->
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                    <div
+                      if:true={isDtfsaPermission}
+                      class="notifOn"
+                      style={styleOfDtfsaContainer}
+                    >
+                      <div class="notif-email">
+                        <div class="email-labels">
+                          <p style="font-weight: 700">
+                            {labels2.ccp2_not_emaildtfsa}
+                          </p>
+                          <p
+                            style="
+                              font-size: 14px;
+                              color: var(--gray-text-1-bg, #7b7b7b);
+                            "
+                          >
+                            {labels2.ccp2_not_emaildtfsasupport}
+                          </p>
+                        </div>
+                        <template if:true={notifiOffdtfsa}>
+                          <div
+                            class="offButton"
+                            onclick={handleNotificationOndtfsa}
+                            data-fieldd="車検満了日の通知設定"
+                            data-valuee="true"
+                            style="
+                              background: var(--Gray-line, #d9d9d9);
+                              align-items: flex-start;
+                            "
+                          >
+                            <div
+                              class="insideOff"
+                              onclick={handleNotificationOndtfsa}
+                              data-fieldd="車検満了日の通知設定"
+                              data-valuee="true"
+                              style="background: var(--White-white, #fff)"
+                            >
+                              <!-- <p style="color: var(--gray-text-2-textbox-text-bg, #BBB);" onclick={handleNotificationOn} data-fieldd="車検満了日の通知設定" data-valuee="オン">
+                                                                {labels2.ccp2_up_2_Off}
+                                                            </p> -->
+                            </div>
+                          </div>
+                        </template>
+                        <template if:false={notifiOffdtfsa}>
+                          <div
+                            class="offButton"
+                            onclick={handleNotificationOffdtfsa}
+                            data-field="車検満了日の通知設定"
+                            data-value="false"
+                            style="
+                              background: var(--red-button-alers, #e10202);
+                              align-items: flex-end;
+                            "
+                          >
+                            <div
+                              class="insideOff"
+                              onclick={handleNotificationOffdtfsa}
+                              data-field="車検満了日の通知設定"
+                              data-value="false"
+                              style="background: var(--White-white, #fff)"
+                            >
+                              <!-- <p onclick={handleNotificationOff} data-field="車検満了日の通知設定" data-value="オフ" style="color: var(--red-button-alers, #E10202);">
+                                                                {labels2.ccp2_up_2_On}
+                                                            </p> -->
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="edit-buttons">
+                <button class="cancel-btn" onclick={handleCanceledit}>
+                  {labels2.ccp_up_cancel23}
+                </button>
+                <button class="save-btn" onclick={saveFormData}>
+                  {labels2.ccp_up_save23}
+                </button>
+              </div>
+            </template>
+            <template if:false={showeditscreen}>
+              <div class="container">
+                <div class="user-info">
+                  <div class="user-info-head">
+                    <p>{labels2.ccp2_up_userInfo}</p>
+                  </div>
+                  <div class="data-div">
+                    <div
+                      class="left-div"
+                      style="border-right: 1px solid #d9d9d9"
+                    >
+                      <div class="info-rec">
+                        <p class="info-label">{labels2.ccp_up_name}</p>
+                        <p class="info-text">
+                          {userDetailData.lastName} {userDetailData.firstName}
+                        </p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">{labels2.ccp_up_name_furigana}</p>
+                        <p class="info-text">
+                          {userDetailData.lastNameKana}
+                          {userDetailData.firstNameKana}
+                        </p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">
+                          {labels2.ccp_up_employee_number}
+                        </p>
+                        <p class="info-text">{userDetailData.Employee_Code}</p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">{labels2.ccp_up_phone_number}</p>
+                        <p class="info-text">{userDetailData.Phone}</p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">{labels2.ccp_up_email}</p>
+                        <p class="info-text">{userDetailData.email}</p>
+                      </div>
+                    </div>
+                    <div class="right-div">
+                      <div class="info-rec">
+                        <p class="info-label">{labels2.ccp_up_position}</p>
+                        <p class="info-text">{userDetailData.Title}</p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">{labels2.ccp_up_affiliation}</p>
+                        <div class="info-text">
+                          <div class="data-branch2">
+                            <!-- <template for:each={userDetailData.Branchs} for:item="branch">
+                                                            <li key={branch.Id} style="list-style: none;" class="data">
+                                                                {branch.Name}
+                                                            </li>
+                                                        </template> -->
+                            <div
+                              style="
+                                display: flex;
+                                gap: 3px;
+                                align-items: center;
+                              "
+                            >
+                              <div
+                                class="branches"
+                                style="width: auto; flex-wrap: wrap"
+                              >
+                                <span title={allBranchesData.firstbranchreal}
+                                  >{allBranchesData.firstbranch}</span
+                                >
+                                <template if:true={morethanonebranch}>
+                                  <span class="branch-All" onclick={branchopen}
+                                    >{labels2.ccp2_up_Other_10} +
+                                    {allBranchesData.onscreenbranchcount}</span
+                                  >
+                                </template>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">{labels2.ccp_up_department}</p>
+                        <p class="info-text">{userDetailData.Department}</p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">{labels2.ccp_up_mobile_number}</p>
+                        <p class="info-text">{userDetailData.MobilePhone}</p>
+                      </div>
+                      <template if:false={showcanceledit}> </template>
+                      <!-- <template if:true={showcanceledit}>
+                                                <div class="info-rec">
+                                                    <p class="info-label">{labels2.ccp_up_preferred_contact_time}</p>
+                                                    <div class="info-text">
+                                                        <div class="conv-times">
+                                                            <div class="time-value">
+                                                                <p style="width: 55px;">
+                                                                    {labels2.ccp_up_weekdays}
+                                                                </p>
+                                                                <p>
+                                                                    {startwork} {labels2.ccp_up_2_time} ~ {endwork}
+                                                                    {labels2.ccp_up_2_time}
+                                                                </p>
+                                                            </div>
+                                                            <div class="time-value">
+                                                                <p style="width: 55px;">
+                                                                    {labels2.ccp_up_weekends}
+                                                                </p>
+                                                                <p>
+                                                                    {startholiday} {labels2.ccp_up_2_time} ~
+                                                                    {endholiday}
+                                                                    {labels2.ccp_up_2_time}
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </template>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                        <div class="user-info">
-                            <div class="user-info-head">
-                                <p>{labels2.ccp2_up_servused}</p>
-                            </div>
-                            <div class="services-data">
-                                <div style="flex-wrap: wrap; display: flex; gap:20px">
-                                    <template for:each={servicesArray} for:item="ser">
-                                        <div key={ser} class="serv-items">{ser}</div>
-                                    </template>
-                                </div>
-                                <template if:true={showcanceledit}>
-                                    <div>
-                                        <button class="stop-serv">{labels2.ccp2_up_stopServ}</button>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
-                        <div class="user-info">
-                            <div class="user-info-head">
-                                <p>{labels2.ccp2_up_notifSet}</p>
-                            </div>
-                            <div class="notification">
-                                <div class="notif-head">
-                                    <p>{labels2.ccp2__up_2_inspectionNotification}</p>
-                                    <p>{isNotifOnorOff}</p>
-                                </div>
-                                <template if:true={notificationBlock}>
-                                    <div class="notif-content">
-                                        <div style="padding-bottom:8px; border-bottom: 1px solid var(--Gray-line, #D9D9D9)">{labels2.ccp2__up_2_AdvNotif}</div>
-                                        <div class="notif-dates">
-                                            <p class="acc-label">{labels2.ccp2__up_2_notifTarget}</p>
-                                            <p>{notificationMessage}</p>
-                                        </div>
-                                        <div class="notif-dates">
-                                            <p class="acc-label">{labels2.ccp2__up_notifDate}</p>
-                                            <template if:true={notificationOption}>
-                                                <p>{selectedNotifdate}</p>
-                                            </template>
-                                            <template if:false={notificationOption}>
-                                                <p>{labels2.ccp2__up_anytimeNotiftobeDisp}</p>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
+                                            </template> -->
                     </div>
-                    <div></div>
+                  </div>
                 </div>
+                <template if:false={servlen}>
+                  <div class="user-info">
+                    <div class="user-info-head">
+                      <p>{labels2.ccp2_up_servused}</p>
+                    </div>
+                    <div class="services-data">
+                      <div style="flex-wrap: wrap; display: flex; gap: 20px">
+                        <template for:each={servicesArray} for:item="ser">
+                          <div key={ser} class="serv-items">{ser}</div>
+                        </template>
+                      </div>
+                      <!-- Stop services button -->
+                      <!-- <template if:true={showcanceledit}>
+                                                <div>
+                                                    <button class="stop-serv">{labels2.ccp2_up_stopServ}</button>
+                                                </div>
+                                            </template> -->
+                    </div>
+                  </div>
+                </template>
+                <div class="user-info">
+                  <div class="user-info-head">
+                    <p>{labels2.ccp2_up_notifSet}</p>
+                  </div>
+                  <div class="notification" style="gap: 0">
+                    <div
+                      lwc:if={isVehicleService}
+                      class="notif-head"
+                      style="
+                        flex-direction: column;
+                        gap: 0;
+                        align-items: start;
+                        padding: 8px 16px;
+                      "
+                    >
+                      <div style="display: flex; gap: 54px; padding: 6px 0">
+                        <p
+                          style="
+                            font-size: 16px;
+                            font-weight: 700;
+                            width: 162px;
+                          "
+                        >
+                          {labels2.ccp2__up_2_inspectionNotification}
+                        </p>
+                        <p>{isNotifOnorOff}</p>
+                      </div>
+                      <div
+                        if:true={notificationBlock}
+                        class="notif-dates"
+                        style="padding: 6px 0; gap: 56px"
+                      >
+                        <p
+                          class="acc-label"
+                          style="
+                            font-size: 16px;
+                            text-align: right;
+                            width: 160px;
+                          "
+                        >
+                          {labels2.ccp2__up_2_notifTarget}
+                        </p>
+                        <p>{notificationMessage}</p>
+                      </div>
+                      <div
+                        if:true={notificationBlock}
+                        class="notif-dates"
+                        style="padding: 6px 0; gap: 72px"
+                      >
+                        <p
+                          class="acc-label"
+                          style="
+                            font-size: 16px;
+                            text-align: right;
+                            width: 144px;
+                          "
+                        >
+                          {labels2.ccp2__up_notifDate}
+                        </p>
+                        <template if:true={notificationOption}>
+                          <p>{selectedNotifdate}</p>
+                        </template>
+                        <template if:false={notificationOption}>
+                          <p>{labels2.ccp2__up_anytimeNotiftobeDisp}</p>
+                        </template>
+                      </div>
+                    </div>
+                    <div class="notif-content">
+                      <div
+                        if:true={isEinvoicePermission}
+                        class="notifOn"
+                        style={styleOfEinvoiceContainer}
+                      >
+                        <div class="notif-email">
+                          <div class="email-labels">
+                            <p style="font-weight: 700">
+                              {labels2.ccp2_not_emailinv}
+                            </p>
+                            <p
+                              style="
+                                font-size: 14px;
+                                color: var(--gray-text-1-bg, #7b7b7b);
+                              "
+                            >
+                              {labels2.ccp2_not_emailinvsupport}
+                            </p>
+                          </div>
+                          <div>{userDetailData.eInvoiceEmail}</div>
+                        </div>
+                      </div>
+                      <div
+                        if:true={isDtfsaPermission}
+                        class="notifOn"
+                        style={styleOfDtfsaContainer2}
+                      >
+                        <div class="notif-email">
+                          <div class="email-labels">
+                            <p style="font-weight: 700">
+                              {labels2.ccp2_not_emaildtfsa}
+                            </p>
+                            <p
+                              style="
+                                font-size: 14px;
+                                color: var(--gray-text-1-bg, #7b7b7b);
+                              "
+                            >
+                              {labels2.ccp2_not_emaildtfsasupport}
+                            </p>
+                          </div>
+                          <div>{userDetailData.LeaseEmail}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <template if:false={showeditscreen}>
+              <div style="display: flex; justify-content: space-between">
+                <button class="cancel-btn" onclick={navigateToHome2}>
+                  {labels2.ccp2_cm_back_to_top}
+                </button>
+                <!-- <button class="edit-button"
+                                    onclick={handleCancelMembership}>{labels2.ccp2_cm_cancel_membership}</button> -->
+              </div>
+            </template>
+          </div>
+        </template>
+        <template if:true={showModal}>
+          <div class="modal-background-last">
+            <div class="modal-window-loader">
+              <p class="warntxt">{labels2.ccp_up_basicInfoEditSaved7}</p>
+              <button class="save-btn" onclick={handleOk}>
+                {labels2.ccp_up_yes}
+              </button>
             </div>
-        </div>
+          </div>
+        </template>
+        <template if:true={showServiceModal}>
+          <div class="slds-backdrop slds-backdrop_open custom-backdrop">
+            <section
+              role="dialog"
+              tabindex="-1"
+              class="slds-modal slds-fade-in-open custom-modal"
+            >
+              <div class="slds-modal__container custom-modal-container">
+                <div class="content-modal2">
+                  <div class="modal-h1">
+                    <p>{labels2.ccp2_cm_confirm_leave}</p>
+                    <p>{labels2.ccp2_cm_confirm_leave2}</p>
+                  </div>
+                  <ul>
+                    <li>{labels2.ccp2_cm_basic_service}</li>
+                    <li>{labels2.ccp2_cm_monthly_invoice}</li>
+                    <li>{labels2.ccp2_cm_financial_service}</li>
+                    <li>{labels2.ccp2_cm_vehicle_inspection}</li>
+                    <li>{labels2.ccp2_cm_vehicle_management}</li>
+                    <li>{labels2.ccp2_cm_cost_management}</li>
+                  </ul>
+                  <div class="btn-modal">
+                    <button class="btn-no" onclick={handleNomodal2}>
+                      {labels2.ccp_up_no23}
+                    </button>
+                    <button class="btn-yes" onclick={handleYesmodal2}>
+                      {labels2.ccp_up_yes23}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </template>
+        <template if:true={showcancelModaledit}>
+          <div class="modal-background-last">
+            <div class="modal-window-small">
+              <div class="warning">
+                <p class="warntxt">{labels2.ccp_up_unsavedChangesPrompt1_23}</p>
+                <p class="warntxt more">
+                  {labels2.ccp_up_unsavedChangesPrompt2_23}
+                </p>
+              </div>
+              <div class="buttons-small">
+                <button class="cancel-btn" onclick={handleNoCanceledit}>
+                  {labels2.ccp_up_no23}
+                </button>
+                <button class="save-btn" onclick={handleYesCanceledit}>
+                  {labels2.ccp_up_yes23}
+                </button>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template if:true={branchesModal}>
+          <div class="modal-background">
+            <div class="modal-window-branch">
+              <div class="modal-header-branch">
+                <div class="count">
+                  <!-- <h1>{vehicleByIdData.branchCount}</h1> -->
+                  <h1 style="font-weight: bold">
+                    {labels2.ccp2_up_affiliation23}
+                  </h1>
+                </div>
+                <lightning-icon
+                  icon-name="utility:close"
+                  size="x-small"
+                  alternative-text="Close"
+                  onclick={branchClose}
+                  class="close-button-branch"
+                >
+                </lightning-icon>
+              </div>
+              <div class="branch-container">
+                <div
+                  class="branch-card"
+                  style="
+                    color: var(--black-txt-bg, #262626);
+
+                    /* JP/PC/H4 */
+                    font-family: &quot;Noto Sans JP&quot;;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: 130%; /* 20.8px */
+                    letter-spacing: 0.32px;
+                  "
+                >
+                  <p>{labels2.ccp2_up_new_affiliation_name}</p>
+                  <p>{labels2.ccp2_up_new_affiliation_number}</p>
+                </div>
+                <template for:each={BranchesArray} for:item="branch">
+                  <div key={branch.Id} class="branch-card">
+                    <P title={branch.Name}> {branch.Name} </P>
+                    <P
+                      >{branch.Account__r.siebelAccountCode__c} -
+                      {branch.Branch_Code__c}</P
+                    >
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </template>
+        <template if:true={showconfModal}>
+          <div class="modal-background-last">
+            <div class="modal-window-small">
+              <div class="warning">
+                <p class="warntxt">{labels2.ccp_up_change_admin_confirm}</p>
+              </div>
+              <div class="buttons-small">
+                <button class="cancel-btn" onclick={handleNo}>
+                  {labels2.ccp_up_no}
+                </button>
+                <button class="save-btn" onclick={handleYes}>
+                  {labels2.ccp_up_yes}
+                </button>
+                <!-- <div class="cancelbutton btn-cancel" onclick={handleNo}>
+                                        <div class="buttontxt">{labels2.ccp_up_no}</div>
+                                    </div>
+                                    <div class="searchbutton btn-cancel" onclick={handleYes}>
+                                        <div class="buttontxt2">{labels2.ccp_up_yes}</div>
+                                    </div> -->
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
+  </div>
+  <!-- </template> -->
 </template>

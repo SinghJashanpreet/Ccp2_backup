@@ -20,6 +20,7 @@ import labelsUser from "@salesforce/resourceUrl/ccp2_labels";
 import i18nextStaticResource from "@salesforce/resourceUrl/i18next";
 import Languagei18n from "@salesforce/apex/CCP2_userData.userLanguage";
 import ErrorLog from "@salesforce/apex/CCP2_lwc_ErrorLogs.createLwcErrorLog";
+import checkManagerUser from "@salesforce/apex/CCP_HeaderController.checkManagerUser";
 
 const arrowicon =
   Vehicle_StaticResource + "/CCP2_Resources/Common/arrow_under.png";
@@ -45,11 +46,11 @@ export default class Ccp2UserManagement extends LightningElement {
   @track allUserData;
   @track customerId;
   @track showconfModal = false;
-  @track userServicesData;
+  @track userServicesData = [];
   @track tempUserServicesData;
   @track userDetailData;
   @track tempUserDetailData;
-  @track allServicesListData;
+  @track allServicesListData = [];
   @track allServicesListDataForClass;
   @track allUserLoader = true;
   @track userDetailsLoader = true;
@@ -59,6 +60,7 @@ export default class Ccp2UserManagement extends LightningElement {
   @track showDeleteScreen = false;
   @track formData = {};
   @track checkboxFormData = {};
+  @track storedcheckboxFormData = {};
   @track uid = USER_ID;
   @track formDataArray = [];
   @track usercount;
@@ -71,6 +73,9 @@ export default class Ccp2UserManagement extends LightningElement {
   @track showlist = false;
   @track deletedBranchIds = [];
   @track showCancelModal = false;
+  @track adminFlag = true;
+
+  @track servicesError = false;
 
   contactClassFirstName = "";
   contactClassLastName = "";
@@ -79,7 +84,7 @@ export default class Ccp2UserManagement extends LightningElement {
   contactClassEmail = "";
   contactClassTelephone = "";
   contactClassCellPhone = "";
-  contactClassBranch = "Inputs1 icon";
+  contactClassBranch = "icon";
   InputFirstName = "";
   InputLastName = "";
   InputFKanaName = "";
@@ -102,27 +107,64 @@ export default class Ccp2UserManagement extends LightningElement {
   @track Fkanaerror = "";
   @track Lkanaerror = "";
   @track initialmail = "";
+  @track showone = false;
 
   loadLanguage() {
     Languagei18n() // Assuming getLanguageI18n is the apex method that fetches the language.
       .then((data) => {
         this.Languagei18n = data;
-        console.log("lang Method", data, this.Languagei18n);
         return this.loadI18nextLibrary(); // Return the promise for chaining
       })
       .then(() => {
         return this.loadLabels(); // Load labels after i18next is ready
       })
-      .then(() => {
-        console.log("Upload Label: ", this.isLanguageChangeDone); // Check language change status
-      })
+      .then(() => {})
       .catch((error) => {
         console.error("Error loading language or labels: ", error);
         let err = JSON.stringify(error);
         ErrorLog({
           lwcName: "ccp2UserManagement",
           errorLog: err,
-          methodName: "Load Language"
+          methodName: "Load Language",
+          ViewName: "User cards, detail and edit",
+          InterfaceName: "CCP User Interface",
+          EventName: "Loading language of user",
+          ModuleName: "Usermanagement"
+        })
+          .then(() => {
+            console.log("Error logged successfully in Salesforce");
+          })
+          .catch((loggingErr) => {
+            console.error("Failed to log error in Salesforce:", loggingErr);
+          });
+      });
+  }
+
+  checkManagerUserFunction() {
+    checkManagerUser()
+      .then((result) => {
+        this.adminFlag = result;
+        // if (this.adminFlag === false) {
+        //   let baseUrl = window.location.href;
+        //   let Newurl;
+        //   if (baseUrl.indexOf("/s/") !== -1) {
+        //       Newurl = baseUrl.split("/s/")[0] + "/s/error";
+        //   }
+        //   window.location.href = Newurl;
+        // }
+      })
+      .catch((error) => {
+        this.errors = JSON.stringify(error);
+        console.error("checkManagerUser errors:" + JSON.stringify(error));
+        let err = JSON.stringify(error);
+        ErrorLog({
+          lwcName: "ccp2_Addbranch",
+          errorLog: err,
+          methodName: "checkManagerUser",
+          ViewName: "create branch",
+          InterfaceName: "Salesforce",
+          EventName: "Data fetch",
+          ModuleName: "Header"
         })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
@@ -136,8 +178,6 @@ export default class Ccp2UserManagement extends LightningElement {
   @wire(userListwithbranch)
   userlistbran({ data }) {
     if (data) {
-      console.log("brnach user list data", data);
-
       //   this.contactlist = data.map((branch)=> ({
 
       //     brnach: branch.branches.map((bran) => (
@@ -152,7 +192,6 @@ export default class Ccp2UserManagement extends LightningElement {
 
       //   }));
 
-      //   console.log("contact branch",JSON.stringify(this.contactlist));
       // }
       this.contactlist = data.map((branch) => {
         const firstBranch =
@@ -166,15 +205,13 @@ export default class Ccp2UserManagement extends LightningElement {
           usercontactId: branch.contact.UserId__c
         };
       });
-
-      console.log("contact branch", JSON.stringify(this.contactlist));
     }
   }
   @wire(getUserServices, {
     userId: "$selectedContactUserId",
     refresh: "$refreshTokenInt2"
   })
-  userServicesFun({ data, error }) {
+  userServicesFun2({ data, error }) {
     if (data) {
       if (data.length === 0) {
         this.userServicesData = ["Null"];
@@ -187,29 +224,28 @@ export default class Ccp2UserManagement extends LightningElement {
         //   "車両管理",
         //   "費用管理"
         // ];
-        console.log("user servicess funnnn data", data);
         const serviceOrder = [
-          this.labels2.ccp2_um_basic_service,
-          this.labels2.ccp2_um_monthly_invoice,
-          this.labels2.ccp2_um_financial_service,
-          this.labels2.ccp2_um_vehicle_inspection,
+          // this.labels2.ccp2_um_basic_service,
           this.labels2.ccp2_um_vehicle_management,
-          this.labels2.ccp2_um_cost_management
+          this.labels2.ccp2_um_monthly_invoice,
+          this.labels2.ccp2_um_financial_service
+          // this.labels2.ccp2_um_vehicle_inspection,
+          // this.labels2.ccp2_um_cost_management
         ];
-        console.log("Service Order", serviceOrder);
 
-        this.userServicesData = serviceOrder.map((service) => 
+        this.userServicesData = serviceOrder.map((service) =>
           data.find((item) => item === service)
         );
 
-        let temServices = this.userServicesData.filter((elm)=>elm !== undefined);
-        this.userServicesData = temServices;
+        console.log("user ser dataaaaa", this.userServicesData);
+        console.log("user ser dataaaaa", JSON.stringify(this.userServicesData));
 
-        console.log("userServicesData2", (this.userServicesData));
+        let temServices = this.userServicesData.filter(
+          (elm) => elm !== undefined
+        );
+        this.userServicesData = temServices;
       }
 
-      // console.log('getUserServices wire:-',data,this.refreshTokenInt)
-      // console.log("selected con id service",this.selectedContactUserId);
       // if (data.length == 0) {
       //   this.userServicesData = ["Null"];
       // } else {
@@ -232,7 +268,7 @@ export default class Ccp2UserManagement extends LightningElement {
           name: data[0].Account.Name === null ? "-" : data[0].Account.Name,
           siebelAccountCode__c:
             data[0].Account.siebelAccountCode__c === null
-              ? "-"
+              ? "未登録"
               : data[0].Account.siebelAccountCode__c
         },
         Department: data[0].Department === null ? "-" : data[0].Department,
@@ -277,7 +313,11 @@ export default class Ccp2UserManagement extends LightningElement {
       ErrorLog({
         lwcName: "ccp2UserManagement",
         errorLog: err,
-        methodName: "wired user"
+        methodName: "wired user",
+        ViewName: "User detail and edit",
+        InterfaceName: "CCP User Interface",
+        EventName: "Fetching data of user",
+        ModuleName: "Usermanagement"
       })
         .then(() => {
           console.log("Error logged successfully in Salesforce");
@@ -287,18 +327,68 @@ export default class Ccp2UserManagement extends LightningElement {
         });
     }
   }
+  @track allBranchesData = {
+    firstbranch: "",
+    firstbranchreal: "",
+    onscreenbranchcount: 0
+  };
+  @track originalBranchopts = [];
 
+  @track morethanonebranch = false;
+  @track Branchesmodal = false;
   @wire(branchdetails, {
     User: "$selectedUserId",
     refresh: "$refreshTokenInt2"
   })
   wiredbranches2({ data, error }) {
     if (data) {
-      console.log("branchdetails wire:-", data, this.refreshTokenInt2);
+      console.log("my data -", data);
+      this.originalBranchopts = data.map((vehicle) => {
+        return { Name: vehicle.Name, Id: vehicle.Id };
+      });
+      // Map branch data
       this.branchfromjunction = data.map((branch) => ({
         Name: branch.Name,
-        Id: branch.Id
+        Id: branch.Id,
+        siebelAccountCode__c:
+          branch?.Account__r?.siebelAccountCode__c || "未登録",
+        Branch_Code__c: branch?.Branch_Code__c
       }));
+
+      // Extract the first branch
+      if (this.branchfromjunction.length > 0) {
+        this.allBranchesData = {
+          firstbranch: this.branchfromjunction[0].Name, // Display name
+          firstbranchreal: this.branchfromjunction[0].Name, // Tooltip title
+          onscreenbranchcount: this.branchfromjunction.length - 1
+        };
+
+        this.morethanonebranch = this.branchfromjunction.length > 1;
+        this.branchfromjunction.forEach((branch) => {
+          if (branch.Branch_Code__c) {
+            let prefix = "";
+            if (
+              branch.Branch_Code__c !== undefined &&
+              branch.Branch_Code__c !== null
+            ) {
+              if (branch.Branch_Code__c >= 0 && branch.Branch_Code__c <= 9) {
+                prefix = "00";
+              } else if (
+                branch.Branch_Code__c >= 10 &&
+                branch.Branch_Code__c <= 99
+              ) {
+                prefix = "0";
+              } else {
+                prefix = " ";
+              }
+            }
+            branch.Branch_Code__c = prefix + branch.Branch_Code__c;
+          } else {
+            // Handle case where Branch_Code__c is missing or not a valid number
+            this.showone = false; // or any other logic you'd like
+          }
+        });
+      }
     } else {
       console.error("error in fetching branches from new", error);
     }
@@ -309,7 +399,6 @@ export default class Ccp2UserManagement extends LightningElement {
     error
   }) {
     if (data) {
-      console.log("branch data branch options", data);
       this.branchoptions = data.map((vehicle) => {
         return { label: vehicle.Name, value: vehicle.Id };
       });
@@ -319,7 +408,11 @@ export default class Ccp2UserManagement extends LightningElement {
       ErrorLog({
         lwcName: "ccp2UserManagement",
         errorLog: err,
-        methodName: "WiredBranches2"
+        methodName: "WiredBranches2",
+        ViewName: "User detail and edit",
+        InterfaceName: "CCP User Interface",
+        EventName: "Fetching branch of user",
+        ModuleName: "Usermanagement"
       })
         .then(() => {
           console.log("Error logged successfully in Salesforce");
@@ -338,8 +431,6 @@ export default class Ccp2UserManagement extends LightningElement {
           this.IsUsercountZero = true;
           this.showUserList = false;
         }
-
-        console.log("Result", result);
         this.allUserData = result.map((elm) => {
           return {
             Name: elm.Name == null ? "null" : elm.Name,
@@ -349,13 +440,12 @@ export default class Ccp2UserManagement extends LightningElement {
               Id: elm.Account.Id == null ? "Null" : elm.Account.Id,
               siebelAccountCode__c:
                 elm.Account.siebelAccountCode__c == null
-                  ? "null"
+                  ? "未登録"
                   : elm.Account.siebelAccountCode__c
             },
             Branch__r: elm.Branch__r == null ? { Name: "Null" } : elm.Branch__r
           };
         });
-        console.log("All User Result: ", JSON.stringify(this.allUserData));
         this.allUserLoader = false;
       })
       .catch((error) => {
@@ -364,7 +454,11 @@ export default class Ccp2UserManagement extends LightningElement {
         ErrorLog({
           lwcName: "ccp2UserManagement",
           errorLog: err,
-          methodName: "getAllUser"
+          methodName: "getAllUser",
+          ViewName: "User cards",
+          InterfaceName: "CCP User Interface",
+          EventName: "Loading all the users",
+          ModuleName: "Usermanagement"
         })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
@@ -375,23 +469,32 @@ export default class Ccp2UserManagement extends LightningElement {
       });
   }
 
+  @track branchesModal = false;
+  branchopen() {
+    this.branchesModal = true;
+  }
+  branchClose() {
+    this.branchesModal = false;
+  }
+
   reloadPage() {
     location.reload();
   }
 
   deleteUser() {
     deleteUser({ contactId: this.selectedUserId })
-      .then((result) => {
-        // this.handleDeleteSuccess();
-        console.log("del result", result);
-      })
+      .then((result) => {})
       .catch((error) => {
         console.error("delete User Fetching error:" + JSON.stringify(error));
         let err = JSON.stringify(error);
         ErrorLog({
           lwcName: "ccp2UserManagement",
           errorLog: err,
-          methodName: "deleteUser"
+          methodName: "deleteUser",
+          ViewName: "User detail",
+          InterfaceName: "CCP User Interface",
+          EventName: "Deleting user",
+          ModuleName: "Usermanagement"
         })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
@@ -403,8 +506,6 @@ export default class Ccp2UserManagement extends LightningElement {
   }
 
   updateUserServices(filteredCheckData) {
-    console.log("filtered check data", filteredCheckData);
-    console.log("selected user id", this.selectedContactUserId);
     updateUserServices({
       con: filteredCheckData,
       userId: this.selectedContactUserId
@@ -416,7 +517,11 @@ export default class Ccp2UserManagement extends LightningElement {
         ErrorLog({
           lwcName: "ccp2UserManagement",
           errorLog: err,
-          methodName: "updateUserServices"
+          methodName: "updateUserServices",
+          ViewName: "User edit",
+          InterfaceName: "CCP User Interface",
+          EventName: "Updating services of user",
+          ModuleName: "Usermanagement"
         })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
@@ -432,13 +537,16 @@ export default class Ccp2UserManagement extends LightningElement {
     })
       .then(() => {})
       .catch((error) => {
-        console.log("updatepermission input" + filteredCheckData);
         console.error("updatepermission" + JSON.stringify(error));
         let err = JSON.stringify(error);
         ErrorLog({
           lwcName: "ccp2UserManagement",
           errorLog: err,
-          methodName: "updatepermission"
+          methodName: "updatepermission",
+          ViewName: "User edit",
+          InterfaceName: "CCP User Interface",
+          EventName: "Updating permissions user",
+          ModuleName: "Usermanagement"
         })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
@@ -449,85 +557,132 @@ export default class Ccp2UserManagement extends LightningElement {
       });
   }
 
+  @wire(getUserAllServicesList, {
+    userId: "$uid",
+    refresh: 0
+  })
+  userServicesFun({ data, error }) {
+    if (data) {
+      // this.allServicesListData = data.filter((serv) =>
+      //   serv.isActive === true
+      // )
+
+      this.allServicesListData = data
+        .filter((serv) => serv.isActive === true)
+        .map((serv) => ({
+          apiName: serv.apiName,
+          japaneseName: serv.japaneseName,
+          isChecked: false // Default false, will update in the next function
+        }));
+
+      console.log(
+        "alll servv in wire",
+        JSON.stringify(this.allServicesListData)
+      );
+    } else {
+      console.error("User Services Fetching error: wire", error);
+    }
+  }
+
   getUserAllServicesList(id) {
     getUserAllServicesList({ userId: id, refresh: this.refreshTokenInt })
       .then((result) => {
-        console.log("resut setv", result);
         if (result === undefined || result.length === 0) {
           this.allServicesListData = ["Null"];
         } else {
-          // const orderedServices = [
-          //   {
-          //     name: "部整月次請求書（電子版）",
-          //     apiName: "E_invoice_Flag__c",
-          //     ...result[1]
-          //   },
-          //   {
-          //     name: "金融サービス",
-          //     apiName: "Financial_service_Flag__c",
-          //     ...result[2]
-          //   },
-          //   {
-          //     name: "車検入庫予約",
-          //     apiName: "Online_maintenance_booking_Flag__c",
-          //     ...result[3]
-          //   },
-          //   {
-          //     name: "車両管理",
-          //     apiName: "Vehicle_management_Flag__c",
-          //     ...result[4]
-          //   },
-          //   {
-          //     name: "費用管理",
-          //     apiName: "Cost_management_Flag__c",
-          //     ...result[0]
-          //   }
-          // ];
+          console.log("serv list", result);
+
+          const activeServiceMap = result.reduce((acc, service) => {
+            acc[service.apiName] = service.isActive; // Store isActive flag
+            return acc;
+          }, {});
+
+          // Merge active states with existing services
+          this.allServicesListData = this.allServicesListData.map(
+            (service) => ({
+              ...service,
+              isChecked: activeServiceMap[service.apiName] || false // Assign isActive
+            })
+          );
+
+          this.checkboxFormData = {
+            FUSO_CCP_External_Financial_service:
+              activeServiceMap["FUSO_CCP_External_Financial_service"] || false,
+            E_invoice: activeServiceMap["E_invoice"] || false,
+            FUSO_CCP_External_Vehicle_management:
+              activeServiceMap["FUSO_CCP_External_Vehicle_management"] || false
+          };
+
+          console.log(
+            "thos. is all serv list",
+            JSON.stringify(this.allServicesListData)
+          );
+
           const orderedServices = [
+            // {
+            //   name: this.labels2.ccp2_um_basic_service,
+            //   apiName: "Direct_Booking",
+            //   isDisabled: true,
+            //   isActive: result[4]?.isActive ?? true,  // Ensure isActive is present
+            //   ...result[4]
+            // },
+            {
+              name: this.labels2.ccp2_um_vehicle_management,
+              apiName: "FUSO_CCP_External_Vehicle_management",
+              isDisabled: false,
+              ...result[3]
+            },
             {
               name: this.labels2.ccp2_um_monthly_invoice,
               apiName: "E_invoice",
+              isDisabled: false,
               ...result[1]
             },
             {
               name: this.labels2.ccp2_um_financial_service,
               apiName: "FUSO_CCP_External_Financial_service",
+              isDisabled: false,
               ...result[2]
-            },
-            {
-              name: this.labels2.ccp2_um_vehicle_inspection,
-              apiName: "FUSO_CCP_External_Online_maintenance_booking",
-              ...result[3]
-            },
-            {
-              name: this.labels2.ccp2_um_vehicle_management,
-              apiName: "FUSO_CCP_External_Vehicle_management",
-              ...result[4]
-            },
-            {
-              name: this.labels2.ccp2_um_cost_management,
-              apiName: "FUSO_CCP_External_Cost_management",
-              ...result[0]
             }
+            // {
+            //   name: this.labels2.ccp2_um_vehicle_inspection,
+            //   apiName: "FUSO_CCP_External_Online_maintenance_booking",
+            //   ...result[3]
+            // },
+            // {
+            //   name: this.labels2.ccp2_um_cost_management,
+            //   apiName: "FUSO_CCP_External_Cost_management",
+            //   ...result[0]
+            // }
           ];
-          this.allServicesListData = orderedServices.map((service, index) => ({
-            ...service,
-            sequence: index + 1
-          }));
+
+          // this.allServicesListData = orderedServices.map((service, index) => ({
+          //   ...service,
+          //   sequence: index + 1
+          // }));
+
+          // this.vehicleAndFinancialServices = orderedServices.filter(service =>
+          //   ["FUSO_CCP_External_Financial_service", "FUSO_CCP_External_Vehicle_management"].includes(service.apiName)
+          // );
+
+          // this.basicAndEInvoiceServices = orderedServices.filter(service =>
+          //   ["Direct_Booking", "E_invoice"].includes(service.apiName)
+          // );
+
+          // this.checkboxFormData = {
+          //   // Direct_Booking: true,
+          //   FUSO_CCP_External_Financial_service: result[2].isActive,
+          //   E_invoice: result[1].isActive,
+          //   // FUSO_CCP_External_Online_maintenance_booking: result[3].isActive,
+          //    FUSO_CCP_External_Vehicle_management: result[3].isActive,
+          //   // FUSO_CCP_External_Cost_management: result[0].isActive
+          // };
 
           console.log(
-            "allServicesListData",
-            JSON.stringify(this.allServicesListData)
+            "check box formm in initial",
+            JSON.stringify(this.checkboxFormData)
           );
-
-          this.checkboxFormData = {
-            Direct_Booking: true,
-            E_invoice: result[1].isActive,
-            FUSO_CCP_External_Financial_service: result[2].isActive,
-            FUSO_CCP_External_Online_maintenance_booking: result[3].isActive,
-            FUSO_CCP_External_Vehicle_management: result[4].isActive,
-            FUSO_CCP_External_Cost_management: result[0].isActive
-          };
+          this.storedcheckboxFormData = this.checkboxFormData;
 
           // this.allServicesListData = result;
           // console.log("allServicesListData",JSON.stringify(this.allServicesListData));
@@ -548,7 +703,11 @@ export default class Ccp2UserManagement extends LightningElement {
         ErrorLog({
           lwcName: "ccp2UserManagement",
           errorLog: err,
-          methodName: "getuserallservicesList"
+          methodName: "getuserallservicesList",
+          ViewName: "User detail and edit",
+          InterfaceName: "CCP User Interface",
+          EventName: "Loading services of user",
+          ModuleName: "Usermanagement"
         })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
@@ -557,6 +716,10 @@ export default class Ccp2UserManagement extends LightningElement {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
       });
+  }
+
+  get servicesLeng() {
+    return this.userServicesData.length === 0;
   }
 
   updateUser(formDataArray) {
@@ -573,7 +736,11 @@ export default class Ccp2UserManagement extends LightningElement {
           ErrorLog({
             lwcName: "ccp2UserManagement",
             errorLog: err,
-            methodName: "updateUser"
+            methodName: "updateUser",
+            ViewName: "User edit",
+            InterfaceName: "CCP User Interface",
+            EventName: "Updating user",
+            ModuleName: "Usermanagement"
           })
             .then(() => {
               console.log("Error logged successfully in Salesforce");
@@ -587,11 +754,11 @@ export default class Ccp2UserManagement extends LightningElement {
   }
 
   connectedCallback() {
+    this.checkManagerUserFunction();
     let baseUrl = window.location.href;
     this.addUserUrl = baseUrl.split("/s/")[0] + "/s/createuser";
     this.homeUrl = baseUrl.split("/s/")[0] + "/s/";
     this.getAllUser();
-    console.log("services connected", this.checkboxFormData);
     this.template.host.style.setProperty(
       "--dropdown-icon",
       `url(${this.imgdrop})`
@@ -635,8 +802,6 @@ export default class Ccp2UserManagement extends LightningElement {
           })
           .then(() => {
             this.labels2 = i18next.store.data[userLocale].translation;
-            console.log("Delete Detail User Locale: ", userLocale);
-            console.log("Delete Detail User Labels: ", this.labels2);
           });
       })
       .catch((error) => {
@@ -645,7 +810,11 @@ export default class Ccp2UserManagement extends LightningElement {
         ErrorLog({
           lwcName: "ccp2UserManagement",
           errorLog: err,
-          methodName: "load labels"
+          methodName: "load labels",
+          ViewName: "User card, detail and edit",
+          InterfaceName: "CCP User Interface",
+          EventName: "Loading labels",
+          ModuleName: "Usermanagement"
         })
           .then(() => {
             console.log("Error logged successfully in Salesforce");
@@ -657,13 +826,10 @@ export default class Ccp2UserManagement extends LightningElement {
   }
 
   getLocale() {
-    console.log("Lang 2", this.Languagei18n);
     this.isLanguageChangeDone = false;
     if (this.Languagei18n === "en_US") {
-      console.log("working1");
       return "en";
     } else {
-      console.log("working2");
       return "jp";
     }
   }
@@ -703,12 +869,17 @@ export default class Ccp2UserManagement extends LightningElement {
       JSON.stringify(ongoingTransactions)
     );
     window.scrollTo(0, 0);
+
+    
+
+
     // this.tempUserDetailData = this.userDetailData;
     // this.tempBranchfromjunction = this.branchfromjunction;
     // this.tempUserServicesData = this.userServicesData;
     this.InputFirstName = this.firstName;
     this.InputLastName = this.lastName;
-
+    this.InputLastName = this.lastName;
+    this.formData = {};
     this.InputFKanaName = this.userDetailData?.firstNameKana__c || "";
     this.InputLKanaName = this.userDetailData?.lastNameKana__c || "";
     this.InputEmail = this.userDetailData?.email || "";
@@ -741,6 +912,9 @@ export default class Ccp2UserManagement extends LightningElement {
 
   handleInputChange(event) {
     const field = event.target.dataset.field;
+    const input = event.target;
+    const onlyDigitsRegex = /^[0-9]*$/;
+
     if (field) {
       if (event.target.type === "checkbox") {
         this.formData[field] = event.target.checked; // Use checked property for checkboxes
@@ -774,7 +948,11 @@ export default class Ccp2UserManagement extends LightningElement {
           // this.contactClassEmail = this.InputEmail ? "" : "invalid-input";
         } else if (field === "電話番号") {
           // const onlyNumber = /^[0-9]*$/;
-          const input = event.target;
+          if (!onlyDigitsRegex.test(input.value)) {
+            event.target.blur();
+          }
+          const cleanedPhone = input.value.replace(/[^0-9]/g, "");
+          input.value = cleanedPhone;
           // let isOk =
           //   input.value.length > 0 && onlyNumber.test(input.value)
           //     ? true
@@ -784,7 +962,11 @@ export default class Ccp2UserManagement extends LightningElement {
           // this.contactClassTelephone = isOk == true ? "" : "invalid-input";
         } else if (field === "携帯番号") {
           // const onlyNumber = /^[0-9]*$/;
-          const input = event.target;
+          if (!onlyDigitsRegex.test(input.value)) {
+            event.target.blur();
+          }
+          const cleanedPhone = input.value.replace(/[^0-9]/g, "");
+          input.value = cleanedPhone;
           // let isOk =
           //   input.value.length > 0 && onlyNumber.test(input.value)
           //     ? true
@@ -794,7 +976,6 @@ export default class Ccp2UserManagement extends LightningElement {
           // this.contactClassCellPhone = isOk == true ? "" : "invalid-input";
         }
         this.formData[field] = event.target.value;
-        console.log("outside error mail", JSON.stringify(this.formData));
       }
     }
   }
@@ -816,7 +997,6 @@ export default class Ccp2UserManagement extends LightningElement {
 
   handleCheckInputChange(event) {
     const field = event.target.dataset.field;
-    console.log("fields nameeeee", field);
 
     if (field) {
       if (event.target.type === "checkbox") {
@@ -825,18 +1005,17 @@ export default class Ccp2UserManagement extends LightningElement {
           [field]: event.target.checked
         };
 
+        console.log(
+          "checkbox form in input chaneg",
+          JSON.stringify(this.checkboxFormData)
+        );
         // Update the UI explicitly if needed
         this.allServicesListData = this.allServicesListData.map((service) => {
           if (service.apiName === field) {
-            return { ...service, isActive: event.target.checked };
+            return { ...service, isChecked: event.target.checked };
           }
           return service;
         });
-
-        console.log(
-          "Updated checkboxFormData",
-          JSON.stringify(this.checkboxFormData)
-        );
       }
     }
   }
@@ -971,7 +1150,6 @@ export default class Ccp2UserManagement extends LightningElement {
     let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let isFormValid = true; // Flag to track overall form validity
     let japanesePattern = /[\u3040-\u30FF\u4E00-\u9FFF]/;
-
     // Reset all error messages and CSS classes
     this.contactClassFirstName = "";
     this.Fnameerror = "";
@@ -981,7 +1159,7 @@ export default class Ccp2UserManagement extends LightningElement {
     this.Fkanaerror = "";
     this.contactClassLKanaName = "";
     this.Lkanaerror = "";
-    this.contactClassBranch = "Inputs1 icon";
+    this.contactClassBranch = "icon";
     this.ErrorText = "";
     this.contactClassEmail = "";
     this.emailerrorText = "";
@@ -989,41 +1167,65 @@ export default class Ccp2UserManagement extends LightningElement {
     this.contactClassTelephone = "";
     this.cellPhoneErrorText = "";
 
+    console.log('reachd here')
+    const serviceBox = this.template.querySelector(
+      '[data-name="serviceBox"]'
+    );
+
+    console.log("serviceBox", serviceBox);
+    console.log("this.allServicesListData", this.allServicesListData);
+
+    if (this.allServicesListData.filter((elm) => elm.isChecked).length === 0) {
+      serviceBox.classList = "services-data invalid-input";
+      this.servicesError = true;
+      isFormValid = false;
+      window.scrollTo(0, 0);
+    }else{
+      serviceBox.classList = "services-data";
+      this.servicesError = false;
+    }
+
     if (this.InputFirstName === "") {
       this.contactClassFirstName = "invalid-input";
       this.Fnameerror = this.labels2.ccp2_um_enterFirstName8;
       this.handleError();
       isFormValid = false;
+      window.scrollTo(0, 0);
     }
     if (this.InputLastName === "") {
       this.contactClassLastName = "invalid-input";
       this.Lnameerror = this.labels2.ccp2_um_enterLastName8;
       this.handleError();
       isFormValid = false;
+      window.scrollTo(0, 0);
     }
     if (this.InputFKanaName === "") {
       this.contactClassFKanaName = "invalid-input";
       this.Fkanaerror = this.labels2.ccp2_um_enterFirstName8;
       this.handleError();
       isFormValid = false;
+      window.scrollTo(0, 0);
     }
     if (this.InputLKanaName === "") {
       this.contactClassLKanaName = "invalid-input";
       this.Lkanaerror = this.labels2.ccp2_um_enterLastName8;
       this.handleError();
       isFormValid = false;
+      window.scrollTo(0, 0);
     }
     if (this.branchfromjunction.length === 0 && this.branch.length === 0) {
       this.ErrorText = this.labels2.ccp2_um_selectAffiliation8;
-      this.contactClassBranch = "Inputs1 icon invalid-input";
+      this.contactClassBranch = "icon invalid-input";
       this.handleError();
       isFormValid = false;
+      window.scrollTo(0, 0);
     }
     if (this.InputEmail === "") {
       this.contactClassEmail = "invalid-input";
       this.emailerrorText = this.labels2.ccp2_um_enterEmail8;
       this.handleError();
       isFormValid = false;
+      window.scrollTo(0, 0);
     } else if (!emailPattern.test(this.InputEmail)) {
       this.contactClassEmail = "invalid-input";
       this.emailerrorText = this.labels2.ccp2_um_invalidEmailFormat8;
@@ -1035,6 +1237,7 @@ export default class Ccp2UserManagement extends LightningElement {
       isFormValid = false;
       window.scrollTo(0, 0);
     }
+
     const emailValidationPromise = new Promise((resolve) => {
       if (this.InputEmail !== this.initialmail) {
         checkUserEmail({ email: this.InputEmail })
@@ -1053,7 +1256,11 @@ export default class Ccp2UserManagement extends LightningElement {
             ErrorLog({
               lwcName: "ccp2UserManagement",
               errorLog: err,
-              methodName: "Save Form Data"
+              methodName: "Save Form Data",
+              ViewName: "User edit",
+              InterfaceName: "CCP User Interface",
+              EventName: "Saving updated data",
+              ModuleName: "Usermanagement"
             })
               .then(() => {
                 console.log("Error logged successfully in Salesforce");
@@ -1078,6 +1285,7 @@ export default class Ccp2UserManagement extends LightningElement {
       this.contactClassTelephone = "invalid-input";
       this.handleError();
       isFormValid = false;
+      window.scrollTo(0, 0);
     } else if (
       this.InputTelephone === "" &&
       !onlyNumber.test(this.InputCellPhone)
@@ -1116,6 +1324,8 @@ export default class Ccp2UserManagement extends LightningElement {
         let filteredData = JSON.stringify(this.formDataArray);
         // this.checkboxFormData["Name"] = this.selectedContactUserId;
         let filteredCheck = JSON.stringify(this.checkboxFormData);
+        console.log("filtered check dataaa", filteredCheck);
+        console.log("selecteduser iddd", this.selectedContactUserId);
 
         const asyncFunction = async () => {
           try {
@@ -1126,36 +1336,13 @@ export default class Ccp2UserManagement extends LightningElement {
             await this.updateUser(filteredData);
             await this.updateUserServices(filteredCheck);
             await this.branchdeleteAdd();
-
-            console.log(
-              "updatedddd services",
-              this.refreshTokenInt,
-              this.refreshTokenInt2
-            );
             this.refreshTokenInt = ++this.refreshTokenInt;
             this.refreshTokenInt2 = ++this.refreshTokenInt2;
-            console.log(
-              "updatedddd services after",
-              this.refreshTokenInt,
-              this.refreshTokenInt2
-            );
 
             this.branch = [];
-            console.log(
-              "refresh1 ,refresh2, selectedUserId in save form",
-              this.refreshTokenInt,
-              this.refreshTokenInt2,
-              this.selectedUserId
-            );
 
             sessionStorage.removeItem("ongoingTransaction");
             setTimeout(async () => {
-              // this.handleSuccess();
-              console.log(
-                "updatedddd services in timeout",
-                this.refreshTokenInt,
-                this.refreshTokenInt2
-              );
               this.showModalAndRefresh();
               this.refreshTokenInt = ++this.refreshTokenInt;
               this.refreshTokenInt2 = ++this.refreshTokenInt2;
@@ -1169,7 +1356,11 @@ export default class Ccp2UserManagement extends LightningElement {
             ErrorLog({
               lwcName: "ccp2UserManagement",
               errorLog: err,
-              methodName: "Save Form Data"
+              methodName: "Save Form Data",
+              ViewName: "User detail and edit",
+              InterfaceName: "CCP User Interface",
+              EventName: "Error updating user",
+              ModuleName: "Usermanagement"
             })
               .then(() => {
                 console.log("Error logged successfully in Salesforce");
@@ -1181,6 +1372,10 @@ export default class Ccp2UserManagement extends LightningElement {
           }
         };
 
+        console.log('this.serviceError',this.servicesError)
+        this.servicesError = false;
+        console.log('this.serviceError',this.servicesError)
+        serviceBox.classList = "services-data";
         asyncFunction();
       } else {
         // Display all accumulated errors
@@ -1190,47 +1385,47 @@ export default class Ccp2UserManagement extends LightningElement {
   }
 
   handleSuccess() {
-    const evt = new ShowToastEvent({
-      title: this.labels2.ccp2_um_done8,
-      message: this.labels2.ccp2_um_infoUpdatedSuccessfully8,
-      variant: "Success"
-    });
-    this.dispatchEvent(evt);
+    // const evt = new ShowToastEvent({
+    //   title: this.labels2.ccp2_um_done8,
+    //   message: this.labels2.ccp2_um_infoUpdatedSuccessfully8,
+    //   variant: "Success"
+    // });
+    // this.dispatchEvent(evt);
   }
 
   handleDeleteSuccess() {
-    const evt = new ShowToastEvent({
-      title: this.labels2.ccp2_um_done8,
-      message: this.labels2.ccp2_um_memberDeletedSuccessfully8,
-      variant: "Success"
-    });
-    this.dispatchEvent(evt);
+    // const evt = new ShowToastEvent({
+    //   title: this.labels2.ccp2_um_done8,
+    //   message: this.labels2.ccp2_um_memberDeletedSuccessfully8,
+    //   variant: "Success"
+    // });
+    // this.dispatchEvent(evt);
   }
 
   handleError() {
-    const evt = new ShowToastEvent({
-      title: this.labels2.ccp2_um_error8,
-      message: this.labels2.ccp2_um_requiredField8,
-      variant: "Error"
-    });
-    this.dispatchEvent(evt);
+    // const evt = new ShowToastEvent({
+    //   title: this.labels2.ccp2_um_error8,
+    //   message: this.labels2.ccp2_um_requiredField8,
+    //   variant: "Error"
+    // });
+    // this.dispatchEvent(evt);
   }
 
   handleemailerror() {
-    const evt = new ShowToastEvent({
-      title: this.labels2.ccp2_um_error8,
-      message: this.labels2.ccp2_um_emailAlreadyUsed8,
-      variant: "Error"
-    });
-    this.dispatchEvent(evt);
+    // const evt = new ShowToastEvent({
+    //   title: this.labels2.ccp2_um_error8,
+    //   message: this.labels2.ccp2_um_emailAlreadyUsed8,
+    //   variant: "Error"
+    // });
+    // this.dispatchEvent(evt);
   }
   handleValidationError() {
-    const evt = new ShowToastEvent({
-      title: this.labels2.ccp2_um_error8,
-      message: this.labels2.ccp2_um_enterValidValue8,
-      variant: "Error"
-    });
-    this.dispatchEvent(evt);
+    // const evt = new ShowToastEvent({
+    //   title: this.labels2.ccp2_um_error8,
+    //   message: this.labels2.ccp2_um_enterValidValue8,
+    //   variant: "Error"
+    // });
+    // this.dispatchEvent(evt);
   }
 
   /*Custom JS*/
@@ -1324,7 +1519,6 @@ export default class Ccp2UserManagement extends LightningElement {
 
   renderedCallback() {
     if (this.isLanguageChangeDone) {
-      console.log("Working 1");
       this.loadLanguage();
     }
     if (!this.outsideClickHandlerAdded) {
@@ -1367,17 +1561,99 @@ export default class Ccp2UserManagement extends LightningElement {
     this.showEditUserDetails = true;
     this.showCancelModal = false;
   }
+
+  compareAndRemoveCommonValues() {
+    const filteredVehicles = [];
+
+    // Filter vehicles by checking against optcontacts
+    for (let vehicle of this.branchoptions) {
+      let isCommon = false;
+      for (let contact of this.branchfromjunction) {
+        if (vehicle.label === contact.Name && vehicle.value === contact.Id) {
+          isCommon = true;
+          break;
+        }
+      }
+      if (!isCommon) {
+        filteredVehicles.push(vehicle);
+      }
+    }
+
+    // Update the arrays with filtered data
+    this.branchoptions = filteredVehicles;
+    // this.optcontacts = filteredContacts;
+  }
+
   CancelhandleYes() {
     // this.userDetailData = this.tempUserDetailData;
     // this.branchfromjunction = this.tempBranchfromjunction;
     // this.userServicesData = this.tempUserServicesData;
     sessionStorage.removeItem("ongoingTransaction");
     window.scrollTo(0, 0);
+    this.checkboxFormData = this.storedcheckboxFormData;
     this.showCancelModal = false;
     this.showUserDetails = true;
     this.userDetailsLoader = false;
-    console.log("cancek user detail", this.showUserDetails);
-    console.log("selected id", this.selectedUserId);
+    this.emailerrorText = "";
+    this.cellPhoneErrorText = "";
+    this.telephoneErrorText = "";
+    this.Fnameerror = "";
+    this.Lnameerror = "";
+    this.Fkanaerror = "";
+    this.Lkanaerror = "";
+    this.ErrorText = "";
+    this.contactClassFirstName = "";
+    this.contactClassLastName = "";
+    this.contactClassFKanaName = "";
+    this.contactClassLKanaName = "";
+    this.contactClassEmail = "";
+    this.contactClassTelephone = "";
+    this.contactClassCellPhone = "";
+    this.contactClassBranch = "icon";
+    this.servicesError =false;
+
+    console.log('userServicesData', this.userServicesData);
+    console.log('allServicesListData', this.allServicesListData);
+    console.log('checkboxFormData', this.checkboxFormData);
+
+    let temArr = this.allServicesListData.map((service) => {
+      if(this.userServicesData?.includes(service.japaneseName)){
+        service.isChecked = true;
+      }else{
+        service.isChecked = false;
+      }
+      return service;
+    });
+
+    this.allServicesListData = temArr;
+
+    this.originalBranchopts.forEach((originalContact) => {
+      const isContactInList = this.branchfromjunction.some(
+        (contact) =>
+          contact.Id === originalContact.Id &&
+          contact.Name === originalContact.Name
+      );
+      if (!isContactInList) {
+        this.branchfromjunction.push({
+          Name: originalContact.Name,
+          Id: originalContact.Id
+        });
+      }
+    });
+
+    // Add all elements from branch to branchoptions
+    this.branchoptions = [
+      ...this.branchoptions,
+      ...this.branch.map((veh) => ({
+        label: veh.Name,
+        value: veh.Id
+      }))
+    ];
+
+    // Empty the branch array
+    this.deletedBranchIds = [];
+    this.branch = [];
+    this.compareAndRemoveCommonValues();
     this.showEditUserDetails = false;
   }
 
@@ -1424,5 +1700,15 @@ export default class Ccp2UserManagement extends LightningElement {
       // event.target.value = value.substring(0, maxLength);
       event.target.blur();
     }
+  }
+
+  handlevalchangePhone(event) {
+    const input = event.target;
+    const onlyDigitsRegex = /^[0-9]*$/;
+    if (!onlyDigitsRegex.test(input.value)) {
+      event.target.blur();
+    }
+    const cleanedPhone = input.value.replace(/[^0-9]/g, "");
+    input.value = cleanedPhone;
   }
 }

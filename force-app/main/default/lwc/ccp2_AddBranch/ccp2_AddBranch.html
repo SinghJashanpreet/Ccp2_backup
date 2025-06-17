@@ -1,0 +1,478 @@
+<template>
+    <div class="main">
+        <div class="half top">
+            <img src={backgroundImagePC} class="main_image" alt="background_Image" />
+        </div>
+        <div class="half bottom">
+            <div class="center-content">
+                <div class="main-content">
+                    <div class="heading">
+                        {labels2.ccp2_ab_addAffiliation}
+                    </div>
+                    <template if:true={Step1}>
+                        <div class="top-step">
+                            <img src={Image1} alt="background" width="400px" height="270px">
+                        </div>
+                    </template>
+                    <template if:true={Step2}>
+                        <div class="top-step">
+                            <img src={Image2} alt="Image2" width="400px" height="270px">
+                        </div>
+                    </template>
+                    <template if:true={Step3}>
+                        <div class="top-step">
+                            <img src={Image3} alt="Image3" width="400px" height="270px">
+                        </div>
+                    </template>
+
+                    <template if:false={Step3}>
+                        <p class="top-step">{labels2.ccp2_ab_enterBasicInfo}</p>
+                    </template>
+                    <template if:true={Step1}>
+                        <div class="account-info">
+                            <div class="acc-left">
+                                <div class="account-text">
+                                    <p class="acc-label">{labels2.ccp2_ab_companyName}</p>
+                                    <p>{AccountName}</p>
+                                </div>
+                                <div class="account-text">
+                                    <p class="acc-label">{labels2.ccp2_ab_affiliationNumber}</p>
+                                    <p>{DisplayNumber}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="user-info">
+                                <div class="user-info-head">
+                                    <p>{labels2.ccp2_ab_branchInfo}</p>
+                                </div>
+                                <div class="edit-data-div">
+                                    <div class="record-edit">
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_ab_affiliationName}</p>
+                                                <p class="reqtxt">{labels2.ccp2_ab_required}</p>
+                                                <p class="valid-txt">{labels2.ccp2_ab_maxWid}</p>
+                                            </div>
+                                            <div class="input-branch">
+                                                <input type="text" oninput={handlevalchange} name="branchss"
+                                                    class="product-name" value={branchName}
+                                                    placeholder={labels2.ccp2_ab_enterRequired}
+                                                    onchange={handleBranchNameChange} maxlength="24">
+                                                <template if:true={showerrorbranch}>
+                                                    <p class="txterror">{labels2.ccp2_ab_errorBranchLimit}</p>
+                                                </template>
+
+                                                <template if:true={showerrorbranchNull}>
+                                                    <p class="txterror">{labels2.ccp2_ab_affiliation_error}</p>
+                                                </template>
+
+                                                <template if:true={alreadybranch}>
+                                                    <p class="txterror">{labels2.ccp2_ab_alreadyexists}</p>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_ab_phoneNumber3}</p>
+                                                <p class="valid-txt">{labels2.cpp2_ab_fullwid}</p>
+                                            </div>
+                                            <input type="text" class="phone" placeholder="04512345678"
+                                                value={phone} name="phone" oninput={handleInput} maxlength="11">
+                                            <p style="color: #7b7b7b;">{labels2.ccp2_ab_phoneNumberNote}</p>
+                                        </div>
+                                    </div>
+                                    <div class="record-edit">
+                                        <div class="label-inputs">
+                                            <p class="input-heading">{labels2.ccp2_ab_avm}</p>
+                                            <div class="inputs-name">
+                                                <p class="detailUser"> {labels2.ccp2_ab_avm_detail}</p>
+                                                <div style="display: flex; gap:23px;">
+                                                    <div class="data" onclick={handleOutsideClick}>
+                                                        <input type="text" oninput={handleSearch} onclick={openlistUser}
+                                                            class="Inputs1 icon" size="50"
+                                                            placeholder={labels2.ccp2_ab_select} readonly>
+                                                        <template if:true={showListUser}>
+                                                            <div class="lists" onclick={handleInsideClick}>
+                                                                <template for:each={filteredUsers} for:item="memb">
+                                                                    <div key={memb.value} class="list-item"
+                                                                        onclick={handleUserSelect} data-id={memb.value}>
+                                                                        <p>{memb.label}</p>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                    <div class="dataScroll">
+                                                        <div class="scrollbar">
+                                                            <template if:true={moreusers.length}>
+                                                                <template for:each={moreusers} for:item="memb">
+                                                                    <div key={memb.Id} class="record-item">
+                                                                        <svg width="24" height="25"
+                                                                            onclick={handleDeleteUser} data-id={memb.Id}
+                                                                            class="filtericn" s viewBox="0 0 24 25"
+                                                                            fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path
+                                                                                d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"
+                                                                                fill="#E10202" />
+                                                                        </svg>
+                                                                        <!-- <lightning-icon icon-name="utility:close"
+                                                                            size="x-small" alternative-text="Delete"
+                                                                            onclick={handleDeleteUser} data-id={memb.Id}
+                                                                            class="filtericn"></lightning-icon> -->
+                                                                        <span
+                                                                            style="width: 80%; margin-top: 1px;">{memb.Name}</span>
+                                                                    </div>
+                                                                </template>
+                                                            </template>
+                                                            <template if:false={moreusers.length}>
+                                                                <p class="custom-placeholder">
+                                                                    {labels2.ccp2_ab_selectedMember}
+                                                                </p>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="label-inputs">
+                                            <p class="input-heading">{labels2.ccp2_ab_avm2}</p>
+                                            <div class="inputs-name">
+                                                <p class="detailUser"> {labels2.ccp2_ab_avm_detail2}</p>
+                                                <div style="display: flex; gap:23px;">
+                                                    <div class="data" onclick={handleOutsideClick}>
+                                                        <input type="text" oninput={handleSearch} onclick={openlist}
+                                                            class="Inputs1 icon" size="50"
+                                                            placeholder={labels2.ccp2_ab_select} readonly>
+                                                        <template if:true={showList}>
+                                                            <div class="lists" onclick={handleInsideClick}>
+                                                                <div class="list-scroll">
+                                                                    <template for:each={filteredVehicles}
+                                                                        for:item="veh">
+                                                                        <div key={veh.value} class="list-item"
+                                                                            onclick={handleVehicleSelect}
+                                                                            data-id={veh.value}>
+                                                                            <p>{veh.label}</p>
+                                                                        </div>
+                                                                    </template>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                    <div class="dataScroll">
+                                                        <div class="scrollbar">
+                                                            <template if:true={morevehicles.length}>
+
+
+                                                                <template for:each={morevehicles} for:item="veh">
+                                                                    <div key={veh.Id} class="record-item">
+                                                                        <svg width="24" height="25"
+                                                                            onclick={handleDeleteVehicle}
+                                                                            data-id={veh.Id} class="filtericn"
+                                                                            viewBox="0 0 24 25" fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path
+                                                                                d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"
+                                                                                fill="#E10202" />
+                                                                        </svg>
+                                                                        <!-- <lightning-icon icon-name="utility:close"
+                                                                            size="x-small" alternative-text="Delete"
+                                                                            onclick={handleDeleteVehicle}
+                                                                            data-id={veh.Id} class="filtericn"
+                                                                            placeholder="Selected Vehicle"></lightning-icon> -->
+                                                                        <span
+                                                                            style="width: 80%; margin-top: 1px;">{veh.Name}</span>
+                                                                    </div>
+                                                                </template>
+                                                            </template>
+                                                            <template if:false={morevehicles.length}>
+                                                                <p class="custom-placeholder">
+                                                                    {labels2.ccp2_ab_selectedVehicle}
+                                                                </p>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-info">
+                                <div class="user-info-head">
+                                    <p>{labels2.ccp2_ab_addressssss}</p>
+                                </div>
+                                <div class="edit-data-div">
+                                    <div class="record-edit">
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_ab_postCode}</p>
+                                                <p class="valid-txt">{labels2.ccp2_ab_val_7}</p>
+                                            </div>
+                                            <div class="pin">
+                                                <p>〒</p>
+                                                <input type="text" id="postalCode" value={postalCode} name="postalCode"
+                                                    oninput={handlePostalCode} class="addressPostal"
+                                                    data-field="postalCode" autocomplete="off" autocorrect="off"
+                                                    autocapitalize="off" placeholder={labels2.ccp2_ab_enterPostalCode}
+                                                    maxlength="7">
+                                            </div>
+                                            <p class="valid-txt">{labels2.ccp2_ab_postValid}</p>
+                                        </div>
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_ab_prefecture}</p>
+                                                <p class="valid-txt">{labels2.ccp2_ab_max06}</p>
+                                            </div>
+                                            <input type="text" id="prefectures" oninput={handlevalchange}
+                                                value={prefectures} name="prefucturesss" onchange={handleInputChange}
+                                                class="address" data-field="prefectures"
+                                                placeholder={labels2.ccp2_ab_examplePrefecture} maxlength="6">
+                                        </div>
+                                    </div>
+                                    <div class="record-edit">
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_ab_cityTownVillage}</p>
+                                                <p class="valid-txt">{labels2.ccp2_ab_maxWid}</p>
+                                            </div>
+                                            <input type="text" id="municipalities" oninput={handlevalchange}
+                                                class="address" value={municipalities} name="municipalitiesss"
+                                                onchange={handleInputChange} data-field="municipalities"
+                                                placeholder={labels2.ccp2_ab_exampleCity} maxlength="24">
+                                        </div>
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_ab_streetNumber}</p>
+                                                <p class="valid-txt">{labels2.ccp2_ab_max40}</p>
+                                            </div>
+                                            <input type="text" id="streetAddress" oninput={handlevalchange}
+                                                class="address" value={streetAddress} onchange={handleInputChange}
+                                                data-field="streetAddress" placeholder={labels2.ccp2_ab_exampleStreet}
+                                                maxlength="40">
+                                        </div>
+                                    </div>
+                                    <div class="record-edit">
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_ab_buildingName}</p>
+                                                <p class="valid-txt">{labels2.ccp2_ab_maxWid}</p>
+                                            </div>
+                                            <input type="text" id="buildingName" oninput={handlevalchange}
+                                                class="address" value={buildingName} name="buildingsss"
+                                                onchange={handleInputChange} data-field="buildingName"
+                                                placeholder={labels2.ccp2_ab_exampleBuilding} maxlength="24">
+                                        </div>
+                                        <div class="label-inputs">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="edit-buttons">
+                            <button class="cancel-btn" onclick={handleCancel}>{labels2.ccp2_ab_cancel}</button>
+                            <button class="save-btn" onclick={handleNext}>{labels2.ccp2_ab_next}</button>
+                        </div>
+                    </template>
+                    <template if:true={Step2}>
+                        <div class="container">
+                            <div class="user-info">
+                                <div class="user-info-head">
+                                    <p>{labels2.ccp2_ab_branchDetails}</p>
+                                </div>
+                                <div class="data-div">
+                                    <div class="left-div" style="border-right: 1px solid #D9D9D9;">
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_ab_companyName}</p>
+                                            <p class="info-text">{AccountName}</p>
+                                        </div>
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_ab_affiliationName2}</p>
+                                            <p class="info-text">{branchName}</p>
+                                        </div>
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_ab_phoneNumber3}</p>
+                                            <template if:true={phone}>
+                                                <p class="info-text">{phone}</p>
+                                            </template>
+                                            <template if:false={phone}>
+                                                <p class="info-text">-</p>
+                                            </template>
+                                        </div>
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_ab_affiliationMembers2}</p>
+                                            <template if:true={moreusers.length}>
+                                                <div class="info-text">
+                                                    <template for:each={moreusers} for:item="memb">
+                                                        <div key={memb.Id}>
+                                                            <span>{memb.Name}</span>
+                                                            <br>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                            <template if:false={moreusers.length}>
+                                                <p class="info-text">-</p>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <div class="right-div">
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_ab_affiliationNumber2}</p>
+                                            <p class="info-text">{DisplayNumber}</p>
+                                        </div>
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_ab_address2}</p>
+                                            <p class="info-text">
+                                                <template if:false={isAddress}>
+                                                    <template if:true={postalCode}>
+                                                        <div style="display: flex;">
+                                                            <p>〒</p>
+                                                            <p>{postalCode}</p>
+                                                        </div>
+                                                    </template>
+                                                    {combinedAddress}
+                                                </template>
+                                                <template if:true={isAddress}>
+                                                    -
+                                                </template>
+                                            </p>
+                                        </div>
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_ab_affiliationVehicles2}</p>
+                                            <template if:true={morevehicles.length}>
+                                                <div class="info-text">
+                                                    <!-- <template for:each={morevehicles} for:item="veh">
+                                                        <div key={veh.Id}>
+                                                            <span class="vehName2">{veh.Name}</span>
+                                                            <br>
+                                                        </div>
+                                                    </template> -->
+                                                    <div
+                                                        style="word-break: break-all; width: auto; display: flex; flex-direction: column;">
+                                                        <template for:each={vehicleByIdData.vehicleNames}
+                                                            for:item="vehicle">
+                                                            <span class="branch-item" key={vehicle.name}
+                                                                title={vehicle.name}>
+                                                                {vehicle.name}
+                                                            </span>
+                                                        </template>
+
+                                                        <template if:true={morethanOneBranch}>
+                                                            <span class="branch-All" onclick={vehicleopen}>
+                                                                {labels2.ccp2_br_Other_10}
+                                                                +{vehicleByIdData.moreVehiclesCount}
+                                                            </span>
+                                                        </template>
+                                                    </div>
+
+                                                </div>
+                                            </template>
+                                            <template if:false={morevehicles.length}>
+                                                <p class="info-text">-</p>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="edit-buttons">
+                            <button class="cancel-btn" onclick={handlePrevious}>{labels2.ccp2_ab_edit}</button>
+                            <button class="save-btn" onclick={handle2Next}>{labels2.ccp2_ab_next2}</button>
+                        </div>
+                    </template>
+                    <template if:true={Step3}>
+                        <div class="Branch-conf">
+                            <p>{labels2.ccp2_ab_registrationComplete}</p>
+                        </div>
+                        <div class="foot-btn">
+                            <button class="save-btn"
+                                onclick={handleSave}>{labels2.ccp2_ab_goToAffiliationManagement}</button>
+                        </div>
+                    </template>
+                    <template if:true={VehiclesModal}>
+                        <div class="modal-background">
+                            <div class="modal-window-branch">
+                                <div class="modal-header-branch">
+                                    <div class="count">
+                                        <!-- <h1>{vehicleByIdData.branchCount}</h1> -->
+                                        <p style='color: var(--black-txt-bg, #262626);
+                            font-family: "Noto Sans JP";
+                            font-size: 16px;
+                            font-style: normal;
+                            font-weight: 700;
+                            line-height: 130%;
+                            letter-spacing: 0.32px;'>{labels2.ccp2_br_new_vehicles_name}</p>
+                                    </div>
+                                    <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Close"
+                                        onclick={vehiclehClose} class="close-button-branch">
+                                    </lightning-icon>
+                                </div>
+                                <div class="branch-container">
+                                    <div class="branch-card" style='color: var(--black-txt-bg, #262626);
+                                                    
+                                                    /* JP/PC/H4 */
+                                                    font-family: "Noto Sans JP";
+                                                    font-size: 16px;
+                                                    font-style: normal;
+                                                    font-weight: 700;
+                                                    line-height: 130%; /* 20.8px */
+                                                    letter-spacing: 0.32px;'>
+                                        <p>{labels2.ccp2_br_registrationnum}</p>
+                                        <p>{labels2.ccp2_br_chassisnum}</p>
+                                    </div>
+                                    <template for:each={morevehicles} for:item="veh">
+                                        <div key={veh.Id} class="branch-card">
+                                            <p title={veh.Name}> {veh.Name} </p>
+                                            <template if:true={veh.chassis}>
+                                                <p title={veh.chassis} if:true={veh.chassis}> {veh.chassis} </p>
+                                            </template>
+                                            <template if:false={veh.Name}>
+                                                -
+                                            </template>
+                                        </div>
+                                    </template>
+
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:true={showCancelModal}>
+                        <div class="modal-background-last">
+                            <div class="modal-window-small">
+                                <div class="warning">
+                                    <p class="warntxt">{labels2.ccp2_ab_unsavedChanges}</p>
+                                    <p class="warntxt more">{labels2.ccp2_ab_unsavedChanges2}</p>
+                                </div>
+                                <div class="buttons-small">
+                                    <button class="cancel-btn" onclick={handleNo}>{labels2.ccp2_ab_no}</button>
+                                    <button class="save-btn" onclick={handleYes}>{labels2.ccp2_ab_yes}</button>
+                                    <!-- <div class="cancelbutton btn-cancel" onclick={handleNo}>
+                                        <p class="buttontxt">{labels2.ccp2_ab_no}</p>
+                                    </div>
+                                    <div class="searchbutton btn-cancel" onclick={handleYes}>
+                                        <p class="buttontxt2">{labels2.ccp2_ab_yes}</p>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <template if:false={adminFlag}>
+        <div class="modal-background-last">
+            <div class="modal-window-small-dtfsa">
+              <div class="dtfsa-div">
+                <div class="perm">
+                  <p>{labels2.ccp2_dtfsa_noAcc1}</p>
+                  <p>{labels2.ccp2_dtfsa_noAcc2}</p>
+                </div>
+                <button class="search-button" onclick={navigateToHome}>{labels2.ccp2_dtfsa_return}</button>
+              </div>
+            </div>
+          </div>
+    </template> -->
+</template>

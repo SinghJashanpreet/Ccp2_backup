@@ -1,0 +1,109 @@
+<template>
+  <template if:false={amIGuestUser}>
+    <footer class="_test-vw">
+      <div class="footer">
+        <div class="container-main">
+          <div class="footer__inner">
+            <div class="footer__upper container" style="padding-left: 37px">
+              <section class="footer__navigation-wrap">
+                <div class="footer__logo">
+                  <img src={footer_logo} alt="" />
+                </div>
+                <nav class="footer__navigation">
+                  <ul class="footer__navigation__list">
+                    <li
+                      class="footer__navigation__list-item"
+                      style="font-size: 14px"
+                    >
+                      <a target="_blank" href="https://www.mitsubishi-fuso.com/"
+                        >{labels2.ccp2_ff_CorporateSite}</a
+                      >
+                    </li>
+                    <li
+                      class="footer__navigation__list-item"
+                      style="font-size: 14px"
+                    >
+                      <a
+                        target="_blank"
+                        href="https://www.mitsubishi-fuso.com/ja/news-recall/recall-information/"
+                        >{labels2.ccp2_ff_RecallSite}</a
+                      >
+                    </li>
+                    <!-- <li class="footer__navigation__list-item">
+                      <a href="">{labels2.ccp2_ff_CampaignsEvents}</a>
+                    </li>
+                    <li class="footer__navigation__list-item">
+                      <a href="">{labels2.ccp2_ff_PressReleases}</a>
+                    </li>
+                    <li class="footer__navigation__list-item">
+                      <a href="">{labels2.ccp2_ff_Recalls}</a>
+                    </li>
+                    <li class="footer__navigation__list-item">
+                      <a href="">{labels2.ccp2_ff_CorporateInfo}</a>
+                    </li> -->
+                  </ul>
+                </nav>
+              </section>
+            </div>
+            <!-- footer__upper  -->
+            <hr class="footer__divider" />
+            <!-- footer__divider  -->
+            <div class="footer__lower container">
+              <section class="footer__navigation-wrap--legal">
+                <nav class="footer__navigation--legal container">
+                  <ul class="footer__navigation__list--legal">
+                    <li class="footer__navigation__list-item--legal">
+                      <a
+                        target="_blank"
+                        href="https://www.mitsubishi-fuso.com/ja/site-policy/"
+                        style="font-size: 10px"
+                        >{labels2.ccp2_ff_UsagePolicy}</a
+                      >
+                    </li>
+                    <li class="footer__navigation__list-item--legal">
+                      <a
+                        target="_blank"
+                        href="https://assets.mitsubishi-fuso.com/fusoassets/2022/04/220318_MFTBC-Privacy-Statement_Japanese-1.pdf?_fsi=zhB5bU6X"
+                        style="font-size: 10px"
+                      >
+                        {labels2.ccp2_ff_PrivacyPolicy}</a
+                      >
+                    </li>
+                    <li class="footer__navigation__list-item--legal">
+                      <a
+                        target="_blank"
+                        href="https://www.mitsubishi-fuso.com/ja/cookie%e3%81%ae%e4%bd%bf%e7%94%a8%e3%81%ab%e9%96%a2%e3%81%99%e3%82%8b%e6%96%b9%e9%87%9d/"
+                        style="font-size: 10px"
+                      >
+                        {labels2.ccp2_ff_CookiePolicy}</a
+                      >
+                    </li>
+                    <li class="footer__navigation__list-item--legal">
+                      <a
+                        target="_blank"
+                        href="https://assets.mitsubishi-fuso.com/fusoassets/2022/03/20220401.pdf?_fsi=zhB5bU6X"
+                        style="font-size: 10px"
+                      >
+                        {labels2.ccp2_ff_ConnectedVehicleDataPolicy}</a
+                      >
+                    </li>
+                    <li
+                      class="footer__navigation__list-item--legal"
+                      style="font-size: 10px"
+                    >
+                      © 2025 Mitsubishi Fuso Truck and Bus Corporation. All
+                      rights reserved.
+                    </li>
+                  </ul>
+                  <!-- <div class="footer__copyright">© 2022 Mitsubishi Fuso Truck and Bus Corporation. All
+                                      rights reserved.</div> -->
+                </nav>
+              </section>
+            </div>
+            <!-- footer__lower  -->
+          </div>
+        </div>
+      </div>
+    </footer>
+  </template>
+</template>

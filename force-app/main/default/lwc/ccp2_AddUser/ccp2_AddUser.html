@@ -1,0 +1,1133 @@
+<template>
+  <div class="main">
+    <div class="half top">
+      <img src={backgroundImagePC} class="main_image" alt="background_Image" />
+    </div>
+    <div class="half bottom">
+      <div class="center-content">
+        <div class="main-container">
+          <div class="contents-box contents-box--inner">
+            <template if:true={showInputSection}>
+              <div class="heading">{labels2.ccp_au_add_user}</div>
+              <!-- Flow Section -->
+              <div class="step">
+                <img src={truckpic1} style="height: 50px" />
+              </div>
+
+              <p class="text-main" style="margin-bottom: 8px;">{labels2.ccp_au_enter_basic_info}</p>
+              <p class="text-main" style="margin-bottom: 24px;">{labels2.ccp_au_add_limit}</p>
+              <div class="form-head">
+                <div class="head-form-item">
+                  <label class="head-form-label">{labels2.ccp_au_company_name}</label>
+                  <div class="head-form-text">{contactData.accountName}</div>
+                </div>
+                <div class="head-form-item">
+                  <label class="head-form-label">{labels2.ccp_au_customer_number}</label>
+                  <div class="head-form-text">{contactData.accountCode}</div>
+                </div>
+              </div>
+
+              <div class="container">
+                <div class="user-info">
+                  <div class="user-info-head">
+                    <p>{labels2.ccp2_um_userInfo}</p>
+                  </div>
+                  <div class="edit-data-div"
+                    style="padding: 44px 36px; border: 1px solid var(--Gray-line, #D9D9D9); gap:32px;">
+                    <div class="record-edit">
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading">{labels2.ccp_au_name}</p>
+                          <p class="reqtxt">{labels2.ccp_au_required}</p>
+                          <p class="valid-input">{labels2.ccp2_au_val_10}</p>
+                        </div>
+                        <div class="value-grp">
+                          <div class="inputs-name">
+                            <p>{labels2.ccp2_um_last_name}</p>
+                            <input type="text" name="lastName" style="margin-bottom: 0;" oninput={handlevalchange}
+                              value={contactInputData.lastName} placeholder={labels2.ccp_au_first_placeholder}
+                              maxlength="10" onchange={handleAllInputChange} />
+                            <template if:true={lastNameError}>
+                              <p class="_error">{lastNameErrorText}</p>
+                            </template>
+                          </div>
+                          <div class="inputs-name">
+                            <p>{labels2.ccp2_um_first_name}</p>
+                            <input type="text" name="firstName" style="margin-bottom: 0;" oninput={handlevalchange}
+                              value={contactInputData.firstName} placeholder={labels2.ccp_au_last_placeholder}
+                              maxlength="10" onchange={handleAllInputChange} />
+                            <template if:true={firstNameError}>
+                              <p class="_error">{firstNameErrorText}</p>
+                            </template>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading">{labels2.ccp_au_name_furigana}</p>
+                          <p class="reqtxt">{labels2.ccp_au_required}</p>
+                          <p class="valid-input">{labels2.ccp2_au_val_10}</p>
+
+                        </div>
+                        <div class="value-grp">
+                          <div class="inputs-name">
+                            <p>{labels2.ccp2_um_last_name_fur}</p>
+                            <input type="text" style="margin-bottom: 0;" name="lastNameKana"
+                              value={contactInputData.lastNameKana} oninput={handlevalchange}
+                              placeholder={labels2.ccp_au_first_fur_placeholder} maxlength="10"
+                              onchange={handleAllInputChange} />
+                            <template if:true={lastNameKanaError}>
+                              <p class="_error">{lastNameKanaErrorText}</p>
+                            </template>
+
+
+                          </div>
+                          <div class="inputs-name">
+                            <p>{labels2.ccp2_um_first_name_fur}</p>
+                            <input type="text" style="margin-bottom: 0;" name="firstNameKana"
+                              value={contactInputData.firstNameKana} placeholder={labels2.ccp_au_last_fur_placeholder}
+                              maxlength="10" oninput={handlevalchange} onchange={handleAllInputChange} />
+                            <template if:true={firstNameKanaError}>
+                              <p class="_error">{firstNameKanaErrorText}</p>
+                            </template>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="record-edit">
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading">{labels2.ccp_au_employee_number}</p>
+                          <p class="valid-input">{labels2.ccp2_au_val_24}</p>
+                        </div>
+                        <input type="text" name="employeeCode" value={contactInputData.employeeCode}
+                          placeholder={labels2.ccp_au_employee_placeholder} oninput={handlevalchange} maxlength="24"
+                          onchange={handleAllInputChange} />
+                        <template if:true={employeeCodeError}>
+                          <p class="_error">{employeeCodeErrorText}</p>
+                        </template>
+                      </div>
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading">{labels2.ccp_au_department}</p>
+                          <p class="valid-input">{labels2.ccp2_au_val_24}</p>
+                        </div>
+                        <input type="text" name="department" value={contactInputData.department} maxlength="24"
+                          placeholder={labels2.ccp_au_department_placeholder} oninput={handlevalchange}
+                          onchange={handleAllInputChange} />
+                        <template if:true={departmentError}>
+                          <p class="_error">{departmentErrorText}</p>
+                        </template>
+                      </div>
+                    </div>
+                    <div class="record-edit">
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading">{labels2.ccp_au_position}</p>
+                          <p class="valid-input">{labels2.ccp2_au_val_24}</p>
+                        </div>
+                        <input type="text" name="title" oninput={handlevalchange} value={contactInputData.title}
+                          maxlength="24" placeholder={labels2.ccp_au_position_placeholder}
+                          onchange={handleAllInputChange} />
+                        <template if:true={titleError}>
+                          <p class="_error">{titleErrorText}</p>
+                        </template>
+                      </div>
+
+                      <div class="label-inputs-branch">
+                        <div class="req-rec">
+                          <p class="input-heading">{labels2.ccp_au_affiliation}</p>
+                          <p class="reqtxt">{labels2.ccp_au_required}</p>
+                        </div>
+                        <div style="display:flex; gap:23px; ">
+                          <div class="dataDrop">
+                            <input type="text" oninput={handleSearch} onclick={handlebranChange}
+                              style="min-height: 48px;" class="Inputs1 icon slds-form-element__control"
+                              placeholder={labels2.ccp_au_affiliation_placeholder} name="branchsss" readonly />
+
+                            <template if:true={showlist}>
+                              <div class="lists" onclick={handleInsideClick}>
+                                <div class="list-scroll">
+                                  <template for:each={filteredbranch} for:item="veh">
+                                    <div key={veh.value} class="list-item" onclick={handleBranchSelect}
+                                      data-id={veh.value}>
+                                      <p>{veh.label}</p>
+                                    </div>
+                                  </template>
+                                </div>
+                              </div>
+                            </template>
+                            <template if:true={branchError}>
+                              <div class="form-item__error flex sp-flex-direction-column">
+                                <div class="form-item__list">
+                                  <p class="_error">{branchErrorText}</p>
+                                </div>
+                              </div>
+                            </template>
+                          </div>
+                          <div style="width: 50%;">
+                            <div class="branchrecords">
+                              <div class="scrollbar">
+                                <template if:true={branch.length}>
+                                  <template for:each={branch} for:item="veh">
+                                    <div key={veh.Id} class="record-item">
+                                      <!-- <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete"
+                                        onclick={handleDeleteBranch} data-id={veh.Id}
+                                        class="filtericn"></lightning-icon> -->
+                                      <svg width="24" height="25" onclick={handleDeleteBranch} data-id={veh.Id}
+                                        class="filtericn" viewBox="0 0 24 25" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                          d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"
+                                          fill="#E10202" />
+                                      </svg>
+                                      <!-- <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete"
+                                        onclick={handleDeleteBranch} data-id={veh.Id}
+                                        class="filtericn"></lightning-icon> -->
+                                      <span style="width: 80%; margin-top: 1px;">{veh.Name}</span>
+                                      <!-- <span>{veh.Name}</span> -->
+                                    </div>
+                                  </template>
+                                </template>
+                              </div>
+                              <template if:false={branch.length}>
+                                <p class="custom-placeholder">
+                                  {labels2.ccp_au_affiliation_option_place}
+                                </p>
+                              </template>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <!-- <div class="dataDrop">
+                          <input type="text" oninput={handleSearch} onclick={handlebranChange}
+                            class="Inputs1 icon slds-form-element__control"
+                            placeholder={labels2.ccp_au_affiliation_placeholder} value={countofbranch} name="branchsss"
+                            readonly /> -->
+
+                        <!-- <template if:true={showlist}>
+                                                        <div class="lists" onclick={handleInsideClick}>
+                                                          <template
+                                                            for:each={filteredbranch}
+                                                            for:item="veh"
+                                                          >
+                                                            <div
+                                                              key={veh.value}
+                                                              class="list-item"
+                                                              onclick={handleBranchSelect}
+                                                              data-id={veh.value}
+                                                            >
+                                                              <p>{veh.label}</p>
+                                                            </div>
+                                                          </template>
+                                                        </div>
+                                                      </template> -->
+                        <!-- <template if:true={showlist}>
+                            <div class="branch-selection-container" onclick={handleInsideClick}>
+                              <div class="mm-filter-dropdown">
+                                <div class="mm-filter-dropdown-rows" onclick={handleAllBranchSelect} data-id="all">
+                                  <input type="checkbox" name="all" checked={isAllBranchSelected}
+                                    onchange={handleAllBranchSelect} style="cursor: pointer;" />
+                                  <p>すべて</p>
+                                </div>
+                                <template for:each={filteredbranch} for:item="veh">
+                                  <div key={veh.value} class="mm-filter-dropdown-rows" onclick={handleBranchSelect}
+                                    data-id={veh.value}>
+                                    <input type="checkbox" name={veh.value} checked={veh.selected}
+                                      onchange={handleBranchSelect} style="cursor: pointer;" />
+                                    <p>{veh.label}</p>
+                                  </div>
+                                </template>
+                              </div>
+                            </div>
+                          </template>
+                          <template if:true={branchError}>
+                            <p class="_error">{branchErrorText}</p>
+                          </template>
+                        </div> -->
+                      </div>
+                    </div>
+                    <div class="record-edit" style="flex-direction: column; gap:16px;">
+                      <div class="req-rec">
+                        <p class="input-heading">{labels2.ccp_au_phone_number}</p>
+                        <p class="reqtxt">{labels2.ccp_au_required}</p>
+                      </div>
+                      <div class="req-rec" style="font-size: 12px; color:#A7A7A7; gap: 0px;">
+                        <p style="font-size: 12px; color:#A7A7A7">{labels2.ccp2_au_phoneNumberText}</p>
+                        <p style="font-size: 12px; color:#A7A7A7">{labels2.ccp2_au_val_11}</p>
+                      </div>
+                      <div class="record-edit">
+                        <div class="label-inputs">
+                          <p class="input-heading2">{labels2.ccp_au_phone_number_confirm}</p>
+                          <div style="display:flex; flex-direction:column; gap:8px;">
+                            <input type="tel" name="phone" value={contactInputData.phone} placeholder="04512345678"
+                              style="margin-bottom: 0px;" oninput={handlephoneInput} onchange={handleAllInputChange}
+                              maxlength="11" pattern="\d*" />
+                            <template if:true={phoneError}>
+                              <p class="_error">{phoneErrorText}</p>
+                            </template>
+                          </div>
+                        </div>
+                        <div class="label-inputs">
+                          <p class="input-heading2">{labels2.ccp_au_mobile_number}</p>
+                          <input type="tel" name="mobilePhone" style="margin-bottom: 0px;"
+                            value={contactInputData.mobilePhone} placeholder="08012345678" oninput={handlephoneInput}
+                            onchange={handleAllInputChange} maxlength="11" />
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="record-edit">
+                      <div class="label-inputs">
+                        <div class="req-rec">
+                          <p class="input-heading2">{labels2.ccp_au_email}</p>
+                          <p class="reqtxt">{labels2.ccp_au_required}</p>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                          <input type="email" name="email" value={contactInputData.email}
+                            placeholder="yamadataro@fuso.com" oninput={handlevalchange} maxlength="40"
+                            onchange={handleAllInputChange} style="width: 95.5%; margin-bottom: 0px;" />
+                          <template if:true={emailError}>
+                            <p class="_error">{emailErrorText}</p>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="container">
+                <div class="user-info">
+                  <div class="user-info-head" style="display: flex; gap: 16px; align-items: center;">
+                    <p>{labels2.ccp_au_service_usage_confirm}</p>
+                    <p class="reqtxt">必須</p>
+                  </div>
+                  <div class="services-data" data-name="serviceBox">
+                    <div style="flex-wrap: wrap; display: flex; gap:111px">
+                      <template for:each={allServices} for:item="ser">
+                        <div key={ser.apiName} class="serv-items2">
+                          <input type="checkbox" class="input-checkbox" style="width: 20px; height: 20px"
+                            data-name={ser.apiName} checked={ser.isChecked}
+                            onchange={handleCheckboxChange1} />
+                          <span>{ser.japaneseName}</span>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                  <p if:true={servicesError} style="font-size: 14px; color:#E10202;">利用サービスを選択してください。</p>
+                  <!-- <div class="services-main"> -->
+                    <!-- <div class="checkbox-wrapper">
+                      <label class="label-box" style="pointer-events: none;" for="1">
+                        <input class="input-checkbox" type="checkbox" name="vehiclemanagement"
+                          onchange={handleCheckboxChange1} disabled checked={vmChecked} />
+                        <p data-checkbox="vehiclemanagement" onclick={handleParagraphClick}>
+                          {labels2.ccp_au_vehicle_management}
+                        </p>
+                      </label>
+                    </div> -->
+
+                    <!-- <div class="checkbox-wrapper">
+                      <label class="label-box" for="1">
+                        <input class="input-checkbox" type="checkbox" name="requestbook"
+                          onchange={handleCheckboxChange1} checked={rbChecked} />
+                        <p data-checkbox="requestbook" onclick={handleParagraphClick}>
+                          {labels2.ccp_au_monthly_invoice}
+                        </p>
+                      </label>
+                    </div>
+
+                    <div class="checkbox-wrapper">
+                      <label class="label-box" for="1">
+                        <input class="input-checkbox" type="checkbox" name="financialservice"
+                          onchange={handleCheckboxChange1} checked={fsChecked} />
+                        <p data-checkbox="financialservice" onclick={handleParagraphClick}>
+                          {labels2.ccp_au_financial_service}
+                        </p>
+                      </label>
+                    </div> -->
+
+                    <!-- <div class="edit-data-div"> -->
+                    <!-- <div class="record-edit">
+                        <div class="label-inputs-service">
+                          <div class="checkbox-wrapper">
+                            <label class="label-box" style="pointer-events: none;" for="1">
+                              <input class="input-checkbox" type="checkbox" name="vehiclemanagement"
+                                onchange={handleCheckboxChange1} disabled checked={vmChecked} />
+                              <p data-checkbox="vehiclemanagement" onclick={handleParagraphClick}>
+                                {labels2.ccp_au_vehicle_management}
+                              </p>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="label-inputs-service">
+                          <div class="checkbox-wrapper">
+                            <label class="label-box" for="1">
+                              <input class="input-checkbox" type="checkbox" name="requestbook"
+                                onchange={handleCheckboxChange1} checked={rbChecked} />
+                              <p data-checkbox="requestbook" onclick={handleParagraphClick}>
+                                {labels2.ccp_au_monthly_invoice}
+                              </p>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="record-edit">
+                        <div class="label-inputs-service">
+                          <div class="checkbox-wrapper">
+                            <label class="label-box" for="1">
+                              <input class="input-checkbox" type="checkbox" name="financialservice"
+                                onchange={handleCheckboxChange1} checked={fsChecked} />
+                              <p data-checkbox="financialservice" onclick={handleParagraphClick}>
+                                {labels2.ccp_au_financial_service}
+                              </p>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="label-inputs-service">
+                          <div class="checkbox-wrapper">
+                            <label class="label-box" style="pointer-events: none;" for="1">
+                              <input class="input-checkbox" type="checkbox" name="baseService"
+                                onchange={handleCheckboxChange1} checked disabled />
+                              <p data-checkbox="baseService" onclick={handleParagraphClick}>
+                                {labels2.ccp_au_basic_service}
+                              </p>
+                            </label>
+                          </div>
+                        </div>
+                      </div> -->
+                    <!-- </div> -->
+                    <!-- <div class="edit-data-div">
+                      <div class="checkbox-wrapper">
+                        <label class="label-box" style="pointer-events: none;" for="1">
+                          <input class="input-checkbox" type="checkbox" name="baseService"
+                            onchange={handleCheckboxChange1} checked disabled />
+                          <p data-checkbox="baseService" onclick={handleParagraphClick}>
+                            {labels2.ccp_au_basic_service}
+                          </p>
+                        </label>
+                      </div>
+                      
+                    </div> -->
+                  <!-- </div> -->
+                </div>
+              </div>
+
+              <!-- <form action="" class="form-main">
+                <div class="form-item form-item--register">
+                  <label class="form-label aligntop-name">{labels2.ccp_au_name}
+                    <span class="reqtxt">{labels2.ccp_au_required}</span>
+                  </label>
+                  <div class="form-item__wrapper flex-direction-column">
+                    <div class="form-item__input flex" style="flex-direction: row">
+                      <div class="form-item__list">
+                        <label class="label-text">{labels2.ccp2_um_last_name}</label>
+                        <div class="slds-form-element__control">
+                          <input type="text" style="background-color: #ffffff;" class="form-input slds-input"
+                            name="lastName" oninput={handlevalchange} value={contactInputData.lastName}
+                            placeholder={labels2.ccp_au_first_placeholder} maxlength="10"
+                            onchange={handleAllInputChange} />
+                        </div>
+                      </div>
+                      <div class="form-item__list">
+                        <label class="label-text">{labels2.ccp2_um_first_name}</label>
+                        <div class="slds-form-element__control">
+                          <input type="text" class="form-input slds-input" name="firstName" oninput={handlevalchange}
+                            value={contactInputData.firstName} placeholder={labels2.ccp_au_last_placeholder}
+                            maxlength="10" onchange={handleAllInputChange} />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-item__error">
+                      <div class="form-item__list">
+                        <template if:true={lastNameError}>
+                          <p class="_error">{lastNameErrorText}</p>
+                        </template>
+                      </div>
+                      <div class="form-item__list">
+                        <template if:true={firstNameError}>
+                          <p class="_error">{firstNameErrorText}</p>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item form-item--register">
+                  <label class="form-label aligntop-name">{labels2.ccp2_um_name_furigana}
+                    <span class="reqtxt">{labels2.ccp_au_required}</span>
+                  </label>
+
+                  <div class="form-item__wrapper flex-direction-column">
+                    <div class="form-item__input flex" style="flex-direction: row">
+                      <div class="form-item__list">
+                        <label class="label-text">{labels2.ccp2_um_last_name_fur}</label>
+                        <div class="slds-form-element__control">
+                          <input type="text" class="form-input slds-input" name="lastNameKana"
+                            value={contactInputData.lastNameKana} oninput={handlevalchange}
+                            placeholder={labels2.ccp_au_first_fur_placeholder} maxlength="10"
+                            onchange={handleAllInputChange} />
+                        </div>
+                      </div>
+                      <div class="form-item__list">
+                        <label class="label-text">{labels2.ccp2_um_first_name_fur}</label>
+                        <div class="slds-form-element__control">
+                          <input type="text" class="form-input slds-input" name="firstNameKana"
+                            value={contactInputData.firstNameKana} placeholder={labels2.ccp_au_last_fur_placeholder}
+                            maxlength="10" oninput={handlevalchange} onchange={handleAllInputChange} />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-item__error flex sp-flex-direction-column">
+                      <div class="form-item__list">
+                        <template if:true={lastNameKanaError}>
+                          <p class="_error">{lastNameKanaErrorText}</p>
+                        </template>
+                      </div>
+                      <div class="form-item__list">
+                        <template if:true={firstNameKanaError}>
+                          <p class="_error">{firstNameKanaErrorText}</p>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <label class="form-label aligntop">{labels2.ccp_au_employee_number}
+                  </label>
+                  <div class="form-item__wrapper _email">
+                    <input type="text" name="employeeCode" value={contactInputData.employeeCode}
+                      class="form-input slds-form-element__control slds-input"
+                      placeholder={labels2.ccp_au_employee_placeholder} oninput={handlevalchange} maxlength="24"
+                      onchange={handleAllInputChange} />
+                    <template if:true={employeeCodeError}>
+                      <p class="_error">{employeeCodeErrorText}</p>
+                    </template>
+                  </div>
+                </div>
+
+                <div class="form-item">
+                  <label class="form-label aligntop">{labels2.ccp_au_department}</label>
+                  <div class="form-item__wrapper _email">
+                    <input type="text" name="department" value={contactInputData.department}
+                      class="form-input slds-form-element__control slds-input" maxlength="24"
+                      placeholder={labels2.ccp_au_department_placeholder} oninput={handlevalchange}
+                      onchange={handleAllInputChange} />
+                    <template if:true={departmentError}>
+                      <p class="_error">{departmentErrorText}</p>
+                    </template>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <label class="form-label aligntop">{labels2.ccp_au_position}</label>
+                  <div class="form-item__wrapper _email">
+                    <input type="text" name="title" oninput={handlevalchange} value={contactInputData.title}
+                      class="form-input slds-form-element__control slds-input" maxlength="24"
+                      placeholder={labels2.ccp_au_position_placeholder} onchange={handleAllInputChange} />
+                    <template if:true={titleError}>
+                      <p class="_error">{titleErrorText}</p>
+                    </template>
+                  </div>
+                </div>
+
+                <div class="form-item">
+                  <label class="form-label aligntopBranch">{labels2.ccp_au_affiliation}
+                    <span class="reqtxt">{labels2.ccp_au_required}</span>
+                  </label>
+                  <div class="form-item__wrapper">
+                    <div class="with-error">
+                      <div class="dataDrop">
+                        <input type="text" oninput={handleSearch} onclick={handlebranChange}
+                          class="Inputs1 icon slds-form-element__control"
+                          placeholder={labels2.ccp_au_affiliation_placeholder} value={countofbranch} name="branchsss"
+                          readonly />
+
+                        <template if:true={showlist}>
+                          <div class="branch-selection-container" onclick={handleInsideClick}>
+                            <div class="mm-filter-dropdown">
+                              <div class="mm-filter-dropdown-rows" onclick={handleAllBranchSelect} data-id="all">
+                                <input type="checkbox" name="all" checked={isAllBranchSelected}
+                                  onchange={handleAllBranchSelect} style="cursor: pointer;" />
+                                <p>すべて</p>
+                              </div>
+                              <template for:each={filteredbranch} for:item="veh">
+                                <div key={veh.value} class="mm-filter-dropdown-rows" onclick={handleBranchSelect}
+                                  data-id={veh.value}>
+                                  <input type="checkbox" name={veh.value} checked={veh.selected}
+                                    onchange={handleBranchSelect} style="cursor: pointer;" />
+                                  <p>{veh.label}</p>
+                                </div>
+                              </template>
+                            </div>
+                          </div>
+                        </template>
+
+                      </div>
+                      <div class="form-item__error flex sp-flex-direction-column">
+                        <div class="form-item__list">
+                          <template if:true={branchError}>
+                            <p class="_error">{branchErrorText}</p>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-item">
+                  <label class="form-label aligntop">{labels2.ccp_au_email}
+                    <span class="reqtxt">{labels2.ccp_au_required}</span>
+                  </label>
+                  <div class="form-item__wrapper _email">
+                    <input type="email" class="form-input slds-form-element__control slds-input" name="email"
+                      value={contactInputData.email} placeholder="yamadataro@fuso.com" oninput={handlevalchange}
+                      maxlength="40" onchange={handleAllInputChange} />
+                    <template if:true={emailError}>
+                      <p class="_error">{emailErrorText}</p>
+                    </template>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <label class="form-label aligntop">{labels2.ccp_au_phone_number}
+                    <span class="reqtxt">{labels2.ccp_au_required}</span>
+                  </label>
+                  <div class="form-item__wrapper _tell">
+                    <p class="form__title label-size" style="font-size: 14px">
+                      {labels2.ccp2_um_phone_or_mobile}<br />{labels2.ccp2_um_phone_or_mobile2}
+                    </p>
+                    <div class="form-item__list">
+                      <label class="label-text">{labels2.ccp_au_phone_number_confirm}</label>
+                      <input type="tel" class="form-input slds-form-element__control slds-input" name="phone"
+                        value={contactInputData.phone} placeholder="03122345678" oninput={handlephoneInput}
+                        onchange={handleAllInputChange} maxlength="11" pattern="\d*" />
+                    </div>
+                    <div class="form-item__list">
+                      <label class="label-text">{labels2.ccp_au_mobile_number}</label>
+                      <input type="tel" class="form-input slds-form-element__control slds-input" name="mobilePhone"
+                        value={contactInputData.mobilePhone} placeholder="08012345678" oninput={handlephoneInput}
+                        onchange={handleAllInputChange} maxlength="11" />
+                    </div>
+
+                    <template if:true={phoneError}>
+                      <p class="_error">{phoneErrorText}</p>
+                    </template>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <label class="form-label aligntop">{labels2.ccp_au_service_usage_confirm}</label>
+                  <div class="form-item__wrapper _tell">
+                    <template if:true={isFDPShow}>
+                      <div class="checkbox-wrapper">
+                        <label class="label-box" for="1">
+                          <input class="input-checkbox" type="checkbox" name="baseService"
+                            onchange={handleCheckboxChange1} checked disabled />
+                          <p data-checkbox="baseService" onclick={handleParagraphClick}>
+                            {labels2.ccp_au_basic_service}
+                          </p>
+                        </label>
+                      </div>
+                      <br />
+                    </template>
+
+                    <div class="checkbox-wrapper">
+                      <label class="label-box" for="1">
+                        <input class="input-checkbox" type="checkbox" name="requestbook"
+                          onchange={handleCheckboxChange1} checked={rbChecked} />
+                        <p data-checkbox="requestbook" onclick={handleParagraphClick}>
+                          {labels2.ccp_au_monthly_invoice}
+                        </p>
+                      </label>
+                    </div>
+                    <br />
+
+                    <div class="checkbox-wrapper">
+                      <label class="label-box" for="1">
+                        <input class="input-checkbox" type="checkbox" name="financialservice"
+                          onchange={handleCheckboxChange1} checked={fsChecked} />
+                        <p data-checkbox="financialservice" onclick={handleParagraphClick}>
+                          {labels2.ccp_au_financial_service}
+                        </p>
+                      </label>
+                    </div>
+                    <br />
+                     <div class="checkbox-wrapper">
+                      <label class="label-box" for="1">
+                        <input class="input-checkbox" type="checkbox" name="onlinemaintenancebooking"
+                          onchange={handleCheckboxChange1} checked={ombChecked} />
+                        <p data-checkbox="onlinemaintenancebooking" onclick={handleParagraphClick}>
+                          {labels2.ccp_au_vehicle_inspection}
+                        </p>
+                      </label>
+                    </div>
+                    <br />
+                     <div class="checkbox-wrapper">
+                      <label class="label-box" for="1">
+                        <input class="input-checkbox" type="checkbox" name="vehiclemanagement"
+                          onchange={handleCheckboxChange1} checked={vmChecked} />
+                        <p data-checkbox="vehiclemanagement" onclick={handleParagraphClick}>
+                          {labels2.ccp_au_vehicle_management}
+                        </p>
+                      </label>
+                    </div>
+                    <br />
+                     <div class="checkbox-wrapper">
+                      <label class="label-box" for="1">
+                        <input class="input-checkbox" type="checkbox" name="costmanagement"
+                          onchange={handleCheckboxChange1} checked={cmChecked} />
+                        <p data-checkbox="costmanagement" onclick={handleParagraphClick}>
+                          {labels2.ccp_au_cost_management}
+                        </p>
+                      </label>
+                    </div>
+                     </div>
+                </div>
+
+              </form> -->
+              <div class="checkboxcontainer">
+                <div class="checkbox-wrapper">
+                  <label class="label-box" for="1">
+                    <input class="input-checkbox" type="checkbox" name="termService" onchange={handleCheckboxChange}
+                      checked={termServiceChecked} />
+                    <a class="termsncond" style="left: 10px;" href={termsUrls.CCP.url} target="_blank">
+                      {labels2.ccp_au_agree_to_service_terms}
+                    </a>
+                  </label>
+                </div>
+                <div class="checkbox-wrapper">
+                  <label class="label-box" for="1">
+                    <input class="input-checkbox" type="checkbox" name="termData" onchange={handleCheckboxChange}
+                      checked={termDataChecked} />
+                    <a class="termsncond"
+                      href="https://assets.mitsubishi-fuso.com/fusoassets/2022/04/220318_MFTBC-Privacy-Statement_Japanese-1.pdf?_fsi=zhB5bU6X"
+                      target="_blank">
+                      {labels2.ccp_au_agree_to_data_protection}
+                    </a>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-footer">
+                <div class="btn2" onclick={handleCancel}>
+                  <P class="toedit2" style="white-space: nowrap">{labels2.ccp_au_cancel}
+                  </P>
+                </div>
+                <!-- <div class="button">
+                                                                              <div class="btn">
+                                                                                  <a onclick={nextClick} class="primary_nextbtn--m disabled" name="nextButton">次へ</a>
+                                                                              </div>
+                                                                          </div>  -->
+                <div class="button__wrapper">
+                  <a onclick={nextClick} name="nextButton" class="primary_nextbtn--m"
+                    style="white-space: nowrap">{labels2.ccp_au_next}</a>
+                </div>
+              </div>
+            </template>
+            <!-- modal start -->
+            <template if:true={isShowModal}>
+              <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                  <div class="slds-modal__content slds-p-around_medium" style="border-radius: 10px">
+                    <H3 class="modal1">
+                      {labels2.ccp_up_maxMembersLimit5}</H3>
+                    <div class="modall-footerbtn">
+                      <button class="primary_nextbtn--m" onclick={returnTop}>
+                        {labels2.ccp_up_yes5}
+                      </button>
+                    </div>
+                  </div>
+                  <!-- modal footer start-->
+                  <!-- <footer class="slds-modal__footer" style="
+                                            text-align: -webkit-center;">
+                                                    <button class="return_btn--m" onclick={returnTop}>はい</button>
+                                                </footer> -->
+                </div>
+              </section>
+              <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+            <!-- modal end-->
+
+            <!--
+            New Confirmation Modal-->
+            <template if:true={showConfirmationSection}>
+              <div class="heading">{labels2.ccp_au_add_user}</div>
+
+              <div class="step">
+                <img src={truckpic2} style=" height: 50px" />
+              </div>
+              <p class="text-main" style="margin-bottom: 24px;">{labels2.ccp_au_confirmation_heading}</p>
+              <div class="form-head">
+                <div class="head-form-item">
+                  <label class="head-form-label">{labels2.ccp_au_company_name}</label>
+                  <div class="head-form-text">{contactData.accountName}</div>
+                </div>
+                <div class="head-form-item">
+                  <label class="head-form-label">{labels2.ccp_au_customer_number}</label>
+                  <div class="head-form-text">{contactData.accountCode}</div>
+                </div>
+              </div>
+              <div class="container">
+                <div class="user-info">
+                  <div class="user-info-head">
+                    <p>{labels2.ccp2_um_userInfo}</p>
+                  </div>
+                  <div class="data-div">
+                    <div class="left-div" style="border-right: 1px solid #d9d9d9">
+                      <div class="info-rec">
+                        <p class="info-label">{labels2.ccp_au_name_confirm}</p>
+                        <p class="info-text">{contactInputData.lastName}&nbsp;{contactInputData.firstName}</p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">
+                          {labels2.ccp_au_name_furigana_confirm}
+                        </p>
+                        <p class="info-text">
+                          {contactInputData.lastNameKana}&nbsp;{contactInputData.firstNameKana}
+                        </p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">
+                          {labels2.ccp_au_employee_number_confirm}
+                        </p>
+                        <p class="info-text">
+                          {contactInputData.employeeCode}
+                        </p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">
+                          {labels2.ccp_au_phone_number_confirm}
+                        </p>
+                        <p class="info-text">{contactInputData.phone}</p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">{labels2.ccp_au_email}</p>
+                        <p class="info-text">{contactInputData.email}</p>
+                      </div>
+                    </div>
+                    <div class="right-div">
+                      <div class="info-rec">
+                        <p class="info-label">{labels2.ccp_au_position_confirm}</p>
+                        <p class="info-text">{contactInputData.title}</p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">
+                          {labels2.ccp_au_affiliation}
+                        </p>
+                        <div class="info-text">
+                          <div class="data-branch2">
+                            <!-- <template for:each={branch} for:item="bran">
+                              <div key={bran.Id} class="selectedbranchname">
+                                <span>{bran.Name}</span>
+                              </div>
+                            </template> -->
+                            <div style="display: flex; gap: 3px; align-items: center;">
+                              <div class="branches" style="width: auto; flex-wrap: wrap;">
+                                <span title={allBranchesData.firstbranchreal}>{allBranchesData.firstbranch}</span>
+                                <template if:true={morethanonebranch}>
+                                  <span class="branch-All" onclick={branchopen}>{labels2.ccp2_um_Other_10} +
+                                    {allBranchesData.onscreenbranchcount}</span>
+                                </template>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">
+                          {labels2.ccp_au_department_confirm}
+                        </p>
+                        <p class="info-text">{contactInputData.department}</p>
+                      </div>
+                      <div class="info-rec">
+                        <p class="info-label">
+                          {labels2.ccp_au_mobile_number_confirm}
+                        </p>
+                        <p class="info-text">
+                          {contactInputData.mobilePhone}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <template if:false={selectedServices}>
+                  <div class="user-info">
+                    <div class="user-info-head">
+                      <p>{labels2.ccp_au_service_usage}</p>
+                    </div>
+                    <div class="services-data">
+                      <div style="flex-wrap: wrap; display: flex; gap: 20px">
+                        <template for:each={allServices} for:item="ser">
+                            <div if:true={ser.isChecked} class="serv-items" key={ser.apiName}>{ser.japaneseName}</div>
+                        </template>
+                        <!-- <template if:true={vmChecked}>
+                          <div class="serv-items">{labels2.ccp_au_vehicle_management}</div>
+                        </template> -->
+                        <!-- <template if:true={rbChecked}>
+                          <div class="serv-items">{labels2.ccp_au_monthly_invoice}</div>
+                        </template>
+                        <template if:true={fsChecked}>
+                          <div class="serv-items">{labels2.ccp_au_financial_service}</div>
+                        </template> -->
+                        <!-- <template if:true={baseChecked}>
+                          <div class="serv-items">{labels2.ccp_au_basic_service}</div>
+                        </template> -->
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+              <div class="form-footer-next">
+                <button onclick={back2InputClick} class="return_btn" style="white-space: nowrap">
+                  {labels2.ccp_au_confirmation_cancel}
+                </button>
+                <button onclick={confirmClick} class="primary_nextbtn--m" style="white-space: nowrap">
+                  {labels2.ccp_au_confirmation_save}
+                </button>
+              </div>
+            </template>
+
+            <!-- Confirmation Section -->
+            <!-- <template if:true={showConfirmationSection}>
+              <div class="heading">{labels2.ccp_au_add_user}</div>
+
+              <div class="step">
+                <img src={truckpic2} style=" height: 50px" />
+              </div>
+              <p class="text-main _register-check">
+                {labels2.ccp_au_confirmation_heading}
+              </p>
+              <div class="basic-info__section">
+                <dl class="section__outline">
+                  <div class="section__definition-list">
+                    <dt>{labels2.ccp_au_company_name_confirm}</dt>
+                    <dd>{contactData.accountName}</dd>
+                  </div>
+                  <div class="section__definition-list">
+                    <dt>{labels2.ccp_au_customer_number_confirm}</dt>
+                    <dd>{contactData.accountCode}</dd>
+                  </div>
+                  <div class="section__definition-list">
+                    <dt>{labels2.ccp_au_name_confirm}</dt>
+                    <dd>
+                      {contactInputData.lastName}&nbsp;{contactInputData.firstName}
+                    </dd>
+                  </div>
+                  <div class="section__definition-list">
+                    <dt>{labels2.ccp_au_name_furigana_confirm}</dt>
+                    <dd>
+                      {contactInputData.lastNameKana}&nbsp;{contactInputData.firstNameKana}
+                    </dd>
+                  </div>
+                  <div class="section__definition-list">
+                    <dt>{labels2.ccp_au_employee_number_confirm}</dt>
+                    <dd>{contactInputData.employeeCode}</dd>
+                  </div>
+
+                  <div class="section__definition-list">
+                    <dt>{labels2.ccp_au_department_confirm}</dt>
+                    <dd>{contactInputData.department}</dd>
+                  </div>
+                  <div class="section__definition-list">
+                    <dt>{labels2.ccp_au_position_confirm}</dt>
+                    <dd>{contactInputData.title}</dd>
+                  </div>
+                  <div class="section__definition-list" style="align-items: baseline;">
+                    <dt class="branch-label">
+                      {labels2.ccp_au_affiliation}
+                    </dt>
+                    <div class="selectedbranchlist">
+                      <template for:each={branch} for:item="bran">
+                        <div key={bran.Id} class="selectedbranchname">
+                          <span>{bran.Name}</span>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                  <div class="section__definition-list">
+                    <dt>{labels2.ccp_au_email}</dt>
+                    <dd>{contactInputData.email}</dd>
+                  </div>
+                  <div class="section__definition-list">
+                    <dt>{labels2.ccp_au_phone_number_confirm}</dt>
+                    <dd>{contactInputData.phone}</dd>
+                  </div>
+                  <div class="section__definition-list">
+                    <dt>{labels2.ccp_au_mobile_number_confirm}</dt>
+                    <dd>{contactInputData.mobilePhone}</dd>
+                  </div>
+                  <div class="section__definition-list">
+                    <dt class="aligntop-service2">
+                      {labels2.ccp_au_service_usage_confirm}
+                    </dt>
+                    <div class="form-item__wrapper _tell padtop">
+                      <template if:true={baseChecked}>
+                        <p>{labels2.ccp_au_basic_service}</p>
+                      </template>
+
+                      <template if:true={rbChecked}>
+                        <p>{labels2.ccp_au_monthly_invoice}</p>
+                      </template>
+
+                      <template if:true={fsChecked}>
+                        <p>{labels2.ccp_au_financial_service}</p>
+                      </template>
+                      <template if:true={ombChecked}>
+                        <p>{labels2.ccp_au_vehicle_inspection}</p>
+                      </template>
+                      <template if:true={vmChecked}>
+                        <p>{labels2.ccp_au_vehicle_management}</p>
+                      </template>
+                      <template if:true={cmChecked}>
+                        <p>{labels2.ccp_au_cost_management}</p>
+                      </template>
+                    </div>
+                  </div>
+                </dl>
+              </div>
+              <div class="form-footer-next">
+                <button onclick={back2InputClick} class="return_btn" style="white-space: nowrap">
+                  {labels2.ccp_au_confirmation_cancel}
+                </button>
+                <button onclick={confirmClick} class="primary_nextbtn--m" style="white-space: nowrap">
+                  {labels2.ccp_au_confirmation_save}
+                </button>
+              </div>
+            </template> -->
+            <template if:true={showCompletionSection}>
+              <!-- Flow Section -->
+              <div class="heading">{labels2.ccp_au_add_user}</div>
+
+              <div class="step">
+                <!-- <div class="step__wrapper">
+                                                <ol class="step__list">
+                                                    <li class="step__item item _checked">
+                                                        <div class="item__top">
+                                                            <div class="item__num">1</div>
+                                                            <img class="item__icon-check" src={checkIcon} alt="">
+                                                            <img class="item__icon-track" src={trackIcon} alt="">
+                                                        </div>
+                                                        <div class="item__bottom">内容入力</div>
+                                                    </li>
+                                                    <li class="step__item item _checked">
+                                                        <div class="item__top">
+                                                            <div class="item__num">2</div>
+                                                            <img class="item__icon-check" src={checkIcon} alt="">
+                                                            <img class="item__icon-track" src={trackIcon} alt="">
+                                                        </div>
+                                                        <div class="item__bottom">内容確認</div>
+                                                    </li>
+                                                    <li class="step__item item _current">
+                                                        <div class="item__top">
+                                                            <div class="item__num">3</div>
+                                                            <img class="item__icon-check" src={checkIcon} alt="">
+                                                            <img class="item__icon-track" src={trackIcon} alt="">
+                                                        </div>
+                                                        <div class="item__bottom">完了</div>
+                                                    </li>
+                                                </ol>
+                                            </div> -->
+                <img src={truckpic3} style="height: 50px" />
+              </div>
+              <div class="register-ok">
+                <p class="text-main" style="    margin-top: 42px;
+    margin-bottom: 78px;">
+                  {labels2.ccp_au_final_first}<br />
+                  {labels2.ccp_au_final_second}<br />
+                  {labels2.ccp_au_final_third}
+                </p>
+                <div class="button__wrapper">
+                  <button onclick={navigateToHome} class="primary_nextbtn--m2">
+                    {labels2.ccp_au_final_back_to_user}
+                  </button>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <template if:true={showCancelModal}>
+    <div class="modal-background-last1">
+      <div class="modal-window-small1">
+        <div class="warning1">
+          <p class="warntxt">{labels2.ccp_au_add_user_cancel}</p>
+          <p class="warntxt more">{labels2.ccp_au_add_user_cancel2}</p>
+        </div>
+        <div class="buttons-small">
+          <div class="cancelbutton btn-cancel" onclick={handleNo}>
+            <p class="buttontxt">{labels2.ccp_au_no}</p>
+          </div>
+          <a href={usermanagement}>
+            <div class="searchbutton btn-cancel" onclick={handleYes}>
+              <p class="buttontxt2">{labels2.ccp_au_yes}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={showCheckboxModal}>
+    <div class="modal-background-last">
+      <div class="modal-window-small">
+        <div class="warning">
+          <p class="warntxt">{labels2.ccp_up_agreeTerms6}</p>
+          <p class="warntxt">{labels2.ccp_up_agreePrivacyPolicy6}</p>
+        </div>
+        <div class="buttons-small">
+          <div class="searchbutton btn" onclick={handleOk}>
+            <p class="buttontxt2">{labels2.ccp_up_yes5}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={branchesModal}>
+    <div class="modal-background">
+      <div class="modal-window-branch">
+        <div class="modal-header-branch">
+          <div class="count">
+            <!-- <h1>{vehicleByIdData.branchCount}</h1> -->
+            <h1 style="font-weight: bold; font-size: 16px;">{labels2.ccp2_um_affiliation23}</h1>
+          </div>
+          <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Close" onclick={branchClose}
+            class="close-button-branch">
+          </lightning-icon>
+        </div>
+        <div class="branch-container">
+          <div class="branch-card" style='color: var(--black-txt-bg, #262626);
+        
+        /* JP/PC/H4 */
+        font-family: "Noto Sans JP";
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 130%; /* 20.8px */
+        letter-spacing: 0.32px;'>
+            <p>{labels2.ccp2_um_new_affiliation_name}</p>
+            <p>{labels2.ccp2_um_new_affiliation_number}</p>
+          </div>
+          <template for:each={branch} for:item="bran">
+            <div key={bran.Id} class="branch-card">
+              <P title={bran.Name}> {bran.Name} </P>
+              <P>{bran.siebelAccountCode__c} - {bran.Branch_Code__c}</P>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </template>
+  <!-- <template if:false={adminFlag}>
+    <div class="modal-background-last">
+        <div class="modal-window-small-dtfsa">
+          <div class="dtfsa-div">
+            <div class="perm">
+              <p>{labels2.ccp2_dtfsa_noAcc1}</p>
+              <p>{labels2.ccp2_dtfsa_noAcc2}</p>
+            </div>
+            <button class="search-button" onclick={navigateToHomepage}>{labels2.ccp2_dtfsa_return}</button>
+          </div>
+        </div>
+      </div>
+</template> -->
+</template>

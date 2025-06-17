@@ -1,0 +1,8 @@
+<template>
+    <template if:true={showUppInfo}>
+        <c-ccp2-_-user-profile onclosemember={handleCloseMember} onopenmember={handleopenmember}></c-ccp2-_-user-profile>
+    </template>
+    <template if:true={showwithdraw}>
+        <c-ccp2cancel-membership onclosem={closeShow} onopenbasic={handleopenbasic}></c-ccp2cancel-membership>
+    </template>
+</template>

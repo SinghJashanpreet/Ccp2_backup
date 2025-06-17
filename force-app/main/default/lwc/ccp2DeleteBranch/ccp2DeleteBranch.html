@@ -1,0 +1,313 @@
+<template>
+    <div class="main">
+        <div class="half top">
+            <img src={backgroundImagePC} class="imgmain">
+        </div>
+    </div>
+    <div class="half bottom">
+        <div class="center-content">
+            <div class="maindev">
+                <template if:true={formLoader}>
+                    <div style="height: 100vh; width:100vw; position:relative;">
+                        <lightning-spinner
+                            style="background-color: var(--slds-g-color-neutral-100-opacity-75, rgb(255 255 255 / 17%));"
+                            alternative-text="Loading" size="medium"></lightning-spinner>
+                    </div>
+                </template>
+                <template if:false={formLoader}>
+                    <div class="heading">
+                        <template if:true={pagestoggle}>
+                            <p class="headingtext">{labels2.ccp2_db_deleteAffiliation}</p>
+                        </template>
+                        <template if:false={pagestoggle}>
+                            <p class="headingtext">{labels2.ccp2_db_deleteAffiliation25}</p>
+                        </template>
+                    </div>
+                    <template if:true={firstStep}>
+                        <div class="Image">
+                            <img src={stepOnePicture} alt="Step One Picture" class="stepimg move">
+                        </div>
+                        <div class="form">
+                            <div class="modelwork">
+                                <div class="record down">
+                                    <p class="headfall">{labels2.ccp2_db_confirmDeleteAffiliation}</p>
+                                </div>
+                                <div class="record down">
+                                    <p class="bold txt moves">{labels2.ccp2_db_reassignVehicles}</p>
+                                    <div class="branchvehicles">
+                                        <template for:each={sections} for:item="section" for:index="index">
+                                            <div key={section.id} class="branchvehicles">
+                                                <p class="size txt">{labels2.ccp2_db_selectAffiliation1}</p>
+                                                <p class="size txt">{labels2.ccp2_db_selectAffiliation2}</p>
+                                                <div class="dropdown">
+                                                    <input type="text" data-id={index} onclick={handlevehChange}
+                                                        class="Inputs1 icon" placeholder={labels2.ccp2_selectPlease}
+                                                        value={section.selectedbranchNameForVehicle} readonly>
+                                                    <template if:true={section.showlist}>
+                                                        <div class="lists2 no-scroll" onclick={handleInsideClick}>
+
+                                                            <template for:each={branchList} for:item="veh">
+                                                                <div key={veh.value} class="list-item"
+                                                                    onclick={handleContactSelect} data-id={veh.value}
+                                                                    data-section-id={index}>
+                                                                    <p>{veh.label}</p>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                                <p class="size txt">{labels2.ccp2_db_selectFromList}</p>
+                                                <div class="vehicles">
+                                                    <div class="scrollbar">
+                                                        <!-- @for future -->
+                                                        <!-- <template if:true={vehicleList.length}>
+                                                        <div class="vehiclesnext">
+                                                            <input type="checkbox" class="checkboxes" onclick={selectallfunction} data-id={index} data-section-id={index}>
+                                                                <p class="labels">すべて</p>
+                                                        </div>
+                                                        </template> -->
+                                                        <template for:each={vehicleList} for:item="vehnew">
+                                                            <div key={vehnew.value} class="vehiclesnext"
+                                                                data-id={vehnew.value}>
+                                                                <input type="checkbox" name="vehiclecheckboxes"
+                                                                    class="checkboxes checkbox-red-border"
+                                                                    onclick={handleCheckboxClick}
+                                                                    data-branch-id={section.selectedValue}
+                                                                    data-id={vehnew.value} data-section-id={index}>
+                                                                <p class="labels">{vehnew.reg}</p>
+                                                            </div>
+                                                        </template>
+                                                        <template if:false={vehicleList.length}>
+                                                            <p class="novehicles">
+                                                                {labels2.ccp2_db_noVehiclesForBranch26}</p>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="addbutton">
+                                        <!-- <img src={addButton} alt="Add Button" class="add-button" onclick={handleAddNewSection}> -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="add-button"
+                                            onclick={handleAddNewSection} width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none">
+                                            <path
+                                                d="M13 7H11V11H7V13H11V17H13V13H17V11H13V7ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z"
+                                                fill="#262626" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="record down">
+                                    <p class="bold txt moves">{labels2.ccp2_db_reassignMembers}</p>
+                                    <div class="branchvehicles">
+                                        <template for:each={sectionUser} for:item="section" for:index="index">
+                                            <div key={section.id} class="branchvehicles">
+                                                <p class="size txt">{labels2.ccp2_db_selectAffiliation3}</p>
+                                                <p class="size txt">{labels2.ccp2_db_selectAffiliation4}</p>
+                                                <div class="dropdown">
+                                                    <input type="text" data-id={index} onclick={handleConChange}
+                                                        class="Inputs1 icon" placeholder={labels2.ccp2_selectPlease}
+                                                        value={section.selectedContactNameForVehicle} readonly>
+                                                    <template if:true={section.showconlist}>
+                                                        <div class="lists2 no-scroll" onclick={handleInsideClick}>
+
+                                                            <template for:each={branchList} for:item="branch">
+                                                                <div key={branch.value} class="list-item"
+                                                                    onclick={handleContactvehSelect}
+                                                                    data-id={branch.value} data-section-id={index}>
+                                                                    <p>{branch.label}</p>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                                <p class="size txt">{labels2.ccp2_db_selectMemberFromList}</p>
+                                                <div class="vehicles">
+                                                    <div class="scrollbar">
+                                                        <!-- @for future -->
+                                                        <!-- <template if:true={ContactList.length}>
+                                                            <div class="vehiclesnext">
+                                                                <input type="checkbox" class="checkboxes" onclick={selectallfunctionUser} data-id={index} data-section-id={index}>
+                                                                    <p class="labels">すべて</p>
+                                                            </div>
+                                                        </template> -->
+                                                        <template for:each={ContactList} for:item="contact">
+                                                            <div key={contact.value} class="vehiclesnext">
+                                                                <input type="checkbox" class="checkboxes"
+                                                                    name="usercheckboxes"
+                                                                    onclick={handleCheckboxClickUser}
+                                                                    data-id={contact.value} data-section-id={index}>
+                                                                <p class="labels">{contact.label}</p>
+                                                            </div>
+                                                        </template>
+                                                        <template if:false={ContactList.length}>
+                                                            <p class="novehicles">{labels2.ccp2_db_noUsersLinked}</p>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="addbutton">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="add-button"
+                                            onclick={handleAddNewSectionUser} width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none">
+                                            <path
+                                                d="M13 7H11V11H7V13H11V17H13V13H17V11H13V7ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z"
+                                                fill="#262626" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-footer">
+                            <div class="cancelbutton btn" onclick={openmodalsure}>
+                                <div class="buttontxt">{labels2.ccp2_db_cancel}</div>
+                            </div>
+                            <template if:false={hasValidSelection}>
+                                <div class="searchbuttondis btn">
+                                    <div class="buttontxt2">{labels2.ccp2_db_next}</div>
+                                </div>
+                            </template>
+                            <template if:true={hasValidSelection}>
+                                <div class="searchbutton btn" onclick={OnfirstStep}>
+                                    <p class="buttontxt2">{labels2.ccp2_db_next}</p>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                    <template if:true={SecondStep}>
+                        <div class="Image">
+                            <img src={stepTwoPicture} alt="Step Two Picture" class="stepimg move2">
+                        </div>
+                        <div class="formsecond">
+                            <div class="second">
+                                <div class="record down">
+                                    <p class="headfall">{labels2.ccp2_db_reassignmentConfirmation25}</p>
+                                </div>
+                                <div class="record down">
+                                    <p class="bold txt">{labels2.ccp2_db_vehicleReassignment25}</p>
+                                    <div class="branchvehicles">
+                                        <template lwc:if={nobranchVehicle}> - </template>
+                                        <template if:true={branchestoVehicleLabel}>
+                                            <template for:each={branchestoVehicleLabel} for:item="data">
+                                                <div key={data.branch} class="branch-container">
+                                                    <p class="bold txt">{data.branch}</p>
+                                                    <template for:each={data.reg} for:item="vehicle">
+                                                        <p key={vehicle} class="names">{vehicle}</p>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="record">
+                                    <p class="bold txt">{labels2.ccp2_db_memberReassignment25}</p>
+                                    <div class="branchvehicles">
+                                        <template lwc:if={nobranchContact}> - </template>
+                                        <template if:true={branchestoUserLabel}>
+                                            <template for:each={branchestoUserLabel} for:item="data">
+                                                <div key={data.branch} class="branch-container">
+                                                    <p class="bold txt">{data.branch}</p>
+                                                    <template for:each={data.users} for:item="user">
+                                                        <p key={user} class="names">{user}</p>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-footer">
+                            <div class="cancelbutton btn" onclick={onPrevStep}>
+                                <div class="buttontxt">{labels2.ccp2_db_edit25}</div>
+                            </div>
+                            <div class="searchbutton btn" onclick={OnSecondStep}>
+                                <div class="buttontxt2">{labels2.ccp2_db_complete25}</div>
+                            </div>
+                        </div>
+                    </template>
+                    <template if:true={ThirdStep}>
+                        <div class="Image" style="margin-top: 22px;">
+                            <img src={stepThirdPicture} alt="Step Third Picture" class="stepimg move2">
+                        </div>
+                        <div class="form-final">
+                            <div class="final">
+                                <p class="txt">{labels2.ccp2_db_affiliationDeleted25}</p>
+                            </div>
+                        </div>
+                        <div class="form-footer">
+                            <div class="searchbutton btn" onclick={FinalStep}>
+                                <p class="buttontxt2">{labels2.ccp2_db_backToAffiliationManagement25}</p>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </div>
+        </div>
+    </div>
+    <template if:true={showsure}>
+        <div class="modal-background-last">
+            <div class="modal-window-small">
+                <div class="warning">
+                    <p class="warntxt">{labels2.ccp2_db_unsavedChangesExit}</p>
+                    <p class="warntxt more"> {labels2.ccp2_db_unsavedChangeExit2}</p>
+                </div>
+                <div class="buttons-small">
+                    <div class="cancelbutton btn" onclick={closemodalsure}>
+                        <p class="buttontxt">{labels2.ccp2_db_no}</p>
+                    </div>
+                    <div class="searchbutton-cancel btn" onclick={onCloseM}>
+                        <div class="buttontxt2">{labels2.ccp2_db_yes}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:true={finalConfirm}>
+        <div class="modal-background-last">
+            <div class="modal-window-small">
+                <div class="warning">
+                    <p class="warntxt">{labels2.ccp2_db_confirmDeleteLocation26}</p>
+                </div>
+                <div class="buttons-small">
+                    <div class="cancelbutton btn" onclick={closemodalfinal}>
+                        <p class="buttontxt">{labels2.ccp2_db_no26}</p>
+                    </div>
+                    <div class="searchbutton-cancel btn" onclick={OnSecondStep}>
+                        <div class="buttontxt2">{labels2.ccp2_db_yes26}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:true={showmissing}>
+        <div class="modal-background-last">
+            <div class="modal-window-small">
+                <div class="warning">
+                    <p class="warntxt">{labels2.ccp2_db_reassignmentNotCompleted26}</p>
+                </div>
+                <div class="buttons-small">
+                    <div class="searchbutton-cancel btn" onclick={closemodalYes}>
+                        <div class="buttontxt2">{labels2.ccp2_db_yes26}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:false={adminFlag}>
+        <div class="modal-background-last">
+            <div class="modal-window-small-dtfsa">
+              <div class="dtfsa-div">
+                <div class="perm">
+                  <p>{labels2.ccp2_dtfsa_noAcc1}</p>
+                  <p>{labels2.ccp2_dtfsa_noAcc2}</p>
+                </div>
+                <button class="search-button" onclick={navigateToHome}>{labels2.ccp2_dtfsa_return}</button>
+              </div>
+            </div>
+          </div>
+    </template>
+</template>

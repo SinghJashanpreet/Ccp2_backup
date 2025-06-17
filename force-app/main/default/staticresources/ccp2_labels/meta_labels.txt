@@ -1,0 +1,53 @@
+Vehicle Module(labelsVehicle): 
+	
+	ccp2_vehicleModal - ccp2_vmo_
+	ccp2_ManualInput - ccp2_mi_
+	ccp2_VehicleCertificateUpload - ccp2_vc_
+	ccp2_VehicleImageUpload - ccp2_vi_
+	ccp2_VehicleListNew - ccp2_vl_
+	ccp2_VehicleDetails - ccp2_vd_
+	ccp2VehicleMaintainenceForm - ccp2_vma_
+	ccp2_vehicleDashboard - ccp2_vda_
+	done(pre)
+	
+User Module(labelsUser):
+	
+	ccp2UserManagement - ccp2_um_
+	ccp_AddUser - ccp_au_
+	done(pre)
+
+Branch Module(labelsBranch):
+	
+	ccp2_branch - ccp2_cb_
+	ccp2AddBranchForm - ccp2_ab_
+	done(imp)
+	ccp2BranchRecordDetail - ccp2_br_
+	ccp2DeleteBranch - ccp2_db_
+	done(pre)
+	
+Basic Info Module(labelsBasicInfo):
+
+	ccp2cancelMembership - ccp2_cm_
+	ccp2_BasicInfo - ccp2_bi_
+	ccp_UserProfile - ccp_up_
+	done(pre)
+	
+Header and Footer Module(labelsHeaderFooter):
+
+	ccp2_FusoHeader - ccp2_fh
+	ccp2_FusoFooter - ccp2_ff
+	ccp2_enquiry - ccp2_en
+	ccp2_faq - ccp2_fa
+	ccp2_notificationCentre - ccp2_nc
+	done(pre)
+
+Top Page, maintainenance, Calendar(infoCenter): 
+
+	ccp2_VehicleMaintenanceCalendar - ccp2_cal_
+	ccp2_createHistoryMaintain - ccp2_ch_
+	ccp2_maintenanceHistory - ccp2_ce_
+	ccp2_Home - ccp2_home_
+	ccp2_einvoice - ccp2_ei_
+	ccp2_dtfsa - ccp2_dtfsa_
+	ccp2_LandingPage -ccp2_lp_
+	done(pre)

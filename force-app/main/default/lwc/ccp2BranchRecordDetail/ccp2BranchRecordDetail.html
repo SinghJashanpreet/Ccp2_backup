@@ -1,0 +1,676 @@
+<template>
+    <template if:true={main}>
+        <div class="main">
+            <div class="half top">
+                <img src={backgroundImagePC} alt="background Image">
+            </div>
+        </div>
+        <div class="half bottom">
+            <div class="center-content">
+                <template if:true={showSpinner}>
+                    <div style="
+                    width: 100%;
+                    height: 430px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    ">
+                        <!-- <lightning-spinner style="background-color: var(slds-g-color-neutral-100-opacity-75, rgba(255, 255, 255, 0.535));" alternative-text="Loading" size="small"></lightning-spinner> -->
+                        <div role="status" class="slds-spinner slds-spinner_small">
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </template>
+                <template if:false={showSpinner}>
+                    <div class="main-content">
+                        <!-- <h1 class="centered-text Text" lwc:if={adminFlag}>{labels2.ccp2_cb_manageAffiliationsAdmin}</h1>
+                                <h1 class="centered-text Text" lwc:else>{labels2.ccp2_cb_manageAffiliationsGen}</h1> -->
+                        <div class="heading" lwc:if={adminFlag}>
+                            {labels2.ccp2_cb_manageAffiliationsAdmin}
+                        </div>
+                        <div class="heading" lwc:else>
+                            {labels2.ccp2_cb_manageAffiliationsGen}
+                        </div>
+                        <template if:true={showDetails}>
+                            <div class="account-info">
+                                <div class="delete" onclick={suremodal}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25"
+                                        fill="none">
+                                        <path
+                                            d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"
+                                            fill="#E10202" />
+                                    </svg>
+                                    <p class="deletetxt">{labels2.ccp2_br_deleteAffiliation}</p>
+                                </div>
+                                <div style="display: flex; align-items:end; gap:16px;">
+                                    <button class="cancel-btn"
+                                        onclick={goToMain}>{labels2.ccp2_br_goToAffiliationManagement}</button>
+                                    <button class="edit-button" onclick={handleChange}>{labels2.ccp2_br_edit}</button>
+                                </div>
+                            </div>
+                            <div class="user-info">
+                                <div class="user-info-head">
+                                    <p>{labels2.ccp2_br_branchDet}</p>
+                                </div>
+                                <div class="data-div">
+                                    <div class="left-div" style="border-right: 1px solid #D9D9D9;">
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_br_companyName}</p>
+                                            <p class="info-text">{CompanyName}</p>
+                                        </div>
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_br_affiliationName}</p>
+                                            <p class="info-text">{branchName}</p>
+                                        </div>
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_br_phoneNumber2}</p>
+                                            <p class="info-text">
+                                                <template lwc:if={hasContact}>
+                                                    <div>{Contact}</div>
+                                                </template>
+                                                <template lwc:else>
+                                                    <div>
+                                                        <p> - </p>
+                                                    </div>
+                                                </template>
+                                            </p>
+                                        </div>
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_br_affiliationMembers}</p>
+                                            <p class="info-text">
+                                                <template lwc:if={hasUsers}>
+                                                    <div class="">
+                                                        <template for:each={contacts} for:item="veh">
+                                                            <div key={veh.Id} class="branch-item">
+                                                                <span>{veh.Name}</span>
+                                                                <br>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                    <!-- <div class="datamain no-scroll">
+                                                        <div
+                                                            style="display: flex; word-break: break-all; width: auto; flex-wrap: wrap;">
+                                                            <template for:each={contactsToShow} for:item="contact">
+                                                                <span key={contact.Id} class="record-item">
+                                                                    <span>{contact.Name}</span>
+                                                                </span>
+                                                            </template>
+                                                            <template if:true={morethanOneContact}>
+                                                                <span class="branch-All" onclick={vehicleopen}>
+                                                                    {labels2.ccp2_br_Other_10} +{moreContactsCount}
+                                                                </span>
+                                                            </template>
+                                                        </div>
+                                                    </div> -->
+                                                </template>
+                                                <template lwc:else>
+                                                    <div class="data center">
+                                                        <p class="dashsize"> - </p>
+                                                    </div>
+                                                </template>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="right-div">
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_br_affiliationNumber}</p>
+                                            <p class="info-text">{siebelcode} - {BranchNumber}</p>
+                                        </div>
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_br_address}</p>
+                                            <p class="info-text">
+                                                <template if:false={isAddress}>
+                                                    <div class="">
+                                                        <template lwc:if={hasPostalAddress}>
+                                                            <div style="display: flex;">
+                                                                <p>〒</p>
+                                                                <p>{postalCode}</p>
+                                                            </div>
+                                                        </template>
+                                                        <p class="pure-u-align-left">{combinedAddress}</p>
+                                                    </div>
+                                                </template>
+                                                <template if:true={isAddress}>
+                                                    -
+                                                </template>
+                                                <!-- <template if:true={isAddress}>
+                                                    <div class="data center">
+                                                        <p class="dashsize"> - </p>
+                                                    </div>
+                                                </template> -->
+                                            </p>
+                                        </div>
+                                        <div class="info-rec">
+                                            <p class="info-label">{labels2.ccp2_br_affiliationVehicles}</p>
+                                            <p class="info-text">
+                                                <template lwc:if={hasVehicles}>
+                                                    <div class="">
+                                                        <!-- <template for:each={vehicle} for:item="veh">
+                                                            <div key={veh.Id} class="record-item">
+                                                                <span>{veh.Name}</span>
+                                                                <br>
+                                                            </div>
+                                                        </template> -->
+                                                        <div
+                                                            style="word-break: break-all; width: auto; display: flex;flex-direction: column;">
+                                                            <template for:each={vehicleByIdData.vehicleNames}
+                                                                for:item="vehicle">
+                                                                <span class="branch-item" key={vehicle.name}
+                                                                    title={vehicle.name}>
+                                                                    {vehicle.name}
+                                                                </span>
+                                                            </template>
+
+                                                            <template if:true={morethanOneBranch}>
+                                                                <span class="branch-All" onclick={vehicleopen}>
+                                                                    {labels2.ccp2_br_Other_10}
+                                                                    +{vehicleByIdData.moreVehiclesCount}
+                                                                </span>
+                                                            </template>
+                                                        </div>
+
+                                                    </div>
+                                                </template>
+                                                <template lwc:else>
+                                                    <div class="data center">
+                                                        <p class="dashsize"> - </p>
+                                                    </div>
+                                                </template>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template if:false={showDetails}>
+                            <div class="account-info">
+                                <div class="acc-left">
+                                    <div class="account-text">
+                                        <p class="acc-label">{labels2.ccp2_br_companyName2}</p>
+                                        <p>{CompanyName}</p>
+                                    </div>
+                                    <div class="account-text">
+                                        <p class="acc-label">{labels2.ccp2_br_affiliationNumber2}</p>
+                                        <p>{siebelcode} - {BranchNumber}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-info">
+                                <div class="user-info-head">
+                                    <p>{labels2.ccp2_br_branchInfo}</p>
+                                </div>
+                                <div class="edit-data-div">
+                                    <div class="record-edit">
+                                        <div class="label-inputs">
+                                            <template if:false={adminFlag}>
+                                                <p class="input-heading">{labels2.ccp2_br_affiliationName}</p>
+                                                <input type="text" value={branchName} name="branch"
+                                                    oninput={handlevalchange} onchange={handleBranchChange}
+                                                    placeholder={labels2.ccp2_ab_enterRequired} maxlength="24"
+                                                    class="Inputs {branchNameClass}" style="cursor: not-allowed;"
+                                                    disabled={isAdmin} required>
+                                            </template>
+                                            <template if:true={adminFlag}>
+                                                <div class="req-rec">
+                                                    <p class="input-heading">{labels2.ccp2_br_affiliationName}</p>
+                                                    <p class="reqtxt">{labels2.ccp2_br_required}</p>
+                                                    <!-- <p class="valid-txt">{labels2.ccp2_ab_maxWid}</p> -->
+                                                </div>
+                                                <div class="input-branch">
+                                                    <input type="text" value={branchName} name="branch"
+                                                        oninput={handlevalchange} onchange={handleBranchChange}
+                                                        placeholder={labels2.ccp2_ab_enterRequired} maxlength="24"
+                                                        class="Inputs {branchNameClass}" required>
+                                                    <template if:true={showerrorbranch}>
+                                                        <p class="txterror">
+                                                            {labels2.ccp2_br_nameMaxLength25}</p>
+                                                    </template>
+                                                    <template if:true={showerrorbranchNull}>
+                                                        <p class="txterror">
+                                                            {labels2.ccp2_br_requiredField25}</p>
+                                                    </template>
+                                                    <template if:true={alreadybranch}>
+                                                        <p class="txterror">{labels2.ccp2_ab_alreadyexists}</p>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_br_phoneNumber2r}</p>
+                                                <p class="valid-txt">{labels2.cpp2_br_fullwid}</p>
+                                            </div>
+                                            <input type="text" name="contactNumber" value={Contact} data-name="contact"
+                                                oninput={handleContactNoChange}
+                                                placeholder="04512345678"
+                                                class="Inputs12 {contactClass}" maxlength="11">
+                                            <p>{labels2.ccp2_br_phoneNumberNote}</p>
+                                        </div>
+                                    </div>
+                                    <div class="record-edit">
+                                        <div class="label-inputs">
+                                            <!-- <p class="input-heading">{labels2.ccp2_br_affiliationMembers}</p> -->
+                                            <template if:false={adminFlag}>
+                                                <div class="input-heading">{labels2.ccp2_br_affiliationMembers}</div>
+                                                <template lwc:if={hasUsers}>
+                                                    <div class="">
+                                                        <template for:each={contacts} for:item="veh">
+                                                            <div key={veh.Id} class="branch-item">
+                                                                <span>{veh.Name}</span>
+                                                                <br>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                                <template lwc:else>
+                                                    <div class="data center">
+                                                        <p class="dashsize"> - </p>
+                                                    </div>
+                                                </template>
+                                            </template>
+                                            <template if:true={adminFlag}>
+                                                <div class="input-heading">{labels2.ccp2_br_affiliationMembers2}</div>
+                                                <div class="inputs-name">
+                                                    <p class="detailUser"> {labels2.ccp2_br_assignMembersToWorkplace}
+                                                    </p>
+                                                    <div class="record-edit-users" style="display: flex; gap:23px;">
+                                                        <div class="comboboxes">
+                                                            <div class="dataDrop">
+                                                                <input type="text" onclick={handleConChange}
+                                                                    class="Inputs1 icon"
+                                                                    placeholder={labels2.ccp2_ab_select} readonly>
+                                                                <template if:true={showList}>
+                                                                    <div class="lists no-scroll"
+                                                                        onclick={handleInsideClick}>
+                                                                        <template for:each={filteredContacts}
+                                                                            for:item="veh">
+                                                                            <div key={veh.value} class="list-item"
+                                                                                onclick={handleContactSelect}
+                                                                                data-id={veh.value}>
+                                                                                <p>{veh.label}</p>
+                                                                            </div>
+                                                                        </template>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+
+
+                                                            <div class="branchrecords">
+                                                                <div class="scrollbar">
+                                                                    <template if:true={hasContacts}>
+                                                                        <template for:each={contacts} for:item="veh">
+                                                                            <div key={veh.Id} class="record-item">
+                                                                                <svg width="24" height="25"
+                                                                                    onclick={handleDeleteContact}
+                                                                                    data-id={veh.Id} class="filtericn"
+                                                                                    viewBox="0 0 24 25" fill="none"
+                                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path
+                                                                                        d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"
+                                                                                        fill="#E10202" />
+                                                                                </svg>
+
+                                                                                <!-- <lightning-icon
+                                                                                    icon-name="utility:close"
+                                                                                    size="x-small"
+                                                                                    alternative-text="Delete"
+                                                                                    onclick={handleDeleteContact}
+                                                                                    data-id={veh.Id}
+                                                                                    class="filtericn"></lightning-icon> -->
+                                                                                <span
+                                                                                    style="width: 80%; margin-top: 1px; word-wrap: break-word;">{veh.Name}</span>
+                                                                                <br>
+                                                                            </div>
+                                                                        </template>
+                                                                        <template for:each={moreContacts}
+                                                                            for:item="veh">
+                                                                            <div key={veh.Id} class="record-item">
+                                                                                <svg width="24" height="25"
+                                                                                    onclick={handleDeleteContact}
+                                                                                    data-id={veh.Id} class="filtericn"
+                                                                                    viewBox="0 0 24 25" fill="none"
+                                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path
+                                                                                        d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"
+                                                                                        fill="#E10202" />
+                                                                                </svg>
+                                                                                <!-- <lightning-icon
+                                                                                    icon-name="utility:close"
+                                                                                    size="x-small"
+                                                                                    alternative-text="Delete"
+                                                                                    onclick={handleDeleteContact}
+                                                                                    data-id={veh.Id}
+                                                                                    class="filtericn"></lightning-icon> -->
+                                                                                <span
+                                                                                    style="width: 80%; margin-top: 1px; ">{veh.Name}</span>
+                                                                                <br>
+                                                                            </div>
+                                                                        </template>
+                                                                    </template>
+                                                                    <template if:false={hasContacts}>
+                                                                        <p class="empty1">
+                                                                            {labels2.ccp2_ab_selectedMember}</p>
+                                                                    </template>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="instructions">
+                                                    <p class="instruct">
+                                                        {labels2.ccp2_br_assignMembersToWorkplace}</p>
+                                                </div> -->
+                                                <!-- <div class="record-edit-users">
+                                                    <div class="comboboxes">
+                                                        <div class="dataC com">
+                                                            <div class="dataDrop2">
+                                                                <input type="text" onclick={handleConChange}
+                                                                    class="Inputs1 icon"
+                                                                    placeholder={labels2.ccp2_ab_select} readonly>
+                                                                <template if:true={showList}>
+                                                                    <div class="lists2 no-scroll"
+                                                                        onclick={handleInsideClick}>
+                                                                        <template for:each={filteredContacts}
+                                                                            for:item="veh">
+                                                                            <div key={veh.value} class="list-item"
+                                                                                onclick={handleContactSelect}
+                                                                                data-id={veh.value}>
+                                                                                <p>{veh.label}</p>
+                                                                            </div>
+                                                                        </template>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="recordsUser">
+                                                        <div class="scrollbar">
+                                                            <template if:true={hasContacts}>
+                                                                <template for:each={contacts} for:item="veh">
+                                                                    <div key={veh.Id} class="record-item">
+                                                                        <lightning-icon icon-name="utility:close"
+                                                                            size="x-small" alternative-text="Delete"
+                                                                            onclick={handleDeleteContact}
+                                                                            data-id={veh.Id}
+                                                                            class="filtericn"></lightning-icon>
+                                                                        <span class="">{veh.Name}</span>
+                                                                        <br>
+                                                                    </div>
+                                                                </template>
+                                                                <template for:each={moreContacts} for:item="veh">
+                                                                    <div key={veh.Id} class="record-item">
+                                                                        <lightning-icon icon-name="utility:close"
+                                                                            size="x-small" alternative-text="Delete"
+                                                                            onclick={handleDeleteContact}
+                                                                            data-id={veh.Id}
+                                                                            class="filtericn"></lightning-icon>
+                                                                        <span class="">{veh.Name}</span>
+                                                                        <br>
+                                                                    </div>
+                                                                </template>
+                                                            </template>
+                                                            <template if:false={hasContacts}>
+                                                                <p class="empty">
+                                                                    {labels2.ccp2_ab_selectedMember}</p>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+
+                                            </template>
+                                        </div>
+                                        <div class="label-inputs">
+                                            <p class="input-heading">{labels2.ccp2_br_affiliationVehicles2}</p>
+                                            <div class="inputs-name">
+                                                <p class="detailUser"> {labels2.ccp2_br_assignVehiclesToWorkplace}</p>
+                                                <div class="record-edit-users">
+                                                    <div class="comboboxes">
+                                                        <div class="dataDrop" style="word-wrap: break-word;">
+                                                            <input type="text" onclick={handlevehChange}
+                                                                class="Inputs1 icon"
+                                                                placeholder={labels2.ccp2_ab_select} readonly>
+                                                            <template if:true={showlist}>
+                                                                <div class="lists" onclick={handleInsideClick}>
+                                                                    <div class="scrollbar2">
+                                                                        <template for:each={filteredVehicles}
+                                                                            for:item="veh">
+                                                                            <div key={veh.value} class="list-item"
+                                                                                onclick={handleVehicleSelect}
+                                                                                data-id={veh.value}>
+                                                                                <p>{veh.label}</p>
+                                                                            </div>
+                                                                        </template>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                        <div class="branchrecords">
+                                                            <div class="scrollbar" style="min-height: 23px;">
+                                                                <template if:true={hasVehicles}>
+                                                                    <template for:each={vehicle} for:item="veh">
+                                                                        <div key={veh.Id} class="record-item">
+                                                                            <svg width="24" height="25"
+                                                                                onclick={handleDeleteVehicle}
+                                                                                data-id={veh.Id} class="filtericn"
+                                                                                viewBox="0 0 24 25" fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                                <path
+                                                                                    d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"
+                                                                                    fill="#E10202" />
+                                                                            </svg>
+                                                                            <!-- <lightning-icon icon-name="utility:close"
+                                                                                size="x-small" alternative-text="Delete"
+                                                                                onclick={handleDeleteVehicle}
+                                                                                data-id={veh.Id}
+                                                                                class="filtericn"></lightning-icon> -->
+                                                                            <span class="vehicleInBox"
+                                                                                style="width: 80%; margin-top: 1px;">{veh.Name}</span>
+                                                                            <br>
+                                                                        </div>
+                                                                    </template>
+                                                                    <template for:each={morevehicles} for:item="veh1">
+                                                                        <div key={veh1.Id} class="record-item">
+                                                                            <svg width="24" height="25"
+                                                                                onclick={handleDeleteVehicle}
+                                                                                data-id={veh1.Id} class="filtericn"
+                                                                                viewBox="0 0 24 25" fill="none"
+                                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                                <path
+                                                                                    d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"
+                                                                                    fill="#E10202" />
+                                                                            </svg>
+                                                                            <!-- <lightning-icon icon-name="utility:close"
+                                                                                size="x-small" alternative-text="Delete"
+                                                                                onclick={handleDeleteVehicle}
+                                                                                data-id={veh1.Id}
+                                                                                class="filtericn"></lightning-icon> -->
+                                                                            <span style="width: 80%; margin-top: 1px;"
+                                                                                class="vehicleInBox">{veh1.Name}</span>
+                                                                        </div>
+                                                                    </template>
+                                                                </template>
+                                                                <template if:false={hasVehicles}>
+                                                                    <p class="empty1">{labels2.ccp2_br_selectedvehicles}
+                                                                    </p>
+                                                                    <!-- {labels2.ccp2_ab_selectedVehiclePlaceholder} -->
+                                                                </template>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-info">
+                                <div class="user-info-head">
+                                    <p>{labels2.ccp2_br_branAdd}</p>
+                                </div>
+                                <div class="edit-data-div">
+                                    <div class="record-edit">
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_br_postCode}</p>
+                                                <p class="valid-txt">{labels2.ccp2_br_val_7}</p>
+                                            </div>
+                                            <div class="pin">
+                                                <p>〒</p>
+                                                <input type="text" value={postalCode} oninput={handlevalidationpostal}
+                                                    maxlength="7" placeholder={labels2.ccp2_ab_enterPostalCode}
+                                                    class="Inputs12postal {addressClass}">
+                                            </div>
+                                            <p class="valid-txt">{labels2.ccp2_br_postValid}</p>
+                                        </div>
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_br_prefecture}</p>
+                                                <p class="valid-txt">{labels2.ccp2_br_max06}</p>
+                                            </div>
+                                            <input type="text" value={prefectures} onchange={handlePrefectureChange}
+                                                oninput={handlevalchange}
+                                                placeholder={labels2.ccp2_ab_examplePrefecture}
+                                                class="Inputs12 {addressClass}" maxlength="6">
+                                        </div>
+                                    </div>
+                                    <div class="record-edit">
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_br_cityTown}</p>
+                                                <p class="valid-txt">{labels2.ccp2_br_maxWid}</p>
+                                            </div>
+                                            <input type="text" value={municipalities}
+                                                onchange={handlemunicipalitiesChange} oninput={handlevalchange}
+                                                placeholder={labels2.ccp2_ab_exampleCity}
+                                                class="Inputs12 {addressClass}" maxlength="24">
+                                        </div>
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_br_streetAddress}</p>
+                                                <p class="valid-txt">{labels2.ccp2_br_max40}</p>
+                                            </div>
+                                            <input type="text" value={streetAddress} onchange={handleStreetChange}
+                                                oninput={handlevalchange} placeholder={labels2.ccp2_ab_exampleStreet}
+                                                class="Inputs12 {addressClass}" maxlength="40">
+                                        </div>
+                                    </div>
+                                    <div class="record-edit">
+                                        <div class="label-inputs">
+                                            <div class="req-rec">
+                                                <p class="input-heading">{labels2.ccp2_br_buildingNameCompanyName}</p>
+                                                <p class="valid-txt">{labels2.ccp2_br_maxWid}</p>
+                                            </div>
+                                            <input type="text" value={buildingName} onchange={handlebuildingChange}
+                                                oninput={handlevalchange} placeholder={labels2.ccp2_ab_exampleBuilding}
+                                                class="Inputs12 {addressClass}" maxlength="24">
+                                        </div>
+                                        <div class="label-inputs">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="edit-buttons">
+                                <button class="cancel-btn" onclick={handleCancel}>{labels2.ccp2_br_cancel}</button>
+                                <button class="save-btn" onclick={handleSave}>{labels2.ccp2_br_save}</button>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+    <template if:false={main}>
+        <c-ccp2-Delete-Branch branch-id={branchId} onclosemodal={closesystem}></c-ccp2-Delete-Branch>
+    </template>
+    <template if:true={showCancelModal}>
+        <div class="modal-background-last">
+            <div class="modal-window-small">
+                <div class="warning">
+                    <p class="warntxt clone">{labels2.ccp2_br_unsavedContentExit}</p>
+                    <p class="warntxt more">{labels2.ccp2_br_unsavedContentExit2}</p>
+                </div>
+                <div class="buttons-small">
+                    <div class="cancelbutton btn-cancel" onclick={handleNo}>
+                        <p class="buttontxt">{labels2.ccp2_br_no}</p>
+                    </div>
+                    <div class="searchbutton btn-search" onclick={handleYes}>
+                        <p class="buttontxt2">{labels2.ccp2_br_yes}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:true={showsure}>
+        <div class="modal-background-last">
+            <div class="modal-window-small">
+                <div class="warning">
+                    <p class="warntxt more">{labels2.ccp2_br_deleteAffiliation_text}</p>
+                </div>
+                <div class="buttons-small">
+                    <div class="cancelbutton btn-cancel" onclick={closesure}>
+                        <div class="buttontxt">{labels2.ccp2_br_deleteno}</div>
+                    </div>
+                    <div class="searchbutton btn-search" onclick={checkAndDeleteBranch}>
+                        <div class="buttontxt2">{labels2.ccp2_br_deleteyes}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:true={showModal}>
+        <div class="modal-background-last">
+            <div class="modal-window-loader">
+                <div class="modal-window-text">
+                    <p class="warntxt">{labels2.ccp2_br_affiliationEditSaved25}</p>
+                </div>
+                <div class="btnSave" onclick={handleOk}>
+                    <div class="toeditSave">{labels2.ccp2_br_deleteyes}</div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template if:true={VehiclesModal}>
+        <div class="modal-background">
+            <div class="modal-window-branch">
+                <div class="modal-header-branch">
+                    <div class="count">
+                        <!-- <h1>{vehicleByIdData.branchCount}</h1> -->
+                        <p style='color: var(--black-txt-bg, #262626);
+    font-family: "Noto Sans JP";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 130%;
+    letter-spacing: 0.32px;'>{labels2.ccp2_br_new_vehicles_name}</p>
+                    </div>
+                    <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Close"
+                        onclick={vehiclehClose} class="close-button-branch">
+                    </lightning-icon>
+                </div>
+                <div class="branch-container">
+                    <div class="branch-card" style='color: var(--black-txt-bg, #262626);
+                            
+                            /* JP/PC/H4 */
+                            font-family: "Noto Sans JP";
+                            font-size: 16px;
+                            font-style: normal;
+                            font-weight: 700;
+                            line-height: 130%; /* 20.8px */
+                            letter-spacing: 0.32px;'>
+                        <p>{labels2.ccp2_br_registrationnum}</p>
+                        <p>{labels2.ccp2_br_chassisnum}</p>
+                    </div>
+                    <template for:each={vehicle} for:item="veh">
+                        <div key={veh.Id} class="branch-card">
+                            <p title={veh.Name}> {veh.Name} </p>
+                            <p title={veh.chassis}> {veh.chassis} </p>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

@@ -9,7 +9,7 @@
                <div class="main-calender-container-header">
                   <div class="left-head-container">
                      <p class="calender-heading">{labels2.ccp2_cal_calendar}</p>
-                     <template if:true={showMonthlyCalendar}>
+                     <!-- <template if:true={showMonthlyCalendar}>
                         <div class="Calender-toogle-button">
                            <div class="Calender-button-nouse" style="margin-left: 5px; cursor: not-allowed;">
                               {labels2.ccp2_cal_annual}
@@ -18,10 +18,40 @@
                               {labels2.ccp2_cal_monthly}
                            </button>
                         </div>
-                     </template>
+                     </template> -->
                   </div>
                   <div class="right-head-container">
-                     <div class="filter A" onclick={toggleMaintainTypeSelection}>
+
+                     <div class="filter A" onclick={toogleOpenSort}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+                           <path d="M3 18.5H9V16.5H3V18.5ZM3 6.5V8.5H21V6.5H3ZM3 13.5H15V11.5H3V13.5Z" fill="black" />
+                        </svg>
+                        <p class="ftextNew">{labels2.ccp2_cal_sort_new}</p>
+                        <div class="branch-selection-container-sort" if:true={showSortSelection}
+                           onclick={handleinsideclick}>
+                           <div class="mm-filter-dropdown">
+                              <div class="sort-major">
+                                 <input type="radio" name="sortOption" value="Default" onchange={handleSortChange}
+                                    checked={defaultSort} class="sorting-radio-colors">
+                                 {labels2.ccp2_cal_expiration_nearest_new}
+                              </div>
+                              <div class="sort-major">
+                                 <input type="radio" name="sortOption" value="MaintenanceSort"
+                                    onchange={handleSortChange} checked={SecondSort} class="sorting-radio-colors">
+                                 {labels2.ccp2_cal_maintenance_nearest_new}
+                              </div>
+                           </div>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="Dot-on-click" if:true={SortOneDot} width="6"
+                           height="9" viewBox="0 0 8 9" fill="none">
+                           <circle cx="4" cy="4.5" r="4" fill="#E10202" />
+                        </svg>
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" class="Dot-on-click" if:true={FilterMaintainTypeDot}
+                           width="6" height="9" viewBox="0 0 8 9" fill="none">
+                           <circle cx="4" cy="4.5" r="4" fill="#E10202" />
+                        </svg> -->
+                     </div>
+                     <!-- <div class="filter A" onclick={toggleMaintainTypeSelection}>
                         <svg width="17" height="21" viewBox="0 0 20 21" fill="none" style="cursor: pointer"
                            class="mm-drop-down-icon2" xmlns="http://www.w3.org/2000/svg">
                            <g clip-path="url(#clip0_14998_62367)">
@@ -68,8 +98,8 @@
                            width="6" height="9" viewBox="0 0 8 9" fill="none">
                            <circle cx="4" cy="4.5" r="4" fill="#E10202" />
                         </svg>
-                     </div>
-                     <div class="filter B" onclick={toggleMaintainFactorySelection}>
+                     </div> -->
+                     <!-- <div class="filter B" onclick={toggleMaintainFactorySelection}>
                         <svg width="17" height="21" viewBox="0 0 20 21" style="cursor: pointer" fill="none"
                            class="mm-drop-down-icon2" xmlns="http://www.w3.org/2000/svg">
                            <g clip-path="url(#clip0_14998_62367)">
@@ -116,6 +146,10 @@
                                       margin-right: 4px;">
                                        <div class="color-strip FullC"></div>
                                     </div>
+                                    <div class="box-of-color colorA" if:true={elm.DivLegend3} style="margin-left: auto;
+                                      margin-right: 4px;">
+                                       <div class="color-strip FullA"></div>
+                                    </div>
                                  </div>
                               </template>
                            </div>
@@ -124,36 +158,37 @@
                            width="6" height="9" viewBox="0 0 8 9" fill="none">
                            <circle cx="4" cy="4.5" r="4" fill="#E10202" />
                         </svg>
+                     </div> -->
+                     <div class="filter D" onclick={FilterOpen}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="cursor: pointer"
+                           viewBox="0 0 24 24" fill="none">
+                           <path
+                              d="M7.00848 6H17.0085L11.9985 12.3L7.00848 6ZM4.25848 5.61C6.27848 8.2 10.0085 13 10.0085 13V19C10.0085 19.55 10.4585 20 11.0085 20H13.0085C13.5585 20 14.0085 19.55 14.0085 19V13C14.0085 13 17.7285 8.2 19.7485 5.61C20.2585 4.95 19.7885 4 18.9585 4H5.04848C4.21848 4 3.74848 4.95 4.25848 5.61Z"
+                              fill="#262626" />
+                        </svg>
+                        <p class="ftextNew">{labels2.ccp2_cal_detailed_search}</p>
+                        <div class="branch-selection-container" if:true={showBranchSelection}
+                           onclick={handleinsideclick}>
+                           <div class="mm-filter-dropdown">
+                              <!-- <template for:each={branchOptions} for:item="elm">
+                                <div class="mm-filter-dropdown-rows" key={elm.branchId}>
+                                  <input type="checkbox" name={elm.branchId} checked={elm.selected}
+                                    onchange={handleBranchSelect} style="cursor: pointer;" />
+                                  <p>{elm.branchName}</p>
+                                </div>
+                                </template> -->
+                           </div>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="Dot-on-click" if:true={FilterOneDot} width="6"
+                           height="9" viewBox="0 0 8 9" fill="none">
+                           <circle cx="4" cy="4.5" r="4" fill="#E10202" />
+                        </svg>
                      </div>
                      <div class="filter C" onclick={toggleOthersSelection}>
-                        <svg width="17" height="21" viewBox="0 0 20 21" style="cursor: pointer" fill="none"
-                           class="mm-drop-down-icon2" xmlns="http://www.w3.org/2000/svg">
-                           <g clip-path="url(#clip0_14998_62367)">
-                              <g filter="url(#filter0_d_14998_62367)">
-                                 <path
-                                    d="M17.5 7.3877L15.7375 5.48486L10 11.6657L4.2625 5.48486L2.5 7.3877L10 15.4849L17.5 7.3877Z"
-                                    fill="#262626" />
-                              </g>
-                           </g>
-                           <defs>
-                              <filter id="filter0_d_14998_613677" x="-17.5" y="-14.5151" width="55" height="50"
-                                 filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                 <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                 <feColorMatrix in="SourceAlpha" type="matrix"
-                                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                                 <feOffset />
-                                 <feGaussianBlur stdDeviation="10" />
-                                 <feComposite in2="hardAlpha" operator="out" />
-                                 <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" />
-                                 <feBlend mode="normal" in2="BackgroundImageFix"
-                                    result="effect1_dropShadow_14998_62367" />
-                                 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_14998_62367"
-                                    result="shape" />
-                              </filter>
-                              <clipPath id="clip0_14998_623077">
-                                 <rect width="20" height="20" fill="white" transform="translate(0 0.484863)" />
-                              </clipPath>
-                           </defs>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+                           <path
+                              d="M19.2587 13.48C19.2977 13.16 19.327 12.84 19.327 12.5C19.327 12.16 19.2977 11.84 19.2587 11.52L21.3194 9.87C21.505 9.72 21.5538 9.45 21.4366 9.23L19.4833 5.77C19.3954 5.61 19.2294 5.52 19.0536 5.52C18.995 5.52 18.9364 5.53 18.8875 5.55L16.4557 6.55C15.9478 6.15 15.4009 5.82 14.8051 5.57L14.434 2.92C14.4047 2.68 14.1996 2.5 13.9555 2.5H10.0489C9.80469 2.5 9.5996 2.68 9.5703 2.92L9.19917 5.57C8.60341 5.82 8.05649 6.16 7.54863 6.55L5.11677 5.55C5.05817 5.53 4.99957 5.52 4.94097 5.52C4.77494 5.52 4.60891 5.61 4.52101 5.77L2.56771 9.23C2.44075 9.45 2.49935 9.72 2.68491 9.87L4.74564 11.52C4.70658 11.84 4.67728 12.17 4.67728 12.5C4.67728 12.83 4.70658 13.16 4.74564 13.48L2.68491 15.13C2.49935 15.28 2.45051 15.55 2.56771 15.77L4.52101 19.23C4.60891 19.39 4.77494 19.48 4.95074 19.48C5.00934 19.48 5.06794 19.47 5.11677 19.45L7.54863 18.45C8.05649 18.85 8.60341 19.18 9.19917 19.43L9.5703 22.08C9.5996 22.32 9.80469 22.5 10.0489 22.5H13.9555C14.1996 22.5 14.4047 22.32 14.434 22.08L14.8051 19.43C15.4009 19.18 15.9478 18.84 16.4557 18.45L18.8875 19.45C18.9461 19.47 19.0047 19.48 19.0633 19.48C19.2294 19.48 19.3954 19.39 19.4833 19.23L21.4366 15.77C21.5538 15.55 21.505 15.28 21.3194 15.13L19.2587 13.48ZM17.3249 11.77C17.364 12.08 17.3737 12.29 17.3737 12.5C17.3737 12.71 17.3542 12.93 17.3249 13.23L17.1882 14.36L18.0574 15.06L19.1122 15.9L18.4285 17.11L17.1882 16.6L16.1725 16.18L15.2935 16.86C14.8735 17.18 14.4731 17.42 14.0727 17.59L13.0374 18.02L12.8811 19.15L12.6858 20.5H11.3185L11.1329 19.15L10.9767 18.02L9.94142 17.59C9.52146 17.41 9.1308 17.18 8.74014 16.88L7.85139 16.18L6.81614 16.61L5.5758 17.12L4.89214 15.91L5.94692 15.07L6.81614 14.37L6.67941 13.24C6.65011 12.93 6.63058 12.7 6.63058 12.5C6.63058 12.3 6.65011 12.07 6.67941 11.77L6.81614 10.64L5.94692 9.94L4.89214 9.1L5.5758 7.89L6.81614 8.4L7.83186 8.82L8.71084 8.14C9.1308 7.82 9.53123 7.58 9.93166 7.41L10.9669 6.98L11.1232 5.85L11.3185 4.5H12.676L12.8616 5.85L13.0179 6.98L14.0531 7.41C14.4731 7.59 14.8637 7.82 15.2544 8.12L16.1432 8.82L17.1784 8.39L18.4188 7.88L19.1024 9.09L18.0574 9.94L17.1882 10.64L17.3249 11.77ZM12.0022 8.5C9.84376 8.5 8.09555 10.29 8.09555 12.5C8.09555 14.71 9.84376 16.5 12.0022 16.5C14.1606 16.5 15.9088 14.71 15.9088 12.5C15.9088 10.29 14.1606 8.5 12.0022 8.5ZM12.0022 14.5C10.9278 14.5 10.0489 13.6 10.0489 12.5C10.0489 11.4 10.9278 10.5 12.0022 10.5C13.0765 10.5 13.9555 11.4 13.9555 12.5C13.9555 13.6 13.0765 14.5 12.0022 14.5Z"
+                              fill="#262626" />
                         </svg>
                         <p class="ftextNew" onclick={toggleOthersSelection}>{labels2.ccp2_cal_others}</p>
                         <div class="branch-selection-container-3" if:true={showOthersSelection}
@@ -179,34 +214,15 @@
                            <circle cx="4" cy="4.5" r="4" fill="#E10202" />
                         </svg>
                      </div>
-                     <div class="filter D" onclick={FilterOpen}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="cursor: pointer"
-                           viewBox="0 0 24 24" fill="none">
-                           <path
-                              d="M7.00848 6H17.0085L11.9985 12.3L7.00848 6ZM4.25848 5.61C6.27848 8.2 10.0085 13 10.0085 13V19C10.0085 19.55 10.4585 20 11.0085 20H13.0085C13.5585 20 14.0085 19.55 14.0085 19V13C14.0085 13 17.7285 8.2 19.7485 5.61C20.2585 4.95 19.7885 4 18.9585 4H5.04848C4.21848 4 3.74848 4.95 4.25848 5.61Z"
-                              fill="#262626" />
-                        </svg>
-                        <p class="ftextNew">{labels2.ccp2_cal_detailed_search}</p>
-                        <div class="branch-selection-container" if:true={showBranchSelection}
-                           onclick={handleinsideclick}>
-                           <div class="mm-filter-dropdown">
-                              <!-- <template for:each={branchOptions} for:item="elm">
-                                <div class="mm-filter-dropdown-rows" key={elm.branchId}>
-                                  <input type="checkbox" name={elm.branchId} checked={elm.selected}
-                                    onchange={handleBranchSelect} style="cursor: pointer;" />
-                                  <p>{elm.branchName}</p>
-                                </div>
-                                </template> -->
-                           </div>
-                        </div>
-                     </div>
                   </div>
                </div>
+               <hr class="Calender-top-divider" />
                <template if:true={isShowVehicleFilterPills}>
                   <div class="calender-pills">
                      <P style="width: 100px; text-wrap: nowrap;">{labels2.ccp2_cal_filter_conditions}</P>
                      <div class="pill-content">
                         <template if:true={jsonParameterForVehicleClassWithoutString.vehicleName}>
+                           <p class="pill-tag">{labels2.ccp2_cal_vehicle_name} :</p>
                            <template for:each={jsonParameterForVehicleClassWithoutString.vehicleName}
                               for:item="vehicleN">
                               <span key={vehicleN} class="pill">
@@ -219,6 +235,7 @@
                            </template>
                         </template>
                         <template if:true={jsonParameterForVehicleClassWithoutString.vehicleType}>
+                           <p class="pill-tag">{labels2.ccp2_cal_vehicle_type} :</p>
                            <template for:each={jsonParameterForVehicleClassWithoutString.vehicleType}
                               for:item="vehicleT">
                               <span key={vehicleT} class="pill">
@@ -229,6 +246,42 @@
                                  </button>
                               </span>
                            </template>
+                        </template>
+                        <template if:true={jsonParameterForVehicleClassWithoutString.serviceType}>
+                           <p class="pill-tag">{labels2.ccp2_cal_maintenance_type_new} :</p>
+                           <template for:each={jsonParameterForVehicleClassWithoutString.serviceType}
+                              for:item="serviceT">
+                              <span key={serviceT} class="pill">
+                                 <span class="pill__label">{serviceT}</span>
+                                 <button class="pill__remove" data-key='serviceType' data-value={serviceT}
+                                    onclick={removePillsfilter}>
+                                    ✖
+                                 </button>
+                              </span>
+                           </template>
+                        </template>
+                        <template if:true={jsonParameterForVehicleClassWithoutString.serviceFactory}>
+                           <p class="pill-tag">{labels2.ccp2_cal_entry_type_new} :</p>
+                           <template for:each={jsonParameterForVehicleClassWithoutString.serviceFactory}
+                              for:item="serviceF">
+                              <span key={serviceF} class="pill">
+                                 <span class="pill__label">{serviceF}</span>
+                                 <button class="pill__remove" data-key='serviceFactory' data-value={serviceF}
+                                    onclick={removePillsfilter}>
+                                    ✖
+                                 </button>
+                              </span>
+                           </template>
+                        </template>
+                        <template if:true={jsonParameterForVehicleClassWithoutString.favVehicle}>
+                           <p class="pill-tag">{labels2.ccp2_cal_filter_fav_head} :</p>
+                           <span class="pill">
+                              <span class="pill__label">{labels2.ccp2_cal_filter_fav}</span>
+                              <button class="pill__remove" data-key='favVehicle' data-value={favVehicle}
+                                 onclick={removePillsfilter}>
+                                 ✖
+                              </button>
+                           </span>
                         </template>
                      </div>
                      <!-- <div class="pills">
@@ -244,14 +297,13 @@
                        </div> -->
                   </div>
                </template>
-               <hr class="Calender-top-divider" />
                <div class="main-calender-container-body">
                   <div
                      style="display: grid;  grid-template-columns: minmax(119px, 200px) 1fr; gap: 4px; margin-bottom: 8px">
                      <div class="calender-information-card">
                         <div class="calender-info">
                            <div class="Cal-info-count">
-                              <p style="font-size: 16px; font-weight:700;" onclick={openMaintainVehicleModal}>車検満了日30日前
+                              <p style="font-size: 16px; font-weight:700;">{labels2.ccp2_cal_instruction_30days}
                               </p>
                               <p class="calender-big-text">{vehicleNearExpCount}{labels2.ccp2_cal_units}</p>
                            </div>
@@ -465,8 +517,6 @@
                      </div>
                   </div>
 
-
-
                   <template if:false={showEmptyUi}>
                      <div class="calendar-middle-container" style="
                        display: flex;
@@ -478,6 +528,7 @@
                        max-height: 440px;
                        overflow: auto;
                        padding: 0px 4px;
+                       scrollbar-gutter: stable;
                        ">
                         <div if:true={isLoading} style="
                           width: 100%;
@@ -497,16 +548,20 @@
                               <div
                                  style="display: grid; align-items: stretch; grid-template-columns: minmax(119px, 200px) repeat(31, 1fr);"
                                  key={elm.Id}>
-                                 <div class="calendar-middle-items-left" data-id={elm.vehicle.Id}>
+                                 <div class="calendar-middle-items-left" data-id={elm.vehicle.Id}
+                                    onclick={handleEventWithVehicleId2}>
                                     <div class="calendar-vehicle-items">
                                        <div style="display: flex; gap: 7px; flex-shrink:0;">
                                           <lightning-icon icon-name={elm.favIcon} class="back-icon-new"
                                              style="margin-top: 3px;" alternative-text="Star" size="x-small"
                                              data-vehicle-id={elm.Id}></lightning-icon>
                                           <div class="Vehicle-Text">
-                                             <p title={elm.Registration_Number__c} style="width:max-content;">{elm.ellipseRegNum}</p>
-                                             <P title={elm.vehicle.Door_Number__c} style="width:max-content;">{elm.ellipseDoorNumber}</P>
-                                             <p class="card-text-instructions" title={elm.combinedNameType}>{elm.ellipseCombinedNameType}</p>
+                                             <p title={elm.Registration_Number__c} style="width:max-content;">
+                                                {elm.ellipseRegNum}</p>
+                                             <P title={elm.vehicle.Door_Number__c} style="width:max-content;">
+                                                {elm.ellipseDoorNumber}</P>
+                                             <p class="card-text-instructions" title={elm.combinedNameType}>
+                                                {elm.ellipseCombinedNameType}</p>
                                              <!-- <p class="card-text-instructions" title={elm.combinedNameType}>{elm.vehicle.Vehicle_Name__c} -
                                                 {elm.vehicle.Vehicle_Type__c}</p> -->
                                           </div>
@@ -526,7 +581,7 @@
                                     <div for:each={date.maintenance} style="display: flex;" for:item="maintenance"
                                        key={maintenance.Id}>
                                        <div if:false={maintenance.showNulSpace} class={maintenance.cssClass}
-                                          data-id={date.date} data-vehicle-id={elm.vehicle.Id}
+                                          data-id={date.date} data-vehicle-id={maintenance.Id} data-vehicle-idd={elm.vehicle.Id}
                                           data-reg-no={elm.Registration_Number__c} onclick={openMaintainVehicleModal}
                                           style={maintenance.width}>
                                           {maintenance.serviceType}
@@ -563,6 +618,11 @@
                </div>
                <div class="main-calender-container-footer">
                   <div class="footer-left">
+                     <div class="calender-legends" style="border-right: 1px solid #d9d9d9;
+    padding-right: 6px;
+    color: #7b7b7b;">
+                        {labels2.ccp2_val_storage_destination_type_223}
+                     </div>
                      <div class="calender-legends">
                         <div class="box-of-color colorA">
                            <div class="color-strip FullA"></div>
@@ -581,11 +641,10 @@
                         </div>
                         <P class="legend-title">{labels2.ccp2_cal_fuso_others}</P>
                      </div>
-                     <div class="calender-legends">
-                        <div class="box-of-color colorF">
-                           <div class="color-strip fullF"></div>
-                        </div>
-                        <P class="legend-title">{labels2.ccp2_cal_fuso_legend_history}</P>
+                     <div class="calender-legends" style="border-right: 1px solid #d9d9d9;
+    padding-right: 6px;
+    color: #7b7b7b;">
+                        {labels2.ccp2_val_calendar_setting_date_223}
                      </div>
                      <div class="calender-legends">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -593,22 +652,28 @@
                               d="M9.16797 12.4243C9.16797 11.9641 9.54106 11.591 10.0013 11.591C10.4615 11.591 10.8346 11.9641 10.8346 12.4243V13.3334C10.8346 13.7937 10.4615 14.1667 10.0013 14.1667C9.54106 14.1667 9.16797 13.7937 9.16797 13.3334V12.4243ZM9.16797 6.66675C9.16797 6.20651 9.54106 5.83341 10.0013 5.83341C10.4615 5.83341 10.8346 6.20651 10.8346 6.66675V10.0001C10.8346 10.4603 10.4615 10.8334 10.0013 10.8334C9.54106 10.8334 9.16797 10.4603 9.16797 10.0001V6.66675ZM9.99297 1.66675C5.39297 1.66675 1.66797 5.40008 1.66797 10.0001C1.66797 14.6001 5.39297 18.3334 9.99297 18.3334C14.6013 18.3334 18.3346 14.6001 18.3346 10.0001C18.3346 5.40008 14.6013 1.66675 9.99297 1.66675ZM10.0013 16.6667C6.31797 16.6667 3.33464 13.6834 3.33464 10.0001C3.33464 6.31675 6.31797 3.33341 10.0013 3.33341C13.6846 3.33341 16.668 6.31675 16.668 10.0001C16.668 13.6834 13.6846 16.6667 10.0013 16.6667Z"
                               fill="#E10202" />
                         </svg>
-                        <P class="legend-title">{labels2.ccp2_cal_inspection_expiry}</P>
+                        <P class="legend-title">{labels2.ccp2_val_error_223}</P>
                      </div>
+                     <div class="calender-legends">
+                        <div class="box-of-color colorF">
+                        </div>
+                        <P class="legend-title">{labels2.ccp2_cal_fuso_legend_history}</P>
+                     </div>
+
                   </div>
                   <div class="footer-cal-right">
                      <div style="display: flex; align-items:center; gap: 5px;">
                         <P class="txt-new-grey">{vehiclesCount}{labels2.ccp2_cal_units}</P>
                         <P class="txt-new-normal">{labels2.ccp2_cal_registered}</P>
                      </div>
-                     <div class="mm-pagination-container">
+                     <!-- <div class="mm-pagination-container">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                            <path
                               d="M18 15V18H6V15H4V18C4 19.1 4.9 20 6 20H18C19.1 20 20 19.1 20 18V15H18ZM17 11L15.59 9.59L13 12.17V4H11V12.17L8.41 9.59L7 11L12 16L17 11Z"
                               fill="#262626" />
                         </svg>
                         <P class="download-font">ダウンロード</P>
-                        <!-- <template if:true={hasvehiclesandateItems}>
+                        <template if:true={hasvehiclesandateItems}>
                            <div class="mm-big-div-page">
                               <button class="mm-nav-button" onclick={handlePreviousPage2}
                                  disabled={isPreviousDisabled2}>
@@ -631,9 +696,15 @@
                                     size="xx-small"></lightning-icon>
                               </button>
                            </div>
-                        </template> -->
-                     </div>
+                        </template>
+                     </div> -->
                   </div>
+               </div>
+               <div class="notice-next-year-holiday" lwc:if={showNoticeForFusoHoliday}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
+                     <path d="M9.16797 12.9246C9.16797 12.4643 9.54106 12.0912 10.0013 12.0912C10.4615 12.0912 10.8346 12.4643 10.8346 12.9246V13.8337C10.8346 14.2939 10.4615 14.667 10.0013 14.667C9.54106 14.667 9.16797 14.2939 9.16797 13.8337V12.9246ZM9.16797 7.16699C9.16797 6.70675 9.54106 6.33366 10.0013 6.33366C10.4615 6.33366 10.8346 6.70675 10.8346 7.16699V10.5003C10.8346 10.9606 10.4615 11.3337 10.0013 11.3337C9.54106 11.3337 9.16797 10.9606 9.16797 10.5003V7.16699ZM9.99297 2.16699C5.39297 2.16699 1.66797 5.90033 1.66797 10.5003C1.66797 15.1003 5.39297 18.8337 9.99297 18.8337C14.6013 18.8337 18.3346 15.1003 18.3346 10.5003C18.3346 5.90033 14.6013 2.16699 9.99297 2.16699ZM10.0013 17.167C6.31797 17.167 3.33464 14.1837 3.33464 10.5003C3.33464 6.81699 6.31797 3.83366 10.0013 3.83366C13.6846 3.83366 16.668 6.81699 16.668 10.5003C16.668 14.1837 13.6846 17.167 10.0013 17.167Z" fill="#E10202"/>
+                  </svg>
+                  <span>{nextYearNoticeText}年1月～の 「三菱ふそう工場休日」 は確定しておりません。確定後反映させていただきますのでご了承ください。（※ {currentYearNoticeText}年10月頃反映予定）</span>
                </div>
             </div>
          </div>
@@ -644,7 +715,7 @@
       <div class="modal-background-last">
          <div class="modal-window-small">
             <div class="header-calender-modal">
-               <p style="font-size: 16px; font-weight: 700;">{vehicleModalobj.RegistrationNumber}</p>
+               <p style="font-size: 16px; font-weight: 400;">{vehicleModalobj.RegistrationNumber}</p>
                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   style="cursor: pointer" onclick={closeMVehicleModal}>
                   <path
@@ -654,20 +725,43 @@
             </div>
             <hr class="divider-main-to-be">
             <template if:true={showModalload}>
-               <div class="loader-img-dev" style="width: 300px;">
+               <div class="loader-img-dev" style="width: 100%;">
                   <div class="loaderimages"></div>
                </div>
             </template>
             <template if:false={showModalload}>
-               <c-ccp2-_-Calendar-Maintainence-Register-Modal vehicle-id={vehId} onback={closeMVehicleModal}></c-ccp2-_-Calendar-Maintainence-Register-Modal>
-               <!-- <div class="Calender-details-container">
-                  <div class="Data-record">
-                     <p class="title">{labels2.ccp2_cal_customer_management_number}</p>
-                     <p class="data">{vehicleModalobj.DoorNumber}</p>
-                  </div>
+               <c-ccp2-_-Calendar-Maintainence-Register-Modal vehicle-id={vehId}
+                  onback={closeMVehicleModal}></c-ccp2-_-Calendar-Maintainence-Register-Modal>
+            </template>
+         </div>
+      </div>
+   </template>
+
+   <template if:true={showVehicleModal2}>
+      <div class="modal-background-last">
+         <div class="modal-window-small">
+            <div class="header-calender-modal2">
+               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  style="cursor: pointer" onclick={closeMVehicleModal2}>
+                  <path
+                     d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                     fill="#262626" />
+               </svg>
+            </div>
+            <template if:true={showModalload2}>
+               <div class="loader-img-dev2">
+                  <div class="loaderimages"></div>
+               </div>
+            </template>
+            <template if:false={showModalload2}>
+               <div class="Calender-details-container2">
                   <div class="Data-record">
                      <p class="title">{labels2.ccp2_cal_registration_number}</p>
                      <p class="data">{vehicleModalobj.RegistrationNumber}</p>
+                  </div>
+                  <div class="Data-record">
+                     <p class="title">{labels2.ccp2_cal_customer_management_number}</p>
+                     <p class="data">{vehicleModalobj.DoorNumber}</p>
                   </div>
                   <div class="Data-record">
                      <p class="title">{labels2.ccp2_cal_vehicle_name}</p>
@@ -679,79 +773,205 @@
                   </div>
                   <div class="Data-record">
                      <p class="title">{labels2.ccp2_cal_affiliation}</p>
-                     <p class="data">{vehicleModalobj.displaybranches}</p>
+                     <p class="data" style="margin-right: 20px;">{vehicleModalobj.displaybranches}</p>
+                  </div>
+                  <div class="Data-record">
+                     <div class="exp-div title">
+                        <p>{labels2.ccp2_cal_expCalmodal}</p>
+                        <template if:true={vehicleModalobj.isExpiringSoon}>
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                              <path d="M7.33203 9.93956C7.33203 9.57137 7.63051 9.27289 7.9987 9.27289C8.36689 9.27289 8.66536 9.57137 8.66536 9.93956V10.6668C8.66536 11.035 8.36689 11.3335 7.9987 11.3335C7.63051 11.3335 7.33203 11.035 7.33203 10.6668V9.93956ZM7.33203 5.3335C7.33203 4.96531 7.63051 4.66683 7.9987 4.66683C8.36689 4.66683 8.66536 4.96531 8.66536 5.3335V8.00016C8.66536 8.36835 8.36689 8.66683 7.9987 8.66683C7.63051 8.66683 7.33203 8.36835 7.33203 8.00016V5.3335ZM7.99203 1.3335C4.31203 1.3335 1.33203 4.32016 1.33203 8.00016C1.33203 11.6802 4.31203 14.6668 7.99203 14.6668C11.6787 14.6668 14.6654 11.6802 14.6654 8.00016C14.6654 4.32016 11.6787 1.3335 7.99203 1.3335ZM7.9987 13.3335C5.05203 13.3335 2.66536 10.9468 2.66536 8.00016C2.66536 5.0535 5.05203 2.66683 7.9987 2.66683C10.9454 2.66683 13.332 5.0535 13.332 8.00016C13.332 10.9468 10.9454 13.3335 7.9987 13.3335Z" fill="#E10202"/>
+                           </svg>
+                        </template>
+                     </div>
+                     <p class="data" style="margin-right: 20px;">{vehicleModalobj.expDate}</p>
                   </div>
                </div>
-               <div class="link-calender" style="padding: 10px 0px;">
-                  <p class="link-of-redirect" data-id={vehicleModalobj.vehicleId} onclick={gotodetailsPage}>
+               <div class="link-calender" style="padding-top: 16px;
+    padding-right: 32px;
+    padding-bottom: 24px;">
+                  <p class="link-of-redirect2" data-id={vehicleModalobj.vehicleId} onclick={gotodetailsPage}>
                      {labels2.ccp2_cal_detailed_information}</p>
-               </div> -->
+               </div>
             </template>
-            <!-- <div class="buttons-small">
-               <div class="footer-buttons-item" data-id={vehicleModalobj.vehicleId} onclick={gotoMaintainencePage}>
-                  <svg width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                     <path
-                        d="M16 2.5H15V0.5H13V2.5H5V0.5H3V2.5H2C0.89 2.5 0.00999999 3.4 0.00999999 4.5L0 18.5C0 19.6 0.89 20.5 2 20.5H16C17.1 20.5 18 19.6 18 18.5V4.5C18 3.4 17.1 2.5 16 2.5ZM16 18.5H2V8.5H16V18.5ZM16 6.5H2V4.5H16V6.5ZM6 12.5H4V10.5H6V12.5ZM10 12.5H8V10.5H10V12.5ZM14 12.5H12V10.5H14V12.5ZM6 16.5H4V14.5H6V16.5ZM10 16.5H8V14.5H10V16.5ZM14 16.5H12V14.5H14V16.5Z"
-                        fill="black" />
-                  </svg>
-                  <span>{labels2.ccp2_cal_maintenance_schedule_registration}</span>
-               </div>
-               <div class="footer-buttons-item" data-id={vehicleModalobj.vehicleId} onclick={gotoHistoryPage}>
-                  <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                     <path
-                        d="M0.933594 4H13V6H0.933594V4ZM0.933594 2H19V0H0.933594V2ZM0.933594 10H7.93359V8H0.933594V10ZM15.9436 6.87L16.6536 6.16C17.0436 5.77 17.6736 5.77 18.0636 6.16L18.7736 6.87C19.1636 7.26 19.1636 7.89 18.7736 8.28L18.0636 8.99L15.9436 6.87ZM15.2336 7.58L9.93359 12.88V15H12.0536L17.3536 9.7L15.2336 7.58Z"
-                        fill="black" />
-                  </svg>
-                  <span>{labels2.ccp2_cal_maintenance_history_registration}</span>
-               </div>
-            </div> -->
          </div>
       </div>
    </template>
+
    <template if:true={colordetailsModal}>
       <div class="modal-background-last">
-         <div class="modal-window-small-color">
-            <div class={element.BoxStrip}></div>
-            <div class={element.BoxColor}>
-               <p>{labels2.ccp2_cal_registration_sample}</p>
-               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  style="cursor: pointer" onclick={CloseColorDetailModal}>
-                  <path
-                     d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
-                     fill="#262626" />
-               </svg>
-            </div>
-            <div class="Calender-details-container-color">
-               <div class="Data-record">
-                  <p class="title-color">{labels2.ccp2_cal_customer_management_number}</p>
-                  <p class="data-color">{labels2.ccp2_cal_vehicle_sample1}</p>
-               </div>
-               <div class="Data-record">
-                  <p class="title-color">{labels2.ccp2_cal_registration_number}</p>
-                  <p class="data-color">{labels2.ccp2_cal_registration_sample}</p>
-               </div>
-               <div class="Data-record">
-                  <p class="title-color">{labels2.ccp2_cal_vehicle_name}</p>
-                  <p class="data-color">{labels2.ccp2_cal_fuso}</p>
-               </div>
-               <div class="Data-record">
-                  <p class="title-color">{labels2.ccp2_cal_vehicle_type}</p>
-                  <p class="data-color">{labels2.ccp2_cal_vehicle_small}</p>
-               </div>
-               <div class="Data-record">
-                  <p class="title-color">{labels2.ccp2_cal_affiliation}</p>
-                  <p class="data-color">{labels2.ccp2_cal_branch_shinagawa}</p>
-               </div>
-            </div>
-            <div class="link-calender-color">
-               <p class="link-of-redirect">{labels2.ccp2_cal_detailed_information}</p>
-            </div>
+         <div class="modal-window-small-color" style="margin-bottom: 10px;">
+            <template if:false={showModalload}>
+               <div class={vehiclModalData.BoxStrip}></div>
+               <template if:false={noedit}>
+                  <div class={vehiclModalData.BoxColor}>
+                     <div style="display: flex; gap: 8px;">
+                        <p>{labels2.ccp2_cal_maintenance_info}</p>
+                        <template if:false={schEdit}></template>
+                        <template if:true={schEdit}>
+                           <template if:false={noedit}>
+                              <div class="link-of-redirect" onclick={openNoedit}>{labels2.ccp2_cal_maintenance_infoEdit}</div>
+                           </template>
+                        </template>
+                        
+                     </div>
+                     <svg xmlns="http://www.w3.org/2000/svg" onclick={CloseColorDetailModal} style="cursor: pointer;"
+                        width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path
+                           d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                           fill="#262626" />
+                     </svg>
+                  </div>
+               </template>
+               <template if:true={noedit}>
+                  <div class={vehiclModalData.BoxColor} style="width: 100%;">
+                     <div style="display: flex; gap: 4px;">
+                        <p>{labels2.ccp2_cal_maintenance_info}</p>
+                     </div>
+                     <svg xmlns="http://www.w3.org/2000/svg" onclick={CloseColorDetailModal} style="cursor: pointer;"
+                        width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path
+                           d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                           fill="#262626" />
+                     </svg>
+                  </div>
+               </template>
+            </template>
+            <template if:false={noedit}>
+               <template if:true={showModalload}>
+                  <div class="loader-img-dev">
+                     <div class="loaderimages"></div>
+                  </div>
+               </template>
+               <template if:false={showModalload}>
+                  <div class="Calender-details-container-color">
+                     <div class="Data-record">
+                        <p class="title-color">{labels2.ccp2_cal_maintenance_type}</p>
+                        <template if:true={vehiclModalData.Service_Type__c}>
+                           <p class="data-color">{vehiclModalData.Service_Type__c}</p>
+                        </template>
+                        <template if:false={vehiclModalData.Service_Type__c}>
+                           -
+                        </template>
+                     </div>
+                     <div class="Data-record">
+                        <template if:true={vehiclModalData.isSchedule}>
+                           <p class="title-color">{labels2.ccp2_cal_Sch_date_label}</p>
+                        </template>
+                        <template if:false={vehiclModalData.isSchedule}>
+                           <p class="title-color">{labels2.ccp2_cal_date_label}</p>
+                        </template>
+                        <p class="data-color">{vehiclModalData.DateToShow}</p>
+                     </div>
+                     <div class="Data-record">
+                        <p class="title-color">{labels2.ccp2_cal_entry_label}</p>
+                        <template if:true={vehiclModalData.Service_Factory__c}>
+                           <p class="data-color">{vehiclModalData.Service_Factory__c}</p>
+                        </template>
+                        <template if:false={vehiclModalData.Service_Factory__c}>
+                           -
+                        </template>
+                     </div>
+                     <div class="Data-record">
+                        <p class="title-color">{labels2.ccp2_cal_entry_location}</p>
+                        <template if:false={vehiclModalData.Recieving_Destination_noSearch__c}>
+                           <div if:true={vehiclModalData.Recieving_Destination__c}
+                              style="display: flex; flex-direction: column; gap: 4px">
+                              <template if:true={vehiclModalData.Recieving_Destination__c}>
+                                 <p style="margin-left: 20px;" class="data-color">
+                                    {vehiclModalData.Recieving_Destination__c}</p>
+                                 <!-- <template if:true={vehiclModalData.addressFlag}>
+                                    <P class="data-color" style="margin-left: 20px;">{vehiclModalData.Shipping_address}
+                                    </P>
+                                 </template> -->
+                                 <!-- <template if:true={vehiclModalData.addressFlagFuso}>
+                                    <P class="data-color" style="margin-left: 20px;">{vehiclModalData.addressFuso}</P>
+                                 </template> -->
+                              </template>
+                           </div>
+                           <template if:false={vehiclModalData.Recieving_Destination__c}>
+                              -
+                           </template>
+                        </template>
+                        <template if:true={vehiclModalData.Recieving_Destination_noSearch__c}>
+                           -
+                        </template>
+                     </div>
+                     <div class="Data-record">
+                        <p class="title-color">{labels2.ccp2_cal_entry_location_other}</p>
+                        <template if:false={vehiclModalData.Recieving_Destination_noSearch__c}>
+                           -
+                        </template>
+                        <template if:true={vehiclModalData.Recieving_Destination_noSearch__c}>
+                           <p class="data-color">{vehiclModalData.Recieving_Destination_noSearch__c}</p>
+                        </template>
+                     </div>
+                     <div class="Data-record">
+                        <p class="title-color">実施内容メモ</p>
+                        <template if:false={vehiclModalData.RichText}>
+                           -
+                        </template>
+                        <template if:true={vehiclModalData.RichText}>
+                           <p class="data-color rich-container">
+                              <lightning-formatted-rich-text class="imageren"
+                                 value={vehiclModalData.RichText}></lightning-formatted-rich-text>
+                           </p>
+                        </template>
+                     </div>
+                     <div class="Data-record">
+                        <p class="title-color">添付写真</p>
+                        <template if:false={vehiclModalData.image.length}>
+                           -
+                        </template>
+                        <template if:true={vehiclModalData.image.length}>
+                           <div class="container-main-images">
+                              <template for:each={vehiclModalData.image} for:item="elm">
+                                 <div class="content-item2-image" key={elm.fileName}>
+                                    <img src={elm.fileURL} alt="Unable to Load the Thumbnail!" />
+                                    <!--  <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                     class="content-item2-logo" data-fileurl={elm.fileURL} onclick={handleToggleZoomInImage}
+                                     onkeydown={handleToggleZoomInImage} role="button" tabindex="0">
+                                     <g id="zoom_in" data-fileurl={elm.fileURL}>
+                                       <path id="Vector"
+                                         d="M15.7539 14.2881H14.9639L14.6839 14.0181C15.6639 12.8781 16.2539 11.3981 16.2539 9.78809C16.2539 6.19809 13.3439 3.28809 9.75391 3.28809C6.16391 3.28809 3.25391 6.19809 3.25391 9.78809C3.25391 13.3781 6.16391 16.2881 9.75391 16.2881C11.3639 16.2881 12.8439 15.6981 13.9839 14.7181L14.2539 14.9981V15.7881L19.2539 20.7781L20.7439 19.2881L15.7539 14.2881ZM9.75391 14.2881C7.26391 14.2881 5.25391 12.2781 5.25391 9.78809C5.25391 7.29809 7.26391 5.28809 9.75391 5.28809C12.2439 5.28809 14.2539 7.29809 14.2539 9.78809C14.2539 12.2781 12.2439 14.2881 9.75391 14.2881ZM10.2539 7.28809H9.25391V9.28809H7.25391V10.2881H9.25391V12.2881H10.2539V10.2881H12.2539V9.28809H10.2539V7.28809Z"
+                                         fill="black" data-fileurl={elm.fileURL} />
+                                     </g>
+                                   </svg> -->
+                                    <svg width="26" height="26" viewBox="0 0 40 40" fill="none"
+                                       xmlns="http://www.w3.org/2000/svg" class="content-item2-logo"
+                                       data-fileurl={elm.fileURL} onclick={handleToggleZoomInImage}
+                                       onkeydown={handleToggleZoomInImage} role="button" tabindex="0">
+                                       <rect y="0.0664062" width="40" height="40" rx="10" fill="#262626"
+                                          fill-opacity="0.4" data-fileurl={elm.fileURL} />
+                                       <path
+                                          d="M23.7539 22.3213H22.9639L22.6839 22.0513C23.6639 20.9113 24.2539 19.4313 24.2539 17.8213C24.2539 14.2313 21.3439 11.3213 17.7539 11.3213C14.1639 11.3213 11.2539 14.2313 11.2539 17.8213C11.2539 21.4113 14.1639 24.3213 17.7539 24.3213C19.3639 24.3213 20.8439 23.7313 21.9839 22.7513L22.2539 23.0313V23.8213L27.2539 28.8113L28.7439 27.3213L23.7539 22.3213ZM17.7539 22.3213C15.2639 22.3213 13.2539 20.3113 13.2539 17.8213C13.2539 15.3313 15.2639 13.3213 17.7539 13.3213C20.2439 13.3213 22.2539 15.3313 22.2539 17.8213C22.2539 20.3113 20.2439 22.3213 17.7539 22.3213ZM18.2539 15.3213H17.2539V17.3213H15.2539V18.3213H17.2539V20.3213H18.2539V18.3213H20.2539V17.3213H18.2539V15.3213Z"
+                                          fill="#F4F4F4" data-fileurl={elm.fileURL} />
+                                    </svg>
+
+                                    <div></div>
+                                 </div>
+                              </template>
+                           </div>
+
+                        </template>
+                     </div>
+                  </div>
+                  <div class="link-calender-color">
+                     <p class="link-of-redirect" data-id={vehiclModalData.Vehicle__c} data-type={vehiclModalData.Id}
+                        onclick={gotoMaintainDetail}>{labels2.ccp2_cal_detailed_information}</p>
+                  </div>
+               </template>
+            </template>
+            <template if:true={noedit}>
+               <c-ccp2-_-Calendar-Maintain-Edit-Modal maintainence-id={vehiclModalData.Id} vehicle-id={vehId2} lwc:ref="childCmp"
+                  onback={closenoedit}></c-ccp2-_-Calendar-Maintain-Edit-Modal>
+            </template>
          </div>
       </div>
    </template>
    <template if:true={showFilterModal}>
-      <div class="modal-background-last">
-         <div class="modal-window-Filter-Modal">
+      <div class="modal-background-filter-last">
+         <div class="modal-window-Filter-Modal2">
             <div class="Header-filter-modal">
                <div class="Filter-btns">
                   <div class="Filter-header-button-close">
@@ -762,11 +982,15 @@
             </div>
             <div class="Filter-Name-container">
                <div class="Filter-Picklists">
+                  <div class="highlighted-heading">
+                     <div class="red-bold-line"></div>
+                     <P class="high-heading-text">{labels2.ccp2_cal_filter_maintenance_new}</P>
+                  </div>
                   <div class="Filter-Picklist-ondemand 1">
-                     <h3>{labels2.ccp2_cal_affiliation_destination}</h3>
+                     <h3>{labels2.ccp2_cal_maintenance_type_new}</h3>
                      <div class="dropdown-input-container">
-                        <input class="dropdown-input-container-text" onclick={branchOpen}
-                           placeholder={labels2.ccp2_cal_select} type="text" value={branchesValue} readonly></input>
+                        <input class="dropdown-input-container-text" onclick={toggleServiceType}
+                           placeholder={labels2.ccp2_cal_select} type="text" value={ServiceTypeValue} readonly></input>
                         <svg width="17" height="21" viewBox="0 0 20 21" fill="none" class="mm-drop-down-icon1"
                            xmlns="http://www.w3.org/2000/svg">
                            <g clip-path="url(#clip0_14998_62367)">
@@ -796,13 +1020,13 @@
                               </clipPath>
                            </defs>
                         </svg>
-                        <div class="dropdown-container" if:true={showbranchDropdown} onclick={handleinsideclick}>
+                        <div class="dropdown-container" if:true={showServiceTypeDropdown} onclick={handleinsideclick}>
                            <div class="mm-filter-dropdown">
-                              <template for:each={branchOptions} for:item="elm">
-                                 <div class="mm-filter-dropdown-rows" key={elm.branchId}>
-                                    <input type="checkbox" name={elm.branchId} checked={elm.selected}
-                                       onchange={handleBranchSelect} style="cursor: pointer;" />
-                                    <p>{elm.branchName}</p>
+                              <template for:each={ServiceTypesPicklistValues} for:item="elm">
+                                 <div class="mm-filter-dropdown-rows" key={elm.label}>
+                                    <input type="checkbox" name={elm.label} class="input-filter-list-items"
+                                       checked={elm.selected} onchange={handleServiceTypeSelect} />
+                                    <p>{elm.label}</p>
                                  </div>
                               </template>
                            </div>
@@ -810,10 +1034,11 @@
                      </div>
                   </div>
                   <div class="Filter-Picklist-ondemand 1">
-                     <h3>{labels2.ccp2_cal_vehicle_name}</h3>
+                     <h3>{labels2.ccp2_cal_entry_type_new}</h3>
                      <div class="dropdown-input-container">
-                        <input class="dropdown-input-container-text" onclick={toggleVehicleName}
-                           placeholder={labels2.ccp2_cal_select} type="text" value={vehicleNameValue} readonly></input>
+                        <input class="dropdown-input-container-text" onclick={toggleServiceFactory}
+                           placeholder={labels2.ccp2_cal_select} type="text" value={ServiceFactoryValue}
+                           readonly></input>
                         <svg width="17" height="21" viewBox="0 0 20 21" fill="none" class="mm-drop-down-icon1"
                            xmlns="http://www.w3.org/2000/svg">
                            <g clip-path="url(#clip0_14998_62367)">
@@ -839,6 +1064,59 @@
                                     result="shape" />
                               </filter>
                               <clipPath id="clip0_14998_6236271_12">
+                                 <rect width="20" height="20" fill="white" transform="translate(0 0.484863)" />
+                              </clipPath>
+                           </defs>
+                        </svg>
+                        <div class="dropdown-container" if:true={showServiceFactoryDropdown}
+                           onclick={handleinsideclick}>
+                           <div class="mm-filter-dropdown" style="max-height: 158px;">
+                              <template for:each={ServiceFactoryPicklistValues} for:item="elm">
+                                 <div class="mm-filter-dropdown-rows" key={elm.label}>
+                                    <input type="checkbox" name={elm.label} class="input-filter-list-items"
+                                       checked={elm.selected} onchange={handleServiceFactorySelect} />
+                                    <p>{elm.label}</p>
+                                 </div>
+                              </template>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="highlighted-heading">
+                     <div class="red-bold-line"></div>
+                     <P class="high-heading-text">{labels2.ccp2_cal_filter_vehicle_new}</P>
+                  </div>
+
+                  <div class="Filter-Picklist-ondemand 1">
+                     <h3>{labels2.ccp2_cal_vehicle_name}</h3>
+                     <div class="dropdown-input-container">
+                        <input class="dropdown-input-container-text" onclick={toggleVehicleName}
+                           placeholder={labels2.ccp2_cal_select} type="text" value={vehicleNameValue} readonly></input>
+                        <svg width="17" height="21" viewBox="0 0 20 21" fill="none" class="mm-drop-down-icon1"
+                           xmlns="http://www.w3.org/2000/svg">
+                           <g clip-path="url(#clip0_14998_62367)">
+                              <g filter="url(#filter0_d_14998_62367)">
+                                 <path
+                                    d="M17.5 7.3877L15.7375 5.48486L10 11.6657L4.2625 5.48486L2.5 7.3877L10 15.4849L17.5 7.3877Z"
+                                    fill="#262626" />
+                              </g>
+                           </g>
+                           <defs>
+                              <filter id="filter0_d_14998_6216071_12" x="-17.5" y="-14.5151" width="55" height="50"
+                                 filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                 <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                 <feColorMatrix in="SourceAlpha" type="matrix"
+                                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                 <feOffset />
+                                 <feGaussianBlur stdDeviation="10" />
+                                 <feComposite in2="hardAlpha" operator="out" />
+                                 <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" />
+                                 <feBlend mode="normal" in2="BackgroundImageFix"
+                                    result="effect1_dropShadow_14998_62367" />
+                                 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_14998_62367"
+                                    result="shape" />
+                              </filter>
+                              <clipPath id="clip0_14998_6206271_12">
                                  <rect width="20" height="20" fill="white" transform="translate(0 0.484863)" />
                               </clipPath>
                            </defs>
@@ -903,14 +1181,64 @@
                         </div>
                      </div>
                   </div>
-                  <!-- <div class="Flags-set">
-                    <h3 class="heading-filter-flag"><strong>キーワード</strong></h3>
-                    <div class="checkbox-flg-filter">
-                      <input type="checkbox" class="filter-checkbox-color" value="VehExp"
-                      checked={Expflag} onchange={handleCheckboxChangeForPills}>
-                      <p>車検満了日通知車両</p>
-                    </div>
-                    </div> -->
+                  <div class="Filter-Picklist-ondemand 1">
+                     <h3>{labels2.ccp2_cal_affiliation_destination}</h3>
+                     <div class="dropdown-input-container">
+                        <input class="dropdown-input-container-text" onclick={branchOpen}
+                           placeholder={labels2.ccp2_cal_select} type="text" value={branchesValue} readonly></input>
+                        <svg width="17" height="21" viewBox="0 0 20 21" fill="none" class="mm-drop-down-icon1"
+                           xmlns="http://www.w3.org/2000/svg">
+                           <g clip-path="url(#clip0_14998_62367)">
+                              <g filter="url(#filter0_d_14998_62367)">
+                                 <path
+                                    d="M17.5 7.3877L15.7375 5.48486L10 11.6657L4.2625 5.48486L2.5 7.3877L10 15.4849L17.5 7.3877Z"
+                                    fill="#262626" />
+                              </g>
+                           </g>
+                           <defs>
+                              <filter id="filter0_d_10998_623677_21" x="-17.5" y="-14.5151" width="55" height="50"
+                                 filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                 <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                 <feColorMatrix in="SourceAlpha" type="matrix"
+                                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                 <feOffset />
+                                 <feGaussianBlur stdDeviation="10" />
+                                 <feComposite in2="hardAlpha" operator="out" />
+                                 <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" />
+                                 <feBlend mode="normal" in2="BackgroundImageFix"
+                                    result="effect1_dropShadow_14998_62367" />
+                                 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_14998_62367"
+                                    result="shape" />
+                              </filter>
+                              <clipPath id="clip0_14998_603677_21">
+                                 <rect width="20" height="20" fill="white" transform="translate(0 0.484863)" />
+                              </clipPath>
+                           </defs>
+                        </svg>
+                        <div class="dropdown-container" if:true={showbranchDropdown} onclick={handleinsideclick}>
+                           <div class="mm-filter-dropdown">
+                              <template for:each={branchOptions} for:item="elm">
+                                 <div class="mm-filter-dropdown-rows" key={elm.branchId}>
+                                    <input type="checkbox" name={elm.branchId} checked={elm.selected}
+                                       onchange={handleBranchSelect} style="cursor: pointer;" />
+                                    <p>{elm.branchName}</p>
+                                 </div>
+                              </template>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="Flags-set">
+                     <h3 class="heading-filter-flag">
+                        <!-- <strong>キーワード</strong> -->
+                        {labels2.ccp2_cal_filter_fav_head}
+                     </h3>
+                     <div class="checkbox-flg-filter">
+                        <input type="checkbox" class="filter-checkbox-color" value="favVehicle" checked={favVehicle}
+                           onchange={handleCheckboxChangeForPills}>
+                        <p>{labels2.ccp2_cal_filter_fav}</p>
+                     </div>
+                  </div>
                </div>
             </div>
             <div class="buttons-filter-small">
@@ -971,10 +1299,10 @@
                               </div>
                               <div class="Data-record">
                                  <template if:true={element.isSchedule}>
-                                    <p class="title-color">予定日</p>
+                                    <p class="title-color">{labels2.ccp2_cal_Sch_date_label}</p>
                                  </template>
                                  <template if:false={element.isSchedule}>
-                                    <p class="title-color">実施日</p>
+                                    <p class="title-color">{labels2.ccp2_cal_date_label}</p>
                                  </template>
                                  <template if:true={element.DateToShow}>
                                     <p class="data-color">{element.DateToShow}</p>
@@ -984,7 +1312,7 @@
                                  </template>
                               </div>
                               <div class="Data-record">
-                                 <p class="title-color">入庫区分</p>
+                                 <p class="title-color">{labels2.ccp2_cal_entry_label}</p>
                                  <template if:true={element.Service_Factory__c}>
                                     <p class="data-color">{element.Service_Factory__c}</p>
                                  </template>
@@ -1028,4 +1356,51 @@
          </div>
       </div>
    </template>
+   <div class="modal-background-last" if:true={showZoomInImageModal}>
+      <div class="modal-window-small">
+         <div class="zoomInImageContainer">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+               class="zoomInImageCrossLogo" style="outline: none" onclick={handleToggleZoomInImage}
+               onkeydown={handleToggleZoomInImage} role="button" tabindex="0">
+               <path
+                  d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
+                  fill="black" />
+            </svg>
+            <img src={currentImageUrl} alt="Unable To Open The Image!" />
+            <!-- <div class="zoomInRangeSlider">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="zoom_out">
+                <path
+                  id="Vectore"
+                  d="M15.7539 14.2559H14.9639L14.6839 13.9859C15.6639 12.8459 16.2539 11.3659 16.2539 9.75586C16.2539 6.16586 13.3439 3.25586 9.75391 3.25586C6.16391 3.25586 3.25391 6.16586 3.25391 9.75586C3.25391 13.3459 6.16391 16.2559 9.75391 16.2559C11.3639 16.2559 12.8439 15.6659 13.9839 14.6859L14.2539 14.9659V15.7559L19.2539 20.7459L20.7439 19.2559L15.7539 14.2559ZM9.75391 14.2559C7.26391 14.2559 5.25391 12.2459 5.25391 9.75586C5.25391 7.26586 7.26391 5.25586 9.75391 5.25586C12.2439 5.25586 14.2539 7.26586 14.2539 9.75586C14.2539 12.2459 12.2439 14.2559 9.75391 14.2559ZM7.25391 9.25586H12.2539V10.2559H7.25391V9.25586Z"
+                  fill="black"
+                />
+              </g>
+            </svg>
+            <input type="range" class="custom-range" />
+            <svg
+              width="24"
+              height="25"
+              viewBox="0 0 24 25"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="zoom_ins">
+                <path
+                  id="Vectors"
+                  d="M15.7539 14.2881H14.9639L14.6839 14.0181C15.6639 12.8781 16.2539 11.3981 16.2539 9.78809C16.2539 6.19809 13.3439 3.28809 9.75391 3.28809C6.16391 3.28809 3.25391 6.19809 3.25391 9.78809C3.25391 13.3781 6.16391 16.2881 9.75391 16.2881C11.3639 16.2881 12.8439 15.6981 13.9839 14.7181L14.2539 14.9981V15.7881L19.2539 20.7781L20.7439 19.2881L15.7539 14.2881ZM9.75391 14.2881C7.26391 14.2881 5.25391 12.2781 5.25391 9.78809C5.25391 7.29809 7.26391 5.28809 9.75391 5.28809C12.2439 5.28809 14.2539 7.29809 14.2539 9.78809C14.2539 12.2781 12.2439 14.2881 9.75391 14.2881ZM10.2539 7.28809H9.25391V9.28809H7.25391V10.2881H9.25391V12.2881H10.2539V10.2881H12.2539V9.28809H10.2539V7.28809Z"
+                  fill="black"
+                />
+              </g>
+            </svg>
+          </div> -->
+         </div>
+      </div>
+   </div>
 </template>

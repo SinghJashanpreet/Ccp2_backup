@@ -1,4 +1,4 @@
-<template> 
+<template>
   <div class="main">
     <div class="top">
       <img src={backgroundImagePC} class="img" alt="" />
@@ -9,7 +9,7 @@
         <template if:true={showUserList}>
           <div class="main-content">
             <h2 class="heading padded">{labels2.ccp2_um_user_management}</h2>
-            <div class="footer-buttons padded" style="margin-bottom: 32px">
+            <div class="footer-buttons2 padded" style="margin-bottom: 32px">
               <a href={homeUrl} style="color: white"><button class="button return-button">
                   {labels2.ccp2_um_back_to_top}
                 </button></a>
@@ -30,7 +30,7 @@
               </div>
             </template>
             <template if:false={allUserLoader}>
-              <div class="list-container padded">
+              <div class="list-container2 padded">
                 <template for:each={contactlist} for:item="elm">
                   <div class="list-element" key={elm.contactssId} data-idd={elm.contactssId}
                     data-user={elm.usercontactId} onclick={handleUserClick}>
@@ -67,357 +67,471 @@
             </div>
           </template>
           <template if:false={userDetailsLoader}>
-            <div class="main-content">
+            <div class="main-content" style="display: flex; flex-direction: column; gap: 24px">
               <h1 class="centered-text-inside">
                 {labels2.ccp2_um_member_info}
               </h1>
               <div class="form">
                 <div class="form_container">
-                  <div class="deleteUser" onclick={handleDeleteUser}>
-                    <lightning-icon icon-name="utility:close" size="x-small" variant="container"
-                      alternative-text="Delete User" class="Abtn icon-red" title="Delete User"></lightning-icon>
-                    <p class="deletetext">{labels2.ccp2_um_delete_user}</p>
-                  </div>
-                  <div class="datarec">
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_company_name}</div>
-                      <div class="data">{userDetailData.account.name}</div>
-                    </div>
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_customer_number}</div>
-                      <div class="data">
-                        {userDetailData.account.siebelAccountCode__c}
+                  <div class="account-info">
+                    <div class="acc-left">
+                      <div class="account-text">
+                        <div class="acc-label">
+                          {labels2.ccp2_um_company_name}
+                        </div>
+                        <div class="">{userDetailData.account.name}</div>
                       </div>
-                    </div>
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_name}</div>
-                      <div class="data">{userDetailData.Name}</div>
-                    </div>
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_name_furigana}</div>
-                      <div class="data">
-                        {userDetailData.lastNameKana__c}
-                        {userDetailData.firstNameKana__c}
+                      <div class="account-text">
+                        <div class="acc-label">
+                          {labels2.ccp2_um_customer_number}
+                        </div>
+                        <div class="">
+                          {userDetailData.account.siebelAccountCode__c}
+                        </div>
                       </div>
-                    </div>
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_employee_number}</div>
-                      <div class="data">{userDetailData.Employee_Code__c}</div>
                     </div>
 
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_department}</div>
-                      <div class="data">{userDetailData.Department}</div>
-                    </div>
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_position}</div>
-                      <div class="data">{userDetailData.Title}</div>
-                    </div>
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_affiliation}</div>
-                      <div class="dataBranch2">
-                        <template for:each={branchfromjunction} for:item="elm">
-                          <div key={elm.Name} class="data2">{elm.Name}</div>
-                        </template>
-                      </div>
-                      <!--Changing for Combo-->
-                      <!-- Changing End -->
-                    </div>
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_email}</div>
-                      <div class="data">{userDetailData.email}</div>
-                    </div>
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_phone_number}</div>
-                      <div class="data">{userDetailData.Phone}</div>
-                    </div>
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_mobile_number}</div>
-                      <div class="data">{userDetailData.MobilePhone}</div>
-                    </div>
-                    <div class="records">
-                      <div class="head">{labels2.ccp2_um_service_usage}</div>
-                      <div class="dataBranch">
-                        <template for:each={userServicesData} for:item="elm">
-                          <div key={elm} class="data">{elm}</div>
-                        </template>
-                      </div>
+                    <div style="display: flex; align-items: end">
+                      <button class="edit-button" onclick={handleEditChange}>
+                        {labels2.ccp2_um_edit}
+                      </button>
                     </div>
                   </div>
 
-                  <div class="buttonEdit">
-                    <div class="btn" onclick={handleEditChange}>
-                      <P class="toedit">{labels2.ccp2_um_edit}</P>
+                  <div class="container">
+                    <div class="user-info">
+                      <div class="user-info-head">
+                        <p>{labels2.ccp2_um_userInfo}</p>
+                      </div>
+                      <div class="data-div">
+                        <div class="left-div" style="border-right: 1px solid #d9d9d9">
+                          <div class="info-rec">
+                            <p class="info-label">{labels2.ccp2_um_name}</p>
+                            <p class="info-text">{userDetailData.Name}</p>
+                          </div>
+                          <div class="info-rec">
+                            <p class="info-label">
+                              {labels2.ccp2_um_name_furigana}
+                            </p>
+                            <p class="info-text">
+                              {userDetailData.lastNameKana__c}
+                              {userDetailData.firstNameKana__c}
+                            </p>
+                          </div>
+                          <div class="info-rec">
+                            <p class="info-label">
+                              {labels2.ccp2_um_employee_number}
+                            </p>
+                            <template if:false={userDetailData.Employee_Code__c}>
+                              <p class="info-text">
+                                -
+                              </p>
+                            </template>
+                            <template if:true={userDetailData.Employee_Code__c}>
+                              <p class="info-text">
+                                {userDetailData.Employee_Code__c}
+                              </p>
+                            </template>
+                          </div>
+                          <div class="info-rec">
+                            <p class="info-label">
+                              {labels2.ccp2_um_phone_number}
+                            </p>
+                            <template if:false={userDetailData.Phone}>
+                              <p class="info-text">
+                                -
+                              </p>
+                            </template>
+                            <template if:true={userDetailData.Phone}>
+                              <p class="info-text">{userDetailData.Phone}</p>
+                            </template>
+                          </div>
+                          <div class="info-rec">
+                            <p class="info-label">{labels2.ccp2_um_email}</p>
+                            <p class="info-text">{userDetailData.email}</p>
+                          </div>
+                        </div>
+                        <div class="right-div">
+                          <div class="info-rec">
+                            <p class="info-label">{labels2.ccp2_um_position}</p>
+                            <template if:false={userDetailData.Title}>
+                              <p class="info-text">
+                                -
+                              </p>
+                            </template>
+                            <template if:true={userDetailData.Title}>
+                              <p class="info-text">{userDetailData.Title}</p>
+                            </template>
+                          </div>
+                          <div class="info-rec">
+                            <p class="info-label">
+                              {labels2.ccp2_um_affiliation}
+                            </p>
+                            <div class="info-text">
+                              <div class="data-branch2"></div>
+                              <template if:false={branchfromjunction}>-</template>
+                              <template if:true={branchfromjunction}>
+                                <div style="display: flex; gap: 3px; align-items: center;">
+                                  <div class="branches" style="width: auto; flex-wrap: wrap;">
+                                    <span title={allBranchesData.firstbranchreal}>{allBranchesData.firstbranch}</span>
+                                    <template if:true={morethanonebranch}>
+                                      <span class="branch-All" onclick={branchopen}>{labels2.ccp2_um_Other_10} +
+                                        {allBranchesData.onscreenbranchcount}</span>
+                                    </template>
+                                  </div>
+                                </div>
+                              </template>
+                            </div>
+                          </div>
+                          <div class="info-rec">
+                            <p class="info-label">
+                              {labels2.ccp2_um_department}
+                            </p>
+                            <template if:false={userDetailData.Department}>
+                              <p class="info-text">
+                                -
+                              </p>
+                            </template>
+                            <template if:true={userDetailData.Department}>
+                              <p class="info-text">{userDetailData.Department}</p>
+                            </template>
+                          </div>
+                          <div class="info-rec">
+                            <p class="info-label">
+                              {labels2.ccp2_um_mobile_number}
+                            </p>
+                            <template if:false={userDetailData.MobilePhone}>
+                              <p class="info-text">
+                                -
+                              </p>
+                            </template>
+                            <template if:true={userDetailData.MobilePhone}>
+                              <p class="info-text">
+                                {userDetailData.MobilePhone}
+                              </p>
+                            </template>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                    <template if:false={servicesLeng}>
+                      <div class="user-info">
+                        <div class="user-info-head">
+                          <p>{labels2.ccp2_um_servused}</p>
+                        </div>
+                        <div class="services-data">
+                          <div style="flex-wrap: wrap; display: flex; gap: 20px">
+                            <template for:each={userServicesData} for:item="ser">
+                              <div key={ser} class="serv-items" style="border-left: 3px solid #E10202;">{ser}</div>
+                            </template>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
                   </div>
                 </div>
-                <div class="form_footer">
-                  <div class="btn1" onclick={handleReturnClick}>
-                    <P class="toedit">{labels2.ccp2_um_back_to_user}</P>
-                  </div>
+
+              </div>
+              <div class="form_footer">
+                <div class="btn1" onclick={handleReturnClick}>
+                  <P class="toedit">{labels2.ccp2_um_back_to_user}</P>
                 </div>
+                <div class="deleteUser" onclick={handleDeleteUser}>
+                  <lightning-icon icon-name="utility:close" style="cursor: pointer;" size="x-small" variant="container"
+                    alternative-text="Delete User" class="Abtn icon-red" title="Delete User"></lightning-icon>
+                  <p class="deletetext">{labels2.ccp2_um_delete_user}</p>
+                </div>
+
               </div>
             </div>
           </template>
         </template>
 
         <template if:true={showEditUserDetails}>
-          <div class="main-content">
-            <h2 class="heading">{labels2.ccp2_um_member_info}</h2>
-            <div class="form">
-              <div class="form_container form_container_save">
-                <!-- Company Name -->
-                <div class="records gap24">
-                  <div class="head head-save">
-                    {labels2.ccp2_um_company_name}
-                  </div>
-                  <div class="data3">{userDetailData.account.name}</div>
-                </div>
+          <div class="main-content" style="display: flex; flex-direction:column; gap:36px;">
 
-                <!-- Customer Number -->
-                <div class="records gap24">
-                  <div class="head head-save">
-                    {labels2.ccp2_um_customer_number}
-                  </div>
-                  <div class="data3">
-                    {userDetailData.account.siebelAccountCode__c}
-                  </div>
-                </div>
-
-                <!-- Full Name -->
-                <div class="records gap24">
-                  <div class="head head-save head-save-cnt">
-                    {labels2.ccp2_um_name}
-                    <span class="reqtxt">{labels2.ccp2_um_required}</span>
-                  </div>
-                  <div class="data3">
-                    <div class="dataCellName">
-                      <span class="data-cell-item">{labels2.ccp2_um_last_name}</span>
-                      <span class="data-cell-item">{labels2.ccp2_um_first_name}</span>
+            <div class="container">
+              <h2 class="heading" style="margin-bottom: 0; width:100%;">{labels2.ccp2_um_member_info}</h2>
+              <div class="account-info">
+                <div class="acc-left">
+                  <div class="account-text">
+                    <div class="acc-label">
+                      {labels2.ccp2_um_company_name}
                     </div>
-                    <div class="dataCellName">
-                      <div class="name-div">
-                        <input type="text" class={contactClassLastName} oninput={handlevalchange}
-                          onchange={handleInputChange} data-field="姓" value={InputLastName}
-                          placeholder={labels2.ccp2_um_example_name} maxlength="10" />
-                        <div if:true={Lnameerror} class="error-text">
-                          {Lnameerror}
-                        </div>
-                      </div>
-                      <div class="name-div">
-                        <input type="text" class={contactClassFirstName} oninput={handlevalchange}
-                          onchange={handleInputChange} data-field="名" value={InputFirstName}
-                          placeholder={labels2.ccp2_um_placeholder_name} maxlength="10" />
-                        <div if:true={Fnameerror} class="error-text">
-                          {Fnameerror}
-                        </div>
-                      </div>
+                    <div class="">{userDetailData.account.name}</div>
+                  </div>
+                  <div class="account-text">
+                    <div class="acc-label">
+                      {labels2.ccp2_um_customer_number}
+                    </div>
+                    <div class="">
+                      {userDetailData.account.siebelAccountCode__c}
                     </div>
                   </div>
                 </div>
-
-                <!-- Name (furigana) -->
-                <div class="records gap24">
-                  <div class="head head-save head-save-cnt">
-                    {labels2.ccp2_um_name_furigana}
-                    <span class="reqtxt">{labels2.ccp2_um_required}</span>
-                  </div>
-                  <div class="data3">
-                    <div class="dataCellName">
-                      <span class="data-cell-item">{labels2.ccp2_um_last_name_fur}</span>
-                      <span class="data-cell-item">{labels2.ccp2_um_first_name_fur}</span>
-                    </div>
-                    <div class="dataCellName">
-                      <div class="name-div">
-                        <input type="text" class={contactClassLKanaName} oninput={handlevalchange}
-                          onchange={handleInputChange} data-field="姓（フリガナ）" value={InputLKanaName}
-                          placeholder={labels2.ccp2_um_example_name_fur} maxlength="10" />
-                        <div if:true={Lkanaerror} class="error-text">
-                          {Lkanaerror}
+              </div>
+              <div class="user-info">
+                <div class="user-info-head">
+                  <p>{labels2.ccp2_um_userInfo}</p> 
+                </div>
+                <div class="edit-data-div">
+                  <div class="record-edit">
+                    <div class="label-inputs">
+                      <div class="req-rec">
+                        <p class="input-heading">{labels2.ccp2_um_name}</p>
+                        <p class="reqtxt">{labels2.ccp2_um_required}</p>
+                        <p class="valid-input">{labels2.ccp2_um_val_10}</p>
+                      </div>
+                      <div class="value-grp">
+                        <div class="inputs-name">
+                          <p>{labels2.ccp2_um_last_name}</p>
+                          <input type="text" class={contactClassLastName} oninput={handlevalchange}
+                            onchange={handleInputChange} data-field="姓" value={InputLastName}
+                            placeholder={labels2.ccp2_um_example_name} maxlength="10" />
+                          <div if:true={Lnameerror} class="error-text">
+                            {Lnameerror}
+                          </div>
+                        </div>
+                        <div class="inputs-name">
+                          <p>{labels2.ccp2_um_first_name}</p>
+                          <input type="text" class={contactClassFirstName} oninput={handlevalchange}
+                            onchange={handleInputChange} data-field="名" value={InputFirstName}
+                            placeholder={labels2.ccp2_um_placeholder_name} maxlength="10" />
+                          <div if:true={Fnameerror} class="error-text">
+                            {Fnameerror}
+                          </div>
                         </div>
                       </div>
-                      <div class="name-div">
-                        <input type="text" class={contactClassFKanaName} oninput={handlevalchange}
-                          onchange={handleInputChange} data-field="名（フリガナ）" value={InputFKanaName}
-                          placeholder={labels2.ccp2_um_placeholder_name} maxlength="10" />
-                        <div if:true={Fkanaerror} class="error-text">
-                          {Fkanaerror}
+                    </div>
+                    <div class="label-inputs">
+                      <div class="req-rec">
+                        <p class="input-heading">{labels2.ccp2_um_name_furigana}</p>
+                        <p class="reqtxt">{labels2.ccp2_um_required}</p>
+                        <p class="valid-input">{labels2.ccp2_um_val_10}</p>
+                      </div>
+                      <div class="value-grp">
+                        <div class="inputs-name">
+                          <p>{labels2.ccp2_um_last_name_fur}</p>
+                          <input type="text" class={contactClassLKanaName} oninput={handlevalchange}
+                            onchange={handleInputChange} data-field="姓（フリガナ）" value={InputLKanaName}
+                            placeholder={labels2.ccp2_um_example_name_fur} maxlength="10" />
+                          <div if:true={Lkanaerror} class="error-text">
+                            {Lkanaerror}
+                          </div>
+                        </div>
+                        <div class="inputs-name">
+                          <p>{labels2.ccp2_um_first_name_fur}</p>
+                          <input type="text" class={contactClassFKanaName} oninput={handlevalchange}
+                            onchange={handleInputChange} data-field="名（フリガナ）" value={InputFKanaName}
+                            placeholder={labels2.ccp2_um_placeholder_name} maxlength="10" />
+                          <div if:true={Fkanaerror} class="error-text">
+                            {Fkanaerror}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                  <div class="record-edit">
+                    <div class="label-inputs">
+                      <div class="req-rec">
+                        <p class="input-heading">{labels2.ccp2_um_employee_number}</p>
+                        <p class="valid-input">{labels2.ccp2_um_val_24}</p>
+                      </div>
+                      <input type="text" onchange={handleInputChange} oninput={handlevalchange} data-field="社員番号"
+                        value={InputEmpCode} maxlength="24" placeholder="A0002" />
+                    </div>
+                    <div class="label-inputs">
+                      <div class="req-rec">
+                        <p class="input-heading">{labels2.ccp2_um_department}</p>
+                        <p class="valid-input">{labels2.ccp2_um_val_24}</p>
+                      </div>
+                      <input type="text" onchange={handleInputChange} oninput={handlevalchange} data-field="部署"
+                        value={InputDepartment} maxlength="24" placeholder={labels2.ccp2_um_industry_auto} />
+                    </div>
+                  </div>
+                  <div class="record-edit">
+                    <div class="label-inputs">
+                      <div class="req-rec">
+                        <p class="input-heading">{labels2.ccp2_um_position}</p>
+                        <p class="valid-input">{labels2.ccp2_um_val_24}</p>
+                      </div>
+                      <input type="text" onchange={handleInputChange} oninput={handlevalchange} maxlength="24"
+                        data-field="役職" value={InputPost} placeholder={labels2.ccp2_um_position_manager} />
+                    </div>
+                    <div class="label-inputs">
+                      <div class="req-rec">
+                        <p class="input-heading">{labels2.ccp2_um_affiliation}</p>
+                        <p class="reqtxt">{labels2.ccp2_um_required}</p>
+                      </div>
+                      <!-- <input type="text"> -->
+                      <div class="data3" style="display: flex; gap: 23px">
+                        <div class="dataDrop">
+                          <input type="text" oninput={handleSearch} style="outline: none; cursor: pointer;"
+                            onclick={handlebranChange} class={contactClassBranch} placeholder={labels2.ccp2_um_select}
+                            readonly />
 
-                <!-- Employee Number -->
-                <div class="records gap24">
-                  <div class="head head-save">
-                    {labels2.ccp2_um_employee_number}
-                  </div>
-                  <div class="data3">
-                    <input type="text" onchange={handleInputChange} oninput={handlevalchange} data-field="社員番号"
-                      value={InputEmpCode} maxlength="24" placeholder="A0002" />
-                  </div>
-                </div>
-                <div class="records gap24">
-                  <div class="head head-save">{labels2.ccp2_um_department}</div>
-                  <div class="data3">
-                    <input type="text" onchange={handleInputChange} oninput={handlevalchange} data-field="部署"
-                      value={InputDepartment} maxlength="24" placeholder={labels2.ccp2_um_industry_auto} />
-                  </div>
-                </div>
-
-                <!-- Post -->
-                <div class="records gap24">
-                  <div class="head head-save">{labels2.ccp2_um_position}</div>
-                  <div class="data3">
-                    <input type="text" onchange={handleInputChange} oninput={handlevalchange} maxlength="24"
-                      data-field="役職" value={InputPost} placeholder={labels2.ccp2_um_position_manager} />
-                  </div>
-                </div>
-                <!-- Affiliation -->
-                <div class="records gap24">
-                  <div class="head head-save" style="padding-top: 10px">
-                    {labels2.ccp2_um_affiliation}
-                    <span class="reqtxt">{labels2.ccp2_um_required}</span>
-                  </div>
-                  <div class="data3" style="display: flex; gap: 12px">
-                    <div class="dataDrop">
-                      <input type="text" oninput={handleSearch} onclick={handlebranChange} class={contactClassBranch}
-                        placeholder={labels2.ccp2_um_select} />
-
-                      <template if:true={showlist}>
-                        <div class="lists" onclick={handleInsideClick}>
-                          <template for:each={filteredbranch} for:item="veh">
-                            <div key={veh.value} class="list-item" onclick={handleBranchSelect} data-id={veh.value}>
-                              <p>{veh.label}</p>
+                          <template if:true={showlist}>
+                            <div class="lists" onclick={handleInsideClick}>
+                              <div class="list-scroll">
+                                <template for:each={filteredbranch} for:item="veh">
+                                  <div key={veh.value} class="list-item" onclick={handleBranchSelect}
+                                    data-id={veh.value}>
+                                    <p>{veh.label}</p>
+                                  </div>
+                                </template>
+                              </div>
                             </div>
                           </template>
+                          <div if:true={ErrorText} class="error-text">
+                            {ErrorText}
+                          </div>
                         </div>
-                      </template>
-                      <div if:true={ErrorText} class="error-text">
-                        {ErrorText}
-                      </div>
-                    </div>
-                    <div class="branchrecords">
-                      <template if:false={branchPlaceholder}>
-                        <div class="scrollbar">
-                          <template for:each={branchfromjunction} for:item="veh">
-                            <div key={veh.Id} class="record-item">
-                              <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete"
-                                onclick={handleDeleteBranch} data-id={veh.Id} class="filtericn"></lightning-icon>
-                              <span>{veh.Name}</span>
-                              <br />
-                            </div>
-                          </template>
-                          <template for:each={branch} for:item="veh">
-                            <div key={veh.Id} class="record-item">
-                              <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete"
-                                onclick={handleDeleteBranch} data-id={veh.Id} class="filtericn"></lightning-icon>
-                              <span>{veh.Name}</span>
-                              <br />
-                            </div>
-                          </template>
+                        <div style="width: 50%;">
+                          <div class="branchrecords">
+                            <template if:false={branchPlaceholder}>
+                              <div class="scrollbar">
+                                <template for:each={branchfromjunction} for:item="veh">
+                                  <div key={veh.Id} class="record-item">
+                                    <svg width="24" height="25" onclick={handleDeleteBranch} data-id={veh.Id}
+                                      class="filtericn" viewBox="0 0 24 25" fill="none"
+                                      xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"
+                                        fill="#E10202" />
+                                    </svg>
+                                    <!-- <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Delete"
+                                      onclick={handleDeleteBranch} data-id={veh.Id} class="filtericn"
+                                      style="cursor: pointer;"></lightning-icon> -->
+                                    <span style="width: 80%; margin-top: 1px;">{veh.Name}</span>
+                                    <br />
+                                  </div>
+                                </template>
+                                <template for:each={branch} for:item="veh">
+                                  <div key={veh.Id} class="record-item">
+                                    <svg width="24" height="25" onclick={handleDeleteBranch} data-id={veh.Id}
+                                      class="filtericn" viewBox="0 0 24 25" fill="none"
+                                      xmlns="http://www.w3.org/2000/svg">
+                                      <path
+                                        d="M19 6.91L17.59 5.5L12 11.09L6.41 5.5L5 6.91L10.59 12.5L5 18.09L6.41 19.5L12 13.91L17.59 19.5L19 18.09L13.41 12.5L19 6.91Z"
+                                        fill="#E10202" />
+                                    </svg>
+                                    <!-- <lightning-icon icon-name="utility:close" style="cursor: pointer;" size="x-small"
+                                      alternative-text="Delete" onclick={handleDeleteBranch} data-id={veh.Id}
+                                      class="filtericn"></lightning-icon> -->
+                                    <span style="width: 80%; margin-top: 1px;">{veh.Name}</span>
+                                    <br />
+                                  </div>
+                                </template>
+                              </div>
+                            </template>
+                            <template if:true={branchPlaceholder}>
+                              <p class="custom-placeholder">
+                                {labels2.ccp2_um_selected_location}
+                              </p>
+                            </template>
+                          </div>
                         </div>
-                      </template>
-                      <template if:true={branchPlaceholder}>
-                        <p class="custom-placeholder">
-                          {labels2.ccp2_um_selected_location}
-                        </p>
-                      </template>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="record-edit" style="flex-direction: column; gap:16px;">
+                    <div class="req-rec">
+                      <p class="input-heading">{labels2.ccp2_um_phone_number}</p>
+                      <p class="reqtxt">{labels2.ccp2_um_required}</p>
+                    </div>
+                    <div class="req-rec" style="gap: 0px;">
+                      <p style="font-size: 12px; color:#A7A7A7">{labels2.ccp2_um_phone_or_mobile}</p>
+                      <p style="font-size: 12px; color:#A7A7A7">{labels2.ccp2_um_val_11}</p>
+                    </div>
+                    <div class="record-edit">
+                      <div class="label-inputs">
+                        <p class="input-heading2">{labels2.ccp2_um_phone_number}</p>
+                        <input type="text" class={contactClassTelephone} oninput={handleInputChange} data-field="電話番号"
+                          value={InputTelephone} maxlength="11" pattern="\d*" placeholder="04512345678" />
+                        <div if:true={telephoneErrorText} class="error-text">
+                          {telephoneErrorText}
+                        </div>
+                        <div if:true={cellPhoneErrorText} class="error-text">
+                          {cellPhoneErrorText}
+                        </div>
+                      </div>
+                      <div class="label-inputs">
+                        <p class="input-heading2">{labels2.ccp2_um_mobile_number}</p>
+                        <input type="text" class={contactClassCellPhone} oninput={handleInputChange} data-field="携帯番号"
+                          value={InputCellPhone} maxlength="11" pattern="\d*" placeholder="08012345678" />
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="record-edit">
+                    <div class="label-inputs">
+                      <div class="req-rec">
+                        <p class="input-heading2">{labels2.ccp2_um_email}</p>
+                        <p class="reqtxt">{labels2.ccp2_um_required}</p>
+                      </div>
+                      <input type="text" onchange={handleInputChange} data-field="メールアドレス" value={InputEmail}
+                        maxlength="40" class={contactClassEmail} placeholder="○○@cubastion.com" disabled readonly />
+                      <div if:true={emailerrorText} class="error-text">
+                        {emailerrorText}
+                      </div>
+                    </div>
+                    <div class="label-inputs">
                     </div>
                   </div>
                 </div>
-
-                <!-- Email Address -->
-                <div class="records gap24">
-                  <div class="head head-save head-save-cnt" style="padding-top: 8px;">
-                    {labels2.ccp2_um_email}
-                    <span class="reqtxt">{labels2.ccp2_um_required}</span>
-                  </div>
-                  <div class="data3">
-                    <input type="text" onchange={handleInputChange} data-field="メールアドレス" value={InputEmail}
-                      maxlength="40" class={contactClassEmail} placeholder="○○@cubastion.com" />
-                    <div if:true={emailerrorText} class="error-text">
-                      {emailerrorText}
-                    </div>
-                  </div>
+              </div>
+              <div class="user-info">
+                <div class="user-info-head" style="display: flex; gap: 16px; align-items: center;">
+                  <p>{labels2.ccp2_um_service_usage}</p>
+                  <p class="reqtxt">{labels2.ccp2_um_required}</p>
                 </div>
-
-                <!-- Telephone Number -->
-                <div class="records gap24">
-                  <div class="head head-save head-save-align">
-                    {labels2.ccp2_um_phone_number}
-                    <span class="reqtxt">{labels2.ccp2_um_required}</span>
-                  </div>
-                  <div class="data3 data-align" style="display: flex; flex-direction: column; gap: 16px;">
-                    <div class="label-size">
-                      <!-- 電話番号あるいは携帯番号のいずれかをハイフンなしで入力してください -->
-                      {labels2.ccp2_um_phone_or_mobile}<br />{labels2.ccp2_um_phone_or_mobile2}
-                    </div>
-                    <div class="records_number">
-                      <div class="phn-label">
-                        {labels2.ccp2_um_phone_number}
-                      </div>
-                      <div class="phn-input">
-                        <input type="text" class={contactClassTelephone} onchange={handleInputChange} data-field="電話番号"
-                          value={InputTelephone} oninput={handleInputValidation} maxlength="11" pattern="\d*" required
-                          placeholder="03621268002" />
-                      </div>
-                    </div>
-                    <div class="records_number">
-                      <div class="phn-label">
-                        {labels2.ccp2_um_mobile_number}
-                      </div>
-                      <div class="phn-input">
-                        <input type="text" class={contactClassCellPhone} onchange={handleInputChange} data-field="携帯番号"
-                          value={InputCellPhone} oninput={handleInputValidation} maxlength="11" pattern="\d*" required
-                          placeholder="03621268002" />
-                      </div>
-                    </div>
-                    <div if:true={telephoneErrorText} class="error-text">
-                      {telephoneErrorText}
-                    </div>
-                    <div if:true={cellPhoneErrorText} class="error-text">
-                      {cellPhoneErrorText}
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Service Used -->
-                <div class="records gap24">
-                  <div class="head head-save">
-                    {labels2.ccp2_um_service_usage}
-                  </div>
-                  <div class="data5">
-                    <div class="checked-service">
-                      <input type="checkbox" checked disabled style="
-                          width: 20px;
-                          height: 20px;
-                          margin-right: 7px;
-                        " />{labels2.ccp2_um_basic_service}
-                    </div>
-
-                    <template for:each={allServicesListData} for:item="elm">
-                      <div class="checkboxContainer" key={elm.apiName}>
+                <div class="services-data" data-name="serviceBox">
+                  <div style="flex-wrap: wrap; display: flex; gap:111px">
+                    <template for:each={allServicesListData} for:item="ser">
+                      <div key={ser.apiName} class="serv-items">
                         <input type="checkbox" class="input-checkbox" style="width: 20px; height: 20px"
-                          data-field={elm.apiName} checked={elm.isActive} onchange={handleCheckInputChange} />
-                        <span>{elm.name}</span>
+                          data-field={ser.apiName} checked={ser.isChecked}
+                          onchange={handleCheckInputChange} />
+                        <span>{ser.japaneseName}</span>
                       </div>
                     </template>
+                    <!-- <div class="serv-div">
+                      <template for:each={vehicleAndFinancialServices} for:item="ser">
+                        <div key={ser.apiName} class="serv-items">
+                          <input type="checkbox" class="input-checkbox" style="width: 20px; height: 20px"
+                            data-field={ser.apiName} checked={ser.isActive} disabled={ser.isDisabled}
+                            onchange={handleCheckInputChange} />
+                          <span>{ser.name}</span>
+                        </div>
+                      </template>
+                    </div>
+                    <div class="serv-div">
+                      <template for:each={basicAndEInvoiceServices} for:item="ser">
+                        <div key={ser.apiName} class="serv-items">
+                          <input type="checkbox" class="input-checkbox" style="width: 20px; height: 20px"
+                            data-field={ser.apiName} checked={ser.isActive} disabled={ser.isDisabled}
+                            onchange={handleCheckInputChange} />
+                          <span>{ser.name}</span>
+                        </div>
+                      </template>
+                    </div> -->
+
                   </div>
                 </div>
-                <div class="form-footer">
-                  <div class="button2">
-                    <div class="btn2" onclick={handleCancel}>
-                      <P class="toedit2">{labels2.ccp2_um_cancel}</P>
-                    </div>
-                  </div>
-                  <!-- Save Button -->
-                  <div class="btn-yes btn-yes-save">
-                    <div class="btn btn-save" onclick={saveFormData}>
-                      <p class="toedit txt-save">{labels2.ccp2_um_save}</p>
-                    </div>
-                  </div>
+                <p if:true={servicesError} style="font-size: 14px; color:#E10202;">利用サービスを選択してください。</p>
+              </div>
+            </div>
+            <div class="form-footer">
+              <div class="button2">
+                <div class="btn2" onclick={handleCancel}>
+                  <P class="toedit2">{labels2.ccp2_um_cancel}</P>
+                </div>
+              </div>
+              <!-- Save Button -->
+              <div class="btn-yes btn-yes-save">
+                <div class="btn btn-save" onclick={saveFormData}>
+                  <p class="toedit txt-save">{labels2.ccp2_um_save}</p>
                 </div>
               </div>
             </div>
@@ -437,24 +551,33 @@
 
         <template if:true={IsUsercountZero}>
           <div class="main-content" style="padding: 64px calc(256px - 10%) 64px calc(256px - 10%)">
-            <h2 class="heading">{labels2.ccp2_um_user_management}</h2>
+            <h2 class="heading3">{labels2.ccp2_um_user_management}</h2>
             <div class="list-container list-container-new">
               <p class="text-para">
                 {labels2.ccp2_um_user_management_new_user}
               </p>
-              <div class="button-container" style="display: flex; justify-content: center">
+              <p class="text-para">
+                {labels2.ccp2_um_user_management_new_user2}
+              </p>
+              <!-- <div class="button-container" style="display: flex; justify-content: center">
                 <a href={addUserUrl} style="color: white">
                   <button class="button add-user-button">
                     {labels2.ccp_au_add_user}
                   </button>
                 </a>
-              </div>
+              </div> -->
             </div>
 
             <div class="footer-buttons" style="margin-top: 0px">
               <a href={homeUrl} style="color: white"><button class="button return-button">
                   {labels2.ccp2_um_back_to_top}
                 </button></a>
+
+              <a href={addUserUrl} style="color: white">
+                <button class="button add-user-button">
+                  {labels2.ccp_au_add_user}
+                </button>
+              </a>
             </div>
           </div>
         </template>
@@ -509,6 +632,41 @@
           <button class="yes-btn1" onclick={handlefinalclose}>
             {labels2.ccp2_um_yes}
           </button>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={branchesModal}>
+    <div class="modal-background">
+      <div class="modal-window-branch">
+        <div class="modal-header-branch">
+          <div class="count">
+            <!-- <h1>{vehicleByIdData.branchCount}</h1> -->
+            <h1 style="font-weight: bold">{labels2.ccp2_um_affiliation23}</h1>
+          </div>
+          <lightning-icon icon-name="utility:close" style="cursor: pointer;" size="x-small" alternative-text="Close"
+            onclick={branchClose} class="close-button-branch">
+          </lightning-icon>
+        </div>
+        <div class="branch-container">
+          <div class="branch-card" style='color: var(--black-txt-bg, #262626);
+    
+    /* JP/PC/H4 */
+    font-family: "Noto Sans JP";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 130%; /* 20.8px */
+    letter-spacing: 0.32px;'>
+            <p>{labels2.ccp2_um_new_affiliation_name}</p>
+            <p>{labels2.ccp2_um_new_affiliation_number}</p>
+          </div>
+          <template for:each={branchfromjunction} for:item="branch">
+            <div key={branch.Id} class="branch-card">
+              <P title={branch.Name}> {branch.Name} </P>
+              <P>{branch.siebelAccountCode__c} - {branch.Branch_Code__c}</P>
+            </div>
+          </template>
         </div>
       </div>
     </div>

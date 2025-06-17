@@ -1,0 +1,181 @@
+<template>
+  <template if:true={branch}>
+    <div class="main">
+      <div class="half top">
+        <img src={backgroundImagePC} class="imghead" />
+      </div>
+      <div class="half bottom">
+        <div class="center-content">
+          <div class="fullData">
+            <template if:true={branchloader}>
+              <lightning-spinner
+                alternative-text="Loading"
+                size="small"
+              ></lightning-spinner>
+            </template>
+            <template if:false={branchloader}>
+              <template if:false={isBranchesEmpty}>
+                <div class="form_header">
+                  <h1 class="centered-text Text">
+                    {labels2.ccp2_cb_manageAffiliations}
+                  </h1>
+                </div>
+                <template if:false={adminFlag}>
+                  <div class="form-footer" style="justify-content: flex-end">
+                    <div class="button">
+                      <div class="btn" onclick={goToMain}>
+                        <P class="toedit Text">{labels2.ccp2_cb_backToTop}</P>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template if:true={adminFlag}>
+                  <div class="form-footer">
+                    <div class="button">
+                      <div class="btn" onclick={goToMain}>
+                        <P class="toedit Text">{labels2.ccp2_cb_backToTop}</P>
+                      </div>
+                    </div>
+                    <div class="button21">
+                      <div class="btn2" onclick={goToCreateBranch}>
+                        <P class="toedit2 Text"
+                          >{labels2.ccp2_cb_addAffiliation}</P
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <div class="form">
+                  <div class="cards-gap no-scroll">
+                    <template for:each={paginatedBranchData} for:item="branch">
+                      <div
+                        key={branch.BranchId}
+                        data-id={branch.BranchId}
+                        onclick={handleclick2}
+                        class="card"
+                      >
+                        <div class="first">
+                          <div class="branchNumber">
+                            <p class="textbranch">
+                              {branch.formattedSiebelAccountCode} -
+                              {branch.formattedBranchNO}
+                            </p>
+                          </div>
+                          <div class="branch-name-main">
+                            <span class="Text">{branch.BranchName}</span>
+                          </div>
+                        </div>
+                        <div class="Second">
+                          <p class="Text">{labels2.ccp2_ab_avm2}</p>
+                          <P class="Text">{branch.VehicleCount}台</P>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+
+                  <div class="pageNumber">
+                    <div class="pagination">
+                      <button
+                        onclick={handlePreviousPage}
+                        class="nav-button"
+                        disabled={isPreviousDisabled}
+                      >
+                        <lightning-icon
+                          icon-name="utility:chevronleft"
+                          alternative-text="Previous"
+                          size="xx-small"
+                        ></lightning-icon>
+                      </button>
+
+                      <button
+                        data-id="1"
+                        onclick={handlePageChange}
+                        if:true={showLeftDots}
+                        class="page-button"
+                      >
+                        1
+                      </button>
+
+                      <template if:true={showLeftDots}>
+                        <span class="page-button-dots">...</span>
+                      </template>
+
+                      <template
+                        for:each={visiblePageNumbers}
+                        for:item="pageNum"
+                      >
+                        <button
+                          key={pageNum}
+                          data-id={pageNum}
+                          onclick={handlePageChange}
+                          class="page-button"
+                        >
+                          {pageNum}
+                        </button>
+                      </template>
+
+                      <template if:true={showRightDots}>
+                        <span class="page-button-dots">...</span>
+                      </template>
+                      <button
+                        if:true={showRightDots}
+                        class="page-button"
+                        data-id={totalPageCount}
+                        onclick={handlePageChange}
+                      >
+                        {totalPageCount}
+                      </button>
+
+                      <button
+                        onclick={handleNextPage}
+                        class="nav-button"
+                        disabled={isNextDisabled}
+                      >
+                        <lightning-icon
+                          icon-name="utility:chevronright"
+                          alternative-text="Next"
+                          size="xx-small"
+                        ></lightning-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template if:true={isBranchesEmpty}>
+                <div class="newmain">
+                  <div class="headsempty">
+                    <p class="headings2">
+                      {labels2.ccp2_cb_manageAffiliations}
+                    </p>
+                  </div>
+                  <div class="centersempty">
+                    <p class="headings1">{labels2.ccp2_cb_worklocationmsg}</p>
+                    <template if:true={adminFlag}>
+                      <div class="button2">
+                        <div class="btn2" onclick={goToCreateBranch}>
+                          <P class="toedit2 Text"
+                            >{labels2.ccp2_cb_addAffiliation}</P
+                          >
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                  <div class="lastempty">
+                    <div class="btnempty" onclick={goToMain}>
+                      <P class="toedit Text">{labels2.ccp2_cb_backToTop}</P>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template if:true={branchA}>
+    <c-ccp2-Branch-Record-Detail
+      branch-id={branchId}
+    ></c-ccp2-Branch-Record-Detail>
+  </template>
+</template>
