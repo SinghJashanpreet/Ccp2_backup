@@ -3,7 +3,7 @@
 }
 
 textarea:focus-visible{
-  border: none;
+  outline: none;
 }
 
 .no-scroll::-webkit-scrollbar {
@@ -1107,22 +1107,25 @@ tbody tr:nth-child(5) td:last-child {
 }
 
 .mm-main-container thead th:nth-child(1) {
-  width: 22%;
+  width: 21%;
   border-top-left-radius: 10px;
 }
 
 .mm-main-container thead th:nth-child(2),
 .mm-main-container thead th:nth-child(3),
 .mm-main-container thead th:nth-child(5) {
-  width: 14%;
+  width: 13%;
 }
 
 .mm-main-container thead th:nth-child(4) {
-  width: 26%;
+  width: 24%;
 }
 
 .mm-main-container thead th:nth-child(6) {
-  width: 10%;
+  width: 9%;
+}
+.mm-main-container thead th:nth-child(7) {
+  width: 5%;
   border-top-right-radius: 10px;
 }
 
@@ -2637,7 +2640,7 @@ tbody tr:nth-child(5) td:last-child {
 }
 
 .recall-drop-list {
-  width: 34%;
+  width: 100%;
   border-radius: 10px;
   border: 1px solid var(--Gray-line, #D9D9D9);
   background: var(--Labels-White-white, #FFF);
@@ -2657,6 +2660,226 @@ tbody tr:nth-child(5) td:last-child {
 
 .recall-list-item:hover {
   background-color: #f0f0f0;
+}
+
+.calendar-popup2 {
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 20px;
+  position: absolute;
+  /* top: 300px; */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 11;
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
+
+.button-disable {
+  background-color: white;
+  border: none;
+  --slds-c-icon-color-foreground-default: #e10202;
+}
+
+.button-disable:disabled {
+  --slds-c-icon-color-foreground-default: #BBBBBB;
+  cursor: not-allowed;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 5px 10px;
+}
+
+.nav-button:disabled {
+  color: #ccc;
+  /* Grey out the disabled button */
+  cursor: not-allowed;
+  /* Show not-allowed cursor */
+}
+
+.calendar-month,
+.calendar-year {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Grid for days and dates */
+.calendar-days-row,
+.calendar-dates-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* 7 equal columns for 7 days of the week */
+  width: 100%;
+  justify-items: center;
+  text-align: center;
+}
+
+.calendar-days-row {
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #333;
+}
+
+.day-label {
+  padding: 5px 0;
+  font-size: 14px;
+  font-weight: bold;
+  color: #AAA;
+}
+
+/* Dates section */
+.calendar-dates-grid {
+  gap: 5px;
+  /* Space between date buttons */
+  margin-bottom: 20px;
+}
+
+.day-button {
+  background-color: white;
+  width: 30px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  font-weight: 700;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+/* Make empty buttons visible but inactive */
+.day-button.empty {
+  background-color: transparent;
+  border: none;
+  cursor: not-allowed;
+}
+
+
+.day-button.selected {
+  background-color: #FEEEED;
+  border-radius: 30px;
+  color: #E10202;
+}
+
+.day-button.disabled {
+  color: #BBBBBB;
+  cursor: not-allowed;
+}
+
+.day-buttonL1 {
+  background-color: white;
+  width: 30px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  font-weight: 700;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+/* Make empty buttons visible but inactive */
+.day-buttonL1.empty {
+  background-color: transparent;
+  border: none;
+  cursor: not-allowed;
+}
+
+
+.day-buttonL1.selected {
+  background-color: #FEEEED;
+  border-radius: 30px;
+  color: #E10202;
+}
+
+.day-buttonL1.disabled {
+  color: #BBBBBB;
+  cursor: not-allowed;
+}
+
+/* .day-button:hover:not(.disabled) {
+  background-color: #ddd; 
+  border-radius: 30px; 
+} */
+
+.calendar-footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.reset-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.yes-button {
+  background-color: #E10202;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.yes-button:disabled {
+  background-color: #BBB;
+  cursor: not-allowed;
+}
+
+.errorinput {
+  border: 1px solid red;
+  background-color: #FEEEED;
+}
+
+/* Last Modified by Singh Jashanpreet */
+.next-year:disabled .next-year-icon {
+  pointer-events: none;
+  --slds-c-icon-color-foreground-default: #BBBBBB;
+}
+
+.prev-year-icon,
+.next-year-icon {
+  --slds-c-icon-color-foreground-default: #262626;
+}
+
+.prev-year {
+  background: transparent;
+  border: none;
+}
+
+.prev-year:disabled {
+  cursor: not-allowed;
+}
+.next-year:disabled {
+  cursor: not-allowed;
+}
+
+.prev-year:disabled .prev-year-icon {
+  pointer-events: none;
+  --slds-c-icon-color-foreground-default: #BBBBBB;
+}
+
+textarea::placeholder{
+  color: #bbbbbb;
 }
 
 @media screen and (max-width: 930px) {

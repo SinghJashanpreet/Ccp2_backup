@@ -30,6 +30,7 @@ import getAllServices from "@salesforce/apex/CCP2_userController.permissionValue
 import Id from "@salesforce/user/Id";
 
 import getUserServices from "@salesforce/apex/CCP2_userController.permissionValuesAccessControl";
+import createLeaseDetail from "@salesforce/apex/CCP2_Additional_Services.createOtherLease";
 
 const editIcon = CCP2_Resources + "/CCP2_Resources/Vehicle/write.png";
 const dropdownImg = CCP2_Resources + "/CCP2_Resources/Common/arrow_under.png";
@@ -293,6 +294,69 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   @track recallImpstatusSelected = "";
 
   @track deleteConfirm = false;
+
+  @track isCalendarOpen2 = false;
+  @track selectedDate2 = null;
+  @track selectedDateToSend2 = null;
+  @track year2 = new Date().getFullYear();
+  @track month2 = new Date().getMonth() + 1;
+  @track calendarDates2 = [];
+  @track selectedDay2; // To track the currently selected day
+  @track isNextMonthDisabled2 = false;
+  @track isPrevMonthDisabled2 = false;
+  @track showPosterreal = false;
+  @track showImplementation = false;
+  @track showScheduleDate = false;
+  @track myday;
+  @track myMonth;
+  @track myYear;
+  @track myday2;
+  @track myMonth2;
+  @track myYear2;
+  @track storedScheduleDate = null;
+  @track storedScheduleEndDate = null;
+  @track storedImplementationDate = null;
+
+  @track isCalendarOpen2L1 = false;
+  @track myday2L1;
+  @track myMonth2L1;
+  @track myYear2L1;
+  @track selectedDay2L1; // To track the currently selected day
+  @track month2L1 = new Date().getMonth() + 1;
+  @track year2L1 = new Date().getFullYear();
+  @track calendarDates2L1 = [];
+  @track selectedDateToSend2L1 = null;
+  @track selectedDate2L1 = null;
+
+  @track isNextMonthDisabled2L1 = false;
+  @track isPrevMonthDisabled2L1 = false;
+
+
+  @track isCalendarOpen2R2 = false;
+  @track selectedDate2R2 = null;
+  @track selectedDateToSend2R2 = null;
+  @track year2R2 = new Date().getFullYear();
+  @track month2R2 = new Date().getMonth() + 1;
+  @track calendarDates2R2 = [];
+  @track selectedDay2R2; // To track the currently selected day
+  @track isNextMonthDisabled2R2 = false;
+  @track isPrevMonthDisabled2R2 = false;
+  @track showPosterreal = false;
+  @track myday2R2;
+  @track myMonth2R2;
+  @track myYear2R2;
+
+
+  @track inputRecallData = {
+    inputClassification: "",
+    inputImpStatus: "",
+    inputImpDate: "",
+    inputRecallSubject: "",
+    inputNotifDate: "",
+    inputManagementNum: "",
+    inputMemo: ""
+  };
+
 
   get isweightValid() {
     return this.vehicleByIdData.vehicleWeigth !== "-";
@@ -659,6 +723,8 @@ export default class Ccp2_VehicleDetails extends LightningElement {
             data.vehicle?.Truck_Connect__c === 0
               ? ""
               : data.vehicle?.Truck_Connect__c,
+          vehicleInfoId:
+            data.vehicle?.Vehicle_Info_Id__c ?? '',
           branchInfo:
             data.vehicle?.Branch_Vehicle_Junctions__r?.length === 0
               ? []
@@ -2979,6 +3045,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   @track isAllSelected = true;
   @track isVehicleSelected = false;
   @track leaseisempty = false;
+  @track showLeaseMemo = false;
   @track leaseFlag1yr = false;
   @track maintainleaseisempty = false;
   @track leaseloader = true;
@@ -3003,19 +3070,25 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       window.location.href = addBranchUrl;
     }
   }
-  loadleasedata() {
-    leaseInformation({ vehicleId: this.vehicleId })
+  @track refreshToken = 10;
+  loadleasedata() { 
+  ++this.refreshToken;
+    leaseInformation({ vehicleId: this.vehicleId, refresh: this.refreshToken })
       .then((result) => {
         console.log("result for lease : -", result);
-        if (result?.Flag) {
+        this.showLeaseMemo = (result?.memoFlag || result?.LeaseFlag) ?? false;
+        if (result?.LeaseFlag) {
           this.leaseisempty = false;
           this.leaseloader = false;
-          // this.leaseFlag1yr = result.Flag;
-          // console.log("lease flaggggggg",this.leaseFlag1yr)
+         
           this.leasedata = {
             ContractNumber: result.contractNumber_nv__c ?? "-",
             Memo: result.Memo ?? "入力してください",
+            MemoForEdit: result.Memo ?? "",
+            memoColor: result.Memo ? '' : 'color: #bbb',
             otherLease: result.otherLease ?? false,
+            LeaseFlag: result.LeaseFlag ?? false,
+            memoFlag: result.memoFlag ?? false,
             CompanyName: result.CompanyName
               ? this.substringToProperLength(result.CompanyName, 32)
               : "-",
@@ -3024,6 +3097,8 @@ export default class Ccp2_VehicleDetails extends LightningElement {
             ContractExpirationdate: result.expirationDate__c
               ? this.formatJapaneseDate(result.expirationDate__c)
               : "-",
+            ContractExpirationdateNormal: result.expirationDate__c ?? null,
+            ContractExpirationdateNormalTem: result.expirationDate__c ?? null,
             ContractYears: result.datefronInitialRegistrationDate__c
               ? result.datefronInitialRegistrationDate__c + "年"
               : "-",
@@ -3038,44 +3113,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
           this.leaseisempty = true;
           this.leaseloader = false;
         }
-        // if (result.length === 0) {
-        //   console.log("result", result);
-        //   this.leaseisempty = true;
-        //   this.leaseloader = false;
-        // } else {
-        //   this.leaseisempty = false;
-        //   if (
-        //     !result[0].contractNumber_nv__c &&
-        //     !result[0].contractorName__c &&
-        //     !result[0].datefronInitialRegistrationDate__c &&
-        //     !result[0].expirationDate__c &&
-        //     !result[0].monthlyLeaseWithoutTax__c &&
-        //     !result[0].voluntaryInsuranceIncluded__c
-        //   ) {
-        //     this.leaseisempty = true;
-        //     this.leaseloader = false;
-        //   } else {
-        //     this.leaseisempty = false;
-        //   }
-        // this.leasedata = {
-        //   ContractNumber: result[0].contractNumber_nv__c || "-",
-        //   ContractName: result[0].contractorName__c || "-",
-        //   ContractExpirationdate: result[0].expirationDate__c
-        //     ? this.formatJapaneseDate(result[0].expirationDate__c)
-        //     : "-",
-        //   ContractYears: result[0].datefronInitialRegistrationDate__c
-        //     ? result[0].datefronInitialRegistrationDate__c + "年"
-        //     : "-",
-        //   MonthlyLeaseFee: this.formatCurrency(
-        //     result[0].monthlyLeaseWithoutTax__c
-        //   ),
-        //   VoluntaryInsurance: result[0].voluntaryInsuranceIncluded__c
-        //     ? "あり"
-        //     : "なし" || "-"
-        // };
-        //   console.log("Lease data:", JSON.stringify(this.leasedata));
-        //   this.leaseloader = false;
-        // }
       })
       .catch((error) => {
         console.error("Error fetching lease data:", error);
@@ -3096,28 +3133,6 @@ export default class Ccp2_VehicleDetails extends LightningElement {
             console.error("Failed to log error in Salesforce:", loggingErr);
           });
       });
-
-    // MaintainenceLeaseInfo({ vehicleId: this.vehicleId })
-    //     .then(result => {
-    //       if (!result[0].contractNumber__c && !result[0].maintenanceContractMenu__c &&
-    //         !result[0].contractStart__c && !result[0].contractEnd__c) {
-    //         this.maintainleaseisempty = true;
-    //         this.leaseloader = false;
-    //       } else {
-    //         this.maintainleaseisempty = false;
-    //       }
-    //         this.maintainenceleasedata = {
-    //           MaintainContractNumber: result[0].contractNumber__c || '-',
-    //           Contractmenu: result[0].maintenanceContractMenu__c || '-',
-    //           ContractStartdate: result[0].contractStart__c ? this.formatJapaneseDate(result[0].contractStart__c.substring(0, 10)) : '-',
-    //           ContractExpirationdate: result[0].contractEnd__c ? this.formatJapaneseDate(result[0].contractEnd__c.substring(0, 10)) : '-'
-    //         };
-    //         console.log('Maintenance lease data:', JSON.stringify(this.maintainenceleasedata));
-    //         this.leaseloader = false;
-    //     })
-    //     .catch(error => {
-    //         console.error('Error fetching maintenance lease data:', error);
-    //     });
   }
 
   //   handleAllclick(){
@@ -3899,8 +3914,52 @@ export default class Ccp2_VehicleDetails extends LightningElement {
     this.loadTKData(this.startDateSortForQuery, this.enddateSortForQuery);
   }
 
-  handleCreaterecall() {
-    this.recallModal = true;
+  handleCreaterecall(event) {
+        event.stopPropagation();
+    const name = event.target.dataset.name;
+    if (name === "Cancel") {
+      // this.inputLeaseData = {
+      //   inputCompanyName: this.leasedata.CompanyName,
+      //   inputContractNumber: this.leasedata.ContractNumber,
+      //   inputContractName: this.leasedata.ContractName,
+      //   inputContractExpDate: this.leasedata.ContractExpirationdate,
+      //   inputContractYear: this.leasedata.ContractYears,
+      //   inputMonthlyLeaseFee: this.leasedata.MonthlyLeaseFee,
+      //   inputVoluntryInsurance: this.leasedata.VoluntaryInsurance,
+      //   inputMemo: this.leasedata.Memo
+      // };
+      this.inputRecallData = {
+        inputClassification: "",
+        inputImpStatus: "",
+        inputImpDate: "",
+        inputRecallSubject: "",
+        inputNotifDate: "",
+        inputManagementNum: "",
+        inputMemo: ""
+      };
+
+    } else if (name === "Create") {
+      this.inputRecallData = {
+        inputClassification: "",
+        inputImpStatus: "",
+        inputImpDate: "",
+        inputRecallSubject: "",
+        inputNotifDate: "",
+        inputManagementNum: "",
+        inputMemo: ""
+      };
+
+      // this.leasedata.ContractExpirationdateNormal = null;
+      
+      this.createModeOfRecallCreateModal = true;
+    } else if (name === "Edit") {
+      // this.leasedata.ContractExpirationdateNormal = this.leasedata.ContractExpirationdateNormalTem;
+      this.createModeOfRecallCreateModal = false;
+    }
+
+    this.recallModal = !this.recallModal;
+    this.isCalendarOpen2 = false;
+    this.isCalendarOpen2R2 = false;
   }
 
   @track showLeaseDeleteConfirmationModal = false;
@@ -3911,16 +3970,41 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       !this.showLeaseDeleteConfirmationModal;
   }
 
-  handleLeaseDeleteConfirmationModalYes(event) {
-    this.showLeaseDeleteConfirmationModal = false;
+    handleLeaseDeleteConfirmationModalYes(event) {
+    this.inputLeaseData = {
+        Id:  this.vehicleByIdData.vehicleInfoId,
+        inputCompanyName: "",
+        inputContractNumber: "",
+        inputContractName: "",
+        inputContractExpDate: null,
+        inputContractYear: null,
+        inputMonthlyLeaseFee: null,
+        inputVoluntryInsurance: null
+      };
+ 
+    console.log("inputLeaseData", this.inputLeaseData);
+ 
+    createLeaseDetail({ jsonInput: JSON.stringify(this.inputLeaseData)})
+    .then((result) => {
+      this.loadleasedata();
+        console.log("Lease created Success!");
+        // if (result) console.log("Lease created Success!");
+      })
+      .catch((error) => {
+        console.error("createLeaseDetail error", error);
+      });
+     
+      this.showLeaseDeleteConfirmationModal = false;
   }
+ 
 
   @track showCreateLeaseModal = false;
   @track createModeOfLeaseCreateModal = false;
+  @track createModeOfRecallCreateModal = false;
   handleCreateLeaseModal(event) {
     event.stopPropagation();
     const name = event.target.dataset.name;
-    if (name === 'Cancel') {
+    if (name === "Cancel") {
       this.inputLeaseData = {
         inputCompanyName: this.leasedata.CompanyName,
         inputContractNumber: this.leasedata.ContractNumber,
@@ -3929,9 +4013,9 @@ export default class Ccp2_VehicleDetails extends LightningElement {
         inputContractYear: this.leasedata.ContractYears,
         inputMonthlyLeaseFee: this.leasedata.MonthlyLeaseFee,
         inputVoluntryInsurance: this.leasedata.VoluntaryInsurance,
-        inputMemo: this.leasedata.Memo
+        inputMemo: this.leasedata.MemoForEdit
       };
-    }else if(name === 'Create'){
+    } else if (name === "Create") {
       this.inputLeaseData = {
         inputCompanyName: "",
         inputContractNumber: "",
@@ -3942,13 +4026,34 @@ export default class Ccp2_VehicleDetails extends LightningElement {
         inputVoluntryInsurance: "",
         inputMemo: ""
       };
+
+      this.leasedata.ContractExpirationdateNormal = null;
+      
       this.createModeOfLeaseCreateModal = true;
-    }else if(name === 'Edit'){
+    } else if (name === "Edit") {
+      this.leasedata.ContractExpirationdateNormal = this.leasedata.ContractExpirationdateNormalTem;
+      if(this.leasedata.ContractExpirationdateNormal){
+        let temDate = new Date(this.leasedata.ContractExpirationdateNormal);
+        this.selectedDate2L1 =  `${temDate.getFullYear()}年${temDate.getMonth() + 1}月${temDate.getDate()}日`;
+        console.log('editing time date in calendar : ', this.selectedDate2L1);
+      }
+
+      this.inputLeaseData = {
+        inputCompanyName: this.leasedata.CompanyName,
+        inputContractNumber: this.leasedata.ContractNumber,
+        inputContractName: this.leasedata.ContractName,
+        inputContractExpDate: this.leasedata.ContractExpirationdateNormal,
+        inputContractYear: this.leasedata.ContractYears,
+        inputMonthlyLeaseFee: this.leasedata.MonthlyLeaseFee,
+        inputVoluntryInsurance: this.leasedata.VoluntaryInsurance,
+        inputMemo: this.leasedata.MemoForEdit
+      };
       this.createModeOfLeaseCreateModal = false;
     }
 
     console.log("this.showCreateLeaseModal", this.showCreateLeaseModal, name);
     this.showCreateLeaseModal = !this.showCreateLeaseModal;
+    this.isCalendarOpen2L1 = false;
   }
 
   @track inputLeaseData = {
@@ -3977,6 +4082,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   }
 
   handleLeaseCreateInputChange(event) {
+    this.handlevalchange(event);
     console.log("event Name", event.target.name);
     const name = event.target.name;
     const value = event.target.value;
@@ -3986,13 +4092,62 @@ export default class Ccp2_VehicleDetails extends LightningElement {
       this.showLeaseInsurancePickList = !this.showLeaseInsurancePickList;
       return;
     }
-
     this.inputLeaseData[name] = value;
+    console.log("input lease data", this.inputLeaseData);
+  }
+
+  handleRecallCreateInputChange(event){
+    this.handlevalchange(event);
+    console.log("event Name", event.target.name);
+    const name = event.target.name;
+    const value = event.target.value;
+
+    this.inputRecallData[name] = value;
+    console.log("input recall data", this.inputRecallData);
+  }
+
+  @track showMemoEditUi = false;
+  handleLeaseMemoEditUi() {
+    this.showMemoEditUi = !this.showMemoEditUi;
   }
 
   handleLeaseSave(event) {
+    this.inputLeaseData.Id = this.vehicleByIdData.vehicleInfoId;
     console.log("inputLeaseData", this.inputLeaseData);
+    if(!this.createModeOfLeaseCreateModal){
+       this.inputLeaseData.inputContractYear = this.inputLeaseData.inputContractYear.replace('年', '');
+       this.inputLeaseData.inputMonthlyLeaseFee = this.inputLeaseData.inputMonthlyLeaseFee.replace('¥ ', '');
+    }
+    createLeaseDetail({ jsonInput: JSON.stringify(this.inputLeaseData)})
+      .then((result) => {
+        this.loadleasedata();
+        console.log("Lease created Success!");
+        // if (result) console.log("Lease created Success!");
+      })
+      .catch((error) => {
+        console.error("createLeaseDetail error", error);
+      });
+    this.isCalendarOpen2L1 = false;
     this.showCreateLeaseModal = false;
+  }
+  handleLeaseMemoSave(event) {
+    let inputTemForMemo = {
+      Id : this.vehicleByIdData.vehicleInfoId,
+      inputMemo: this.inputLeaseData.MemoForEdit
+    }
+   
+    console.log("inputTemForMemo", inputTemForMemo);
+    createLeaseDetail({ jsonInput: JSON.stringify(inputTemForMemo)})
+      .then((result) => {
+        this.loadleasedata();
+        console.log("Lease created Success!");
+        // if (result) console.log("Lease created Success!");
+      })
+      .catch((error) => {
+        console.error("createLeaseDetail error", error);
+      });
+
+    this.showMemoEditUi = false;
   }
 
   handlebackRecallCreate() {
@@ -4006,6 +4161,7 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   handleRecallcategSel(event) {
     this.recallCategoryselected = event.currentTarget.dataset.value;
     this.catDropdown = false;
+    this.inputRecallData.inputClassification = this.recallCategoryselected;
     console.log("recallCategoryselected", this.recallCategoryselected);
   }
 
@@ -4016,6 +4172,1355 @@ export default class Ccp2_VehicleDetails extends LightningElement {
   handleRecallstatusSel(event) {
     this.recallImpstatusSelected = event.currentTarget.dataset.value;
     this.impstatusDropdown = false;
+    this.inputRecallData.inputImpStatus = this.recallImpstatusSelected;
     console.log("recallstatuss", this.recallImpstatusSelected, event);
+  }
+
+  /* Recall Calendar 1 here */
+  openCalendarImplementation(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      event.stopPropagation();
+      this.showPosterreal = false;
+      this.isCalendarOpen2 = !this.isCalendarOpen2;
+      // this.isCalendarOpen = false;
+      // this.showMyList = true;
+      // this.showMorelist = false;
+      // this.searchArrayaccount = [];
+      // this.showBranchlist = false;
+      // this.showlistfactoryType = false;
+      // this.showlistScheduleType = false;
+
+      const temD = this.maintenanceDetails?.Implementation_Date__c2
+        ? new Date(this.maintenanceDetails?.Implementation_Date__c2)
+        : null;
+      // console.log("yes not same!!123", this.selectedDay, this.myday);
+      if (!this.myday2 && temD) this.myday2 = temD.getDate();
+      if (!this.myMonth2 && temD) this.myMonth2 = temD.getMonth() + 1;
+      if (!this.myYear2 && temD) this.myYear2 = temD.getFullYear();
+      // if (temD === null && !this.selectedDay2) {
+      if (temD === null && !this.myday2) {
+        let t = new Date();
+        this.myMonth2 = t.getMonth() + 1;
+        this.myYear2 = t.getFullYear();
+      }
+
+      if (this.selectedDay2 !== this.myday2) {
+        // console.log("yes not same!!", this.selectedDay, this.myday);
+        this.selectedDay2 = this.myday2;
+      }
+      if (this.month2 !== this.myMonth2 && this.myMonth2 !== undefined) {
+        this.month2 = this.myMonth2;
+      }
+      if (this.year2 !== this.myYear2 && this.myYear2 !== undefined) {
+        this.year2 = this.myYear2;
+      }
+
+      this.populateCalendar2();
+
+      if (this.selectedDay2) {
+        const selectedButton = this.template.querySelector(
+          `.day-button[data-day="${this.selectedDay2}"]`
+        );
+        if (selectedButton) {
+          selectedButton.classList.add("selected");
+        }
+      }
+    }
+  }
+
+  closeCalendar2() {
+    this.isCalendarOpen2 = false;
+  }
+
+  populateCalendar2() {
+    const today = new Date();
+    const firstDayOfMonth = new Date(this.year2, this.month2 - 1, 1).getDay(); // Day of the week for 1st of the month
+    const daysInMonth = new Date(this.year2, this.month2, 0).getDate(); // Number of days in the month
+
+    // Initialize calendarDates array
+    this.calendarDates2 = [];
+    this.isNextMonthDisabled2 = false; // Reset flag for next month
+    this.isPrevMonthDisabled2 = false; // Reset flag for prev month
+
+    // Add empty slots for days before the 1st of the month
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      this.calendarDates2.push({
+        value: "",
+        className: "day-button empty",
+        isEmpty: true,
+        isDisabled: true
+      });
+    }
+
+    if (!this.showPosterreal) {
+      for (let i = 1; i <= daysInMonth; i++) {
+        const currentDate = new Date(this.year2, this.month2 - 1, i); // JS date function has months indexed from 0-11
+        const isDisabled = currentDate > today;
+
+        // Check if this date is the previously selected date
+        const isSelected = this.selectedDay2 && this.selectedDay2 == i;
+        let buttonClass = "day-button filled";
+
+        if (isDisabled) {
+          buttonClass += " disabled";
+        } else if (isSelected) {
+          buttonClass += " selected";
+        }
+
+        this.calendarDates2.push({
+          value: i,
+          className: buttonClass,
+          isEmpty: false,
+          isDisabled
+        });
+      }
+    } else {
+      for (let i = 1; i <= daysInMonth; i++) {
+        const currentDate = new Date(this.year2, this.month2 - 1, i); // JS date function has months indexed from 0-11
+        const isDisabled = currentDate < today;
+
+        // Check if this date is the previously selected date
+        const isSelected = this.selectedDay2 && this.selectedDay2 == i;
+        let buttonClass = "day-button filled";
+
+        if (isDisabled) {
+          buttonClass += " disabled";
+        } else if (isSelected) {
+          buttonClass += " selected";
+        }
+
+        this.calendarDates2.push({
+          value: i,
+          className: buttonClass,
+          isEmpty: false,
+          isDisabled
+        });
+      }
+    }
+    let todayMonth = today.getMonth() + 1;
+    let todayYear = today.getFullYear();
+    if (
+      this.year2 >= todayYear ||
+      (this.month2 > todayMonth && this.year2 === todayYear - 1)
+    ) {
+      this.isNextYearDisabled2 = true;
+    } else {
+      this.isNextYearDisabled2 = false;
+    }
+    if (this.month2 === todayMonth && this.year2 === todayYear) {
+      this.isNextMonthDisabled2 = true;
+    } else {
+      this.isNextMonthDisabled2 = false;
+    }
+
+    const nextMonth = new Date(this.year2, this.month2);
+    const prevMonth = new Date(this.year2, this.month2 - 1);
+    this.isNextMonthDisabled2 = nextMonth > today;
+    this.isPrevMonthDisabled2 = prevMonth < today;
+  }
+
+  selectDate2(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      const selectedDay = event.target.textContent;
+
+      // Remove 'selected' class from the previously selected day
+      if (this.selectedDay2) {
+        const previouslySelected =
+          this.template.querySelector(`.day-button.selected`);
+        if (previouslySelected) {
+          previouslySelected.classList.remove("selected");
+        }
+      }
+
+      // Set the selected day if it's not disabled
+      if (selectedDay && !event.target.disabled) {
+        this.selectedDay2 = selectedDay;
+        const currentButton = event.target;
+        currentButton.classList.add("selected"); // Mark this button as selected
+
+        // Update only `selectedDateToSend`, not `selectedDate` yet
+      }
+
+      this.confirmDate2();
+    }
+  }
+
+  confirmDate2() {
+    if (this.selectedDay2) {
+      // Update the formatted `selectedDate` when confirm is clicked
+      this.selectedDate2 = `${this.year2}年${this.month2}月${this.selectedDay2}日`;
+      this.myday2 = this.selectedDay2;
+      this.myMonth2 = this.month2;
+      this.myYear2 = this.year2;
+      // Update the input field with the selected date
+      const inputField = this.template.querySelector(".input-recall");
+      inputField.value = this.selectedDate2;
+
+      const selectedDateToSend = new Date(
+        this.year2,
+        this.month2 - 1,
+        this.selectedDay2
+      );
+      this.selectedDateToSend2 = this.formatDateToYYYYMMDD(selectedDateToSend);
+      // this.serviceFactoryOptions = this.serviceFactoryOptions.filter(
+      //   (ser) => ser.label !== "ふそう"
+      // );
+      // if (this.selectedPicklistfactoryType === "ふそう") {
+      //   this.selectedPicklistfactoryType = "";
+      //   this.BranchSearchList = true;
+      //   this.FusoSearchList = false;
+      //   this.handleRemovesearchKeyFuso();
+      // }
+      this.inputRecallData.inputImpDate = this.selectedDateToSend2;
+    }
+    this.isCalendarOpen2 = false;
+  }
+
+  resetDate2() {
+    this.selectedDate2 = null;
+    this.selectedDay2 = null; // Clear the selected day
+    const todayD = new Date();
+    this.year2 = todayD.getFullYear();
+    this.myYear2 = todayD.getFullYear();
+    this.month2 = todayD.getMonth() + 1;
+    this.myMonth2 = todayD.getMonth() + 1;
+    this.myday2 = undefined;
+    const inputField = this.template.querySelector(".input-recall");
+    inputField.value = "";
+    this.selectedDateToSend2 = null;
+    // this.maintenanceDetails.Implementation_Date__c = null;
+    // this.maintenanceDetails.Implementation_Date__c2 = null;
+
+    // Reset the selected state of all buttons
+    const selectedButtons = this.template.querySelectorAll(
+      ".day-button.selected"
+    );
+    selectedButtons.forEach((button) => button.classList.remove("selected"));
+    this.populateCalendar2();
+    this.serviceFactoryOptions = this.serviceFactoryOptionsreset;
+
+    this.isNextYearDisabled2 = true;
+    this.isNextMonthDisabled2 = true;
+  }
+
+  goToPreviousMonth2(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      if (this.showPosterreal) {
+        if (!this.isPrevMonthDisabled2) {
+          this.month2--;
+          this.selectedDay2 = null;
+
+          if (this.month2 < 1) {
+            this.month2 = 12;
+            this.year2--;
+          }
+
+          if (this.myMonth2 === this.month2 && this.myYear2 === this.year2) {
+            this.selectedDay2 = this.myday2;
+          }
+
+          //this.selectedDate = null;
+          const selectedButtons = this.template.querySelectorAll(
+            ".day-button.selected"
+          );
+          selectedButtons.forEach((button) =>
+            button.classList.remove("selected")
+          );
+          this.populateCalendar2();
+        }
+      } else {
+        this.month2--;
+        this.selectedDay2 = null;
+
+        if (this.month2 < 1) {
+          this.month2 = 12;
+          this.year2--;
+        }
+
+        if (this.myMonth2 === this.month2 && this.myYear2 === this.year2) {
+          this.selectedDay2 = this.myday2;
+        }
+
+        //this.selectedDate = null;
+        const selectedButtons = this.template.querySelectorAll(
+          ".day-button.selected"
+        );
+        selectedButtons.forEach((button) =>
+          button.classList.remove("selected")
+        );
+        this.populateCalendar2();
+      }
+
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
+
+      if (todayYear - 1 >= this.year2 && todayMonth >= this.month2) {
+        this.isNextYearDisabled2 = false;
+      }
+    }
+  }
+
+  goToNextMonth2(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      if (!this.isNextMonthDisabled2 && !this.showPosterreal) {
+        this.month2++;
+        const selectedButtons = this.template.querySelectorAll(
+          ".day-button.selected"
+        );
+        selectedButtons.forEach((button) =>
+          button.classList.remove("selected")
+        );
+        this.selectedDay2 = null;
+        if (this.month2 > 12) {
+          this.month2 = 1;
+          this.year2++;
+        }
+        if (this.myMonth2 === this.month2 && this.myYear2 === this.year2) {
+          this.selectedDay2 = this.myday2;
+          // this.selectedDate = null;
+        }
+        // this.selectedDay = null;
+        //this.selectedDate = null;
+        this.populateCalendar2();
+      } else if (this.showPosterreal) {
+        this.month2++;
+        const selectedButtons = this.template.querySelectorAll(
+          ".day-button.selected"
+        );
+        selectedButtons.forEach((button) =>
+          button.classList.remove("selected")
+        );
+        this.selectedDay2 = null;
+        if (this.month2 > 12) {
+          this.month2 = 1;
+          this.year2++;
+        }
+        if (this.myMonth2 === this.month2 && this.myYear2 === this.year2) {
+          this.selectedDay2 = this.myday2;
+          // this.selectedDate = null;
+        }
+        // this.selectedDay = null;
+        //this.selectedDate = null;
+        this.populateCalendar2();
+      }
+
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
+
+      if (todayMonth === this.month2 && todayYear === this.year2) {
+        this.isNextYearDisabled2 = true;
+      }
+
+      /* Last Modified by Singh Jashanpreet */
+      if (todayYear - 1 === this.year2 && todayMonth < this.month2) {
+        this.isNextYearDisabled2 = true;
+      }
+    }
+  }
+
+  formatDateToYYYYMMDD(date) {
+    if (!date || !(date instanceof Date)) {
+      console.error("Invalid date:", date);
+      return null;
+    }
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  // Function to get the Japanese era based on the year
+  getJapaneseEra(year) {
+    if (year >= 2019) {
+      const eraYear = year - 2018; // Reiwa started in 2019, so 2024 is Reiwa 6
+      return `令和${eraYear}年`;
+    } else if (year >= 1989) {
+      const eraYear = year - 1988; // Heisei started in 1989
+      return `平成${eraYear}年`;
+    }
+    // Add more eras as needed
+    return "";
+  }
+
+  // Function to get the localized month name
+  getMonthLabel(month) {
+    const monthLabels = [
+      "1月",
+      "2月",
+      "3月",
+      "4月",
+      "5月",
+      "6月",
+      "7月",
+      "8月",
+      "9月",
+      "10月",
+      "11月",
+      "12月"
+    ];
+    return monthLabels[month - 1];
+  }
+
+  get displayDate() {
+    if (this.selectedDate2) {
+      return this.selectedDate2 === "-" ? "" : this.selectedDate2;
+    }
+
+    // if (this.maintenanceDetails.Implementation_Date__c) {
+    //   return this.maintenanceDetails.Implementation_Date__c === "-"
+    //     ? ""
+    //     : this.maintenanceDetails.Implementation_Date__c;
+    // }
+
+    return "";
+  }
+
+  get monthLabel2() {
+    return this.getMonthLabel(this.month2);
+  }
+
+  get era2() {
+    return this.getJapaneseEra(this.year2);
+  }
+
+  prevYear2() {
+    //for history
+    this.isNextYearDisabled2 = false;
+    this.year2--;
+    const selectedButtons = this.template.querySelectorAll(
+      ".day-button.selected"
+    );
+    selectedButtons.forEach((button) =>
+      button.classList.remove(
+        "selected",
+        "in-range",
+        "startborder",
+        "endborder",
+        "singleborder"
+      )
+    );
+    // this.selectedDay2 = null;
+    // if (this.myYear2 === this.year2) {
+    //   this.selectedDay2 = this.myday2;
+    //   this.month2 = this.myMonth2;
+    // }
+    this.populateCalendar2();
+  }
+
+  nextyear2() {
+    //for history
+    // this.isPrevDisabled = false;
+    // this.isPrevYearDisabled = false;
+
+    this.year2++;
+    const selectedButtons = this.template.querySelectorAll(
+      ".day-button.selected"
+    );
+    selectedButtons.forEach((button) =>
+      button.classList.remove(
+        "selected",
+        "in-range",
+        "startborder",
+        "endborder",
+        "singleborder"
+      )
+    );
+    //this.selectedDay2 = null;
+    // if (this.myYear === this.year) {
+    //   this.selectedDay = this.myday;
+    //   this.month = this.myMonth;
+    // }
+    this.populateCalendar2();
+
+    /* Last Modified by Singh Jashanpreet */
+    const today = new Date();
+    let todayMonth = today.getMonth() + 1;
+    let todayYear = today.getFullYear();
+
+    console.log(
+      todayYear,
+      " ",
+      this.year,
+      " ",
+      todayMonth,
+      " ",
+      this.month,
+      " ",
+      this.isNextYearDisabled2
+    );
+    //isNextMonthDisabled2
+    //isNextYearDisabled2
+    if (
+      todayYear <= this.year2 ||
+      (this.month2 > todayMonth && todayYear - 1 === this.year2)
+    ) {
+      //2025 -
+      this.isNextYearDisabled2 = true;
+    }
+    if (todayYear === this.year2 && this.month2 === todayMonth) {
+      this.isNextMonthDisabled2 = true;
+      this.isNextYearDisabled2 = true;
+    }
+  }
+
+
+   /* Recall Calendar 2 here */
+  openCalendarImplementationR2(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      event.stopPropagation();
+      // this.showPosterreal = false;
+      this.isCalendarOpen2R2 = !this.isCalendarOpen2R2;
+      // this.isCalendarOpen = false;
+      // this.showMyList = true;
+      // this.showMorelist = false;
+      // this.searchArrayaccount = [];
+      // this.showBranchlist = false;
+      // this.showlistfactoryType = false;
+      // this.showlistScheduleType = false;
+
+      const temD = this.maintenanceDetails?.Implementation_Date__c2
+        ? new Date(this.maintenanceDetails?.Implementation_Date__c2)
+        : null;
+      // console.log("yes not same!!123", this.selectedDay, this.myday);
+      if (!this.myday2R2 && temD) this.myday2R2 = temD.getDate();
+      if (!this.myMonth2R2 && temD) this.myMonth2R2 = temD.getMonth() + 1;
+      if (!this.myYear2R2 && temD) this.myYear2R2 = temD.getFullYear();
+      // if (temD === null && !this.selectedDay2) {
+      if (temD === null && !this.myday2R2) {
+        let t = new Date();
+        this.myMonth2R2 = t.getMonth() + 1;
+        this.myYear2R2 = t.getFullYear();
+      }
+
+      if (this.selectedDay2R2 !== this.myday2R2) {
+        // console.log("yes not same!!", this.selectedDay, this.myday);
+        this.selectedDay2R2 = this.myday2R2;
+      }
+      if (this.month2R2 !== this.myMonth2R2 && this.myMonth2R2 !== undefined) {
+        this.month2R2 = this.myMonth2R2;
+      }
+      if (this.year2R2 !== this.myYear2R2 && this.myYear2R2 !== undefined) {
+        this.year2R2 = this.myYear2R2;
+      }
+
+      this.populateCalendar2R2();
+
+      if (this.selectedDay2R2) {
+        const selectedButton = this.template.querySelector(
+          `.day-button[data-day="${this.selectedDay2R2}"]`
+        );
+        if (selectedButton) {
+          selectedButton.classList.add("selected");
+        }
+      }
+    }
+  }
+
+  closeCalendar2R2() {
+    this.isCalendarOpen2R2 = false;
+  }
+
+  populateCalendar2R2() {
+    const today = new Date();
+    const firstDayOfMonth = new Date(this.year2R2, this.month2R2 - 1, 1).getDay(); // Day of the week for 1st of the month
+    const daysInMonth = new Date(this.year2R2, this.month2R2, 0).getDate(); // Number of days in the month
+
+    // Initialize calendarDates array
+    this.calendarDates2R2 = [];
+    this.isNextMonthDisabled2R2 = false; // Reset flag for next month
+    this.isPrevMonthDisabled2R2 = false; // Reset flag for prev month
+
+    // Add empty slots for days before the 1st of the month
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      this.calendarDates2R2.push({
+        value: "",
+        className: "day-button empty",
+        isEmpty: true,
+        isDisabled: true
+      });
+    }
+
+    if (!this.showPosterreal) {
+      for (let i = 1; i <= daysInMonth; i++) {
+        const currentDate = new Date(this.year2R2, this.month2R2 - 1, i); // JS date function has months indexed from 0-11
+        const isDisabled = currentDate > today;
+
+        // Check if this date is the previously selected date
+        const isSelected = this.selectedDay2R2 && this.selectedDay2R2 == i;
+        let buttonClass = "day-button filled";
+
+        if (isDisabled) {
+          buttonClass += " disabled";
+        } else if (isSelected) {
+          buttonClass += " selected";
+        }
+
+        this.calendarDates2R2.push({
+          value: i,
+          className: buttonClass,
+          isEmpty: false,
+          isDisabled
+        });
+      }
+    } else {
+      for (let i = 1; i <= daysInMonth; i++) {
+        const currentDate = new Date(this.year2R2, this.month2R2 - 1, i); // JS date function has months indexed from 0-11
+        const isDisabled = currentDate < today;
+
+        // Check if this date is the previously selected date
+        const isSelected = this.selectedDay2R2 && this.selectedDay2R2 == i;
+        let buttonClass = "day-button filled";
+
+        if (isDisabled) {
+          buttonClass += " disabled";
+        } else if (isSelected) {
+          buttonClass += " selected";
+        }
+
+        this.calendarDates2R2.push({
+          value: i,
+          className: buttonClass,
+          isEmpty: false,
+          isDisabled
+        });
+      }
+    }
+    let todayMonth = today.getMonth() + 1;
+    let todayYear = today.getFullYear();
+    if((this.year2R2 >= todayYear) || (this.month2R2 > todayMonth && this.year2R2 === todayYear - 1)){
+      this.isNextYearDisabled2R2 = true;
+    } else{
+      this.isNextYearDisabled2R2 = false;
+    }
+    if(this.month2R2 === todayMonth && this.year2R2 === todayYear){
+      this.isNextMonthDisabled2R2 = true;
+    } else{
+      this.isNextMonthDisabled2R2 = false;
+    }
+
+    const nextMonth = new Date(this.year2R2, this.month2R2);
+    const prevMonth = new Date(this.year2R2, this.month2R2 - 1);
+    this.isNextMonthDisabled2R2 = nextMonth > today;
+    this.isPrevMonthDisabled2R2 = prevMonth < today;
+  }
+
+  selectDate2R2(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      const selectedDay = event.target.textContent;
+
+      // Remove 'selected' class from the previously selected day
+      if (this.selectedDay2R2) {
+        const previouslySelected =
+          this.template.querySelector(`.day-button.selected`);
+        if (previouslySelected) {
+          previouslySelected.classList.remove("selected");
+        }
+      }
+
+      // Set the selected day if it's not disabled
+      if (selectedDay && !event.target.disabled) {
+        this.selectedDay2R2 = selectedDay;
+        const currentButton = event.target;
+        currentButton.classList.add("selected"); // Mark this button as selected
+
+        // Update only `selectedDateToSend`, not `selectedDate` yet
+      }
+
+      this.confirmDate2R2();
+    }
+  }
+
+  confirmDate2R2() {
+    if (this.selectedDay2R2) {
+      // Update the formatted `selectedDate` when confirm is clicked
+      this.selectedDate2R2 = `${this.year2R2}年${this.month2R2}月${this.selectedDay2R2}日`;
+      this.myday2R2 = this.selectedDay2R2;
+      this.myMonth2R2 = this.month2R2;
+      this.myYear2R2 = this.year2R2;
+      // Update the input field with the selected date
+      const inputField = this.template.querySelector(".input-recall");
+      inputField.value = this.selectedDate2R2;
+
+      const selectedDateToSend = new Date(
+        this.year2R2,
+        this.month2R2 - 1,
+        this.selectedDay2R2
+      );
+      this.selectedDateToSend2R2 = this.formatDateToYYYYMMDD(selectedDateToSend);
+      // this.serviceFactoryOptions = this.serviceFactoryOptions.filter(
+      //   (ser) => ser.label !== "ふそう"
+      // );
+      // if (this.selectedPicklistfactoryType === "ふそう") {
+      //   this.selectedPicklistfactoryType = "";
+      //   this.BranchSearchList = true;
+      //   this.FusoSearchList = false;
+      //   this.handleRemovesearchKeyFuso();
+      // }
+      this.inputRecallData.inputNotifDate = this.selectedDateToSend2R2;
+    }
+    this.isCalendarOpen2R2 = false;
+  }
+
+  resetDate2R2() {
+    this.selectedDate2R2 = null;
+    this.selectedDay2R2 = null; // Clear the selected day
+    const todayD = new Date();
+    this.year2R2 = todayD.getFullYear();
+    this.myYear2R2 = todayD.getFullYear();
+    this.month2R2 = todayD.getMonth() + 1;
+    this.myMonth2R2 = todayD.getMonth() + 1;
+    this.myday2R2 = undefined;
+    const inputField = this.template.querySelector(".custom-input");
+    inputField.value = "";
+    this.selectedDateToSend2R2 = null;
+    // this.maintenanceDetails.Implementation_Date__c = null;
+    // this.maintenanceDetails.Implementation_Date__c2 = null;
+
+    // Reset the selected state of all buttons
+    const selectedButtons = this.template.querySelectorAll(
+      ".day-button.selected"
+    );
+    selectedButtons.forEach((button) => button.classList.remove("selected"));
+    this.populateCalendar2R2();
+    // this.serviceFactoryOptions = this.serviceFactoryOptionsreset;
+
+    this.isNextYearDisabled2R2 = true;
+    this.isNextMonthDisabled2R2 = true;
+  }
+
+  goToPreviousMonth2R2(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      if (this.showPosterreal) {
+        if (!this.isPrevMonthDisabled2R2) {
+          this.month2R2--;
+          this.selectedDay2R2 = null;
+
+          if (this.month2R2 < 1) {
+            this.month2R2 = 12;
+            this.year2R2--;
+          }
+
+          if (this.myMonth2R2 === this.month2R2 && this.myYear2R2 === this.year2R2) {
+            this.selectedDay2R2 = this.myday2R2;
+          }
+
+          //this.selectedDate = null;
+          const selectedButtons = this.template.querySelectorAll(
+            ".day-button.selected"
+          );
+          selectedButtons.forEach((button) =>
+            button.classList.remove("selected")
+          );
+          this.populateCalendar2R2();
+        }
+      } else {
+        this.month2R2--;
+        this.selectedDay2R2 = null;
+
+        if (this.month2R2 < 1) {
+          this.month2R2 = 12;
+          this.year2R2--;
+        }
+
+        if (this.myMonth2R2 === this.month2R2 && this.myYear2R2 === this.year2R2) {
+          this.selectedDay2R2 = this.myday2R2;
+        }
+
+        //this.selectedDate = null;
+        const selectedButtons = this.template.querySelectorAll(
+          ".day-button.selected"
+        );
+        selectedButtons.forEach((button) =>
+          button.classList.remove("selected")
+        );
+        this.populateCalendar2R2();
+      }
+
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
+
+      if (todayYear - 1 >=  this.year2R2 && todayMonth >= this.month2R2) {
+        this.isNextYearDisabled2R2 = false;
+      }
+    }
+  }
+
+  goToNextMonth2R2(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      if (!this.isNextMonthDisabled2R2 && !this.showPosterreal) {
+        this.month2R2++;
+        const selectedButtons = this.template.querySelectorAll(
+          ".day-button.selected"
+        );
+        selectedButtons.forEach((button) =>
+          button.classList.remove("selected")
+        );
+        this.selectedDay2R2 = null;
+        if (this.month2R2 > 12) {
+          this.month2R2 = 1;
+          this.year2R2++;
+        }
+        if (this.myMonth2R2 === this.month2R2 && this.myYear2R2 === this.year2R2) {
+          this.selectedDay2 = this.myday2;
+          // this.selectedDate = null;
+        }
+        // this.selectedDay = null;
+        //this.selectedDate = null;
+        this.populateCalendar2R2();
+      } else if (this.showPosterreal) {
+        this.month2R2++;
+        const selectedButtons = this.template.querySelectorAll(
+          ".day-button.selected"
+        );
+        selectedButtons.forEach((button) =>
+          button.classList.remove("selected")
+        );
+        this.selectedDay2R2 = null;
+        if (this.month2R2 > 12) {
+          this.month2R2 = 1;
+          this.year2R2++;
+        }
+        if (this.myMonth2R2 === this.month2R2 && this.myYear2R2 === this.year2R2) {
+          this.selectedDay2R2 = this.myday2R2;
+          // this.selectedDate = null;
+        }
+        // this.selectedDay = null;
+        //this.selectedDate = null;
+        this.populateCalendar2R2();
+      }
+
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
+
+      if (todayMonth === this.month2R2 && todayYear === this.year2R2) {
+        this.isNextYearDisabled2R2 = true;
+      }
+
+      /* Last Modified by Singh Jashanpreet */
+      if (todayYear - 1 === this.year2R2 && todayMonth < this.month2R2) {
+        this.isNextYearDisabled2R2 = true;
+      }
+    }
+  }
+
+  get displayDateR2() {
+    if (this.selectedDate2R2) {
+      return this.selectedDate2R2 === "-" ? "" : this.selectedDate2R2;
+    }
+
+    // if (this.maintenanceDetails.Implementation_Date__c) {
+    //   return this.maintenanceDetails.Implementation_Date__c === "-"
+    //     ? ""
+    //     : this.maintenanceDetails.Implementation_Date__c;
+    // }
+
+    return "";
+  }
+
+  get monthLabel2R2() {
+    return this.getMonthLabel(this.month2R2);
+  }
+
+  get era2R2() {
+    return this.getJapaneseEra(this.year2R2);
+  }
+
+    prevYear2R2() {
+    //for history
+      this.isNextYearDisabled2R2 = false;
+      this.year2R2--;
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-button.selected"
+      );
+      selectedButtons.forEach((button) =>
+        button.classList.remove(
+          "selected",
+          "in-range",
+          "startborder",
+          "endborder",
+          "singleborder"
+        )
+      );
+      // this.selectedDay2 = null;
+      // if (this.myYear2 === this.year2) {
+      //   this.selectedDay2 = this.myday2;
+      //   this.month2 = this.myMonth2;
+      // }
+      this.populateCalendar2R2();
+  }
+
+  nextyear2R2() {
+    //for history
+      // this.isPrevDisabled = false;
+      // this.isPrevYearDisabled = false;
+
+      this.year2R2++;
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-button.selected"
+      );
+      selectedButtons.forEach((button) =>
+        button.classList.remove(
+          "selected",
+          "in-range",
+          "startborder",
+          "endborder",
+          "singleborder"
+        )
+      );
+      //this.selectedDay2 = null;
+      // if (this.myYear === this.year) {
+      //   this.selectedDay = this.myday;
+      //   this.month = this.myMonth;
+      // }
+      this.populateCalendar2R2();
+
+      /* Last Modified by Singh Jashanpreet */
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
+
+      console.log(
+        todayYear,
+        " ",
+        this.yearR2,
+        " ",
+        todayMonthR2,
+        " ",
+        this.isNextYearDisabled2R2
+      );
+        //isNextMonthDisabled2
+  //isNextYearDisabled2
+      if (
+        todayYear <= this.year2R2 ||
+        (this.month2R2 > todayMonth && todayYear - 1 === this.year2R2)
+      ) {
+        //2025 -
+        this.isNextYearDisabled2R2 = true;
+      }
+      if (todayYear === this.year2R2 && this.month2R2 === todayMonth) {
+        this.isNextMonthDisabled2R2 = true;
+        this.isNextYearDisabled2R2 = true;
+      }
+  }
+
+
+
+
+  /* Lease Calendar here */
+  openCalendarImplementationL1(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      event.stopPropagation();
+      this.isCalendarOpen2L1 = !this.isCalendarOpen2L1;
+
+      let temD = this.leasedata?.ContractExpirationdateNormal
+        ? new Date(this.leasedata?.ContractExpirationdateNormal)
+        : null;
+
+      if(this.createModeOfLeaseCreateModal){
+        temD = null;
+      }
+      if (!this.myday2L1 && temD) this.myday2L1 = temD.getDate();
+      if (!this.myMonth2L1 && temD) this.myMonth2L1 = temD.getMonth() + 1;
+      if (!this.myYear2L1 && temD) this.myYear2L1 = temD.getFullYear();
+
+      if (temD === null && !this.myday2L1) {
+        let t = new Date();
+        this.myMonth2L1 = t.getMonth() + 1;
+        this.myYear2L1 = t.getFullYear();
+      }
+
+      if (this.selectedDay2L1 !== this.myday2L1) {
+        this.selectedDay2L1 = this.myday2L1;
+      }
+      if (this.month2L1 !== this.myMonth2L1 && this.myMonth2L1 !== undefined) {
+        this.month2L1 = this.myMonth2L1;
+      }
+      if (this.year2L1 !== this.myYear2L1 && this.myYear2L1 !== undefined) {
+        this.year2L1 = this.myYear2L1;
+      }
+
+      this.populateCalendar2L1();
+
+      console.log(
+        "this.selectedDay2L1this.selectedDay2L1",
+        this.selectedDay2L1
+      );
+      if (this.selectedDay2L1) {
+        const selectedButton = this.template.querySelector(
+          `.day-buttonL1[data-day="${this.selectedDay2L1}"]`
+        );
+        console.log("is selectedbutton enter");
+        console.log("is selectedbutton", selectedButton);
+        if (selectedButton) {
+          selectedButton.classList.add("selected");
+        }
+      }
+    }
+  }
+
+  closeCalendar2L1() {
+    this.isCalendarOpen2L1 = false;
+  }
+
+  populateCalendar2L1() {
+    const today = new Date();
+    const firstDayOfMonth = new Date(
+      this.year2L1,
+      this.month2L1 - 1,
+      1
+    ).getDay(); // Day of the week for 1st of the month
+    const daysInMonth = new Date(this.year2L1, this.month2L1, 0).getDate(); // Number of days in the month
+
+    // Initialize calendarDates array
+    this.calendarDates2L1 = [];
+
+    // this.isNextMonthDisabled2 = false; // Reset flag for next month
+    // this.isPrevMonthDisabled2 = false; // Reset flag for prev month
+
+    // Add empty slots for days before the 1st of the month
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      this.calendarDates2L1.push({
+        value: "",
+        className: "day-buttonL1 empty",
+        isEmpty: true,
+        isDisabled: false
+      });
+    }
+
+    for (let i = 1; i <= daysInMonth; i++) {
+      const currentDate = new Date(this.year2L1, this.month2L1 - 1, i); // JS date function has months indexed from 0-11
+      // const isDisabled = currentDate > today;
+
+      // Check if this date is the previously selected date
+      const isSelected = this.selectedDay2L1 && this.selectedDay2L1 == i;
+      let buttonClass = "day-buttonL1 filled";
+
+      if (isSelected) {
+        buttonClass += " selected";
+      }
+
+      this.calendarDates2L1.push({
+        value: i,
+        className: buttonClass,
+        isEmpty: false,
+        isDisabled: false
+      });
+    }
+
+    let todayMonth = today.getMonth() + 1;
+    let todayYear = today.getFullYear();
+    // if((this.year2L1 >= todayYear) || (this.month2L1 > todayMonth && this.year2L1 === todayYear - 1)){
+    //   this.isNextYearDisabled2 = true;
+    // } else{
+    //   this.isNextYearDisabled2 = false;
+    // }
+    // if(this.month2L1 === todayMonth && this.year2L1 === todayYear){
+    //   this.isNextMonthDisabled2 = true;
+    // } else{
+    //   this.isNextMonthDisabled2 = false;
+    // }
+
+    // const nextMonth = new Date(this.year2L1, this.month2L1);
+    // const prevMonth = new Date(this.year2L1, this.month2L1 - 1);
+    // this.isNextMonthDisabled2 = nextMonth > today;
+    // this.isPrevMonthDisabled2 = prevMonth < today;
+  }
+
+  selectDate2L1(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      const selectedDay = event.target.textContent;
+
+      // Remove 'selected' class from the previously selected day
+      if (this.selectedDay2L1) {
+        const previouslySelected = this.template.querySelector(
+          `.day-buttonL1.selected`
+        );
+        if (previouslySelected) {
+          previouslySelected.classList.remove("selected");
+        }
+      }
+
+      // Set the selected day if it's not disabled
+      if (selectedDay && !event.target.disabled) {
+        this.selectedDay2L1 = selectedDay;
+        const currentButton = event.target;
+        currentButton.classList.add("selected"); // Mark this button as selected
+
+        // Update only `selectedDateToSend`, not `selectedDate` yet
+      }
+
+      this.confirmDate2L1();
+    }
+  }
+
+  confirmDate2L1() {
+    if (this.selectedDay2L1) {
+      // Update the formatted `selectedDate` when confirm is clicked
+      this.selectedDate2L1 = `${this.year2L1}年${this.month2L1}月${this.selectedDay2L1}日`;
+      this.myday2L1 = this.selectedDay2L1;
+      this.myMonth2L1 = this.month2L1;
+      this.myYear2L1 = this.year2L1;
+      // Update the input field with the selected date
+      const inputField = this.template.querySelector(".input-recall");
+      inputField.value = this.selectedDate2L1;
+
+      const selectedDateToSend = new Date(
+        this.year2L1,
+        this.month2L1 - 1,
+        this.selectedDay2L1
+      );
+      this.selectedDateToSend2L1 =
+        this.formatDateToYYYYMMDD(selectedDateToSend);
+
+      this.inputLeaseData.inputContractExpDate = this.selectedDateToSend2L1;
+    }
+    this.isCalendarOpen2L1 = false;
+  }
+
+  resetDate2L1() {
+    this.selectedDate2L1 = null;
+    this.selectedDay2L1 = null; // Clear the selected day
+    this.inputLeaseData.inputContractExpDate = "";
+    const todayD = new Date();
+    this.year2L1 = todayD.getFullYear();
+    this.myYear2L1 = todayD.getFullYear();
+    this.month2L1 = todayD.getMonth() + 1;
+    this.myMonth2L1 = todayD.getMonth() + 1;
+    this.myday2L1 = undefined;
+    const inputField = this.template.querySelector(".input-recall");
+    inputField.value = "";
+    this.selectedDateToSend2L1 = null;
+    // this.maintenanceDetails.Implementation_Date__c = null;
+    // this.maintenanceDetails.Implementation_Date__c2 = null;
+
+    // Reset the selected state of all buttons
+    const selectedButtons = this.template.querySelectorAll(
+      ".day-buttonL1.selected"
+    );
+    console.log("selectedButtons for reset", selectedButtons);
+    selectedButtons.forEach((button) => button.classList.remove("selected"));
+    this.populateCalendar2L1();
+    // this.serviceFactoryOptions = this.serviceFactoryOptionsreset;
+
+    // this.isNextYearDisabled2 = true;
+    // this.isNextMonthDisabled2 = true;
+  }
+
+  goToPreviousMonth2L1(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      // if (!this.isPrevMonthDisabled2) {
+      this.month2L1--;
+      this.selectedDay2L1 = null;
+
+      if (this.month2L1 < 1) {
+        this.month2L1 = 12;
+        this.year2L1--;
+      }
+
+      if (
+        this.myMonth2L1 === this.month2L1 &&
+        this.myYear2L1 === this.year2L1
+      ) {
+        this.selectedDay2L1 = this.myday2L1;
+      }
+
+      //this.selectedDate = null;
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-buttonL1.selected"
+      );
+      selectedButtons.forEach((button) => button.classList.remove("selected"));
+      this.populateCalendar2L1();
+      // }
+
+      // const today = new Date();
+      // let todayMonth = today.getMonth() + 1;
+      // let todayYear = today.getFullYear();
+
+      // if (todayYear - 1 >=  this.year2L1 && todayMonth >= this.month2L1) {
+      //   this.isNextYearDisabled2 = false;
+      // }
+    }
+  }
+
+  goToNextMonth2L1(event) {
+    if (
+      event.type === "click" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      this.month2L1++;
+      const selectedButtons = this.template.querySelectorAll(
+        ".day-buttonL1.selected"
+      );
+      selectedButtons.forEach((button) => button.classList.remove("selected"));
+      this.selectedDay2L1 = null;
+      if (this.month2L1 > 12) {
+        this.month2L1 = 1;
+        this.year2L1++;
+      }
+      if (
+        this.myMonth2L1 === this.month2L1 &&
+        this.myYear2L1 === this.year2L1
+      ) {
+        this.selectedDay2L1 = this.myday2L1;
+        // this.selectedDate = null;
+      }
+      // this.selectedDay = null;
+      //this.selectedDate = null;
+      this.populateCalendar2L1();
+
+      const today = new Date();
+      let todayMonth = today.getMonth() + 1;
+      let todayYear = today.getFullYear();
+
+      // if (todayMonth === this.month2L1 && todayYear === this.year2L1) {
+      //   this.isNextYearDisabled2 = true;
+      // }
+
+      // /* Last Modified by Singh Jashanpreet */
+      // if (todayYear - 1 === this.year2L1 && todayMonth < this.month2L1) {
+      //   this.isNextYearDisabled2 = true;
+      // }
+    }
+  }
+
+  get displayDateL1() {
+    if (this.selectedDate2L1) {
+      return this.selectedDate2L1 === "-" ? "" : this.selectedDate2L1;
+    }
+
+    // if (this.maintenanceDetails.Implementation_Date__c) {
+    //   return this.maintenanceDetails.Implementation_Date__c === "-"
+    //     ? ""
+    //     : this.maintenanceDetails.Implementation_Date__c;
+    // }
+
+    return "";
+  }
+
+  get monthLabel2L1() {
+    return this.getMonthLabel(this.month2L1);
+  }
+
+  get era2L1() {
+    return this.getJapaneseEra(this.year2L1);
+  }
+
+  prevYear2L1() {
+    //for history
+    // this.isNextYearDisabled2 = false;
+    this.year2L1--;
+    const selectedButtons = this.template.querySelectorAll(
+      ".day-buttonL1.selected"
+    );
+    selectedButtons.forEach((button) =>
+      button.classList.remove(
+        "selected",
+        "in-range",
+        "startborder",
+        "endborder",
+        "singleborder"
+      )
+    );
+    this.selectedDay2L1 = null;
+    if (this.myYear2L1 === this.year2L1) {
+      this.selectedDay2L1 = this.myday2L1;
+      this.month2L1 = this.myMonth2L1;
+    }
+    this.populateCalendar2L1();
+  }
+
+  nextyear2L1() {
+    //for history
+    // this.isPrevDisabled = false;
+    // this.isPrevYearDisabled = false;
+
+    this.year2L1++;
+    const selectedButtons = this.template.querySelectorAll(
+      ".day-buttonL1.selected"
+    );
+    selectedButtons.forEach((button) =>
+      button.classList.remove(
+        "selected",
+        "in-range",
+        "startborder",
+        "endborder",
+        "singleborder"
+      )
+    );
+    this.selectedDay2L1 = null;
+    if (this.myYear2L1 === this.year2L1) {
+      this.selectedDay2L1 = this.myday2L1;
+      this.month2L1 = this.myMonth2L1;
+    }
+    this.populateCalendar2L1();
+
+    //     /* Last Modified by Singh Jashanpreet */
+    //     const today = new Date();
+    //     let todayMonth = today.getMonth() + 1;
+    //     let todayYear = today.getFullYear();
+
+    //     console.log(
+    //       todayYear,
+    //       " ",
+    //       this.year,
+    //       " ",
+    //       todayMonth,
+    //       " ",
+    //       this.month,
+    //       " ",
+    //       this.isNextYearDisabled2
+    //     );
+    //       //isNextMonthDisabled2
+    // //isNextYearDisabled2
+    //     if (
+    //       todayYear <= this.year2L1 ||
+    //       (this.month2L1 > todayMonth && todayYear - 1 === this.year2L1)
+    //     ) {
+    //       //2025 -
+    //       this.isNextYearDisabled2 = true;
+    //     }
+    //     if (todayYear === this.year2L1 && this.month2L1 === todayMonth) {
+    //       this.isNextMonthDisabled2 = true;
+    //       this.isNextYearDisabled2 = true;
+    //     }
   }
 }
